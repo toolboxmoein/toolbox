@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تعامل روزانه | دستیار اینستاگرام</title>
+  
+  <!-- فونت وزیر -->
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome برای آیکون‌ها -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <style>
+    /* ===== استایل‌های استخراج شده از کد مرجع ===== */
+    :root {
+        --primary-color: #00D968;
+        --primary-light: #E6F8EE;
+        --dark-color: #333;
+        --light-color: #f8f9fa;
+        --card-shadow: 0 15px 35px rgba(0, 217, 104, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+        --border-radius: 16px;
+        --button-border-radius: 8px;
+        --border-color: #e0e0e0;
+        --grey-color: #6c757d;
+        --grey-light: #f8f9fa;
+        --grey-medium: #dee2e6;
+        --success-color: #7CFC00; /* سبز روشن برای تکمیل شده */
+        --info-color: #FF9800; /* نارنجی برای دکمه منفی */
+        --warning-color: #FFC300; /* زرد */
+        --danger-color: #e53935; /* قرمز برای ریست */
+        --transition: all 0.3s ease;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+        font-family: 'Vazirmatn', Arial, sans-serif;
+        background-color: var(--light-color);
+        direction: rtl;
+        text-align: right;
+        color: var(--dark-color);
+        line-height: 1.6;
+        padding: 20px;
+    }    
+    body.modal-open {
+        overflow: hidden;
+    }
+
+    /* ===== کانتینر اصلی صفحه ===== */
+    .main-container {
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--card-shadow);
+        padding: 25px;
+        margin-bottom: 25px; /* برای فاصله با جدول پایین */
+    }
+
+    .persian-date {
+      text-align: right;
+      margin-bottom: 25px;
+      font-size: 1rem;
+      color: var(--grey-color);
+      font-weight: 500;
+      border-bottom: 1px solid var(--grey-medium);
+      padding-bottom: 20px;
+    }
+    
+    /* کادر خاکستری دور اهداف حذف شد */
+    .card-header {
+        font-weight: 600;
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--dark-color);
+    }
+    
+    .card-header i {
+        color: var(--primary-color);
+    }
+
+    .interaction-items {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* همیشه دو ستونه */
+        gap: 15px;    }
+
+    .interaction-item {
+        display: flex;
+        align-items: center;
+        background-color: var(--grey-light); /* تغییر به خاکستری روشن برای هر آیتم */
+        padding: 10px;
+        border-radius: var(--button-border-radius);
+        border: 1px solid var(--grey-medium);
+        cursor: pointer;
+        transition: var(--transition);
+    }    
+    .interaction-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        border-color: var(--primary-color);
+    }
+    
+    .interaction-item i {
+        font-size: 1.2rem;
+        color: var(--primary-color);
+        margin-left: 10px;
+    }
+    
+    .interaction-info { flex-grow: 1; }
+    .interaction-info span:first-child { font-weight: 500; display: block; }
+    .interaction-info .count { font-weight: 600; font-size: 0.9rem; color: var(--grey-color); }
+
+    /* --- استایل جدول --- */
+    .task-table-container {
+        background-color: white;
+        border-radius: var(--border-radius);        box-shadow: var(--card-shadow);
+        padding: 20px;
+    }    .task-table {
+      width: 100%;
+      border-collapse: collapse;    }
+
+    .task-table th {
+      background: var(--primary-light);
+      color: var(--dark-color);
+      padding: 15px;
+      font-weight: 600;
+      text-align: right;
+      border-bottom: 2px solid var(--grey-medium);
+    }
+    
+    .task-table th:first-child, .task-table td:first-child { text-align: center; } /* ردیف */
+    .task-table th:nth-child(3), .task-table td:nth-child(3) { text-align: center; } /* تعداد */
+    .task-table th:last-child, .task-table td:last-child { text-align: center; } /* عملیات */
+
+    .task-table td {
+      padding: 15px;      border-bottom: 1px solid var(--grey-light);
+      vertical-align: middle;      font-size: 0.95rem;
+    }
+    
+    .task-table tbody tr:last-child td { border-bottom: none; }
+    
+    /* --- استایل‌های مربوط به وضعیت تکمیل شده --- */
+    .task-table tbody tr.completed { background-color: #f0fff0; }
+    .task-table tbody tr.completed td:nth-child(2) { text-decoration: line-through; color: var(--grey-color); }
+    .task-table tbody tr.completed .task-counter,
+    .task-table tbody tr.completed .infinity-display { color: #2E8B57; font-weight: 700; }
+    .task-table tbody tr.completed .btn-group button { background-color: var(--grey-medium); cursor: not-allowed; pointer-events: none; }
+    .task-table tbody tr.completed .btn-group button:hover { transform: none; }    /* --- استایل نمایش شمارنده --- */
+    .task-counter, .infinity-display {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--dark-color);
+    }
+
+    /* --- استایل دکمه‌های عملیات --- */
+    .btn-group { display: flex; gap: 8px; justify-content: center; align-items: center; }
+    .btn { padding: 6px 12px; border: none; border-radius: var(--button-border-radius); cursor: pointer; transition: var(--transition); font-size: 1rem; line-height: 1; color: white; }
+    .btn-increment { background: var(--primary-color); }
+    .btn-decrement { background: var(--info-color); }
+    .btn:hover:not(:disabled) { opacity: 0.9; transform: translateY(-2px); }
+    .btn:disabled { background-color: var(--grey-medium); cursor: not-allowed; }
+    
+    /* --- استایل دکمه ریست کلی --- */
+    .global-reset-button {
+        display: flex; align-items: center; justify-content: center;
+        gap: 10px; padding: 12px 25px;
+        border-radius: var(--button-border-radius);
+        font-weight: 500; transition: var(--transition); cursor: pointer;
+        font-family: inherit; width: 100%; max-width: 400px;
+        margin: 25px auto 0; background: var(--danger-color);
+        color: white; border: none;
+    }
+    .global-reset-button:hover { background: #c0392b; }
+
+    /* === استایل برای مدال تأیید ریست === */
+    .modal {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(0, 0, 0, 0.65); z-index: 2001;
+        display: none; justify-content: center; align-items: center;
+    }
+    .modal.active { display: flex; }
+    
+    .modal-content {
+        background-color: white; border-radius: var(--border-radius);
+        padding: 30px; width: 90%; max-width: 450px;
+    }
+    .modal-title { font-size: 1.3rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; color: var(--danger-color); }
+    .modal-content p { color: var(--grey-color); margin-bottom: 25px; line-height: 1.7; }
+    .modal-footer { display: flex; gap: 10px; margin-top: 25px; }
+    .modal-footer button { flex: 1; padding: 12px; border-radius: var(--button-border-radius); font-size: 1rem; border: none; cursor: pointer; font-family: 'Vazirmatn', Arial, sans-serif; }
+    #confirm-reset { background-color: var(--danger-color); color: white; }
+    #cancel-reset { background-color: var(--grey-medium); color: var(--dark-color); }
+
+    /* --- ریسپانسیو --- */
+    @media (max-width: 768px) {
+        body { padding: 15px; }
+        .main-container, .task-table-container { padding: 20px; }
+        .interaction-item { flex-direction: column; text-align: center; gap: 5px; }
+        .interaction-item i { margin-left: 0; margin-bottom: 5px; }
+        .task-table th, .task-table td { padding: 12px 8px; font-size: 0.9rem; }
+    }
+    @media (max-width: 400px) {
+        .interaction-info span:first-child { font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    <div class="persian-date" id="persian-date"></div>
+
+    <!-- بخش نمایش تعاملات روزانه -->
+    <div class="daily-interactions-summary">
+      <h3 class="card-header"><i class="fas fa-chart-line"></i>اهداف امروز</h3>
+      <div class="interaction-items" id="daily-interactions-summary-items">
+        <!-- محتوا توسط جاوا اسکریپت پر می‌شود -->
+      </div>
+    </div>
+  </div>
+
+  <div class="task-table-container">
+    <table class="task-table">
+      <thead>
+        <tr>
+          <th>ردیف</th>
+          <th>عنوان فعالیت</th>
+          <th>تعداد</th>
+          <th>عملیات</th>
+        </tr>
+      </thead>
+      <tbody id="task-list">
+        <!-- ردیف‌ها به صورت پویا با جاوا اسکریپت اضافه می‌شوند -->
+      </tbody>
+    </table>
+    
+    <button id="global-reset-button" class="global-reset-button">
+        <i class="fas fa-sync-alt"></i>
+        <span>ریست کل برنامه</span>
+    </button>
+  </div>
+
+  <!-- مدال تأیید ریست -->
+  <div class="modal" id="confirm-reset-modal">
+    <div class="modal-content">
+      <h3 class="modal-title"><i class="fas fa-exclamation-triangle"></i>تأیید ریست</h3>
+      <p>آیا مطمئن هستید که می‌خواهید تمام اطلاعات وظایف و اهداف امروز را پاک کنید؟ این عمل غیرقابل بازگشت است.</p>
+      <div class="modal-footer">
+        <button id="confirm-reset">بله، ریست کن</button>
+        <button id="cancel-reset">انصراف</button>      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- توابع کمکی ---
+    function toPersianNumber(n) {
+      if (n === Infinity || n === null || n === undefined) return 'همه';
+      const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      return String(n).replace(/\d/g, x => farsiDigits[x]);
+    }
+    
+    function getPersianDate() {
+      try {
+        // تغییر آپشن‌ها برای فرمت درخواستی: "جمعه ۲۴ مرداد ۱۴۰۴"
+        const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        const date = new Intl.DateTimeFormat('fa-IR-u-nu-latn', options).format(new Date());
+        // تبدیل اعداد به فارسی و حذف کاما
+        return date.replace(/\d+/g, n => toPersianNumber(n)).replace(/،/g, '');
+      } catch (e) {
+        console.error("خطا در نمایش تاریخ شمسی:", e);
+        return ""; 
+      }
+    }
+
+    function getTodayDateString() {
+        const today = new Date();        return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    }
+
+    function getRandomCount(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // --- مدیریت وظایف ---
+    const STORAGE_KEY = 'dailyInteractionTasks_v9'; 
+    const DAILY_INTERACTIONS_KEY = 'dailyInteractionsData_v7';
+
+    const baseTasks = [
+      { id: 1, title: 'Following', min: Infinity, max: Infinity, order: 1 },
+      { id: 6, title: 'Story', min: Infinity, max: Infinity, order: 2 },
+      { id: 2, title: 'Explore', min: 15, max: 25, order: 3 },
+      { id: 3, title: 'Reels', min: 10, max: 20, order: 4 },
+      { id: 4, title: 'Three posts in Explore', min: 5, max: 10, order: 5 },
+      { id: 5, title: 'Three posts in Reels', min: 5, max: 10, order: 6 },
+      { id: 7, title: 'Hashtag', min: 8, max: 15, order: 7 },
+    ];
+
+    let currentTasks = [];
+    let dailyInteractions = { 
+      posts: 0, 
+      comments: 0, 
+      likes: 0, 
+      saves: 0,
+      clickCounts: { posts: 0, comments: 0, likes: 0, saves: 0 } 
+    };
+
+    function loadOrGenerateDailyInteractions() {
+        const savedInteractions = localStorage.getItem(DAILY_INTERACTIONS_KEY);        const todayString = getTodayDateString();
+        let data = null;
+        if (savedInteractions) {
+            try { data = JSON.parse(savedInteractions); } catch (e) {
+                console.error("خطا در خواندن اطلاعات تعاملات روزانه:", e);
+                localStorage.removeItem(DAILY_INTERACTIONS_KEY);
+                data = null;
+            }
+        }
+
+        if (!data || data.date !== todayString) {            dailyInteractions = {
+                posts: getRandomCount(10, 20),
+                comments: getRandomCount(15, 25),
+                likes: getRandomCount(20, 30),
+                saves: getRandomCount(5, 15),
+                clickCounts: { posts: 0, comments: 0, likes: 0, saves: 0 }
+            };
+            saveInteractions();
+        } else {
+            dailyInteractions = data.interactions;
+            if (dailyInteractions.saves === undefined) dailyInteractions.saves = getRandomCount(5, 15);
+            if (dailyInteractions.clickCounts === undefined) {
+                dailyInteractions.clickCounts = { posts: 0, comments: 0, likes: 0, saves: 0 };
+            } else if (dailyInteractions.clickCounts.saves === undefined) {
+                dailyInteractions.clickCounts.saves = 0;
+            }
+            ['posts', 'comments', 'likes', 'saves'].forEach(type => {
+                dailyInteractions[type] = parseInt(dailyInteractions[type], 10) || 0;
+                dailyInteractions.clickCounts[type] = parseInt(dailyInteractions.clickCounts[type], 10) || 0;
+            });
+        }
+        displayDailyInteractions();
+    }
+
+    function displayDailyInteractions() {
+        const dailyInteractionsDiv = document.getElementById('daily-interactions-summary-items');
+        if (dailyInteractionsDiv) {
+            dailyInteractionsDiv.innerHTML = `
+                <div class="interaction-item" data-type="posts" onclick="incrementInteractionCount('posts')">
+                    <i class="fas fa-share"></i>
+                    <div class="interaction-info">
+                        <span>ارسال</span>
+                        <span class="count">${toPersianNumber(dailyInteractions.clickCounts.posts)} / ${toPersianNumber(dailyInteractions.posts)}</span>
+                    </div>
+                </div>
+                <div class="interaction-item" data-type="comments" onclick="incrementInteractionCount('comments')">
+                    <i class="fas fa-comment"></i>
+                     <div class="interaction-info">
+                        <span>کامنت</span>
+                        <span class="count">${toPersianNumber(dailyInteractions.clickCounts.comments)} / ${toPersianNumber(dailyInteractions.comments)}</span>
+                    </div>
+                </div>
+                <div class="interaction-item" data-type="likes" onclick="incrementInteractionCount('likes')">
+                    <i class="fas fa-heart"></i>
+                     <div class="interaction-info">
+                        <span>لایک</span>
+                        <span class="count">${toPersianNumber(dailyInteractions.clickCounts.likes)} / ${toPersianNumber(dailyInteractions.likes)}</span>
+                    </div>
+                </div>
+                <div class="interaction-item" data-type="saves" onclick="incrementInteractionCount('saves')">
+                    <i class="fas fa-bookmark"></i>
+                     <div class="interaction-info">
+                        <span>ذخیره</span>
+                        <span class="count">${toPersianNumber(dailyInteractions.clickCounts.saves)} / ${toPersianNumber(dailyInteractions.saves)}</span>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    function incrementInteractionCount(type) {
+        if (dailyInteractions.clickCounts[type] === undefined) {
+            dailyInteractions.clickCounts[type] = 0;
+        }
+        dailyInteractions.clickCounts[type]++;
+        saveInteractions();
+        displayDailyInteractions();
+    }
+
+    function saveInteractions() {
+        const dataToSave = { date: getTodayDateString(), interactions: dailyInteractions };
+        try { localStorage.setItem(DAILY_INTERACTIONS_KEY, JSON.stringify(dataToSave)); } catch (e) { console.error("خطا در ذخیره اطلاعات تعاملات:", e); }
+    }
+
+    function loadTasks() {        const savedData = localStorage.getItem(STORAGE_KEY);
+        const todayString = getTodayDateString();
+        let data = null;
+        if (savedData) {
+            try { data = JSON.parse(savedData); } catch (e) {
+                console.error("خطا در خواندن اطلاعات وظایف ذخیره شده:", e);
+                localStorage.removeItem(STORAGE_KEY);
+                data = null;
+            }
+        }
+
+        if (!data || data.date !== todayString) {
+            currentTasks = baseTasks.map(task => ({
+                ...task,
+                count: 0,
+                finalMax: task.max === Infinity ? Infinity : getRandomCount(task.min, task.max),
+            })).sort((a, b) => a.order - b.order);
+            saveTasks();
+        } else {
+            currentTasks = data.tasks;
+            let needsResave = false;
+            baseTasks.forEach(baseTask => {
+                const currentTask = currentTasks.find(t => t.id === baseTask.id);
+                if (!currentTask) {
+                    currentTasks.push({ ...baseTask, count: 0, finalMax: baseTask.max === Infinity ? Infinity : getRandomCount(baseTask.min, baseTask.max) });
+                    needsResave = true;
+                } else {
+                     if (currentTask.finalMax === undefined || currentTask.order === undefined || currentTask.min !== baseTask.min || currentTask.max !== baseTask.max) {
+                        currentTask.min = baseTask.min;
+                        currentTask.max = baseTask.max;
+                         if (currentTask.finalMax === undefined || (currentTask.max !== Infinity && currentTask.finalMax > currentTask.max)) {
+                             currentTask.finalMax = baseTask.max === Infinity ? Infinity : getRandomCount(baseTask.min, baseTask.max);
+                         }
+                        currentTask.order = baseTask.order;                        needsResave = true;
+                    }
+                    currentTask.count = parseInt(currentTask.count, 10) || 0;
+                }
+            });
+            currentTasks = currentTasks.filter(task => baseTasks.some(bt => bt.id === task.id));
+            currentTasks.sort((a, b) => a.order - b.order);
+            if (needsResave) saveTasks();
+        }
+        renderTasks();
+        loadOrGenerateDailyInteractions();
+    }
+
+    function saveTasks() {
+        const dataToSave = { date: getTodayDateString(), tasks: currentTasks };
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave)); } catch (e) { console.error("خطا در ذخیره اطلاعات وظایف:", e); }
+    }
+
+    function renderTasks() {
+      const taskListBody = document.getElementById('task-list');
+      taskListBody.innerHTML = '';
+      currentTasks.forEach((task, index) => {
+        const row = document.createElement('tr');
+        const isFiniteTask = task.finalMax !== Infinity;
+        const isCompleted = isFiniteTask && task.count >= task.finalMax;
+        if (isCompleted) row.classList.add('completed');
+        let countDisplay = '';
+        if (task.finalMax === Infinity) {
+          countDisplay = `<span class="infinity-display">${toPersianNumber(task.count)} / ${toPersianNumber(Infinity)}</span>`;
+        } else {
+          countDisplay = `<span class="task-counter">${toPersianNumber(task.count)} / ${toPersianNumber(task.finalMax)}</span>`;
+        }
+        row.innerHTML = `
+          <td>${toPersianNumber(index + 1)}</td>
+          <td>${task.title}</td>
+          <td>${countDisplay}</td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-increment" onclick="incrementTask(${task.id})" ${isCompleted ? 'disabled' : ''}><i class="fas fa-plus"></i></button>
+              <button class="btn btn-decrement" onclick="decrementTask(${task.id})" ${task.count === 0 ? 'disabled' : ''} ${isCompleted ? 'disabled' : ''}><i class="fas fa-minus"></i></button>
+            </div>
+          </td>
+        `;
+        taskListBody.appendChild(row);
+      });
+    }
+
+    function incrementTask(taskId) {
+        const task = currentTasks.find(t => t.id === taskId);
+        if (!task) return;
+        const isFiniteTask = task.finalMax !== Infinity;
+        const isCompleted = isFiniteTask && task.count >= task.finalMax;
+        if (!isCompleted || task.finalMax === Infinity) {
+            task.count++;
+            saveTasks();
+            renderTasks();
+        }
+    }
+
+    function decrementTask(taskId) {
+        const task = currentTasks.find(t => t.id === taskId);
+        if (task && task.count > 0) {
+            task.count--;
+            saveTasks();
+            renderTasks();
+        }
+    }
+
+    function showResetConfirmModal() {
+        document.getElementById('confirm-reset-modal').classList.add('active');
+        document.body.classList.add('modal-open');    }
+
+    function hideResetConfirmModal() {
+        document.getElementById('confirm-reset-modal').classList.remove('active');
+        document.body.classList.remove('modal-open');
+    }
+
+    function resetApplication() {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(DAILY_INTERACTIONS_KEY);
+        hideResetConfirmModal();
+        window.location.reload();
+    }
+
+    function initializeApp() {
+       const persianDateElement = document.getElementById('persian-date');
+       const persianDate = getPersianDate();
+       if (persianDate) persianDateElement.textContent = persianDate;
+       else persianDateElement.style.display = 'none';
+
+       loadTasks();
+
+       document.getElementById('global-reset-button').addEventListener('click', showResetConfirmModal);
+       document.getElementById('cancel-reset').addEventListener('click', hideResetConfirmModal);
+       document.getElementById('confirm-reset').addEventListener('click', resetApplication);
+       document.getElementById('confirm-reset-modal').addEventListener('click', (e) => {
+           if (e.target.id === 'confirm-reset-modal') hideResetConfirmModal();
+       });
+
+       window.addEventListener('beforeunload', () => {
+           saveInteractions();
+       });
+    }
+
+    window.onload = initializeApp;
+  </script>
+</body>
+</html>

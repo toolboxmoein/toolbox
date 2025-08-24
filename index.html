@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رادار اینستاگرام</title>
+    
+    <!-- فونت وزیر -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome برای آیکون‌ها -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* --- متغیرهای اصلی --- */
+        :root {
+            --primary-color: #00D968;
+            --primary-light: #E6F8EE;
+            --secondary-color: #00B84B;
+            --dark-color: #333;
+            --light-color: #f8f9fa;            --shadow: 0 10px 30px rgba(0, 217, 104, 0.1);
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --card-shadow: 0 15px 35px rgba(0, 217, 104, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            --subtle-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --border-radius: 16px;
+            --button-border-radius: 8px;            --border-color: #e0e0e0;
+            --grey-color: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0; 
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            background-color: var(--light-color);            direction: rtl;
+            text-align: right;
+            color: var(--dark-color);            line-height: 1.6;
+        }
+
+        /* استایل‌های هدر */
+        .header {            background-color: #ffffff;
+            padding: 15px 0 15px 20px; /* تغییر پدینگ برای زبانه */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* --- استایل جدید برای زبانه منو --- */
+        .menu-tab-button {            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px 12px 20px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 15px 0 0 15px; /* گرد کردن لبه‌های چپ */
+            transition: var(--transition);
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-tab-button:hover {
+            background-color: var(--secondary-color);
+            transform: translateX(5px); /* افکت حرکتی در هاور */
+        }
+        
+        .logo-container { 
+            flex: 1; 
+            display: flex; 
+            justify-content: center;         }        
+        .logo-placeholder { 
+            width: 240px; 
+            height: 80px; 
+            background-image: url('images/logo.png');            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        /* منوی همبرگری */
+        .menu-slide {             position: fixed; 
+            top: 0; 
+            right: -100%;
+            width: 300px; 
+            height: 100vh; 
+            background-color: #ffffff; 
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1); 
+            z-index: 2000; 
+            transition: right 0.3s ease;
+            overflow-y: auto; 
+        }
+        
+        .menu-slide.show { 
+            right: 0;
+        }
+        
+        .menu-overlay {             position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh;
+            background-color: rgba(0,0,0,0.5); 
+            z-index: 1999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-overlay.show { 
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* استایل‌های منوی داخلی */
+        .sidebar-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        .sidebar-logo-placeholder {
+            width: 240px;
+            height: 80px;
+            background-image: url('images/logo.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .sidebar-menu {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .sidebar-menu-item {
+            display: flex;
+            align-items: center;            padding: 14px 16px;            border-radius: var(--border-radius);
+            text-decoration: none;
+            color: var(--dark-color);
+            transition: var(--transition);
+        }
+        .sidebar-menu-item:hover {
+            background-color: var(--primary-light);
+            transform: translateX(-5px);
+        }
+        .sidebar-menu-icon {
+            width: 40px;            height: 40px;
+            background-color: var(--primary-light);
+            border-radius: 50%;            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 15px;
+        }
+        .sidebar-menu-icon i {
+            color: var(--primary-color);            font-size: 16px;        }
+        .sidebar-menu-text {
+            font-size: 15px;
+            font-weight: 500;
+        }        .sidebar-footer {
+            margin-top: auto;
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;        }
+        .sidebar-version {
+            font-size: 12px;
+            color: var(--grey-color);
+        }
+        
+        .main-content {             padding: 20px; 
+        }
+        
+        .separator-bar {
+            width: 100%;
+            height: 0.5cm;
+            background: var(--gradient);
+            margin-bottom: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--subtle-shadow);
+        }
+        
+        .toolbar { 
+            width: 100%; 
+            height: 1.5cm; 
+            background-color: #ffffff; 
+            box-shadow: var(--card-shadow); 
+            display: flex;
+            align-items: center; 
+            overflow-x: auto;             white-space: nowrap; 
+            margin-bottom: 20px; 
+            border-radius: var(--border-radius);             scroll-behavior: smooth; 
+        } 
+        .toolbar::-webkit-scrollbar { height: 6px; }
+        .toolbar::-webkit-scrollbar-track { background: var(--grey-light); } 
+        .toolbar::-webkit-scrollbar-thumb { background: var(--grey-color); border-radius: 3px; } 
+        .toolbar::-webkit-scrollbar-thumb:hover { background: var(--dark-color); }
+        
+        .toolbar-item { 
+            background: none; 
+            border: none; 
+            color: var(--dark-color); 
+            padding: 18px 24px;
+            cursor: pointer; 
+            font-family: 'Vazirmatn', Arial, sans-serif; 
+            font-size: 16px; 
+            font-weight: 500; 
+            transition: var(--transition);
+            white-space: nowrap; 
+            flex-shrink: 0; 
+            position: relative; 
+        }
+        
+        .toolbar-item:hover { 
+            background-color: var(--primary-light); 
+            color: var(--primary-color); 
+        }
+        
+        .toolbar-item.active { 
+            color: var(--primary-color); 
+            background-color: var(--primary-light); 
+            font-weight: 600; 
+        }
+        
+        .toolbar-item:not(:last-child)::after { 
+            content: ''; 
+            position: absolute; 
+            left: 0; 
+            top: 25%; 
+            height: 50%; 
+            width: 1px; 
+            background-color: var(--border-color); 
+        }        
+        .loaded-content { 
+            width: 100%; 
+            min-height: 300px; 
+        }
+        
+        /* Responsive */ 
+        @media (max-width: 768px) {
+            .logo-placeholder { 
+                width: 150px; /* کمی کوچک‌تر کردن لوگو برای جا شدن زبانه */
+                height: 60px; 
+            }
+            .sidebar-logo-placeholder {
+                width: 200px;
+                height: 70px;
+            }            .separator-bar { 
+                height: 0.3cm; 
+            }
+            .toolbar-item { 
+                font-size: 14px;
+                padding: 15px 18px;
+            }
+            .menu-slide { 
+                width: 280px; 
+            }
+            .menu-tab-button {
+                font-size: 14px;
+                padding: 10px 20px 10px 15px;
+            }
+        }
+
+        /* مخفی کردن هدر و محتوای اصلی در ابتدا */
+        .header,
+        .main-content {
+            display: none; /* این بخش‌ها در ابتدا مخفی هستند */
+        }
+
+        /* اضافه کردن استایل برای صفحه فعالسازی حساب (payment-container) */
+        #payment-container {
+            display: flex; /* در ابتدا hidden است */
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: var(--light-color);
+            position: fixed;
+            top: 0;
+            left: 0;            width: 100%;
+            z-index: 9998; /* کمی کمتر از z-index منوها */
+        }
+        #payment-container > div {
+            background: #fff;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            width: 100%;
+            max-width: 450px;            text-align: center;
+        }
+        #payment-container h2 {
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+        #payment-container p {
+            margin-top: 10px;
+            margin-bottom: 25px;
+            color: var(--grey-color);
+            font-size: 15px;
+        }
+        #payment-container button {
+            width: 100%;
+            padding: 14px;            border: none;
+            border-radius: var(--button-border-radius);
+            font-size: 16px;
+            cursor: pointer;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            margin-bottom: 10px;
+            transition: var(--transition);        }
+        #payment-container #pay-now-button {
+            background: var(--gradient);
+            color: white;
+        }
+        #payment-container #pay-now-button:hover {
+            box-shadow: var(--shadow);            transform: translateY(-2px);
+        }
+        #payment-container #logout-button {
+            background: none;
+            color: var(--grey-color);
+            border: 1px solid var(--border-color);
+        }
+        #payment-container #logout-button:hover {
+            background-color: var(--primary-light);
+        }
+        #payment-container #payment-message {
+            margin-top: 20px;
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- START: صفحه پرداخت / حساب غیرفعال -->
+<!-- این صفحه فقط در صورتی نمایش داده می‌شود که کاربر لاگین باشد اما حسابش فعال نباشد -->
+<div id="payment-container" style="display: none;">
+    <div style="background: #fff; padding: 40px; border-radius: var(--border-radius); box-shadow: var(--card-shadow); width: 100%; max-width: 450px; text-align: center;">
+        <i class="fas fa-exclamation-circle" style="font-size: 60px; color: var(--primary-color); margin-bottom: 20px;"></i>
+        <h2>حساب شما فعال نیست</h2>
+        <p style="margin-top: 10px; margin-bottom: 25px; color: var(--grey-color);">دوره آزمایشی شما به پایان رسیده یا حساب شما فعال نیست. لطفاً برای دسترسی کامل، اشتراک خود را فعال کنید.</p>
+                <!-- این دکمه بعداً به درگاه زرین پال متصل می‌شود -->
+        <button id="pay-now-button">
+            <i class="fas fa-credit-card"></i> فعال‌سازی حساب و پرداخت
+        </button>
+        
+        <button id="logout-button">            <i class="fas fa-sign-out-alt"></i> خروج از حساب
+        </button>
+
+        <p id="payment-message"></p>
+    </div>
+</div>
+<!-- END: صفحه پرداخت / حساب غیرفعال -->
+
+<!-- محتوای اصلی برنامه -->
+<header class="header">
+    <div class="hamburger-menu">
+        <button class="menu-tab-button" id="hamburgerIcon">منو</button>
+    </div>
+    <div class="logo-container">
+        <div class="logo-placeholder"></div> 
+    </div>
+    <div style="width: 44px; visibility: hidden;"></div> 
+</header>
+
+<div class="menu-overlay" id="menuOverlay"></div>
+<div class="menu-slide" id="menuSlide">
+    <div class="sidebar-header">        <div class="sidebar-logo">
+            <div class="sidebar-logo-placeholder"></div>
+        </div>
+    </div>
+    <div class="sidebar-menu">
+        <a href="about-app.html" class="sidebar-menu-item">
+            <div class="sidebar-menu-icon"><i class="fas fa-info-circle"></i></div>
+            <div class="sidebar-menu-text">درباره برنامه</div>
+        </a>
+        <a href="about-us.html" class="sidebar-menu-item">            <div class="sidebar-menu-icon"><i class="fas fa-users"></i></div>
+            <div class="sidebar-menu-text">درباره ما</div>
+        </a>
+        <a href="contact.html" class="sidebar-menu-item">
+            <div class="sidebar-menu-icon"><i class="fas fa-phone-alt"></i></div>
+            <div class="sidebar-menu-text">راه‌های ارتباطی</div>
+        </a>
+        <a href="settings.html" class="sidebar-menu-item">            <div class="sidebar-menu-icon"><i class="fas fa-cog"></i></div>
+            <div class="sidebar-menu-text">تنظیمات</div>
+        </a>
+        <a href="#" id="sidebar-logout-button" class="sidebar-menu-item">
+            <div class="sidebar-menu-icon"><i class="fas fa-sign-out-alt"></i></div>
+            <div class="sidebar-menu-text">خروج</div>
+        </a>
+    </div>
+    <div class="sidebar-footer">
+        <div class="sidebar-version">نسخه 1.0.0</div>
+    </div>
+</div>
+
+<main class="main-content" id="mainContent">
+    <div class="separator-bar"></div>
+    <div class="toolbar">        <button class="toolbar-item active" data-content="followers">فالوورها</button>
+        <button class="toolbar-item" data-content="following">فالوینگ‌ها</button>        <button class="toolbar-item" data-content="direct-marketing">دایرکت مارکتینگ</button>
+        <button class="toolbar-item" data-content="calendar">تقویم تولید محتوا</button>
+        <button class="toolbar-item" data-content="engagement">تعامل</button>
+        <button class="toolbar-item" data-content="checklist">چک لیست تولید محتوا</button>
+    </div>
+    <div class="loaded-content" id="loadedContent">
+        <!-- محتوا اینجا بارگذاری می‌شود -->
+    </div>
+</main>
+
+<script type="module">
+    // تغییر: supabase از اینجا حذف شد زیرا در auth.js export نمی‌شود و نیازی به آن نیست.
+    import { signOut, getSession } from './auth.js';
+
+    // تابع اصلی بررسی وضعیت ورود و نمایش محتوا
+    async function checkAuthStateAndDisplayContent() {
+        const session = await getSession(); // این تابع باید { accessToken, user: { email, firstName, lastName, createdAt, subscriptionStatus, ... } } را برگرداند.
+        const header = document.querySelector('.header');
+        const mainContent = document.getElementById('mainContent');
+        const paymentContainer = document.getElementById('payment-container');
+
+        // در ابتدا همه بخش‌ها را مخفی کن
+        header.style.display = 'none';
+        mainContent.style.display = 'none';
+        paymentContainer.style.display = 'none';
+
+        if (!session || !session.user) {
+            console.log("کاربر وارد نشده یا سشن نامعتبر است، هدایت به صفحه ثبت نام.");
+            window.location.href = 'register.html'; // هدایت به صفحه ثبت‌نام/ورود
+            return; // توقف اجرای بقیه کد
+        }
+
+        console.log("کاربر وارد شده:", session.user.email);
+
+        // --- منطق 7 روز استفاده رایگان و صفحه پرداخت ---
+        // تغییر: اطلاعات created_at و subscription_status مستقیماً از شیء user سشن خوانده می‌شود.
+        const userCreatedAt = session.user.createdAt; 
+        const subscriptionStatus = session.user.subscriptionStatus;
+
+        if (!userCreatedAt || !subscriptionStatus) {
+            console.error("خطا: اطلاعات 'createdAt' یا 'subscriptionStatus' از Worker دریافت نشد. لطفاً مطمئن شوید Worker این اطلاعات را در پاسخ getSession برمی‌گرداند.");
+            alert("خطا در دریافت اطلاعات کاربری. لطفاً دوباره تلاش کنید یا با پشتیبانی تماس بگیرید.");
+            await signOut();
+            window.location.href = 'register.html';
+            return;
+        }
+
+        const createdAtDate = new Date(userCreatedAt);
+        const sevenDaysLater = new Date(createdAtDate.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 روز به میلی‌ثانیه
+        const now = new Date();
+
+        const isSubscriptionActive = subscriptionStatus === 'active';
+        const isTrialPeriod = now <= sevenDaysLater;            
+        
+        if (isSubscriptionActive || isTrialPeriod) {
+            // اگر اشتراک فعال است یا هنوز در دوره آزمایشی هستیم، محتوای اصلی نمایش داده شود
+            header.style.display = 'flex';                
+            mainContent.style.display = 'block';
+            console.log("اشتراک فعال یا در دوره آزمایشی، نمایش محتوای اصلی.");
+            loadContent('followers'); // بارگذاری محتوای پیش‌فرض
+        } else {
+            // اگر دوره آزمایشی تمام شده و اشتراک فعال نیست، صفحه پرداخت را نمایش بده
+            paymentContainer.style.display = 'flex';
+            console.log("دوره رایگان تمام شده و اشتراک فعال نیست، نمایش صفحه پرداخت.");
+        }
+    }
+
+    // فراخوانی تابع بررسی وضعیت ورود هنگام بارگذاری اولیه صفحه
+    checkAuthStateAndDisplayContent();
+
+    // --- کد جاوا اسکریپت اصلی برنامه شما (بقیه موارد) ---
+    const hamburgerIcon = document.getElementById('hamburgerIcon');
+    const menuSlide = document.getElementById('menuSlide');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const toolbarItems = document.querySelectorAll('.toolbar-item');
+    const loadedContent = document.getElementById('loadedContent');
+    const sidebarLogoutButton = document.getElementById('sidebar-logout-button');
+    const paymentLogoutButton = document.getElementById('logout-button');
+
+    function openMenu() {
+        menuSlide.classList.add('show');
+        menuOverlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+        menuSlide.classList.remove('show');        
+        menuOverlay.classList.remove('show');
+        document.body.style.overflow = 'auto';
+    }
+
+    if (hamburgerIcon) {
+        hamburgerIcon.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            openMenu();
+        });
+    }
+
+    if (menuOverlay) {
+        menuOverlay.addEventListener('click', closeMenu);
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeMenu();
+        }
+    });
+
+    if (toolbarItems) {
+        toolbarItems.forEach(item => {
+            item.addEventListener('click', function() {
+                toolbarItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                const contentType = this.getAttribute('data-content');
+                loadContent(contentType);
+            });
+        });
+    }
+    
+    function loadContent(contentType) {
+        let finalHTML = '';
+        const pageFileMap = {
+            'followers': 'follower-management.html',
+            'following': 'following.html',
+            'direct-marketing': 'direct-marketing.html',
+            'calendar': 'content-calendar.html',
+            'engagement': 'daily-engagement.html',
+            'checklist': 'checklist-content.html'
+        };
+
+        if (pageFileMap[contentType]) {
+            finalHTML = `<iframe src="${pageFileMap[contentType]}" style="width: 100%; height: 80vh; border: none; border-radius: var(--border-radius);"></iframe>`;
+        } else {
+            finalHTML = getFallbackContent('محتوا', 'این بخش در حال توسعه است...'); 
+        }
+
+        loadedContent.innerHTML = finalHTML;
+    }
+    function getFallbackContent(title, message) {
+        return `<div style="width: 100%; min-height: 300px; background-color: #ffffff; border-radius: var(--border-radius); padding: 20px; box-shadow: var(--card-shadow); text-align:center;">
+            <h3>${title}</h3><p>${message}</p></div>`;
+    }
+
+    // --- خروج از حساب (دکمه‌های خروج) ---
+    async function performLogout() {
+        const loggedOut = await signOut();
+        if (loggedOut) {
+            window.location.href = 'register.html'; // انتقال به صفحه ثبت‌نام/ورود بعد از خروج موفق
+        } else {
+            alert('مشکلی در خروج از حساب رخ داد.');
+        }
+    }
+
+    if (sidebarLogoutButton) {
+        sidebarLogoutButton.addEventListener('click', async (e) => {
+            e.preventDefault();
+            await performLogout();
+        });
+    }
+
+    if (paymentLogoutButton) {
+        paymentLogoutButton.addEventListener('click', async (e) => {
+            e.preventDefault();
+            await performLogout();
+        });
+    }
+
+    // --- اضافه کردن منطق برای دکمه پرداخت (فعلاً فقط یک پیام نمایش می‌دهد) ---    
+    const payNowButton = document.getElementById('pay-now-button');
+    if (payNowButton) {
+        payNowButton.addEventListener('click', () => {
+            alert('به صفحه پرداخت زرین پال منتقل خواهید شد. این بخش در دست توسعه است.');
+            // اینجا باید کد اتصال به درگاه زرین پال قرار گیرد
+        });
+    }
+</script>
+
+</body></html>

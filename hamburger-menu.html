@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl"><head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>منوی همبرگری</title> <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+ <style>
+ :root {
+ --primary-color: #00D968;
+ --primary-light: #4DF5A5;
+ --secondary-color: #00B84B;
+ --dark-color: #008E3A;
+ --light-color: #E6F8EE;
+ --complementary-color: #FF5722;
+ --text-color: #333333;
+ --text-light: #666666;
+ --bg-color: #f9f9f9;
+ --white: #ffffff;
+ --transition: all 0.3s ease;
+ --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+ --shadow: 0 4px 15px rgba(0, 217, 104, 0.2);
+ --border-radius: 12px;
+ }
+
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Vazirmatn', Arial, sans-serif;
+ color: var(--text-color);
+ line-height: 1.6; background-color: var(--bg-color);
+ height: 100vh;
+ overflow-x: hidden;
+ position: relative;
+ }
+
+ .overlay {
+ position: fixed;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background-color: rgba(0, 0, 0, 0.5);
+ z-index: 999;
+ opacity: 0;
+ visibility: hidden;
+ transition: var(--transition);
+ }
+
+ .overlay.active {
+ opacity: 1;
+ visibility: visible;
+ }
+
+ .sidebar {
+ position: fixed;
+ top: 0;
+ right: -80%;
+ width: 75%;
+ max-width: 360px;
+ height: 100%;
+ background-color: var(--white);
+ box-shadow: -3px 0 15px rgba(0, 0, 0, 0.1);
+ z-index: 1000;
+ transition: var(--transition);
+ overflow-y: auto;
+ padding: 20px;
+ display: flex;
+ flex-direction: column;
+ }
+
+ .sidebar.active {
+ right: 0;
+ }
+
+ .sidebar-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ padding-bottom: 20px;
+ margin-bottom: 20px;
+ border-bottom: 1px solid var(--light-color);
+ }
+
+ .sidebar-logo-image {
+ height: 35px;
+ }
+
+ .sidebar-close {
+ width: 36px;
+ height: 36px;
+ background-color: var(--light-color);
+ border-radius: 50%;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ cursor: pointer;
+ transition: var(--transition);
+ }
+
+ .sidebar-close:hover {
+ background-color: var(--primary-light);
+ }
+
+ .user-profile {
+ background: var(--gradient);
+ border-radius: var(--border-radius);
+ padding: 20px;
+ margin-bottom: 25px;
+ color: var(--white);
+ text-align: center;
+ }
+
+ .user-avatar {
+ width: 70px;
+ height: 70px;
+ background-color: rgba(255, 255, 255, 0.2);
+ border-radius: 50%;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ margin: 0 auto 15px;
+ border: 3px solid rgba(255, 255, 255, 0.3);
+ }
+
+ .user-avatar i {
+ font-size: 30px;
+ }
+
+ .user-info h3 {
+ font-size: 16px;
+ font-weight: 600;
+ margin-bottom: 5px;
+ }
+
+ .user-info p {
+ font-size: 13px;
+ opacity: 0.9; margin-bottom: 3px;
+ word-break: break-all;
+ }
+
+ .user-status { display: inline-block;
+ background-color: rgba(255, 255, 255, 0.2);
+ padding: 4px 12px;
+ border-radius: 20px;
+ font-size: 11px;
+ font-weight: 500;
+ margin-top: 8px;
+ }
+
+ .sidebar-menu {
+ display: flex;
+ flex-direction: column;
+ gap: 10px;
+ margin-bottom: 30px;
+ }
+
+ .sidebar-menu-item {
+ display: flex;
+ align-items: center;
+ padding: 14px 16px;
+ border-radius: var(--border-radius);
+ text-decoration: none;
+ color: var(--text-color);
+ transition: var(--transition);
+ }
+
+ .sidebar-menu-item:hover {
+ background-color: var(--light-color);
+ transform: translateX(-5px);
+ }
+
+ .sidebar-menu-item.logout {
+ background-color: #ffebee;
+ color: #c62828;
+ border: 1px solid #ffcdd2;
+ }
+
+ .sidebar-menu-item.logout:hover {
+ background-color: #ffcdd2;
+ }
+
+ .sidebar-menu-icon { width: 40px;
+ height: 40px;
+ background-color: var(--light-color);
+ border-radius: 50%;
+ display: flex;
+ justify-content: center; align-items: center;
+ margin-left: 15px;
+ }
+
+ .sidebar-menu-icon i {
+ color: var(--primary-color);
+ font-size: 18px;
+ } .sidebar-menu-item.logout .sidebar-menu-icon i {
+ color: #c62828;
+ }
+
+ .sidebar-menu-text {
+ font-size: 15px; font-weight: 500;
+ }
+
+ .sidebar-footer {
+ margin-top: auto;
+ padding-top: 20px;
+ border-top: 1px solid var(--light-color);
+ text-align: center;
+ }
+
+ .sidebar-version {
+ font-size: 12px;
+ color: var(--text-light);
+ }
+
+ /* Loading state */
+ .loading {
+ opacity: 0.6;
+ pointer-events: none;
+ }
+ </style>
+</head>
+
+<body>
+
+ <!-- این بخش از کد شما حذف شده چون منوی شما توسط دکمه در header اصلی باز می‌شود -->
+ <!-- <div class="menu-toggle" id="menuToggle"> ... </div> -->
+ <!-- <div class="demo-content"> ... </div> --> <!-- اورلی تیره پشت منو -->
+ <div class="overlay" id="overlay"></div>
+
+ <!-- منوی همبرگری -->
+ <div class="sidebar" id="sidebar">
+ <!-- هدر منو -->
+ <div class="sidebar-header">
+ <div class="sidebar-logo">
+ <img src="images/logo.png" alt="لوگو" class="sidebar-logo-image">
+ </div>
+ <div class="sidebar-close" id="sidebarClose">
+ <i class="fas fa-times"></i>
+ </div>
+ </div>
+
+ <!-- بخش پروفایل کاربر -->
+ <div class="user-profile" id="userProfile">
+ <div class="user-avatar"> <i class="fas fa-user"></i>
+ </div>
+ <div class="user-info">
+ <h3 id="userName">در حال بارگذاری...</h3>
+ <p id="userEmail">...</p>
+ </div>
+ </div>
+
+ <!-- منوی اصلی -->
+ <div class="sidebar-menu">
+ <!-- آیتم‌های منو شما اینجا قرار می‌گیرند -->
+ <!-- مثال: -->
+ <a href="about-app.html" class="sidebar-menu-item">
+ <div class="sidebar-menu-icon"><i class="fas fa-info-circle"></i></div>
+ <div class="sidebar-menu-text">درباره برنامه</div>
+ </a>
+ <!-- ... بقیه آیتم‌های منو ... -->
+
+ <!-- دکمه خروج -->
+ <a href="#" class="sidebar-menu-item logout" id="logoutButton">
+ <div class="sidebar-menu-icon">
+ <i class="fas fa-sign-out-alt"></i>
+ </div>
+ <div class="sidebar-menu-text">خروج از حساب</div>
+ </a>
+ </div>
+
+ <!-- فوتر منو -->
+ <div class="sidebar-footer">
+ <div class="sidebar-version">نسخه 1.0.0</div>
+ </div>
+ </div>
+
+ <script type="module">
+ import { getSession, signOut, supabase } from './auth.js';
+
+ // این اسکریپت باید در صفحه اصلی شما (index.html) باشد
+ // و با منوی واقعی شما یکپارچه شود.
+ // فرض می‌کنیم این کد در همان صفحه‌ای است که منو را باز می‌کند. const sidebar = document.getElementById('sidebar');
+ const overlay = document.getElementById('overlay');
+ const sidebarClose = document.getElementById('sidebarClose');
+ const logoutButton = document.getElementById('logoutButton');
+ const userName = document.getElementById('userName');
+ const userEmail = document.getElementById('userEmail');
+
+ // --- توابع باز و بسته کردن منو ---
+ // این توابع باید از دکمه منوی اصلی شما فراخوانی شوند
+ window.openMenu = function() {
+ sidebar.classList.add('active');
+ overlay.classList.add('active');
+ document.body.style.overflow = 'hidden';
+ }
+
+ window.closeMenu = function() {
+ sidebar.classList.remove('active');
+ overlay.classList.remove('active');
+ document.body.style.overflow = '';
+ }
+
+ // Event Listeners برای بستن منو
+ sidebarClose.addEventListener('click', window.closeMenu);
+ overlay.addEventListener('click', window.closeMenu);
+
+ // --- بارگذاری اطلاعات کاربر ---
+ async function loadUserProfile() {
+ const session = await getSession();
+ if (!session) {
+ console.log("کاربر لاگین نیست، هدایت به صفحه ورود.");
+ window.location.href = 'login.html'; // **مهم:** بررسی کنید این نام فایل درست باشد
+ return;
+ }
+
+ userEmail.textContent = session.user.email; const { data: profile, error } = await supabase
+ .from('profiles')
+ .select('first_name, last_name')
+ .eq('id', session.user.id)
+ .single();
+
+ if (error) {
+ console.error('خطا در دریافت پروفایل:', error);
+ userName.textContent = 'کاربر خوش آمدید';
+ } else if (profile) {
+ const fullName = `${profile.first_name || ''} ${profile.last_name || ''}`.trim();
+ userName.textContent = fullName || session.user.email; // اگر نام نبود، ایمیل را نشان بده
+ }
+ }
+
+ // --- خروج از حساب ---
+ logoutButton.addEventListener('click', async (e) => {
+ e.preventDefault();
+ 
+ if (confirm('آیا برای خروج از حساب مطمئن هستید؟')) {
+ document.body.classList.add('loading');
+ 
+ const loggedOut = await signOut();
+ if (loggedOut) {
+ // ##### اصلاح اصلی اینجا انجام شد #####
+ window.location.href = 'login.html';
+ } else {
+ console.error('مشکلی در خروج از حساب رخ داد.');
+ document.body.classList.remove('loading');
+ alert('مشکلی در خروج از حساب رخ داد.');
+ }
+ }
+ });
+
+ // در ابتدای بارگذاری صفحه، اطلاعات کاربر را فراخوانی کن loadUserProfile();
+ </script>
+</body>
+
+</html>
