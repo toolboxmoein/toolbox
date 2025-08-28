@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پیام‌ها - رادار اینستاگرام</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00D968;
+            --primary-light: #E6F8EE;
+            --secondary-color: #00B84B;
+            --dark-color: #333;
+            --light-color: #f8f9fa;
+            --shadow: 0 10px 30px rgba(0, 217, 104, 0.1);
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --card-shadow: 0 15px 35px rgba(0, 217, 104, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            --border-radius: 16px;
+            --border-color: #e0e0e0;
+            --grey-color: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            background-color: var(--light-color);
+            direction: rtl;
+            text-align: right;
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .page-header h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 50%;
+            transform: translateX(50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+        
+        #messages-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message-card {
+            background-color: #ffffff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            padding: 25px;
+            transition: var(--transition);
+            border-right: 5px solid var(--primary-color);
+        }
+
+        .message-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 217, 104, 0.15), 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .message-author {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        
+        .message-author i {
+            margin-left: 8px;
+            font-size: 1.2rem;
+        }
+
+        .message-timestamp {
+            font-size: 0.85rem;
+            color: var(--grey-color);
+        }
+
+        .message-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #444;
+        }
+
+        #loading-state, #empty-state {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.1rem;
+            color: var(--grey-color);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+            .message-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-envelope-open-text"></i> پیام‌های ادمین</h1>
+        </div>
+        
+        <div id="messages-container">
+            <p id="loading-state">در حال بارگذاری پیام‌ها...</p>
+            <!-- پیام‌ها اینجا به صورت داینامیک اضافه می‌شوند -->
+        </div>
+    </div>
+
+    <script>
+        // آدرس Worker شما (باید با آدرس استفاده شده در بقیه فایل‌ها یکی باشد)
+        const WORKER_URL = 'https://weathered-sun-e806.toolbox-moein.workers.dev';
+        
+        const messagesContainer = document.getElementById('messages-container');
+        const loadingState = document.getElementById('loading-state');
+
+        // تابع برای نمایش پیام‌ها
+        function displayMessages(messages) {
+            // پاک کردن محتوای قبلی (مثل متن "در حال بارگذاری")
+            messagesContainer.innerHTML = '';
+
+            if (!messages || messages.length === 0) {
+                messagesContainer.innerHTML = '<p id="empty-state"><i class="fas fa-info-circle"></i> در حال حاضر هیچ پیامی وجود ندارد.</p>';
+                return;
+            }
+            
+            // مرتب‌سازی پیام‌ها از جدید به قدیم بر اساس timestamp
+            messages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            messages.forEach(message => {
+                const messageCard = document.createElement('div');
+                messageCard.className = 'message-card';
+
+                // تبدیل تاریخ به فرمت خوانای فارسی
+                const formattedDate = new Date(message.timestamp).toLocaleString('fa-IR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                messageCard.innerHTML = `
+                    <div class="message-header">
+                        <div class="message-author">
+                            <i class="fas fa-user-shield"></i>
+                            <span>ادمین</span>
+                        </div>
+                        <div class="message-timestamp">${formattedDate}</div>
+                    </div>
+                    <p class="message-text">${message.text}</p>
+                `;
+                messagesContainer.appendChild(messageCard);
+            });
+        }
+
+        // تابع برای بارگذاری پیام‌ها از Worker
+        async function loadMessages() {
+            try {
+                const response = await fetch(`${WORKER_URL}/messages`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    console.error('Failed to load messages:', response.statusText);
+                    messagesContainer.innerHTML = '<p id="empty-state" style="color: red;">خطا در دریافت پیام‌ها. لطفاً بعداً تلاش کنید.</p>';
+                    return;
+                }
+
+                const data = await response.json();
+                displayMessages(data.messages);
+
+            } catch (error) {
+                console.error('Error loading messages:', error);
+                messagesContainer.innerHTML = '<p id="empty-state" style="color: red;">خطای شبکه. لطفاً اتصال اینترنت خود را بررسی کنید.</p>';
+            }
+        }
+        
+        // اجرای تابع بارگذاری پیام‌ها هنگام باز شدن صفحه
+        document.addEventListener('DOMContentLoaded', loadMessages);
+    </script>
+
+</body>
+</html>
