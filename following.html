@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت فالویینگ‌ها</title>
+
+    <!-- فونت وزیر -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">    <!-- Font Awesome برای آیکون‌ها -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #00D968;
+            --primary-light: #E6F8EE;
+            --dark-color: #333;
+            --light-color: #f8f9fa;
+            --card-shadow: 0 15px 35px rgba(0, 217, 104, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            --subtle-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* اضافه شد برای consistency */
+            --border-radius: 16px;
+            --button-border-radius: 8px;
+            --border-color: #e0e0e0;            --grey-color: #6c757d;
+            --grey-light: #f8f9fa;
+            --grey-medium: #dee2e6;
+            --success-color: #28a745; /* تغییر به سبز تیره تر برای هماهنگی */
+            --info-color: #007bff; /* تغییر به آبی برای هماهنگی */
+            --warning-color: #ffc107;
+            --danger-color: #e53935;
+            --transition: all 0.3s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            background-color: var(--light-color);            
+            direction: rtl;
+            text-align: right;
+            color: var(--dark-color);            
+            line-height: 1.6;
+            overflow-x: hidden; /* جلوگیری از اسکرول افقی اضافی */
+        }
+        
+        /* Wrapper برای محتوای اصلی صفحه فالویینگ */
+        .following-page-wrapper {
+            max-width: 800px; /* برای تراز افقی با دیگر بخش‌های اصلی برنامه */
+            margin: 0 auto; /* وسط‌چین کردن */
+            padding: 20px; /* پدینگ کلی صفحه از اینجا اعمال می‌شود */
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        .dashboard-container, .following-list-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 25px;        
+            width: 100%; /* برای پر کردن عرض wrapper */
+        }
+        
+        .dashboard-container { padding: 20px; } 
+
+        .total-following-input-group { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            margin-bottom: 20px; 
+            border-bottom: 1px solid var(--grey-medium); 
+            padding-bottom: 20px; 
+        }
+        .total-following-input-group label { font-weight: 600; font-size: 1.1rem; flex-shrink: 0; }
+        .total-following-input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--grey-medium);
+            border-radius: var(--button-border-radius);
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 1.1rem;
+            text-align: center;
+            font-weight: 700;
+            transition: color 0.2s ease-in-out;
+            color: var(--dark-color);
+        }
+
+        /* Style for making the input text dim like a placeholder */
+        #total-followings-input.placeholder-style {
+            color: #a0a0a0;
+        }
+        
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+        
+        /* اصلاح شده: چینش دو ستونه ثابت در تمام نمایشگرها */
+        .report-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); /* همیشه دو ستون */
+            gap: 15px; 
+            margin-bottom: 20px; 
+        }
+        .report-card { 
+            background-color: white; /* تغییر به سفید برای هماهنگی با stat-card در فالوور */
+            padding: 15px; 
+            border-radius: var(--border-radius); /* استفاده از border-radius اصلی */
+            border: 2px solid transparent; /* border-color از JS می‌آید */
+            cursor: pointer; 
+            transition: var(--transition); 
+            display: flex; /* برای تنظیم محتوای داخلی */
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative; /* برای Long Press */
+            box-shadow: var(--card-shadow); /* استفاده از card-shadow اصلی */
+        }
+        .report-card:hover { /* اضافه شدن hover state */
+            transform: translateY(-4px);
+        }
+        .report-card.active { 
+            /* border-color از JS می‌آید */
+            background-color: var(--primary-light); /* پس‌زمینه روشن ثابت */
+            transform: translateY(-2px); 
+            box-shadow: 0 2px 8px rgba(0, 217, 104, 0.3), inset 0 0 0 2px var(--primary-color); /* shadow مشابه stat-card */
+        }
+        .report-card-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 10px; 
+            font-weight: 600; 
+            flex-grow: 1; /* اجازه رشد برای اشغال فضای موجود */
+        }
+        .report-card-title { font-size: 1rem; }
+        .report-card-percentage { 
+            font-size: 1.1rem; 
+            font-weight: 700; 
+            color: inherit; /* رنگ از کارت والد گرفته شود (که توسط JS تنظیم می‌شود) */
+        }
+        .progress-bar-container { width: 100%; background-color: var(--grey-medium); border-radius: 50px; height: 10px; overflow: hidden; }
+        .progress-bar { 
+            height: 100%; 
+            border-radius: 50px; 
+            transition: width 0.5s ease-in-out; 
+            background-color: inherit; /* رنگ از کارت والد گرفته شود (که توسط JS تنظیم می‌شود) */
+        }
+        .report-card-count { margin-top: 8px; font-size: 0.9rem; color: var(--grey-color); }
+        
+        /* استایل کارت افزودن دسته جدید */
+        .report-card.add-new-category-card {
+            background-color: var(--grey-light);
+            border: 2px dashed var(--grey-medium); 
+            color: var(--grey-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: var(--subtle-shadow); /* سایه کمی متفاوت برای این کارت */
+        }
+        .report-card.add-new-category-card:hover {
+            border-color: var(--primary-color);
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            transform: translateY(-4px); /* hover effect مشابه کارت‌های دیگر */
+        }
+        .report-card.add-new-category-card .report-card-title {
+            font-weight: 500;
+            font-size: 1rem;
+            color: inherit; 
+            margin-bottom: 5px;
+        }
+        .report-card.add-new-category-card .report-card-percentage i {
+            font-size: 2.5rem; 
+            color: inherit; 
+            margin-bottom: 0;
+            line-height: 1; /* برای وسط چین کردن آیکون */
+        }
+        .report-card.add-new-category-card .report-card-header {
+            flex-direction: column; /* عنوان و آیکون روی هم قرار گیرند */
+            gap: 10px;
+            margin-bottom: 0;
+        }
+        .report-card.add-new-category-card .report-card-count {
+            display: none; /* تعداد را برای کارت افزودن دسته جدید مخفی کن */
+        }
+        /* استایل برای کارت "افزودن دسته جدید" وقتی تمام عرض را می‌گیرد */
+        .report-card.add-new-category-card.full-width {
+            grid-column: 1 / -1; /* این کارت دو ستون را اشغال می‌کند */
+        }
+
+
+        .guidance-box { background-color: var(--primary-light); border-right: 4px solid var(--primary-color); padding: 15px; border-radius: var(--button-border-radius); margin-top: 20px; display: flex; align-items: center; gap: 15px; }
+        .guidance-box i { font-size: 24px; color: var(--primary-color); }
+
+        /* General action button styles (copied from follower.html for consistency) */
+        .action-button {
+            background-color: #f2f2f2;
+            border: 1px solid #d9d9d9;
+            border-radius: var(--button-border-radius);
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            color: var(--dark-color);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            white-space: nowrap;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+        .action-button i {
+            margin-left: 8px;
+            font-size: 1.1em;
+        }
+        .action-button.primary {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        .action-button.danger {
+            background-color: var(--danger-color);
+            color: white;
+            border-color: var(--danger-color);
+        }
+
+        #add-following-btn { 
+            background-color: var(--primary-color); 
+            color: white; 
+            padding: 12px 20px; 
+            font-size: 1rem; 
+            border-radius: var(--button-border-radius); 
+            border: none; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            width: 100%; /* برای پر کردن عرض wrapper */
+            max-width: none; /* حذف محدودیت عرض قبلی */
+            margin: 0 auto 20px; /* وسط‌چین کردن و فاصله پایین */
+            font-family: 'Vazirmatn', Arial, sans-serif; 
+        }
+        .following-list-container { padding: 20px; }
+        .following-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid var(--grey-light); gap: 15px; }
+        .following-item:first-child { padding-top: 0; }
+        .following-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .following-info { display: flex; align-items: center; gap: 15px; text-align: right; }        .following-avatar { width: 40px; height: 40px; border-radius: 50%; background-color: var(--primary-light); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 600; color: var(--primary-color); flex-shrink: 0; }
+        .following-username { font-weight: 600; }
+        .following-name { font-size: 0.9rem; color: var(--grey-color); }
+        .category-tag { padding: 3px 10px; border-radius: 50px; font-size: 0.8rem; font-weight: 500; color: black; }
+        /* رنگ Category Tag از رنگ دسته گرفته شود */
+        .category-tag { background-color: inherit; color: inherit; } 
+        .following-actions button { background: none; border: none; font-size: 1rem; cursor: pointer; padding: 5px; color: var(--grey-color); }
+        .following-actions button:hover { color: var(--dark-color); }
+        .following-actions .delete-btn:hover { color: var(--danger-color); }
+        
+        .alert-message { 
+            padding: 12px 20px; 
+            margin-bottom: 20px; 
+            border-radius: var(--button-border-radius); 
+            font-size: 0.95rem; 
+            font-weight: 500; 
+            text-align: center; 
+            display: none; 
+            border: 1px solid transparent; 
+            transition: opacity 0.3s ease; 
+            width: 100%; /* برای پر کردن عرض wrapper */
+        }
+        .alert-message.error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+        .alert-message.success { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
+        .alert-message.info { background-color: var(--primary-light); color: var(--primary-color); border-color: var(--border-color); }
+
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.65); z-index: 2001; display: none; justify-content: center; align-items: center; }
+        .modal-content { background-color: white; border-radius: var(--border-radius); padding: 30px; width: 90%; max-width: 520px; }
+        .modal-title { font-size: 1.3rem; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid var(--grey-medium); border-radius: var(--button-border-radius); font-family: 'Vazirmatn', Arial, sans-serif; font-size: 1rem; }
+        
+        #following-username-input, #new-category-name-input {
+            direction: ltr;
+            text-align: left;
+        }
+        /* جایگزینی input[type="color"] با پالت رنگ */
+        .color-palette-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: nowrap; /* همیشه در یک ردیف */
+            overflow-x: auto; /* اگر تعداد رنگ‌ها زیاد شد، اسکرول افقی داشته باشد */
+            padding-bottom: 5px; /* برای فضای اسکرول‌بار */
+        }
+        .color-swatch {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid var(--grey-medium);
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+            flex-shrink: 0; /* جلوگیری از کوچک شدن در موبایل */
+        }
+        .color-swatch:hover {
+            transform: scale(1.1);
+        }
+        .color-swatch.active {
+            border-color: var(--primary-color);
+            transform: scale(1.1);
+            box-shadow: 0 0 0 3px var(--primary-light); /* حلقه سبز دور رنگ فعال */
+        }
+
+        .category-selection-row { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; } /* اضافه شدن flex-wrap */
+        .category-btn { 
+            flex: 1; /* اجازه رشد برای اشغال فضای موجود */
+            min-width: calc(50% - 5px); /* حداقل عرض برای دو ستون */
+            padding: 10px; 
+            font-size: 0.9rem; 
+            border: 1px solid var(--grey-medium); 
+            border-radius: var(--button-border-radius); 
+            background-color: white; 
+            cursor: pointer; 
+            transition: var(--transition); 
+            font-family: 'Vazirmatn', Arial, sans-serif; 
+            color: var(--dark-color); /* رنگ پیش فرض متن */
+        }
+        /* استایل دکمه‌های دسته در حالت فعال */
+        .category-btn.active {
+            border: 2px solid; /* رنگ border از JS می‌آید */
+            background-color: var(--primary-light); /* پس‌زمینه روشن ثابت */
+            color: var(--dark-color); /* متن تیره برای پس‌زمینه روشن */
+            font-weight: 600; /* متن پررنگ */
+        }
+        
+        .category-descriptions { background-color: #f7f7f7; border: 1px solid var(--border-color); padding: 12px; border-radius: var(--button-border-radius); font-size: 0.85rem; color: var(--grey-color); }
+        .category-descriptions p { margin-bottom: 8px; line-height: 1.5; }
+        .category-descriptions p:last-child { margin-bottom: 0; }
+        .category-descriptions b { color: var(--dark-color); font-weight: 600; }
+        
+        .modal-footer { 
+            display: flex; 
+            gap: 10px; 
+            margin-top: 25px; 
+            justify-content: center; /* برای وسط چین شدن دکمه‌ها */
+        }
+        .modal-footer button { 
+            flex: 1; 
+            padding: 12px; 
+            border-radius: var(--button-border-radius); 
+            font-size: 1rem; 
+            border: none; 
+            cursor: pointer; 
+            font-family: 'Vazirmatn', Arial, sans-serif; 
+        }
+        #save-following-btn, #save-new-category-btn { background-color: var(--primary-color); color: white; }
+        .modal-cancel { background-color: var(--grey-medium); color: var(--dark-color); }
+        
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--grey-color); }
+        .empty-state i { font-size: 40px; margin-bottom: 15px; opacity: 0.5; }
+
+        /* Modal برای ویرایش/حذف دسته */
+        #category-action-modal .modal-content {
+            padding: 25px;
+            max-width: 380px;
+            text-align: center;
+        }
+        #category-action-modal .modal-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--grey-light);
+        }
+        #category-action-modal p {
+            margin-bottom: 20px;
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+        /* اصلاح شده: چینش دکمه‌ها در category-action-modal */
+        #category-action-modal .action-buttons-group {
+            display: flex;
+            flex-direction: column; /* برای اینکه ردیف‌ها زیر هم باشند */
+            gap: 10px; /* فاصله بین ردیف‌ها */
+            margin-top: 20px;
+        }
+        #category-action-modal .action-buttons-row { /* ردیف برای دکمه‌های ویرایش/حذف */
+            display: flex;
+            gap: 10px; /* فاصله بین دکمه‌ها در یک ردیف */
+            width: 100%;
+        }
+        #category-action-modal .action-buttons-group button {
+            flex: 1; /* دکمه‌ها عرض یکسان بگیرند */
+            padding: 12px;
+            border-radius: var(--button-border-radius);
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none; /* حذف border پیش‌فرض */
+        }
+        #category-action-modal #edit-category-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        #category-action-modal #edit-category-btn:hover {
+            opacity: 0.9;
+        }
+        #category-action-modal #delete-category-btn {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        #category-action-modal #delete-category-btn:hover {
+            opacity: 0.9;
+        }
+        #category-action-modal #cancel-action-btn {
+            background-color: var(--grey-medium);
+            color: var(--dark-color);
+        }
+        #category-action-modal #cancel-action-btn:hover {
+            background-color: var(--grey-color);
+            color: white;
+        }
+        
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .following-page-wrapper {
+                padding: 10px; /* پدینگ کمتر در موبایل */
+            }
+            .dashboard-container, .following-list-container {
+                margin-bottom: 15px;
+            }
+            .dashboard-container {
+                padding: 15px;
+            }
+            .total-following-input-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding-bottom: 15px;
+            }
+            .total-following-input-group label {
+                font-size: 1rem;
+            }
+            /* .report-grid {
+                grid-template-columns: 1fr; /* این خط حذف شد تا 2 ستونه بماند */
+            /* } */
+            .report-card {
+                padding: 12px;
+            }
+            .guidance-box {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            .guidance-box i {
+                margin-bottom: 5px;
+            }
+            #add-following-btn {
+                padding: 10px 15px;
+                font-size: 0.95rem;
+            }
+            .following-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .following-info:last-child {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            .following-avatar {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+            .following-username {
+                font-size: 0.95rem;
+            }
+            .following-name, .category-tag {
+                font-size: 0.8rem;
+            }
+            .following-actions {
+                margin-left: auto;
+            }
+            .modal-content {
+                padding: 20px;
+            }
+            .modal-title {
+                font-size: 1.2rem;
+            }
+            .category-selection-row {
+                flex-wrap: wrap;
+            }
+            .category-btn {
+                flex: none;
+                width: calc(50% - 5px);
+            }
+            .modal-footer {
+                flex-direction: column;
+            }
+            /* اصلاح شده: چینش دکمه‌های action-buttons-row در موبایل */
+            #category-action-modal .action-buttons-row {
+                flex-direction: row; /* همچنان ردیفی */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="following-page-wrapper"> <!-- Wrapper جدید برای هم‌ترازی افقی -->
+        <div class="dashboard-container">
+            <div class="total-following-input-group">
+                <label for="total-followings-input">تعداد کل فالویینگ‌ها:</label>
+                <input type="number" id="total-followings-input" placeholder="500">
+            </div>
+            <div class="report-grid" id="report-grid-container"> 
+                <!-- کارت‌های دسته‌بندی و "افزودن دسته جدید" اینجا به صورت داینامیک توسط جاوااسکریپت رندر می‌شوند -->
+            </div>
+            <div class="guidance-box" id="guidance-box"><i class="fas fa-lightbulb"></i><p id="guidance-text">برای شروع، تعداد کل فالویینگ‌های خود را وارد کرده و پروفایل‌ها را ثبت کنید.</p></div>
+        </div>    
+        <div id="app-alert" class="alert-message" style="display: none;"></div>
+        <button id="add-following-btn"><i class="fas fa-user-plus"></i> افزودن پیج جدید</button>
+        <div class="following-list-container">
+            <div id="following-list"><div class="empty-state"><i class="fas fa-users"></i><p>هنوز فالویینگی ثبت نشده است.</p></div></div>
+        </div>
+    </div> <!-- پایان following-page-wrapper -->
+
+    <!-- Modal برای افزودن/ویرایش فالویینگ -->
+    <div class="modal" id="following-modal">
+        <div class="modal-content">
+            <h3 class="modal-title" id="modal-title">افزودن پیج جدید</h3>
+            <div id="modal-alert" class="alert-message" style="display: none; margin-bottom: 15px;"></div>
+            <div class="form-group"><label for="following-username-input">نام کاربری (آی‌دی):</label><input type="text" id="following-username-input" placeholder="مثال: amlak.moein"></div>
+            <div class="form-group"><label for="following-name-input">نام:</label><input type="text" id="following-name-input" placeholder="مثال: املاک معین"></div>
+            <div class="form-group">
+                <label>دسته‌بندی:</label>
+                <div class="category-selection-row">
+                    <!-- دکمه‌های دسته‌بندی اینجا به صورت داینامیک توسط جاوااسکریپت رندر می‌شوند -->
+                </div>
+                <div class="category-descriptions">
+                    <p><b>مکمل:</b> پیج‌هایی با مخاطبان مشترک و ارزشمند، اما در حوزه‌ای متفاوت (مانند طراح داخلی برای یک املاک).</p>
+                    <p><b>مرتبط:</b> پیج‌های همکار یا رقیب که دقیقا در حوزه کاری شما فعالیت می‌کنند و منبع تحلیل و الهام‌بخشی هستند.</p>
+                    <p><b>متفرقه:</b> پیج‌های شخصی، دوستان، خانواده و هر پیجی که ارتباط مستقیم با اهداف کاری شما ندارد.</p>
+                </div>            
+            </div>
+            <div class="modal-footer"><button id="save-following-btn">ذخیره</button><button class="modal-cancel" onclick="closeModal(document.getElementById('following-modal'))">انصراف</button></div>
+        </div>
+    </div>
+
+    <!-- Modal جدید برای افزودن/ویرایش دسته جدید -->
+    <div class="modal" id="add-category-modal">
+        <div class="modal-content">
+            <h3 class="modal-title" id="add-edit-category-modal-title">افزودن دسته جدید</h3>
+            <div id="add-category-modal-alert" class="alert-message" style="display: none; margin-bottom: 15px;"></div>
+            <div class="form-group">
+                <label for="new-category-name-input">نام دسته:</label>
+                <input type="text" id="new-category-name-input" placeholder="مثال: اینفلوئنسرها">
+            </div>
+            <div class="form-group">
+                <label>رنگ دسته:</label>
+                <div class="color-palette-container" id="new-category-color-palette">
+                    <!-- Color swatches will be rendered here by JS -->
+                </div>
+                <input type="hidden" id="new-category-selected-color" value="#00D968"> <!-- Hidden input to store selected color -->
+            </div>
+            <div class="modal-footer">
+                <button id="save-new-category-btn">ذخیره</button>
+                <button class="modal-cancel" onclick="closeModal(document.getElementById('add-category-modal'))">انصراف</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal جدید برای اکشن‌های (ویرایش/حذف) دسته -->
+    <div class="modal" id="category-action-modal">
+        <div class="modal-content">
+            <h3 class="modal-title">مدیریت دسته</h3>
+            <p>برای دسته "<strong id="action-category-name"></strong>" چه کاری می‌خواهید انجام دهید؟</p>
+            <div id="category-action-modal-alert" class="alert-message" style="display: none; margin-bottom: 15px;"></div>
+            <div class="action-buttons-group">
+                <div class="action-buttons-row">
+                    <button class="action-button primary" id="edit-category-btn"><i class="fas fa-pencil-alt"></i> ویرایش</button>
+                    <button class="action-button danger" id="delete-category-btn"><i class="fas fa-trash-alt"></i> حذف</button>
+                </div>
+                <div class="action-buttons-row">
+                    <button class="action-button modal-cancel" id="cancel-action-btn">انصراف</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal برای تایید حذف دسته -->
+    <div class="modal" id="confirm-delete-category-modal">
+        <div class="modal-content">
+            <h3 class="modal-title">تایید حذف دسته</h3>
+            <p>آیا از حذف دسته "<strong id="confirm-delete-category-name"></strong>" اطمینان دارید؟ تمامی فالویینگ‌های این دسته به "متفرقه" منتقل می‌شوند.</p>
+            <div class="modal-footer">
+                <button class="action-button danger" id="confirm-delete-category-yes">بله، حذف شود</button>
+                <button class="action-button modal-cancel" id="confirm-delete-category-no">انصراف</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global constants for categories
+        const DEFAULT_CATEGORIES_DATA = [
+            { key: 'complementary', name: 'مکمل', color: '#28a745' }, // استفاده از هگز کد برای سازگاری
+            { key: 'related', name: 'مرتبط', color: '#007bff' },
+            { key: 'miscellaneous', name: 'متفرقه', color: '#ffc107' }
+        ];
+        // 5 رنگ از پیش تعریف شده برای انتخاب در مودال افزودن دسته
+        const PREDEFINED_COLORS = [
+            '#00D968', // Primary Green (can be different from success-color)
+            '#007bff', // Blue
+            '#ffc107', // Yellow
+            '#e53935', // Red
+            '#6c757d'  // Grey
+        ];
+
+        const LOCAL_STORAGE_FOLLOWINGS = 'following-data';
+        const LOCAL_STORAGE_TOTAL = 'following-total-count';
+        const LOCAL_STORAGE_USER_CATEGORIES = 'following-user-categories';
+        
+        let followings = [];
+        let totalFollowingsCount = 0;        
+        let editingFollowingId = null;
+        let selectedCategoryKey = null; // Store the key of the selected category
+        let activeFilterCategoryKeys = []; // Renamed for clarity, stores keys of active filters
+        let userDefinedCategories = []; // Stores custom categories added by the user
+        let allAvailableCategories = []; // Combines DEFAULT_CATEGORIES_DATA and userDefinedCategories
+
+        // Variables for Long Press logic
+        let pressTimer = null; // Changed from longPressTimer for clarity
+        let isLongPress = false;
+        let currentCategoryForActions = null; // Stores the category object for actions (edit/delete)
+        const LONG_PRESS_DURATION = 1000; // 1 second
+        const MOVE_THRESHOLD = 10; // Pixels for minimal movement to cancel long press
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            updateDashboard();
+            renderFollowingList();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            const totalInput = document.getElementById('total-followings-input');
+            const usernameInput = document.getElementById('following-username-input');
+
+            totalInput.addEventListener('focus', () => {
+                totalInput.classList.remove('placeholder-style');
+            });
+            
+            totalInput.addEventListener('blur', () => {                
+                if (totalInput.value) {
+                    totalInput.classList.add('placeholder-style');
+                } else {
+                    totalInput.classList.remove('placeholder-style'); // اگر خالی شد، استایل را بردار
+                }
+            });
+
+            totalInput.addEventListener('input', () => {
+                totalFollowingsCount = parseInt(totalInput.value, 10) || 0;
+                updateDashboard();
+                saveData();
+            });
+
+            usernameInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^a-zA-Z0-9._]/g, '');
+            });
+            
+            document.getElementById('add-following-btn').addEventListener('click', () => openModal(document.getElementById('following-modal')));
+            document.getElementById('save-following-btn').addEventListener('click', saveFollowing);
+            
+            document.getElementById('save-new-category-btn').addEventListener('click', saveNewCategory);
+
+            // Generic modal close for all modal-cancel buttons
+            document.querySelectorAll('.modal-cancel').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault(); // Prevent form submission if it's inside a form
+                    closeModal(event.target.closest('.modal'));
+                });
+            });
+
+            // Event listeners for category action modal buttons
+            document.getElementById('edit-category-btn').addEventListener('click', () => editCategory(currentCategoryForActions.key));
+            document.getElementById('delete-category-btn').addEventListener('click', () => confirmDeleteCategory(currentCategoryForActions.key));
+            // Changed cancel-action-btn from modal-cancel to explicit click listener
+            document.getElementById('cancel-action-btn').addEventListener('click', () => closeModal(document.getElementById('category-action-modal')));
+            
+            // Event listener for confirm delete category YES button
+            document.getElementById('confirm-delete-category-yes').addEventListener('click', () => deleteCategory(currentCategoryForActions.key));
+            // Event listener for confirm delete category NO button (which is modal-cancel)
+            document.getElementById('confirm-delete-category-no').addEventListener('click', () => closeModal(document.getElementById('confirm-delete-category-modal')));
+        }
+
+        // Generic showAlert function, can target specific alert elements
+        function showAlert(message, type = 'info', isModal = false, targetElement = null) {
+            const alertElement = targetElement || (isModal ? document.getElementById('modal-alert') : document.getElementById('app-alert'));
+            if (alertElement) {
+                alertElement.textContent = message;
+                alertElement.className = `alert-message ${type}`;
+                alertElement.style.display = 'block';
+                if (!isModal) {
+                    setTimeout(() => { alertElement.style.display = 'none'; }, 4000);
+                }
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem(LOCAL_STORAGE_FOLLOWINGS, JSON.stringify(followings));
+            localStorage.setItem(LOCAL_STORAGE_TOTAL, totalFollowingsCount);
+            localStorage.setItem(LOCAL_STORAGE_USER_CATEGORIES, JSON.stringify(userDefinedCategories));
+        }
+
+        function loadData() {
+            const totalInput = document.getElementById('total-followings-input');
+            followings = JSON.parse(localStorage.getItem(LOCAL_STORAGE_FOLLOWINGS) || '[]');
+            const savedTotal = localStorage.getItem(LOCAL_STORAGE_TOTAL);
+            userDefinedCategories = JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER_CATEGORIES) || '[]');
+            updateAllAvailableCategories(); // Update combined categories after loading
+
+            if (totalInput) {
+                if (savedTotal !== null && savedTotal !== '') {
+                    totalFollowingsCount = parseInt(savedTotal, 10);                    
+                    totalInput.value = totalFollowingsCount;
+                    totalInput.classList.add('placeholder-style');
+                } else {
+                    totalFollowingsCount = 0;
+                    totalInput.value = '';
+                    totalInput.classList.remove('placeholder-style');
+                }
+            }
+        }
+        
+        // Function to combine default and user-defined categories
+        function updateAllAvailableCategories() {
+            // Ensure default categories are always present and at the beginning
+            const defaultKeys = DEFAULT_CATEGORIES_DATA.map(c => c.key);
+            const filteredUserCategories = userDefinedCategories.filter(uc => !defaultKeys.includes(uc.key));
+            allAvailableCategories = [...DEFAULT_CATEGORIES_DATA, ...filteredUserCategories];
+        }
+
+        function updateDashboard() {
+            const reportGridContainer = document.getElementById('report-grid-container');
+            if (!reportGridContainer) return;
+            reportGridContainer.innerHTML = ''; // Clear existing cards
+
+            const counts = {};
+            allAvailableCategories.forEach(cat => {
+                counts[cat.key] = followings.filter(f => f.categoryKey === cat.key).length;
+            });
+
+            const totalCategorized = followings.length;
+            const percentages = {};
+
+            allAvailableCategories.forEach(cat => {
+                percentages[cat.key] = totalCategorized > 0 ? Math.round((counts[cat.key] / totalCategorized) * 100) : 0;
+            });
+
+            // Render all dynamic categories first
+            allAvailableCategories.forEach(cat => {
+                const card = createReportCardElement(cat, counts[cat.key], percentages[cat.key]);
+                reportGridContainer.appendChild(card);
+            });
+
+            // Add the "Add New Category" card last
+            const addNewCardDiv = document.createElement('div');
+            addNewCardDiv.className = 'report-card add-new-category-card';
+            addNewCardDiv.id = 'add-new-category-card'; // For easy reference in JS
+            addNewCardDiv.innerHTML = `
+                <div class="report-card-header">
+                    <span class="report-card-title">افزودن دسته جدید</span>
+                    <span class="report-card-percentage"><i class="fas fa-plus"></i></span>
+                </div>
+            `;
+            // Removed direct event listener here, will be added via createReportCardElement for consistency
+            reportGridContainer.appendChild(addNewCardDiv);
+
+            // Apply full-width style to "Add New Category" card if it's the only one in its row
+            const allCardsInGrid = reportGridContainer.children;
+            const addNewCategoryCard = document.getElementById('add-new-category-card');
+
+            if (addNewCategoryCard) {
+                // Check if the total number of cards is odd and it's the last card
+                // Only apply full-width if the total number of cards is odd.
+                if (allCardsInGrid.length % 2 !== 0 && allCardsInGrid[allCardsInGrid.length - 1] === addNewCategoryCard) {
+                    addNewCategoryCard.classList.add('full-width');
+                } else {
+                    addNewCategoryCard.classList.remove('full-width');
+                }
+            }
+
+            updateGuidance(percentages);
+        }
+
+        function createReportCardElement(category, count, percentage) {
+            const card = document.createElement('div');
+            card.className = `report-card`;
+            card.dataset.categoryKey = category.key;
+            card.dataset.categoryName = category.name;
+            
+            // Set dynamic colors
+            card.style.borderColor = category.color;
+            card.style.color = category.color; 
+            
+            // Check if this category is currently active in filters
+            if (activeFilterCategoryKeys.includes(category.key)) {
+                card.classList.add('active');
+            }
+
+            card.innerHTML = `
+                <div class="report-card-header">
+                    <span class="report-card-title">${category.name}</span>
+                    <span class="report-card-percentage" style="color: ${category.color};">${percentage}%</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="background-color: ${category.color}; width: ${percentage}%;"></div>
+                </div>
+                <div class="report-card-count" style="color: var(--grey-color);">${count} فالویینگ</div>
+            `;
+            
+            // Long press / Click event listeners
+            let startX, startY;
+            
+            const handlePressStart = (e) => {
+                if (category.key === 'add-new-category-card') { // Special handling for add new category card
+                    clearTimeout(pressTimer);
+                    isLongPress = false;
+                    return; // No long press for this card
+                }
+                if (e.button && e.button !== 0) return; // Only left-click for mouse
+                
+                clearTimeout(pressTimer);
+                isLongPress = false; // Reset for this new press
+
+                startX = e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX);
+                startY = e.clientY || (e.touches && e.touches[0] && e.touches[0].clientY);
+                
+                // Prevent default text selection on long press
+                if (e.cancelable) e.preventDefault();
+
+                pressTimer = setTimeout(() => {
+                    isLongPress = true;
+                    openCategoryActionModal(category.key);
+                }, LONG_PRESS_DURATION);
+            };
+
+            const handlePressEnd = (e) => {
+                clearTimeout(pressTimer);
+                if (!isLongPress && (e.type === 'mouseup' || e.type === 'touchend')) {
+                    // It was a short click/tap
+                    toggleCategoryFilter(category.key, card);
+                }
+                isLongPress = false; // Always reset after end
+            };
+
+            const handlePressMove = (e) => {
+                if (isLongPress) return; // If long press already triggered, ignore move
+
+                const currentX = e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX);
+                const currentY = e.clientY || (e.touches && e.touches[0] && e.touches[0].clientY);
+                
+                if (startX === undefined || startY === undefined || currentX === undefined || currentY === undefined) {
+                    return; // Not enough data points
+                }
+
+                const dx = Math.abs(currentX - startX);
+                const dy = Math.abs(currentY - startY);
+
+                if (dx > MOVE_THRESHOLD || dy > MOVE_THRESHOLD) {
+                    clearTimeout(pressTimer);
+                    isLongPress = false; // Movement cancels long press
+                }
+            };
+
+            // Event Listeners for standard category cards
+            if (category.key !== 'add-new-category-card') {
+                card.addEventListener('mousedown', handlePressStart);
+                card.addEventListener('mouseup', handlePressEnd);
+                card.addEventListener('mouseleave', () => clearTimeout(pressTimer)); 
+
+                card.addEventListener('touchstart', handlePressStart, { passive: false }); 
+                card.addEventListener('touchend', handlePressEnd);
+                card.addEventListener('touchmove', handlePressMove, { passive: false }); 
+                card.addEventListener('touchcancel', () => clearTimeout(pressTimer));
+            } else {
+                // Specific click for "Add New Category" card
+                card.addEventListener('click', openAddCategoryModal);
+            }
+
+            return card;
+        }
+        
+        // Helper function to determine contrasting text color (black or white)
+        function getContrastColor(hexcolor) {
+            // For CSS variables, convert to a known hex or return default
+            if (hexcolor.startsWith('var(')) {
+                if (hexcolor === 'var(--success-color)') return 'white'; // #28a745
+                if (hexcolor === 'var(--info-color)') return 'white'; // #007bff
+                if (hexcolor === 'var(--warning-color)') return '#333'; // #ffc107
+                if (hexcolor === 'var(--primary-color)') return 'white'; // #00D968
+                if (hexcolor === 'var(--dark-color)') return 'white'; // #333
+                if (hexcolor === 'var(--grey-color)') return 'white'; // #6c757d
+                // Fallback for unknown vars
+                return 'white'; 
+            }
+            // For actual hex codes
+            const r = parseInt(hexcolor.slice(1, 3), 16);
+            const g = parseInt(hexcolor.slice(3, 5), 16);
+            const b = parseInt(hexcolor.slice(5, 7), 16);
+            const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+            return (yiq >= 128) ? '#333' : 'white'; /* استفاده از dark-color برای تضاد بهتر */
+        }
+
+        // Refactor toggleCategoryFilter to use categoryKey
+        function toggleCategoryFilter(categoryKey, cardElement) {
+            // Prevent filter toggle if it was a long press
+            if (isLongPress) {
+                isLongPress = false; // Reset flag
+                return;
+            }
+
+            // If the clicked card is the "Add New Category" card, do not filter.
+            if (categoryKey === 'add-new-category-card') {
+                return;
+            }
+
+            cardElement.classList.toggle('active');
+            if (activeFilterCategoryKeys.includes(categoryKey)) {
+                activeFilterCategoryKeys = activeFilterCategoryKeys.filter(c => c !== categoryKey);
+            } else {
+                activeFilterCategoryKeys.push(categoryKey);
+            }
+            // Re-render dashboard to update active states of other cards
+            updateDashboard();
+            renderFollowingList();
+        }
+
+        function updateGuidance(percentages) {
+            const guidanceText = document.getElementById('guidance-text');
+            const totalCountInput = document.getElementById('total-followings-input');
+            const hasTotalCount = totalCountInput.value !== '';
+
+            if(followings.length === 0 && !hasTotalCount) {
+                 guidanceText.textContent = 'برای شروع، تعداد کل فالویینگ‌های خود را وارد کرده و پروفایل‌ها را ثبت کنید.';
+                 return;
+            }            
+            // Find miscellaneous percentage by key
+            const miscellaneousCat = allAvailableCategories.find(cat => cat.key === 'miscellaneous');
+            const miscellaneousPercentage = miscellaneousCat ? percentages[miscellaneousCat.key] : 0;
+
+            // Find complementary percentage by key
+            const complementaryCat = allAvailableCategories.find(cat => cat.key === 'complementary');
+            const complementaryPercentage = complementaryCat ? percentages[complementaryCat.key] : 0;
+
+
+            if (miscellaneousPercentage > 40) {
+                guidanceText.textContent = 'تحلیل: درصد بالایی از فالویینگ‌های شما متفرقه هستند. برای بهبود کیفیت فید، آنفالو کردن برخی را در نظر بگیرید.';
+            } else if (complementaryPercentage < 10 && followings.length > 20) {
+                guidanceText.textContent = 'تحلیل: تعداد کمی فالویینگ مکمل دارید. برای الهام گرفتن و یادگیری، افراد موفق حوزه کاری خود را دنبال کنید.';
+            } else if (totalFollowingsCount > 0 && followings.length / totalFollowingsCount < 0.5) {
+                guidanceText.textContent = 'نکته: کمتر از نیمی از فالویینگ‌ها دسته‌بندی شده‌اند. برای گزارش دقیق‌تر، پروفایل‌ها را ثبت کنید.';            
+            } else {
+                guidanceText.textContent = 'وضعیت دسته‌بندی شما مناسب به نظر می‌رسد. به مدیریت منظم فالویینگ‌های خود ادامه دهید.';
+            }
+        }
+
+        function renderFollowingList() {
+            const followingListDiv = document.getElementById('following-list');
+            followingListDiv.innerHTML = '';
+            let itemsToRender = followings;            
+            if (activeFilterCategoryKeys.length > 0) {
+                itemsToRender = followings.filter(f => activeFilterCategoryKeys.includes(f.categoryKey));
+            }
+            if (itemsToRender.length === 0) {
+                followingListDiv.innerHTML = `<div class="empty-state"><i class="fas fa-users"></i><p>${activeFilterCategoryKeys.length > 0 ? 'فالووینگی در دسته‌های انتخابی یافت نشد.' : 'هنوز فالویینگی ثبت نشده است.'}</p></div>`;
+                return;            
+            }
+            itemsToRender.forEach(f => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'following-item';
+                // Find category data to get color and name
+                const categoryData = allAvailableCategories.find(cat => cat.key === f.categoryKey);
+                const categoryColor = categoryData ? categoryData.color : 'var(--grey-color)'; // Fallback color
+                const categoryName = categoryData ? categoryData.name : f.categoryKey; // Fallback name
+                const categoryTextColor = getContrastColor(categoryColor);
+
+                itemDiv.innerHTML = `
+                    <div class="following-info">
+                        <div class="following-avatar" style="background-color: ${categoryColor}; color: ${categoryTextColor};">${f.username.charAt(0).toUpperCase()}</div>
+                        <div><div class="following-username">${f.username}</div><div class="following-name">${f.name || ''}</div></div>
+                    </div>
+                    <div class="following-info">
+                         <div class="category-tag" style="background-color: ${categoryColor}; color: ${categoryTextColor};">${categoryName}</div>                         
+                         <div class="following-actions">
+                            <button onclick="openModal(document.getElementById('following-modal'), '${f.id}')" title="ویرایش"><i class="fas fa-pencil-alt"></i></button>
+                            <button class="delete-btn" onclick="removeFollowing('${f.id}')" title="حذف"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>`;
+                followingListDiv.appendChild(itemDiv);
+            });
+        }
+        
+        function saveFollowing() {
+            const usernameInput = document.getElementById('following-username-input');
+            const nameInput = document.getElementById('following-name-input');
+            const username = usernameInput.value.trim();
+            const name = nameInput.value.trim();
+
+            if (!username || !selectedCategoryKey) {
+                showAlert('لطفاً نام کاربری و دسته‌بندی را مشخص کنید.', 'error', true, document.getElementById('modal-alert'));
+                return;
+            }
+
+            // Check for duplicate username
+            const existingFollowing = followings.find(f => f.username.toLowerCase() === username.toLowerCase());
+            if (existingFollowing && (!editingFollowingId || existingFollowing.id !== editingFollowingId)) {
+                showAlert('این نام کاربری قبلاً ثبت شده است.', 'error', true, document.getElementById('modal-alert'));
+                return;
+            }
+
+            if (editingFollowingId) {
+                const index = followings.findIndex(f => f.id === editingFollowingId);
+                if (index > -1) {
+                    followings[index].username = username;
+                    followings[index].name = name;
+                    followings[index].categoryKey = selectedCategoryKey; // Store category key
+                }
+                showAlert(`پیج ${username} با موفقیت ویرایش شد.`, 'success');            
+            } else {
+                const newFollowing = { id: 'id_' + Date.now(), username: username, name: name, categoryKey: selectedCategoryKey }; // Store category key
+                followings.push(newFollowing);
+                showAlert(`پیج ${username} با موفقیت اضافه شد.`, 'success');
+            }
+            closeModal(document.getElementById('following-modal'));            
+            saveData();
+            updateDashboard();
+            renderFollowingList();
+        }
+
+        function removeFollowing(id) {
+            if (confirm('آیا از حذف این آیتم اطمینان دارید؟')) {                
+                const followingToRemove = followings.find(f => f.id === id);
+                followings = followings.filter(f => f.id !== id);
+                saveData();
+                updateDashboard();
+                renderFollowingList();
+                showAlert(`پیج ${followingToRemove.username} حذف شد.`, 'info');            
+            }
+        }
+
+        // Generic openModal function
+        function openModal(modalElement, id = null) {
+            document.body.classList.add('modal-open');
+            modalElement.style.display = 'flex';
+
+            if (modalElement.id === 'following-modal') {
+                const modalTitle = document.getElementById('modal-title');
+                const usernameInput = document.getElementById('following-username-input');
+                const nameInput = document.getElementById('following-name-input');
+                document.getElementById('modal-alert').style.display = 'none';
+                editingFollowingId = id;
+                selectedCategoryKey = null;
+                
+                renderCategorySelection(); // Populate category buttons
+                
+                if (id) {
+                    const following = followings.find(f => f.id === id);
+                    modalTitle.textContent = 'ویرایش پیج';
+                    usernameInput.value = following.username;
+                    nameInput.value = following.name || '';
+                    selectedCategoryKey = following.categoryKey; // Set selected category by key
+                    
+                    const activeBtn = document.querySelector(`.category-selection-row .category-btn[data-category-key="${following.categoryKey}"]`);
+                    if (activeBtn) {
+                        activeBtn.classList.add('active');
+                        // Apply active styles to the pre-selected button
+                        const categoryData = allAvailableCategories.find(c => c.key === following.categoryKey);
+                        if (categoryData) {
+                             activeBtn.style.backgroundColor = 'var(--primary-light)';
+                             activeBtn.style.color = categoryData.color;
+                             activeBtn.style.borderColor = categoryData.color;
+                        }
+                    }
+                } else {
+                    modalTitle.textContent = 'افزودن پیج جدید';
+                    usernameInput.value = '';
+                    nameInput.value = '';
+                    usernameInput.focus();
+                }
+            } else if (modalElement.id === 'add-category-modal') {
+                document.getElementById('add-edit-category-modal-title').textContent = (id ? 'ویرایش دسته' : 'افزودن دسته جدید');
+                // Render color palette when add/edit category modal opens
+                const initialColor = id ? allAvailableCategories.find(cat => cat.key === id).color : PREDEFINED_COLORS[0];
+                renderColorPalette('new-category-color-palette', initialColor);
+            }
+        }
+
+        // Generic closeModal function
+        function closeModal(modalElement) {
+            if (modalElement) {
+                document.body.classList.remove('modal-open'); 
+                modalElement.style.display = 'none';
+                // Reset specific states if needed
+                if (modalElement.id === 'following-modal') {
+                    editingFollowingId = null;
+                    selectedCategoryKey = null;
+                }
+                if (modalElement.id === 'add-category-modal') {
+                    document.getElementById('add-category-modal-alert').style.display = 'none';
+                    // Clear form for add category modal
+                    document.getElementById('new-category-name-input').value = '';
+                    // Reset selected color in palette to default
+                    document.getElementById('new-category-selected-color').value = PREDEFINED_COLORS[0];
+                }
+                if (modalElement.id === 'category-action-modal') {
+                    document.getElementById('category-action-modal-alert').style.display = 'none';
+                    currentCategoryForActions = null;
+                }
+                if (modalElement.id === 'confirm-delete-category-modal') {
+                    // No specific reset needed here, just close
+                }
+            }
+        }
+
+        // Function to render the 5 predefined color swatches
+        function renderColorPalette(containerId, initialColor = PREDEFINED_COLORS[0]) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = ''; // Clear previous swatches
+
+            const selectedColorInput = document.getElementById('new-category-selected-color');
+            selectedColorInput.value = initialColor; // Set initial value for hidden input
+
+            PREDEFINED_COLORS.forEach(color => {
+                const swatch = document.createElement('div');
+                swatch.className = 'color-swatch';
+                swatch.style.backgroundColor = color;
+                swatch.dataset.color = color;
+
+                if (color.toLowerCase() === initialColor.toLowerCase()) {
+                    swatch.classList.add('active');
+                }
+
+                swatch.addEventListener('click', () => {
+                    document.querySelectorAll(`#${containerId} .color-swatch`).forEach(s => s.classList.remove('active'));
+                    swatch.classList.add('active');
+                    selectedColorInput.value = color; // Update hidden input
+                });
+                container.appendChild(swatch);
+            });
+        }
+
+        // Function to populate category buttons in the following-modal
+        function renderCategorySelection() {
+            const categorySelectionRow = document.querySelector('.category-selection-row');
+            if (!categorySelectionRow) return;
+            categorySelectionRow.innerHTML = ''; // Clear existing buttons
+
+            allAvailableCategories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'category-btn';
+                btn.dataset.categoryKey = cat.key;
+                btn.textContent = cat.name;
+                btn.style.backgroundColor = cat.color; // Apply custom color
+                btn.style.color = getContrastColor(cat.color); // Ensure text is readable
+                
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.category-selection-row .category-btn').forEach(b => {
+                        b.classList.remove('active');
+                        // Reset background and text color of inactive buttons to their category's base style
+                        const inactiveCat = allAvailableCategories.find(c => c.key === b.dataset.categoryKey);
+                        if (inactiveCat) {
+                            b.style.backgroundColor = inactiveCat.color; // Set to category's base color
+                            b.style.color = getContrastColor(inactiveCat.color); // Set to category's base text color
+                            b.style.borderColor = 'var(--grey-medium)'; // Reset border for inactive
+                        }
+                    });
+                    btn.classList.add('active');
+                    selectedCategoryKey = cat.key; // Store the key, not the name
+                    
+                    // Apply active styles to the clicked button
+                    btn.style.backgroundColor = 'var(--primary-light)'; // Light background for active state
+                    btn.style.color = cat.color; // Text color is the category's main color
+                    btn.style.borderColor = cat.color; // Border color is the category's main color
+                });
+                categorySelectionRow.appendChild(btn);
+            });
+        }
+
+        // Function to open Add Category Modal
+        function openAddCategoryModal() {
+            // Reset form fields
+            document.getElementById('new-category-name-input').value = '';
+            // Render color palette with default selected
+            renderColorPalette('new-category-color-palette', PREDEFINED_COLORS[0]);
+            document.getElementById('add-category-modal-alert').style.display = 'none';
+            // Set title for adding new category
+            document.getElementById('add-edit-category-modal-title').textContent = 'افزودن دسته جدید';
+            openModal(document.getElementById('add-category-modal'));
+        }
+
+        // Function to save new category
+        function saveNewCategory() {
+            const nameInput = document.getElementById('new-category-name-input');
+            const newCategoryName = nameInput.value.trim();
+            const newCategoryColor = document.getElementById('new-category-selected-color').value; // Get from hidden input
+
+            // Determine if we are editing or adding
+            const isEditing = currentCategoryForActions && document.getElementById('add-edit-category-modal-title').textContent === 'ویرایش دسته';
+            let categoryToEdit = null;
+
+            if (isEditing) {
+                categoryToEdit = userDefinedCategories.find(cat => cat.key === currentCategoryForActions.key);
+            }
+
+            if (!newCategoryName) {
+                showAlert('لطفاً نام دسته را وارد کنید.', 'error', true, document.getElementById('add-category-modal-alert'));
+                return;
+            }
+            
+            // Check for duplicate names (case-insensitive), excluding the category being edited
+            const duplicateCheck = allAvailableCategories.some(cat => 
+                cat.name.toLowerCase() === newCategoryName.toLowerCase() && 
+                (!isEditing || cat.key !== categoryToEdit.key)
+            );
+            if (duplicateCheck) {
+                showAlert('این نام دسته قبلاً وجود دارد.', 'error', true, document.getElementById('add-category-modal-alert'));
+                return;
+            }
+
+            if (isEditing && categoryToEdit) {
+                categoryToEdit.name = newCategoryName;
+                categoryToEdit.color = newCategoryColor;
+                showAlert(`دسته "${newCategoryName}" با موفقیت ویرایش شد.`, 'success');
+            } else {
+                const newCategoryKey = 'custom_' + Date.now(); // More robust unique key for custom categories
+                userDefinedCategories.push({
+                    key: newCategoryKey,
+                    name: newCategoryName,
+                    color: newCategoryColor
+                });
+                showAlert(`دسته "${newCategoryName}" با موفقیت اضافه شد.`, 'success');
+            }
+
+            saveData();
+            updateAllAvailableCategories(); // Rebuild allAvailableCategories
+            updateDashboard(); // Re-render dashboard with new category
+            renderCategorySelection(); // Update category selection in following modal
+            closeModal(document.getElementById('add-category-modal'));
+            currentCategoryForActions = null; // Reset
+        }
+
+        // Function to open category action modal (edit/delete)
+        function openCategoryActionModal(categoryKey) {
+            const category = allAvailableCategories.find(cat => cat.key === categoryKey);
+            if (!category) return;
+
+            // Do not open action modal for the "Add New Category" card
+            if (categoryKey === 'add-new-category-card') { // Check for the specific key
+                return; 
+            }
+
+            currentCategoryForActions = category;
+            document.getElementById('action-category-name').textContent = category.name;
+
+            const editBtn = document.getElementById('edit-category-btn');
+            const deleteBtn = document.getElementById('delete-category-btn');
+            
+            // Default categories cannot be deleted or renamed.
+            const isDefaultCategory = DEFAULT_CATEGORIES_DATA.some(dc => dc.key === category.key);
+
+            if (isDefaultCategory) {
+                editBtn.disabled = true;
+                editBtn.style.opacity = 0.5;
+                deleteBtn.disabled = true;
+                deleteBtn.style.opacity = 0.5;
+                showAlert('دسته‌های پیش‌فرض قابل ویرایش یا حذف نیستند.', 'info', true, document.getElementById('category-action-modal-alert'));
+            } else {
+                editBtn.disabled = false;
+                editBtn.style.opacity = 1;
+                deleteBtn.disabled = false;
+                deleteBtn.style.opacity = 1;
+                document.getElementById('category-action-modal-alert').style.display = 'none'; // Clear previous alerts
+            }
+            openModal(document.getElementById('category-action-modal'));
+        }
+
+        // Function to handle editing a category
+        function editCategory(categoryKey) {
+            const category = allAvailableCategories.find(cat => cat.key === categoryKey);
+            if (!category) return;
+
+            closeModal(document.getElementById('category-action-modal'));
+            // Open add-category-modal in edit mode
+            openModal(document.getElementById('add-category-modal'), categoryKey); // Pass key to indicate edit mode
+            document.getElementById('add-edit-category-modal-title').textContent = 'ویرایش دسته';
+            document.getElementById('new-category-name-input').value = category.name;
+            // The renderColorPalette in openModal will handle setting the color
+        }
+
+        // Function to confirm deletion of a category
+        function confirmDeleteCategory(categoryKey) {
+            const category = allAvailableCategories.find(cat => cat.key === categoryKey);
+            if (!category) return;
+
+            closeModal(document.getElementById('category-action-modal')); // Close action modal
+            document.getElementById('confirm-delete-category-name').textContent = category.name;
+            openModal(document.getElementById('confirm-delete-category-modal')); // Open confirmation modal
+        }
+
+        // Function to delete a category
+        function deleteCategory(categoryKey) {
+            const categoryToDelete = userDefinedCategories.find(cat => cat.key === categoryKey);
+            if (!categoryToDelete) {
+                showAlert('خطا: دسته مورد نظر برای حذف یافت نشد.', 'error', true, document.getElementById('confirm-delete-category-modal').querySelector('.alert-message'));
+                return;
+            }
+
+            // Reassign followings in this category to 'miscellaneous'
+            const miscellaneousCategory = DEFAULT_CATEGORIES_DATA.find(cat => cat.key === 'miscellaneous');
+            if (miscellaneousCategory) {
+                followings.forEach(f => {
+                    if (f.categoryKey === categoryKey) {
+                        f.categoryKey = miscellaneousCategory.key;
+                    }
+                });
+            } else {
+                console.error("Critical: 'Miscellaneous' category not found. Cannot reassign deleted category followings.");
+            }
+
+            userDefinedCategories = userDefinedCategories.filter(cat => cat.key !== categoryKey);
+            
+            saveData();
+            updateAllAvailableCategories();
+            updateDashboard();
+            renderFollowingList();
+            closeModal(document.getElementById('confirm-delete-category-modal'));
+            showAlert(`دسته "${categoryToDelete.name}" با موفقیت حذف شد. فالویینگ‌های آن به "متفرقه" منتقل شدند.`, 'success');
+            currentCategoryForActions = null; // Reset
+        }
+
+    </script>
+</body>
+</html>
