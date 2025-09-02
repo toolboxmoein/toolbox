@@ -1,0 +1,2065 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>چک لیست تولید محتوا</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <style>
+        :root {
+            /* START: CHANGE - Unified CSS Variables from following.html */
+            --primary-color: #00D968;
+            --primary-light: #E6F8EE;
+            --dark-color: #333;
+            --light-color: #f8f9fa; /* Used as body background and light elements */
+            --card-shadow: 0 15px 35px rgba(0, 217, 104, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            --subtle-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); /* For smaller cards/buttons */
+            --border-radius: 16px;
+            --button-border-radius: 8px;
+            --border-color: #e0e0e0;
+            --grey-color: #6c757d;
+            --grey-light: #f8f9fa; /* Lighter grey for backgrounds */
+            --grey-medium: #dee2e6; /* Medium grey for borders/dividers */
+            --success-color: #28a745; /* Darker green for specific success states */
+            --info-color: #007bff; /* Blue for info/view actions */
+            --warning-color: #ffc107; /* Yellow for warnings */
+            --danger-color: #e53935; /* Red for danger/delete */
+            --transition: all 0.3s ease;
+
+            /* Specific to Checklist, adapted to new palette */
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--success-color)); /* Using success-color for darker green in gradient */
+            --hover-transform: translateY(-5px); /* Already exists, keeping */
+            --text-black-color: var(--dark-color); /* Renamed for clarity */
+            --checked-color: var(--primary-color); /* Primary color for checked state */
+            --platform-selected-color: var(--primary-light); /* Light primary for selected tab */
+            --platform-selected-hover-color: #cff5e0; /* Slightly darker light primary */
+            --button-default-bg: var(--grey-medium); /* Grey for default buttons */
+            --button-default-hover-bg: var(--grey-color); /* Darker grey for hover */
+            --reset-button-bg: var(--danger-color); /* Danger red for reset */
+            --reset-button-hover-bg: #c0392b; /* Darker red */
+            --add-button-bg: var(--primary-color); /* Primary green for add */
+            --add-button-hover-bg: var(--success-color); /* Darker green for hover */
+            --add-action-bg: var(--primary-color); /* Primary green for add action button */
+            --add-action-hover-bg: var(--success-color); /* Darker green for hover */
+            --delete-confirm-bg: var(--danger-color); /* Danger red for delete confirm */
+            --delete-cancel-bg: var(--grey-medium); /* Medium grey for delete cancel */
+            --delete-confirm-hover-bg: #c0392b; /* Darker red */
+            --delete-cancel-hover-bg: var(--grey-color); /* Darker grey */
+            --delete-icon-color: var(--grey-color); /* Grey for delete icons */
+            --delete-icon-hover-color: var(--danger-color); /* Danger red for hover */
+            --modal-backdrop-color: rgba(0, 0, 0, 0.65); /* Darker backdrop */
+            --font-size: 1rem;
+            --list-item-hover-bg: var(--primary-light); /* Light primary for list item hover */
+            --alert-ok-button-bg: var(--primary-color); /* Primary green for alert OK */
+            --alert-ok-button-hover-bg: var(--success-color); /* Darker green */
+            --dragging-bg: #f0fff5; /* Light green for dragging */
+            --dragging-border: 2px dashed var(--primary-color);
+            /* END: CHANGE */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* START: CHANGE - Unified body styles */
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            background-color: var(--light-color);            
+            direction: rtl;
+            text-align: right;
+            color: var(--dark-color);            
+            line-height: 1.6;
+            overflow-x: hidden; /* جلوگیری از اسکرول افقی اضافی */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            /* END: CHANGE */
+        }
+
+        /* START: CHANGE - New main wrapper for content alignment */
+        .main-app-wrapper {
+            max-width: 800px; /* برای تراز افقی با دیگر بخش‌های اصلی برنامه */
+            margin: 0 auto; /* وسط‌چین کردن */
+            padding: 20px; /* پدینگ کلی صفحه از اینجا اعمال می‌شود */
+            flex-grow: 1; /* اجازه رشد برای اشغال فضای موجود */
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+        /* END: CHANGE */
+
+        .header-container {
+            /* START: CHANGE - Styled as a dashboard-container */
+            position: relative; /* Changed from sticky, sticky behavior is for the entire main-app-wrapper section */
+            top: 0;
+            z-index: 100;
+            width: 100%;
+            background-color: white; /* Changed to white */
+            border-radius: var(--border-radius); /* Rounded corners */
+            box-shadow: var(--card-shadow); /* Consistent shadow */
+            padding: 20px; /* Uniform padding */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 25px; /* Space below header container */
+            /* END: CHANGE */
+        }
+
+        .topbar {
+            width: 100%;
+            /* START: CHANGE - Removed max-width here, it's handled by main-app-wrapper */
+            /* max-width: 800px; */ 
+            /* END: CHANGE */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0; /* Remove horizontal padding here */
+        }
+        
+        /* START: CHANGE - Added a specific container for H1 and controls, mimicking dashboard-container */
+        .dashboard-section {
+            width: 100%;
+            /* background-color: white; */ /* Already set on header-container */
+            /* border-radius: var(--border-radius); */
+            /* box-shadow: var(--card-shadow); */
+            /* padding: 20px; */
+            margin-top: 15px; /* Space between logo/menu and title */
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        /* END: CHANGE */
+
+        .logo-container {
+            /* START: CHANGE - Adjusted margin and size */
+            height: 60px; /* Keeping original height */
+            width: 180px; /* Keeping original width */
+            margin: 0 auto 15px; /* Centered, with space below */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* END: CHANGE */
+        }
+
+        .logo-image {
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        #menuButton {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 10;
+        }
+
+        #menuButton span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: var(--primary-color);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* START: CHANGE - Unified backdrop */
+            background: var(--modal-backdrop-color);
+            backdrop-filter: blur(3px); /* Changed blur intensity to match modals */
+            /* END: CHANGE */
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .menu-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .menu-panel {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 320px;
+            height: 100%;
+            /* START: CHANGE - Unified menu panel background/shadow */
+            background: white; /* Unified background */
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15); /* Kept original shadow style */
+            /* END: CHANGE */
+            z-index: 1001;
+            padding: 30px;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            border-left: 3px solid var(--primary-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu-overlay.active .menu-panel {
+            right: 0;
+        }
+
+        .menu-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            /* START: CHANGE - Unified border */
+            border-bottom: 1px solid var(--grey-medium);
+            /* END: CHANGE */
+        }
+
+        .menu-logo {
+            max-width: 140px;
+            height: auto;
+            display: block;
+        }
+
+        .close-menu {
+            /* START: CHANGE - Unified close button style */
+            background-color: var(--danger-color); /* Red color */
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: white;
+            transition: var(--transition); /* Unified transition */
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            left: -15px; /* Positioning on the left edge */
+            top: 50%;
+            transform: translateY(-50%);
+            /* END: CHANGE */
+        }
+
+        .close-menu:hover {
+            /* START: CHANGE - Unified hover style */
+            background-color: #d32f2f; /* Darker red */
+            transform: translateY(-50%) rotate(90deg);
+            /* END: CHANGE */
+        }
+
+        .menu-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .menu-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-item {
+            margin-bottom: 8px;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: var(--button-border-radius); /* Unified border radius */
+            text-decoration: none;
+            color: var(--dark-color); /* Unified text color */
+            transition: var(--transition);
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .menu-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--primary-color);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .menu-link:hover {
+            /* START: CHANGE - Unified hover background/color */
+            background-color: var(--primary-light); /* Light primary color */
+            color: var(--primary-color);
+            padding-right: 15px; /* Keep consistent padding */
+            /* END: CHANGE */
+        }
+
+        .menu-link:hover::before {
+            transform: scaleY(1);
+        }
+
+        .menu-icon {
+            margin-left: 12px;
+            width: 20px;
+            text-align: center;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .menu-link:hover .menu-icon {
+            color: var(--primary-color);
+        }
+
+        .menu-footer {
+            padding: 15px;
+            /* START: CHANGE - Unified border/background */
+            border-top: 1px solid var(--grey-medium);
+            background-color: var(--grey-light);
+            /* END: CHANGE */
+            border-radius: var(--button-border-radius); /* Unified border radius */
+            margin-top: auto;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--grey-color);
+        }
+
+        .menu-version {
+            display: inline-block;
+            padding: 3px 10px;
+            /* START: CHANGE - Unified version tag background/color */
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            /* END: CHANGE */
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        main {
+            /* START: CHANGE - Flex 1 to fill available space within main-app-wrapper */
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0; /* Remove main padding, handled by main-app-wrapper */
+            background-color: transparent; /* Background handled by body */
+            /* END: CHANGE */
+        }
+
+        h1 {
+            text-align: center;
+            /* START: CHANGE - Margin, padding and font size for consistency */
+            margin: 0 0 15px; /* Margin below title */
+            color: var(--dark-color);
+            position: relative;
+            padding-bottom: 10px; /* Smaller padding for underline */
+            font-size: 1.5rem;
+            /* END: CHANGE */
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px; /* Slightly smaller underline */
+            height: 3px;
+            /* START: CHANGE - Unified gradient */
+            background: var(--gradient);
+            /* END: CHANGE */
+            border-radius: 3px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 15px 0 20px; /* Margin below controls */
+            gap: 15px; /* Increased gap */
+            flex-wrap: wrap;
+            width: 100%;
+            /* START: CHANGE - Removed max-width here, handled by header-container */
+            /* max-width: 800px; */
+            /* END: CHANGE */
+        }
+
+        .control-button {
+            /* START: CHANGE - Unified button styles */
+            border: none;
+            padding: 12px 20px; /* Consistent padding */
+            border-radius: var(--button-border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center; /* Center content */
+            gap: 8px;
+            text-align: center;
+            white-space: nowrap;
+            box-shadow: var(--subtle-shadow); /* Consistent subtle shadow */
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 1rem; /* Consistent font size */
+            font-weight: 500;
+            /* END: CHANGE */
+        }
+
+        .control-button:hover {
+            /* START: CHANGE - Unified hover transform/shadow */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 217, 104, 0.2); /* Slightly stronger shadow on hover */
+            /* END: CHANGE */
+        }
+
+        #add-item-btn {
+            background: var(--gradient);
+            color: white;
+            /* START: CHANGE - Removed hover styles here, defined in generic .control-button:hover */
+            /* END: CHANGE */
+        }
+
+        #add-item-btn:hover {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-color)); /* Lighter gradient on hover */
+        }
+
+        #reset-btn {
+            background-color: var(--danger-color); /* Danger color for reset */
+            color: white;
+        }
+
+        #reset-btn:hover {
+            background-color: var(--reset-button-hover-bg);
+        }
+
+        .platform-tabs-container {
+            width: 100%;
+            /* START: CHANGE - Removed max-width/padding/margin, handled by header-container */
+            /* max-width: 800px; */
+            /* padding: 0 20px; */
+            margin: 0; /* No top/bottom margin */
+            /* END: CHANGE */
+        }
+
+        .platform-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start; /* Align tabs to start (right in RTL) */
+            gap: 10px;
+            margin: 0; /* Remove margin from here */
+            width: 100%;
+        }
+
+        .platform-tab {
+            /* START: CHANGE - Styled as report-card for platforms */
+            background-color: white; /* White background */
+            color: var(--dark-color); /* Dark text */
+            border: 2px solid transparent; /* Border will be set by JS/active state */
+            padding: 15px; /* Increased padding for card feel */
+            border-radius: var(--border-radius); /* Consistent border-radius */
+            cursor: grab;
+            transition: var(--transition);
+            text-align: center;
+            white-space: nowrap;
+            box-shadow: var(--subtle-shadow); /* Consistent subtle shadow */
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            min-width: 120px; /* Slightly larger min-width */
+            max-width: none; /* Let flex handle max-width more fluidly */
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1 1 auto; /* Allow tabs to grow and shrink more flexibly */
+            /* END: CHANGE */
+        }
+
+        .platform-tab:hover {
+            /* START: CHANGE - Unified hover effect for cards */
+            background-color: #ffffff; /* Keep white on hover */
+            transform: translateY(-2px); /* Slight lift */
+            box-shadow: 0 6px 15px rgba(0, 217, 104, 0.15); /* Slightly stronger shadow */
+            /* END: CHANGE */
+        }
+
+        .platform-tab.active {
+            /* START: CHANGE - Unified active state */
+            background-color: var(--primary-light);
+            box-shadow: 0 2px 8px rgba(0, 217, 104, 0.3), inset 0 0 0 2px var(--primary-color);
+            border-color: var(--primary-color);
+            /* END: CHANGE */
+        }
+
+        .platform-tab.dragging {
+            /* START: CHANGE - Unified dragging style */
+            opacity: 0.7; /* Slightly less opaque */
+            background-color: var(--dragging-bg);
+            border: var(--dragging-border);
+            cursor: grabbing;
+            /* END: CHANGE */
+        }
+
+        .platform-tab .delete-platform-btn {
+            /* START: CHANGE - Unified delete button style */
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            width: 24px; /* Slightly larger delete button */
+            height: 24px;
+            border-radius: 50%;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: var(--transition);
+            z-index: 2;
+            box-shadow: var(--subtle-shadow); /* Added subtle shadow */
+            /* END: CHANGE */
+        }
+        .platform-tab .delete-platform-btn:hover {
+            background-color: #c0392b; /* Darker red */
+        }
+
+        .platform-tab:hover .delete-platform-btn {
+            opacity: 1;
+        }
+
+        .platform-content {
+            display: none;
+            width: 100%;
+            /* START: CHANGE - Added margin-top for separation */
+            margin-top: 20px;
+            /* END: CHANGE */
+            max-width: 800px;
+        }
+
+        .platform-content.active {
+            display: block;
+        }
+
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px; /* Increased gap */
+            justify-content: flex-start; /* Align actions to start (right in RTL) */
+            align-items: center;
+            margin: 15px 0;
+            min-height: 60px;
+            /* START: CHANGE - Background/shadow for the actions container */
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--subtle-shadow);
+            padding: 20px;
+            /* END: CHANGE */
+        }
+
+        .action-wrapper {
+            /* START: CHANGE - Styled as following-item (card-like) */
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--grey-light); /* Lighter background for individual actions */
+            border-radius: var(--button-border-radius); /* Slightly smaller border-radius */
+            overflow: hidden;
+            box-shadow: none; /* No extra shadow on wrapper itself, controlled by container/hover */
+            transition: var(--transition);
+            border: 1px solid var(--grey-medium); /* Light border */
+            cursor: grab;
+            /* END: CHANGE */
+        }
+
+        .action-wrapper.checked {
+            /* START: CHANGE - Unified checked style */
+            background-color: var(--checked-color);
+            border-color: var(--success-color); /* Darker green border */
+            /* END: CHANGE */
+        }
+
+        .action-wrapper.dragging {
+            /* START: CHANGE - Unified dragging style */
+            opacity: 0.7;
+            background-color: var(--dragging-bg);
+            border: var(--dragging-border);
+            cursor: grabbing;
+            /* END: CHANGE */
+        }
+
+        .checklist-button {
+            background: none;
+            border: none;
+            color: var(--dark-color); /* Dark text */
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            font-family: inherit;
+            font-size: 0.95rem; /* Consistent font size */
+            white-space: nowrap;
+            pointer-events: none; /* Let parent handle dragging */
+        }
+
+        .action-wrapper.checked .checklist-button {
+            color: white;
+        }
+
+        .delete-action-btn {
+            background: none;
+            border: none;
+            color: var(--delete-icon-color);
+            padding: 0 8px;
+            cursor: pointer;
+            font-size: 1rem; /* Slightly larger icon */
+            line-height: 1;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            /* START: CHANGE - Unified border */
+            border-right: 1px solid var(--grey-medium);
+            /* END: CHANGE */
+            transition: var(--transition);
+        }
+
+        .delete-action-btn:hover {
+            color: var(--delete-icon-hover-color);
+        }
+
+        .action-wrapper.checked .delete-action-btn {
+            /* START: CHANGE - Unified checked delete button style */
+            border-right: 1px solid rgba(255, 255, 255, 0.4); /* Lighter border in checked state */
+            color: rgba(255, 255, 255, 0.9); /* White color */
+            /* END: CHANGE */
+        }
+
+        .action-wrapper.checked .delete-action-btn:hover {
+            color: white;
+        }
+
+        .add-action-btn {
+            /* START: CHANGE - Unified add action button style */
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 38px; /* Larger button */
+            height: 38px;
+            font-size: 1.5rem; /* Larger plus icon */
+            line-height: 38px; /* Center text */
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--subtle-shadow);
+            margin-right: 0; /* No margin on right */
+            margin-left: 10px; /* Margin from other actions */
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* END: CHANGE */
+        }
+
+        .add-action-btn:hover {
+            /* START: CHANGE - Unified hover transform/shadow */
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+            transform: translateY(-2px); /* Slight lift */
+            box-shadow: 0 6px 15px rgba(0, 217, 104, 0.2);
+            /* END: CHANGE */
+        }
+
+        .add-platform-btn {
+            /* START: CHANGE - Unified add platform button style */
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: var(--button-border-radius); /* Changed to square button with rounded corners */
+            width: 100%; /* Take full width */
+            padding: 12px 0; /* Consistent padding */
+            font-size: 1.2rem; /* Larger plus icon */
+            line-height: 1; /* Center icon */
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--subtle-shadow);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px; /* Space from other tabs */
+            /* END: CHANGE */
+        }
+
+        .add-platform-btn:hover {
+            /* START: CHANGE - Unified hover transform/shadow */
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 217, 104, 0.2);
+            /* END: CHANGE */
+        }
+
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* START: CHANGE - Unified backdrop color */
+            background-color: var(--modal-backdrop-color);
+            backdrop-filter: blur(3px); /* Match previous blur */
+            /* END: CHANGE */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            /* START: CHANGE - Unified modal content styles */
+            background-color: white;
+            padding: 30px; /* Consistent padding */
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow); /* Consistent card shadow */
+            width: 90%;
+            max-width: 520px; /* Consistent max width */
+            text-align: right;
+            transform: translateY(-50px);
+            opacity: 0;
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            max-height: 90vh; /* Consistent max height */
+            overflow-y: auto; /* Consistent overflow scrolling */
+            -webkit-overflow-scrolling: touch;
+            display: flex;
+            flex-direction: column;
+            /* END: CHANGE */
+        }
+
+        .modal-backdrop.show {
+            display: flex;
+        }
+
+        .modal-backdrop.show .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .modal-header {
+            /* START: CHANGE - Unified modal header styles */
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--grey-medium); /* Consistent border */
+            font-size: 1.3rem; /* Consistent font size */
+            font-weight: 600;
+            color: var(--dark-color);
+            /* END: CHANGE */
+        }
+
+        .modal-body {
+            /* START: CHANGE - Unified modal body styles */
+            overflow-y: auto;
+            margin-bottom: 25px;
+            flex-grow: 1;
+            /* END: CHANGE */
+        }
+
+        .modal-message {
+            /* START: CHANGE - Unified modal message styles */
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: center;
+            color: var(--dark-color);
+            /* END: CHANGE */
+        }
+
+        .modal-buttons {
+            /* START: CHANGE - Unified modal button container styles */
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Consistent gap */
+            margin-top: 25px; /* Consistent margin-top */
+            /* Removed border-top and padding-top here, as per following.html's modal-footer logic */
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            /* END: CHANGE */
+        }
+
+        .modal-button {
+            /* START: CHANGE - Unified modal button styles */
+            flex: 1; /* Allow buttons to take equal width */
+            min-width: 120px; /* Consistent min-width */
+            border: none;
+            padding: 12px; /* Consistent padding */
+            border-radius: var(--button-border-radius);
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 1rem; /* Consistent font size */
+            font-weight: 500;
+            transition: var(--transition);
+            box-shadow: none; /* No extra shadow here, handled by hover or specific button styles */
+            /* END: CHANGE */
+        }
+        
+        /* Removed .modal-button:hover as it was causing issues with specific button hovers.
+           Specific hover effects will be added below for confirm/cancel buttons. */
+        
+        .modal-confirm-btn {
+            /* START: CHANGE - Unified confirm button style */
+            background: var(--primary-color); /* Primary color */
+            color: white;
+            /* END: CHANGE */
+        }
+
+        .modal-confirm-btn:hover {
+            /* START: CHANGE - Unified confirm button hover */
+            background: var(--success-color); /* Darker green on hover */
+            opacity: 0.9; /* Slight opacity change */
+            /* END: CHANGE */
+        }
+
+        .modal-cancel-btn {
+            /* START: CHANGE - Unified cancel button style */
+            background-color: var(--grey-medium); /* Medium grey */
+            color: var(--dark-color);
+            /* END: CHANGE */
+        }
+
+        .modal-cancel-btn:hover {
+            /* START: CHANGE - Unified cancel button hover */
+            background-color: var(--grey-color); /* Darker grey on hover */
+            color: white;
+            /* END: CHANGE */
+        }
+
+        #add-item-modal .modal-body h4 {
+            /* START: CHANGE - Unified h4 styles */
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.1rem; /* Slightly larger h4 */
+            font-weight: 600; /* Bolder */
+            color: var(--dark-color);
+            /* END: CHANGE */
+        }
+
+        #add-item-modal .suggestion-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 15px 0;
+            max-height: 150px;
+            overflow-y: auto;
+            /* START: CHANGE - Unified border/border-radius */
+            border: 1px solid var(--grey-medium);
+            border-radius: var(--button-border-radius);
+            /* END: CHANGE */
+        }
+
+        #add-item-modal .suggestion-list li {
+            padding: 8px 12px;
+            cursor: pointer;
+            /* START: CHANGE - Unified border */
+            border-bottom: 1px solid var(--grey-light);
+            /* END: CHANGE */
+            transition: var(--transition);
+        }
+
+        #add-item-modal .suggestion-list li:last-child {
+            border-bottom: none;
+        }
+
+        #add-item-modal .suggestion-list li:hover {
+            /* START: CHANGE - Unified hover background */
+            background-color: var(--primary-light);
+            /* END: CHANGE */
+        }
+
+        #add-item-modal .suggestion-list li.selected {
+            /* START: CHANGE - Unified selected style */
+            background-color: var(--primary-color);
+            color: white;
+            /* END: CHANGE */
+        }
+
+        #add-item-modal .add-custom-section {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        #add-item-modal input[type="text"] {
+            flex-grow: 1;
+            padding: 12px; /* Consistent padding */
+            /* START: CHANGE - Unified input styles */
+            border: 1px solid var(--grey-medium);
+            border-radius: var(--button-border-radius);
+            font-family: 'Vazirmatn', Arial, sans-serif; /* Explicit font */
+            font-size: 1rem; /* Consistent font size */
+            /* END: CHANGE */
+            transition: var(--transition);
+        }
+
+        #add-item-modal input[type="text"]:focus {
+            /* START: CHANGE - Unified focus style */
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.15); /* Consistent focus shadow */
+            outline: none; /* Remove default outline */
+            /* END: CHANGE */
+        }
+
+        #add-item-modal .add-custom-btn {
+            /* START: CHANGE - Unified custom button style */
+            padding: 12px 20px; /* Consistent padding */
+            font-size: 1rem; /* Consistent font size */
+            flex-shrink: 0;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--button-border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--subtle-shadow);
+            /* END: CHANGE */
+        }
+
+        #add-item-modal .add-custom-btn:hover {
+            /* START: CHANGE - Unified custom button hover */
+            background: var(--success-color); /* Darker green on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 217, 104, 0.2);
+            /* END: CHANGE */
+        }
+
+        #add-item-modal .action-selection-container {
+            margin-top: 15px;
+        }
+
+        #add-item-modal .action-selection-container input[type="checkbox"] {
+            margin-left: 8px;
+            accent-color: var(--primary-color);
+            width: 18px; /* Slightly larger checkbox */
+            height: 18px;
+            vertical-align: middle; /* Align with text */
+        }
+
+        /* --- Custom Alert Modal Style --- */
+        #custom-alert-modal .modal-content {
+            max-width: 400px;
+        }
+
+        #custom-alert-modal .modal-buttons {
+            /* START: CHANGE - Removed border-top/padding-top here, handled by .modal-buttons */
+            border-top: none;
+            padding-top: 0;
+            /* END: CHANGE */
+            justify-content: center;
+        }
+
+        #custom-alert-ok-btn {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        #custom-alert-ok-btn:hover {
+            background: var(--success-color);
+        }
+        
+        /* START: CHANGE - Help Modal Specific styles */
+        #helpModalOverlay .modal-content {
+            max-width: 600px; /* Wider for better readability of help text */
+        }
+        #helpModalOverlay .modal-body ul {
+            list-style: disc; /* Use disc for bullet points */
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+        #helpModalOverlay .modal-body ul li {
+            margin-bottom: 5px;
+            line-height: 1.5;
+        }
+        #helpModalOverlay .modal-body p {
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+        /* END: CHANGE */
+
+
+        @media (max-width: 768px) {
+            .main-app-wrapper {
+                padding: 10px; /* Less padding in mobile */
+            }
+            .header-container {
+                padding: 15px; /* Less padding for header */
+                margin-bottom: 15px;
+            }
+            .controls {
+                margin: 10px 0 15px;
+                gap: 10px;
+            }
+            .control-button {
+                padding: 10px 15px;
+                font-size: 0.95rem;
+            }
+            .platform-tabs {
+                justify-content: center; /* Center tabs on smaller screens */
+                gap: 8px;
+            }
+            .platform-tab {
+                padding: 12px;
+                font-size: 0.9rem;
+                min-width: 100px; /* Smaller min-width */
+                flex-basis: calc(50% - 4px); /* Two tabs per row */
+            }
+            .add-platform-btn {
+                padding: 10px 0;
+                font-size: 1.1rem;
+                min-width: 100%; /* Full width */
+            }
+            .logo-container {
+                height: 50px;
+                width: 150px;
+                margin-bottom: 10px;
+            }
+            h1 {
+                font-size: 1.3rem;
+                padding-bottom: 8px;
+            }
+            h1::after {
+                width: 80px;
+            }
+            .menu-panel {
+                width: 280px;
+                padding: 20px;
+            }
+            .close-menu {
+                left: 5px;
+            }
+            .button-container {
+                padding: 15px;
+                gap: 10px;
+            }
+            .action-wrapper {
+                flex-basis: calc(50% - 5px); /* Two actions per row */
+            }
+            .add-action-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 1.3rem;
+                min-width: unset;
+            }
+            .modal-content {
+                padding: 20px;
+            }
+            .modal-header {
+                font-size: 1.2rem;
+            }
+            .modal-button {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+                min-width: calc(50% - 5px); /* Two buttons per row in modals */
+            }
+            .modal-buttons {
+                flex-direction: row; /* Ensure buttons stay in a row */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .platform-tab {
+                min-width: 80px;
+                font-size: 0.85rem;
+                flex-basis: calc(50% - 4px); /* Still two per row */
+            }
+            .add-platform-btn {
+                font-size: 1rem;
+            }
+            .logo-container {
+                height: 40px;
+                width: 120px;
+            }
+            h1 {
+                font-size: 1.2rem;
+            }
+            h1::after {
+                width: 60px;
+            }
+            .action-wrapper {
+                flex-basis: 100%; /* One action per row */
+            }
+            .add-action-btn {
+                margin-left: 0; /* No left margin */
+            }
+            .modal-buttons button {
+                min-width: 100%; /* Full width buttons for very small screens */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- START: CHANGE - Main wrapper for consistency -->
+    <div class="main-app-wrapper"> 
+    <!-- END: CHANGE -->
+        <header class="header-container">
+            <div class="topbar">
+                <button id="menuButton" aria-label="منو">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            
+            <div class="logo-container">
+                <img src="images/logo.png" alt="لوگوی برنامه" class="logo-image">
+            </div>
+            
+            <!-- START: CHANGE - Dashboard section for H1 and controls -->
+            <div class="dashboard-section">
+                <h1>چک لیست تولید محتوا</h1>
+                <div class="controls">
+                    <button id="add-item-btn" class="control-button"><i class="fas fa-plus"></i> <span>افزودن آیتم</span></button>
+                    <button id="reset-btn" class="control-button"><i class="fas fa-undo"></i> <span>ریست انتخاب‌ها</span></button>
+                </div>
+            </div>
+            <!-- END: CHANGE -->
+            
+            <div class="platform-tabs-container">
+                <div class="platform-tabs" id="platform-tabs">
+                    <!-- Platform tabs will be generated here -->
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div id="platform-contents">
+                <!-- Platform contents will be generated here -->
+            </div>
+        </main>
+    <!-- START: CHANGE - Closing main-app-wrapper -->
+    </div> 
+    <!-- END: CHANGE -->
+
+    <div id="menuOverlayElement" class="menu-overlay">
+        <div class="menu-panel">
+            <div class="menu-header">
+                <img src="images/logo.png" alt="لوگوی برنامه" class="menu-logo">
+                <button id="closeMenuButton" class="close-menu">&times;</button>
+            </div>
+            <div class="menu-content">
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a class="menu-link" id="helpMenuItem">
+                            <i class="menu-icon fas fa-question-circle"></i>
+                            <span>راهنما</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="menu-footer">
+                <span class="menu-version">نسخه ۱.۰.۰</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="custom-confirm-modal" class="modal-backdrop">
+        <div class="modal-content">
+            <div class="modal-header">تأیید حذف</div>
+            <div class="modal-body">
+                <p id="modal-message" class="modal-message">آیا از حذف مطمئن هستید؟</p>
+            </div>
+            <div class="modal-buttons">
+                <button id="modal-cancel-btn" class="modal-button modal-cancel-btn">لغو</button>
+                <button id="modal-confirm-btn" class="modal-button modal-confirm-btn">بله، حذف کن</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Item Modal -->
+    <div id="add-item-modal" class="modal-backdrop">
+        <div class="modal-content">
+            <div class="modal-header" id="add-modal-header">افزودن آیتم جدید</div>
+            <div class="modal-body" id="add-modal-body"><!-- Content loaded by JS --></div>
+            <div class="modal-buttons">
+                <button id="add-modal-cancel-btn" class="modal-button modal-cancel-btn">لغو</button>
+                <button id="add-modal-next-btn" class="modal-button modal-confirm-btn" style="display: none;">بعدی</button>
+                <button id="add-modal-finish-btn" class="modal-button modal-confirm-btn" style="display: none;">افزودن
+                    نهایی</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Alert/Info Modal -->
+    <div id="custom-alert-modal" class="modal-backdrop">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p id="custom-alert-message" class="modal-message">پیام الرت</p>
+            </div>
+            <div class="modal-buttons">
+                <button id="custom-alert-ok-btn" class="modal-button modal-confirm-btn">باشه</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="helpModalOverlay" class="modal-backdrop">
+        <div class="modal-content">
+            <div class="modal-header">راهنمای استفاده</div>
+            <div class="modal-body">
+                <p>این برنامه برای مدیریت فعالیت‌های تولید محتوا در پلتفرم‌های مختلف طراحی شده است.</p>
+                <p>با استفاده از این چک لیست می‌توانید:</p>
+                <ul style="padding-right: 20px; margin-bottom: 15px;">
+                    <li>فعالیت‌های انجام شده را علامت بزنید</li>
+                    <li>پلتفرم‌های جدید اضافه کنید</li>
+                    <li>اقدامات مختلف برای هر پلتفرم تعریف کنید</li>
+                    <li>دکمه‌های پلتفرم و اقدامات را با کشیدن و رها کردن جابجا کنید</li>
+                    <li>پلتفرم‌ها و اقدامات را حذف کنید</li>
+                </ul>
+                <p>برای انتخاب یک پلتفرم، روی دکمه آن در بالای صفحه کلیک کنید. برای علامت زدن یک اقدام انجام شده، روی آن کلیک کنید.</p>
+                <p>برای جابجایی دکمه‌ها، انگشت خود را روی دکمه نگه دارید و آن را به محل مورد نظر بکشید.</p>
+            </div>
+            <div class="modal-buttons">
+                <button id="closeHelpModal" class="modal-button modal-confirm-btn">متوجه شدم</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Element Selections ---
+            const platformTabs = document.getElementById('platform-tabs');
+            const platformContents = document.getElementById('platform-contents');
+            const addItemBtn = document.getElementById('add-item-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const confirmModal = document.getElementById('custom-confirm-modal');
+            const confirmModalMessage = document.getElementById('modal-message');
+            const confirmModalConfirmBtn = document.getElementById('modal-confirm-btn');
+            const confirmModalCancelBtn = document.getElementById('modal-cancel-btn');
+            const addItemModal = document.getElementById('add-item-modal');
+            const addItemModalHeader = document.getElementById('add-modal-header');
+            const addItemModalBody = document.getElementById('add-modal-body');
+            const addItemModalCancelBtn = document.getElementById('add-modal-cancel-btn');
+            const addItemModalNextBtn = document.getElementById('add-modal-next-btn');
+            const addItemModalFinishBtn = document.getElementById('add-modal-finish-btn');
+            const alertModal = document.getElementById('custom-alert-modal');
+            const alertModalMessage = document.getElementById('custom-alert-message');
+            const alertModalOkBtn = document.getElementById('custom-alert-ok-btn');
+            const menuButton = document.getElementById('menuButton');
+            const menuOverlay = document.getElementById('menuOverlayElement');
+            const closeMenuBtn = document.getElementById('closeMenuButton');
+            const helpMenuItem = document.getElementById('helpMenuItem');
+            const helpModalOverlay = document.getElementById('helpModalOverlay');
+            const closeHelpModalBtn = document.getElementById('closeHelpModal');
+
+            // --- State Variables ---
+            let deleteCallback = null;
+            let selectedPlatformForAdding = null; // Stores {id, name, isNew}
+            let selectedActionsToAdd = [];
+            let draggedElement = null;
+            let draggedElementInitialIndex = -1;
+            
+            // --- Sample Data ---
+            const suggestedActions = ["پست", "استوری", "کاور", "کپشن", "ارسال", "ویدیو", "مقاله", "کامنت", "دایرکت"];
+
+            // --- Initial Platform Data ---
+            const initialPlatforms = [
+                {
+                    id: "instagram_1678886400000",
+                    name: "اینستاگرام",
+                    actions: [
+                        { id: "instagram_cover_insta_1678886400001", name: "کاور اینستاگرام" },
+                        { id: "instagram_caption_insta_1678886400002", name: "کپشن اینستاگرام" },
+                        { id: "instagram_story_insta_1678886400003", name: "استوری اینستاگرام" },
+                        { id: "instagram_prepare_media_new", name: "آماده‌سازی ویدئو/عکس" },
+                        { id: "instagram_ready_send_new", name: "آماده ارسال" },
+                        { id: "instagram_upload_insta_1678886400004", name: "آپلود" }
+                    ]
+                },
+                {
+                    id: "telegram_1678886401000",
+                    name: "کانال تلگرام",
+                    actions: [
+                        { id: "telegram_video_telegram_1678886401001", name: "آماده سازی ویدیو" },
+                        { id: "telegram_text_telegram_1678886401002", name: "آماده سازی متن" },
+                        { id: "telegram_send_telegram_1678886401003", name: "ارسال به تلگرام" }
+                    ]
+                },
+                {
+                    id: "aparat_1678886403000",
+                    name: "آپارات",
+                    actions: [
+                        { id: "aparat_cover_aparat_1678886403001", name: "کاور" },
+                        { id: "aparat_caption_aparat_1678886403002", name: "کپشن" },
+                        { id: "aparat_upload_aparat_1678886403003", name: "آپلود" }
+                    ]
+                },
+                {
+                    id: "youtube_1678886404000",
+                    name: "یوتیوب",
+                    actions: [
+                        { id: "youtube_cover_youtube_1678886404001", name: "کاور" },
+                        { id: "youtube_caption_youtube_1678886404002", name: "کپشن" },
+                        { id: "youtube_upload_youtube_1678886404003", name: "آپلود" }
+                    ]
+                },
+                {
+                    id: "site_1678886405000",
+                    name: "سایت",
+                    actions: [
+                        { id: "site_photo_site_1678886405001", name: "آماده سازی عکس" },
+                        { id: "site_article_site_1678886405002", name: "نوشتن مقاله" },
+                        { id: "site_upload_site_1678886405003", name: "آپلود در سایت" }
+                    ]
+                }
+            ];
+
+            // --- Initialize Platforms ---
+            function initializePlatforms() {
+                // Clear existing content
+                platformTabs.innerHTML = '';
+                platformContents.innerHTML = '';
+
+                // Create platform tabs and content
+                initialPlatforms.forEach((platform, index) => {
+                    // Create tab
+                    const tab = createPlatformTab(platform.id, platform.name);
+                    if (index === 0) tab.classList.add('active');
+                    platformTabs.appendChild(tab);
+
+                    // Create content
+                    const content = document.createElement('div');
+                    content.classList.add('platform-content');
+                    content.dataset.platformId = platform.id;
+                    if (index === 0) content.classList.add('active');
+
+                    // Create button container
+                    const buttonContainer = document.createElement('div');
+                    buttonContainer.classList.add('button-container');
+                    buttonContainer.dataset.platformId = platform.id;
+
+                    // Add actions
+                    platform.actions.forEach(action => {
+                        const actionWrapper = createActionWrapper(action.name, platform.id);
+                        buttonContainer.appendChild(actionWrapper);
+                    });
+
+                    // Add "add action" button
+                    const addActionBtn = document.createElement('button');
+                    addActionBtn.classList.add('add-action-btn');
+                    addActionBtn.innerHTML = '<i class="fas fa-plus"></i>'; // Changed to icon
+                    addActionBtn.title = `افزودن اقدام به ${platform.name}`;
+                    addActionBtn.dataset.platformId = platform.id;
+                    addActionBtn.dataset.platformName = platform.name;
+                    buttonContainer.appendChild(addActionBtn);
+
+                    content.appendChild(buttonContainer);
+                    platformContents.appendChild(content);
+                });
+
+                // Add the "add platform" button
+                const addPlatformBtn = document.createElement('button');
+                addPlatformBtn.classList.add('add-platform-btn');
+                addPlatformBtn.innerHTML = '<i class="fas fa-plus"></i> افزودن پلتفرم جدید'; // Changed to icon + text
+                addPlatformBtn.title = 'افزودن پلتفرم جدید';
+                addPlatformBtn.id = 'add-platform-btn';
+                platformTabs.appendChild(addPlatformBtn);
+
+                // Add event listener for add platform button
+                addPlatformBtn.addEventListener('click', showAddItemModal);
+
+                // Initialize drag and drop for platform tabs
+                initDragDropForPlatforms();
+
+                // Initialize drag and drop for action buttons
+                initDragDropForActions();
+            }
+
+            // --- Drag and Drop for Platforms ---
+            function initDragDropForPlatforms() {
+                const tabs = platformTabs.querySelectorAll('.platform-tab');
+                
+                tabs.forEach(tab => {
+                    tab.addEventListener('mousedown', handlePlatformDragStart);
+                    tab.addEventListener('touchstart', handlePlatformDragStart, { passive: true });
+                });
+
+                platformTabs.addEventListener('mousemove', handlePlatformDragOver);
+                platformTabs.addEventListener('touchmove', handlePlatformDragOver, { passive: false });
+                
+                document.addEventListener('mouseup', handlePlatformDragEnd);
+                document.addEventListener('touchend', handlePlatformDragEnd);
+            }
+
+            function handlePlatformDragStart(e) {
+                // Ignore if it's the delete button
+                if (e.target.classList.contains('delete-platform-btn')) {
+                    return;
+                }
+
+                draggedElement = this;
+                draggedElement.classList.add('dragging');
+                
+                // Get the initial index for reference
+                const tabs = Array.from(platformTabs.querySelectorAll('.platform-tab'));
+                draggedElementInitialIndex = tabs.indexOf(draggedElement);
+                
+                // Calculate offset for mouse position
+                const rect = draggedElement.getBoundingClientRect();
+                const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+                
+                // Store the initial mouse offset
+                draggedElement.dataset.offsetX = clientX - rect.left;
+            }
+
+            function handlePlatformDragOver(e) {
+                e.preventDefault();
+                
+                if (!draggedElement || !draggedElement.classList.contains('platform-tab')) {
+                    return;
+                }
+                
+                const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+                const tabs = Array.from(platformTabs.querySelectorAll('.platform-tab:not(.dragging)'));
+                
+                if (tabs.length === 0) return;
+                
+                // Find the element to insert before
+                const nextElement = tabs.reduce((closest, tab) => {
+                    const rect = tab.getBoundingClientRect();
+                    const offset = clientX - rect.left - rect.width / 2;
+                    
+                    if (offset < 0 && offset > closest.offset) {
+                        return { offset, element: tab };
+                    } else {
+                        return closest;
+                    }
+                }, { offset: Number.NEGATIVE_INFINITY, element: null }).element;
+                
+                // Insert the dragged element
+                if (nextElement) {
+                    platformTabs.insertBefore(draggedElement, nextElement);
+                } else {
+                    // If there's no next element, append to the end (before the add button)
+                    const addBtn = document.getElementById('add-platform-btn');
+                    platformTabs.insertBefore(draggedElement, addBtn);
+                }
+            }
+
+            function handlePlatformDragEnd() {
+                if (!draggedElement || !draggedElement.classList.contains('platform-tab')) {
+                    return;
+                }
+                
+                draggedElement.classList.remove('dragging');
+                draggedElement = null;
+                draggedElementInitialIndex = -1;
+            }
+
+            // --- Drag and Drop for Actions ---
+            function initDragDropForActions() {
+                document.querySelectorAll('.button-container').forEach(container => {
+                    initDragDropForContainer(container);
+                });
+            }
+
+            function initDragDropForContainer(container) {
+                const actions = container.querySelectorAll('.action-wrapper');
+                
+                actions.forEach(action => {
+                    action.addEventListener('mousedown', handleActionDragStart);
+                    action.addEventListener('touchstart', handleActionDragStart, { passive: true });
+                });
+
+                container.addEventListener('mousemove', handleActionDragOver);
+                container.addEventListener('touchmove', handleActionDragOver, { passive: false });
+                
+                container.addEventListener('mouseup', handleActionDragEnd);
+                container.addEventListener('touchend', handleActionDragEnd);
+            }
+
+            function handleActionDragStart(e) {
+                // Ignore if it's the delete button
+                if (e.target.classList.contains('delete-action-btn')) {
+                    return;
+                }
+
+                // Prevent default to avoid text selection
+                e.preventDefault();
+
+                draggedElement = this;
+                draggedElement.classList.add('dragging');
+                
+                // Get the initial index for reference
+                const container = this.closest('.button-container');
+                const actions = Array.from(container.querySelectorAll('.action-wrapper'));
+                draggedElementInitialIndex = actions.indexOf(draggedElement);
+                
+                // Calculate offset for mouse position
+                const rect = draggedElement.getBoundingClientRect();
+                const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+                const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+                
+                // Store the initial mouse offset
+                draggedElement.dataset.offsetX = clientX - rect.left;
+                draggedElement.dataset.offsetY = clientY - rect.top;
+            }
+
+            function handleActionDragOver(e) {
+                e.preventDefault();
+                
+                if (!draggedElement || !draggedElement.classList.contains('action-wrapper')) {
+                    return;
+                }
+                
+                const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+                const container = this;
+                const actions = Array.from(container.querySelectorAll('.action-wrapper:not(.dragging)'));
+                
+                if (actions.length === 0) {
+                    // If there are no other actions, just make sure it's before the add button
+                    const addBtn = container.querySelector('.add-action-btn');
+                    if (addBtn) {
+                        container.insertBefore(draggedElement, addBtn);
+                    }
+                    return;
+                }
+                
+                // Find the element to insert before
+                const nextElement = actions.reduce((closest, action) => {
+                    const rect = action.getBoundingClientRect();
+                    const offset = clientX - rect.left - rect.width / 2;
+                    
+                    if (offset < 0 && offset > closest.offset) {
+                        return { offset, element: action };
+                    } else {
+                        return closest;
+                    }
+                }, { offset: Number.NEGATIVE_INFINITY, element: null }).element;
+                
+                // Insert the dragged element
+                if (nextElement) {
+                    container.insertBefore(draggedElement, nextElement);
+                } else {
+                    // If there's no next element, append to the end (before the add button)
+                    const addBtn = container.querySelector('.add-action-btn');
+                    container.insertBefore(draggedElement, addBtn);
+                }
+            }
+
+            function handleActionDragEnd() {
+                if (!draggedElement || !draggedElement.classList.contains('action-wrapper')) {
+                    return;
+                }
+                
+                draggedElement.classList.remove('dragging');
+                draggedElement = null;
+                draggedElementInitialIndex = -1;
+            }
+
+            // --- Menu Functions ---
+            function setupMenuEvents() {
+                if (menuButton) {
+                    menuButton.addEventListener('click', function () {
+                        if (menuOverlay) {
+                            menuOverlay.classList.add('active');
+                            document.body.style.overflow = 'hidden';
+                        }
+                    });
+                }
+
+                if (closeMenuBtn) {
+                    closeMenuBtn.addEventListener('click', function () {
+                        menuOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    });
+                }
+
+                if (menuOverlay) {
+                    menuOverlay.addEventListener('click', function (e) {
+                        if (e.target === menuOverlay) {
+                            menuOverlay.classList.remove('active');
+                            document.body.style.overflow = '';
+                        }
+                    });
+                }
+
+                if (helpMenuItem) {
+                    helpMenuItem.addEventListener('click', function () {
+                        if (helpModalOverlay) helpModalOverlay.classList.add('show');
+                        if (menuOverlay) menuOverlay.classList.remove('active');
+                        document.body.style.overflow = 'hidden';
+                    });
+                }
+
+                if (closeHelpModalBtn) {
+                    closeHelpModalBtn.addEventListener('click', function () {
+                        if (helpModalOverlay) helpModalOverlay.classList.remove('show');
+                        document.body.style.overflow = '';
+                    });
+                }
+
+                if (helpModalOverlay) {
+                    helpModalOverlay.addEventListener('click', function (e) {
+                        if (e.target === helpModalOverlay) {
+                            helpModalOverlay.classList.remove('show');
+                            document.body.style.overflow = '';
+                        }
+                    });
+                }
+            }
+
+            // --- Modal Functions (Confirm, Add, Alert) ---
+            function showConfirmModal(message, onConfirm) {
+                confirmModalMessage.textContent = message;
+                deleteCallback = onConfirm;
+                confirmModal.style.display = 'flex';
+                setTimeout(() => confirmModal.classList.add('show'), 10);
+            }
+            function hideConfirmModal() {
+                confirmModal.classList.remove('show');
+                setTimeout(() => {
+                    confirmModal.style.display = 'none';
+                    deleteCallback = null;
+                }, 300);
+            }
+            function showAddItemModal() {
+                selectedPlatformForAdding = null;
+                selectedActionsToAdd = [];
+                loadPlatformSelectionStep();
+                addItemModal.style.display = 'flex';
+                setTimeout(() => addItemModal.classList.add('show'), 10);
+            }
+            function hideAddItemModal() {
+                addItemModal.classList.remove('show');
+                setTimeout(() => {
+                    addItemModal.style.display = 'none';
+                    addItemModalBody.innerHTML = '';
+                }, 300);
+            }
+            function showCustomAlert(message) {
+                alertModalMessage.textContent = message;
+                alertModal.style.display = 'flex';
+                setTimeout(() => alertModal.classList.add('show'), 10);
+            }
+            function hideCustomAlert() {
+                alertModal.classList.remove('show');
+                setTimeout(() => {
+                    alertModal.style.display = 'none';
+                }, 300);
+            }
+
+            // --- Add Item Modal Steps ---
+            function loadPlatformSelectionStep() {
+                addItemModalHeader.textContent = "1. انتخاب یا افزودن پلتفرم";
+                let platformHtml = '<h4>پلتفرم‌های موجود:</h4><ul class="suggestion-list" id="platform-suggestion-list">';
+                
+                // Get existing platforms
+                const existingPlatforms = new Set();
+                platformTabs.querySelectorAll('.platform-tab').forEach(tab => {
+                    const platformName = tab.textContent.replace(/×$/, '').trim(); // Remove '×' from delete button
+                    const platformId = tab.dataset.platformId;
+                    if (platformName && !existingPlatforms.has(platformName)) {
+                        platformHtml += `<li data-platform-id="${platformId}" data-platform-name="${platformName}">${platformName}</li>`;
+                        existingPlatforms.add(platformName);
+                    }
+                });
+                platformHtml += '</ul>';
+                platformHtml += '<h4>یا افزودن پلتفرم جدید:</h4>';
+                platformHtml += '<div class="add-custom-section"><input type="text" id="new-platform-name" placeholder="نام پلتفرم جدید..."><button id="add-new-platform-btn" class="modal-button add-custom-btn">انتخاب</button></div>';
+                addItemModalBody.innerHTML = platformHtml;
+                addItemModalNextBtn.style.display = 'block';
+                addItemModalFinishBtn.style.display = 'none';
+
+                addItemModalBody.querySelectorAll('#platform-suggestion-list li').forEach(li => {
+                    li.addEventListener('click', () => {
+                        addItemModalBody.querySelectorAll('#platform-suggestion-list li.selected').forEach(s => s.classList.remove('selected'));
+                        li.classList.add('selected');
+                        selectedPlatformForAdding = {
+                            id: li.dataset.platformId,
+                            name: li.dataset.platformName,
+                            isNew: false
+                        };
+                        const inputEl = document.getElementById('new-platform-name');
+                        const addBtnEl = document.getElementById('add-new-platform-btn');
+                        if (inputEl) inputEl.value = '';
+                        if (inputEl) inputEl.disabled = false;
+                        if (addBtnEl) addBtnEl.disabled = false;
+                        if (addBtnEl) addBtnEl.textContent = 'انتخاب';
+                    });
+                });
+
+                const addNewBtn = document.getElementById('add-new-platform-btn');
+                const newNameInput = document.getElementById('new-platform-name');
+                if (addNewBtn) addNewBtn.addEventListener('click', handleSelectNewPlatform);
+                if (newNameInput) newNameInput.addEventListener('input', () => {
+                    addItemModalBody.querySelectorAll('#platform-suggestion-list li.selected').forEach(s => s.classList.remove('selected'));
+                    selectedPlatformForAdding = null;
+                    const addBtnEl = document.getElementById('add-new-platform-btn');
+                    if (addBtnEl) {
+                        addBtnEl.textContent = 'انتخاب';
+                        addBtnEl.disabled = false; // Ensure button is enabled when typing
+                    }
+                    const inputEl = document.getElementById('new-platform-name');
+                    if (inputEl) inputEl.disabled = false; // Ensure input is enabled
+                });
+            }
+
+            function handleSelectNewPlatform() {
+                const input = document.getElementById('new-platform-name');
+                const addButton = document.getElementById('add-new-platform-btn');
+                if (!input || !addButton) return;
+
+                const newName = input.value.trim();
+                if (newName) {
+                    let exists = false;
+                    platformTabs.querySelectorAll('.platform-tab').forEach(tab => {
+                        if (tab.textContent.replace(/×$/, '').trim().toLowerCase() === newName.toLowerCase()) {
+                            exists = true;
+                        }
+                    });
+                    if (exists) {
+                        showCustomAlert(`پلتفرم "${newName}" از قبل وجود دارد!`);
+                        return;
+                    }
+                    selectedPlatformForAdding = { id: null, name: newName, isNew: true };
+                    addItemModalBody.querySelectorAll('#platform-suggestion-list li.selected').forEach(s => s.classList.remove('selected'));
+                    input.disabled = true;
+                    addButton.textContent = 'انتخاب شد';
+                    addButton.disabled = true;
+                    showCustomAlert(`پلتفرم جدید "${newName}" انتخاب شد. برای افزودن اقدام روی "بعدی" کلیک کنید.`);
+                } else {
+                    showCustomAlert('لطفاً نام پلتفرم جدید را وارد کنید یا از لیست بالا انتخاب کنید.');
+                }
+            }
+
+            function loadActionSelectionStep() {
+                if (!selectedPlatformForAdding) {
+                    showCustomAlert("لطفاً ابتدا یک پلتفرم را انتخاب یا اضافه کنید.");
+                    return;
+                }
+                addItemModalHeader.textContent = `2. افزودن اقدام برای: ${selectedPlatformForAdding.name}`;
+                let actionHtml = '<h4>اقدامات پیشنهادی (می‌توانید چند مورد انتخاب کنید):</h4><div class="action-selection-container suggestion-list">';
+                suggestedActions.forEach((action, index) => {
+                    actionHtml += `<div><label><input type="checkbox" name="suggested_action" value="${action}" id="action-${index}"> ${action}</label></div>`;
+                });
+                actionHtml += '</div>';
+                actionHtml += '<h4>یا افزودن اقدام سفارشی:</h4>';
+                actionHtml += '<div class="add-custom-section"><input type="text" id="new-action-name" placeholder="نام اقدام سفارشی..."><button id="add-custom-action-btn" class="modal-button add-custom-btn">افزودن</button></div>';
+                actionHtml += '<div id="custom-actions-list" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 5px;"></div>';
+
+                addItemModalBody.innerHTML = actionHtml;
+                addItemModalNextBtn.style.display = 'none';
+                addItemModalFinishBtn.style.display = 'block';
+                const addCustomBtn = document.getElementById('add-custom-action-btn');
+                if (addCustomBtn) addCustomBtn.addEventListener('click', handleAddCustomAction);
+            }
+
+            function handleAddCustomAction() {
+                const input = document.getElementById('new-action-name');
+                if (!input) return;
+                const actionName = input.value.trim();
+                if (actionName && !selectedActionsToAdd.includes(actionName)) {
+                    selectedActionsToAdd.push(actionName);
+                    const listDiv = document.getElementById('custom-actions-list');
+                    if (listDiv) {
+                        const span = document.createElement('span');
+                        span.textContent = actionName;
+                        span.style.backgroundColor = '#eee';
+                        span.style.padding = '3px 8px';
+                        span.style.borderRadius = '10px';
+                        span.style.fontSize = '0.85rem';
+                        listDiv.appendChild(span);
+                    }
+                    input.value = '';
+                } else if (selectedActionsToAdd.includes(actionName)) {
+                    showCustomAlert("این اقدام سفارشی قبلاً اضافه شده است.");
+                }
+                input.focus();
+            }
+
+            function finishAddingItems() {
+                // Collect selected suggested actions
+                document.querySelectorAll('input[name="suggested_action"]:checked').forEach(checkbox => {
+                    if (!selectedActionsToAdd.includes(checkbox.value)) {
+                        selectedActionsToAdd.push(checkbox.value);
+                    }
+                });
+                
+                try {
+                    if (selectedPlatformForAdding.isNew) {
+                        // Create new platform
+                        const safePlatformName = selectedPlatformForAdding.name.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_');
+                        const platformId = `${safePlatformName}_${Date.now()}`;
+                        
+                        // Create tab
+                        const tab = createPlatformTab(platformId, selectedPlatformForAdding.name);
+                        
+                        // Add to tabs (before the add button)
+                        const addBtn = document.getElementById('add-platform-btn');
+                        platformTabs.insertBefore(tab, addBtn);
+                        
+                        // Create content
+                        const content = document.createElement('div');
+                        content.classList.add('platform-content');
+                        content.dataset.platformId = platformId;
+                        
+                        // Create button container
+                        const buttonContainer = document.createElement('div');
+                        buttonContainer.classList.add('button-container');
+                        buttonContainer.dataset.platformId = platformId;
+                        
+                        // Add actions
+                        selectedActionsToAdd.forEach(actionName => {
+                            if (actionName.trim()) {
+                                const actionWrapper = createActionWrapper(actionName.trim(), platformId);
+                                buttonContainer.appendChild(actionWrapper);
+                            }
+                        });
+                        
+                        // Add "add action" button
+                        const addActionBtn = document.createElement('button');
+                        addActionBtn.classList.add('add-action-btn');
+                        addActionBtn.innerHTML = '<i class="fas fa-plus"></i>'; // Changed to icon
+                        addActionBtn.title = `افزودن اقدام به ${selectedPlatformForAdding.name}`;
+                        addActionBtn.dataset.platformId = platformId;
+                        addActionBtn.dataset.platformName = selectedPlatformForAdding.name;
+                        buttonContainer.appendChild(addActionBtn);
+                        
+                        content.appendChild(buttonContainer);
+                        platformContents.appendChild(content);
+                        
+                        // Initialize drag and drop for the new container
+                        initDragDropForContainer(buttonContainer);
+                        
+                        // Activate the new tab
+                        activateTab(tab);
+                        
+                    } else {
+                        // Add to existing platform
+                        const content = platformContents.querySelector(`.platform-content[data-platform-id="${selectedPlatformForAdding.id}"]`);
+                        if (!content) {
+                            throw new Error("Content not found for platform: " + selectedPlatformForAdding.id);
+                        }
+                        
+                        const buttonContainer = content.querySelector('.button-container');
+                        const addActionBtn = buttonContainer.querySelector('.add-action-btn');
+                        
+                        // Add actions before the add button
+                        selectedActionsToAdd.forEach(actionName => {
+                            if (actionName.trim()) {
+                                const actionWrapper = createActionWrapper(actionName.trim(), selectedPlatformForAdding.id);
+                                buttonContainer.insertBefore(actionWrapper, addActionBtn);
+                            }
+                        });
+                        
+                        // Activate this tab
+                        const tab = platformTabs.querySelector(`.platform-tab[data-platform-id="${selectedPlatformForAdding.id}"]`);
+                        if (tab) {
+                            activateTab(tab);
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error finishing add:", error);
+                    showCustomAlert("خطایی در افزودن رخ داد: " + error.message);
+                } finally {
+                    hideAddItemModal();
+                }
+            }
+
+            // --- Element Creation Functions ---
+            function createPlatformTab(platformId, platformName) {
+                const tab = document.createElement('button');
+                tab.classList.add('platform-tab');
+                tab.dataset.platformId = platformId;
+                tab.textContent = platformName;
+                
+                // Add delete button
+                const deleteBtn = document.createElement('button');
+                deleteBtn.classList.add('delete-platform-btn');
+                deleteBtn.innerHTML = '&times;';
+                deleteBtn.title = `حذف پلتفرم ${platformName}`;
+                tab.appendChild(deleteBtn);
+                
+                // Add event listener for tab click
+                tab.addEventListener('click', function(e) {
+                    // Don't activate if clicking the delete button
+                    if (e.target !== deleteBtn) {
+                        activateTab(this);
+                    }
+                });
+                
+                // Add event listener for delete button
+                deleteBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const platformName = tab.textContent.replace(/×$/, '').trim(); // Remove '×' for display
+                    showConfirmModal(`آیا از حذف پلتفرم "${platformName}" و تمام اقدامات آن مطمئن هستید؟`, () => {
+                        // Remove the content
+                        const content = platformContents.querySelector(`.platform-content[data-platform-id="${platformId}"]`);
+                        if (content) {
+                            content.remove();
+                        }
+                        
+                        // If this was the active tab, activate another one
+                        if (tab.classList.contains('active')) {
+                            const remainingTabs = Array.from(platformTabs.querySelectorAll('.platform-tab')).filter(t => t !== tab);
+                            if (remainingTabs.length > 0) {
+                                activateTab(remainingTabs[0]); // Activate the first remaining tab
+                            } else {
+                                // No tabs left, clear content area or show empty state
+                                platformContents.innerHTML = ''; 
+                            }
+                        }
+                        
+                        // Remove the tab
+                        tab.remove();
+                        // Re-initialize drag and drop for platforms to update event listeners
+                        initDragDropForPlatforms();
+                    });
+                });
+                
+                // Make tab draggable
+                tab.addEventListener('mousedown', handlePlatformDragStart);
+                tab.addEventListener('touchstart', handlePlatformDragStart, { passive: true });
+                
+                return tab;
+            }
+
+            function activateTab(tab) {
+                // Deactivate all tabs
+                platformTabs.querySelectorAll('.platform-tab').forEach(t => t.classList.remove('active'));
+                
+                // Activate this tab
+                tab.classList.add('active');
+                
+                // Hide all content
+                platformContents.querySelectorAll('.platform-content').forEach(c => c.classList.remove('active'));
+                
+                // Show this content
+                const platformId = tab.dataset.platformId;
+                const content = platformContents.querySelector(`.platform-content[data-platform-id="${platformId}"]`);
+                if (content) {
+                    content.classList.add('active');
+                }
+            }
+
+            function createActionWrapper(actionName, platformId) {
+                const wrapper = document.createElement('div');
+                wrapper.classList.add('action-wrapper');
+
+                const actionButton = document.createElement('button');
+                actionButton.classList.add('checklist-button');
+                actionButton.textContent = actionName;
+                const safeActionName = actionName.toLowerCase().replace(/[^a-z0-9_]/g, '_');
+                const safePlatformId = String(platformId).replace(/[^a-z0-9_]/g, '_');
+                actionButton.dataset.action = `${safePlatformId}_${safeActionName}_${Date.now()}`;
+
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('delete-action-btn');
+                deleteButton.innerHTML = '&times;';
+                deleteButton.title = "حذف اقدام";
+
+                wrapper.appendChild(actionButton);
+                wrapper.appendChild(deleteButton);
+                
+                // Add event listeners
+                wrapper.addEventListener('click', function(e) {
+                    // Don't toggle if clicking the delete button
+                    if (!e.target.classList.contains('delete-action-btn')) {
+                        this.classList.toggle('checked');
+                    }
+                });
+                
+                deleteButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    showConfirmModal(`آیا از حذف "${actionName}" مطمئن هستید؟`, () => {
+                        wrapper.remove();
+                        // Re-initialize drag and drop for this container to update event listeners
+                        const container = wrapper.closest('.button-container');
+                        if (container) initDragDropForContainer(container);
+                    });
+                });
+                
+                // Make action draggable
+                wrapper.addEventListener('mousedown', handleActionDragStart);
+                wrapper.addEventListener('touchstart', handleActionDragStart, { passive: true });
+                
+                return wrapper;
+            }
+
+            // --- Event Handlers ---
+            // Handle add action button click
+            document.addEventListener('click', function(event) {
+                if (event.target.classList.contains('add-action-btn') || event.target.closest('.add-action-btn')) {
+                    const btn = event.target.closest('.add-action-btn');
+                    const platformId = btn.dataset.platformId;
+                    const platformName = btn.dataset.platformName || 
+                                        platformTabs.querySelector(`.platform-tab[data-platform-id="${platformId}"]`).textContent.replace(/×$/, '').trim();
+                    
+                    selectedPlatformForAdding = {
+                        id: platformId,
+                        name: platformName,
+                        isNew: false
+                    };
+                    selectedActionsToAdd = [];
+                    loadActionSelectionStep();
+                    addItemModal.style.display = 'flex';
+                    setTimeout(() => addItemModal.classList.add('show'), 10);
+                }
+            });
+
+            // --- Listeners for Control Buttons ---
+            addItemBtn.addEventListener('click', showAddItemModal);
+            resetBtn.addEventListener('click', () => {
+                platformContents.querySelectorAll('.action-wrapper.checked').forEach(w => w.classList.remove('checked'));
+            });
+
+            // --- Listeners for Delete Modal ---
+            confirmModalConfirmBtn.addEventListener('click', () => {
+                if (deleteCallback) deleteCallback();
+                hideConfirmModal();
+            });
+            confirmModalCancelBtn.addEventListener('click', hideConfirmModal);
+            confirmModal.addEventListener('click', (event) => {
+                if (event.target === confirmModal) hideConfirmModal();
+            });
+
+            // --- Listeners for Add Item Modal ---
+            addItemModalCancelBtn.addEventListener('click', hideAddItemModal);
+            addItemModalNextBtn.addEventListener('click', loadActionSelectionStep);
+            addItemModalFinishBtn.addEventListener('click', finishAddingItems);
+            addItemModal.addEventListener('click', (event) => {
+                if (event.target === addItemModal) hideAddItemModal();
+            });
+
+            // --- Listeners for Custom Alert Modal ---
+            alertModalOkBtn.addEventListener('click', hideCustomAlert);
+            alertModal.addEventListener('click', (event) => {
+                if (event.target === alertModal) hideCustomAlert();
+            });
+
+            // Initialize platforms
+            initializePlatforms();
+            
+            // Set up menu events
+            setupMenuEvents();
+
+        }); // End of DOMContentLoaded
+    </script>
+</body>
+
+</html>
