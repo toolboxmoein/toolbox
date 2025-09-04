@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+ <title>گزارشگیری فالوور</title>
+ <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+ <style>
+ /* --- متغیرهای اصلی (کپی شده از فایل اصلی برای هماهنگی) --- */
+ :root {
+ --primary-color: #00D968; --primary-light: #E6F8EE; --secondary-color: #00B84B; --dark-color: #333; --light-color: #f8f9fa;
+ --shadow: 0 10px 30px rgba(0, 217, 104, 0.1); --transition: all 0.3s ease;
+ --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+ --card-shadow: 0 15px 35px rgba(0, 217, 104, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+ --subtle-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+ --border-radius: 16px; --button-border-radius: 8px; --border-color: #e0e0e0;
+ --grey-color: #6c757d; --grey-light: #f8f9fa;
+ --grey-medium: #dee2e6;
+ --success-color: #28a745;
+ --danger-color: #e53935;
+ --warning-color: #ffc107; --info-color: #17a2b8;
+ --purple-color: #6f42c1;
+ }
+
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ /* غیرفعال کردن انتخاب متن برای همه عناصر */
+ -webkit-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+ user-select: none;
+ -webkit-touch-callout: none; /* iOS Safari */
+ -webkit-tap-highlight-color: transparent; /* حذف هایلایت در موبایل */
+ }
+
+ body {
+ font-family: 'Vazirmatn', Arial, sans-serif;
+ margin: 0;
+ padding: 20px;
+ background-color: var(--light-color);
+ color: var(--dark-color);
+ direction: rtl;
+ text-align: right;
+ line-height: 1.6;
+ display: flex;
+ justify-content: center;
+ align-items: flex-start;
+ min-height: 100vh;
+ box-sizing: border-box;
+ /* جلوگیری از زوم در موبایل */
+ -webkit-text-size-adjust: 100%;
+ -ms-text-size-adjust: 100%;
+ /* غیرفعال کردن منوی راست کلیک */
+ -webkit-touch-callout: none;
+ -webkit-user-select: none;
+ -khtml-user-select: none;
+ -moz-user-select: none;
+ -ms-user-select: none;
+ user-select: none;
+ }
+
+ .container {
+ max-width: 900px;
+ width: 100%;
+ margin: 0 auto;
+ background-color: white;
+ padding: 30px;
+ border-radius: var(--border-radius);
+ box-shadow: var(--card-shadow);
+ box-sizing: border-box;
+ overflow-y: auto;
+ max-height: calc(100vh - 40px);
+ }
+
+ h2 {
+ color: var(--dark-color);
+ text-align: right;
+ margin-top: 30px;
+ margin-bottom: 15px;
+ font-size: 1.4rem;
+ border-bottom: 1px solid var(--grey-medium);
+ padding-bottom: 10px;
+ }
+
+ /* بازطراحی کامل بخش کنترل‌های گزارش */
+ .report-controls {
+ display: flex;
+ flex-direction: column;
+ gap: 15px;
+ margin-bottom: 30px;
+ padding: 0;
+ background: transparent;
+ border: none;
+ }
+
+ .form-group {
+ display: flex;
+ flex-direction: column;
+ }
+
+ .form-group label {
+ font-weight: 500;
+ margin-bottom: 8px;
+ color: var(--dark-color);
+ font-size: 0.95rem;
+ }
+
+ select, input[type="date"] {
+ width: 100%;
+ padding: 10px 15px;
+ border: 1px solid var(--grey-medium);
+ border-radius: var(--button-border-radius);
+ font-size: 0.95rem;
+ color: var(--dark-color);
+ background-color: white;
+ cursor: pointer;
+ outline: none;
+ transition: border-color 0.3s;
+ font-family: 'Vazirmatn', Arial, sans-serif;
+ }
+
+ select:focus, input[type="date"]:focus {
+ border-color: var(--primary-color);
+ }
+
+ .custom-date-fields {
+ display: none;
+ flex-direction: column;
+ gap: 15px;
+ margin-top: 15px;
+ }
+
+ .custom-date-fields.show {
+ display: flex;
+ }
+
+ .date-row {
+ display: flex;
+ gap: 15px;
+ }
+
+ .date-row .form-group {
+ flex: 1;
+ }
+
+ .status-breakdown-list {
+ list-style: none;
+ padding: 0;
+ margin-top: 20px;
+ }
+ .status-breakdown-list li {
+ display: flex;
+ justify-content: space-between;
+ padding: 10px 0;
+ border-bottom: 1px dashed var(--grey-light);
+ font-size: 1rem;
+ }
+ .status-breakdown-list li:last-child {
+ border-bottom: none;
+ }
+ .status-breakdown-list li span:first-child {
+ font-weight: 500;
+ color: var(--dark-color);
+ }
+ .status-breakdown-list li span:last-child {
+ font-weight: 600;
+ color: var(--primary-color);
+ }
+
+ .suggestions-box {
+ background-color: var(--primary-light);
+ border: 1px solid var(--primary-color);
+ border-radius: var(--border-radius);
+ padding: 20px;
+ margin-top: 30px;
+ }
+ .suggestions-box h3 {
+ color: var(--primary-color);
+ margin-bottom: 15px;
+ font-size: 1.2rem;
+ }
+ .suggestions-box ul {
+ list-style: none;
+ padding: 0;
+ }
+ .suggestions-box li {
+ margin-bottom: 10px;
+ color: var(--dark-color);
+ font-size: 0.95rem;
+ line-height: 1.5;
+ }
+ .suggestions-box li i {
+ margin-left: 8px;
+ color: var(--primary-color);
+ }
+ .suggestions-box li.warning i { color: var(--warning-color); }
+ .suggestions-box li.danger i { color: var(--danger-color); }
+ .suggestions-box li.success i { color: var(--success-color); }
+
+ .action-buttons-row {
+ display: flex;
+ justify-content: center;
+ gap: 15px;
+ margin-top: 40px;
+ }
+
+ .action-button {
+ padding: 12px 30px;
+ border: none;
+ border-radius: var(--button-border-radius);
+ background-color: var(--danger-color);
+ color: white;
+ cursor: pointer;
+ font-family: 'Vazirmatn', Arial, sans-serif;
+ font-size: 1.1rem;
+ transition: background-color 0.3s ease;
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ }
+ .action-button:hover {
+ background-color: #c0392b;
+ }
+
+ @media (max-width: 768px) {
+ body { padding: 10px; }
+ .container { max-height: calc(100vh - 20px); padding: 20px; }
+ .date-row { flex-direction: column; }
+ .action-buttons-row { flex-direction: column; }
+ .action-button { width: 100%; }
+ }
+ </style>
+</head>
+<body>
+ <div class="container">
+
+ <div class="report-controls">
+ <div class="form-group">
+ <label for="date-range-select">انتخاب بازه زمانی:</label>
+ <select id="date-range-select">
+ <option value="all-time">کل زمان</option>
+ <option value="last-7-days">۷ روز گذشته</option>
+ <option value="last-30-days">۳۰ روز گذشته</option>
+ <option value="last-90-days">۹۰ روز گذشته</option>
+ <option value="custom">بازه سفارشی</option>
+ </select>
+ </div>
+ 
+ <div class="custom-date-fields" id="custom-date-fields">
+ <div class="date-row">
+ <div class="form-group">
+ <label for="start-date">از تاریخ:</label>
+ <input type="date" id="start-date">
+ </div>
+ <div class="form-group">
+ <label for="end-date">تا تاریخ:</label>
+ <input type="date" id="end-date">
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <h2><i class="fas fa-chart-pie" style="margin-left: 8px;"></i> آمار کلی</h2>
+
+ <ul class="status-breakdown-list">
+ <li><span>فالوورهای ثبت شده:</span> <span id="total-followers-added">0</span></li>
+ <li><span>پیام‌های ارسال شده:</span> <span id="messages-sent">0</span></li>
+ <li><span>درصد پاسخگویی:</span> <span id="response-rate">0%</span></li>
+ <li><span>درصد حذف شده‌ها:</span> <span id="removed-followers-percentage">0%</span></li>
+ <li><span>درصد فالوورهای روح:</span> <span id="ghost-followers-percentage">0%</span></li>
+ <li><span>فالوورهای جدید (تازه اضافه شده):</span> <span id="status-new-count">0 (0%)</span></li>
+ <li><span>فالوور جدید:</span> <span id="status-new-follower-percentage">0 (0%)</span></li>
+ <li><span>در انتظار پاسخ:</span> <span id="status-pending-percentage">0 (0%)</span></li>
+ <li><span>نیازمند بررسی:</span> <span id="status-check-needed-percentage">0 (0%)</span></li>
+ <li><span>پاسخ داده:</span> <span id="status-responded-percentage">0 (0%)</span></li>
+ <li><span>بررسی‌های امروز:</span> <span id="status-today-check-percentage">0 (0%)</span></li>
+ <li><span>آماده حذف:</span> <span id="status-no-response-percentage">0 (0%)</span></li>
+ </ul>
+
+ <div class="suggestions-box" id="suggestions-box">
+ <h3><i class="fas fa-lightbulb" style="margin-left: 8px;"></i> پیشنهادات و هشدارها</h3>
+ <ul id="suggestions-list">
+ <!-- Suggestions will be dynamically loaded here -->
+ <li><i class="fas fa-check-circle"></i> وضعیت عمومی فالوورهای شما خوب است. به همین روند ادامه دهید!</li>
+ </ul>
+ </div>
+
+ <div class="action-buttons-row">
+ <button class="action-button" onclick="window.parent.closeModal(window.parent.document.getElementById('report-iframe-modal'))"><i class="fas fa-times-circle"></i> بستن گزارش</button>
+ </div>
+ </div>
+
+ <script>
+ // غیرفعال کردن منوی راست کلیک و کیبورد shortcuts
+ document.addEventListener('contextmenu', function(e) {
+ e.preventDefault();
+ return false;
+ });
+
+ document.addEventListener('keydown', function(e) {
+ // غیرفعال کردن Ctrl+A, Ctrl+C, Ctrl+V, F12, Ctrl+Shift+I
+ if ((e.ctrlKey && (e.keyCode === 65 || e.keyCode === 67 || e.keyCode === 86)) || 
+ e.keyCode === 123 || 
+ (e.ctrlKey && e.shiftKey && e.keyCode === 73)) {
+ e.preventDefault();
+ return false;
+ }
+ });
+
+ // غیرفعال کردن drag & drop
+ document.addEventListener('dragstart', function(e) {
+ e.preventDefault();
+ return false;
+ });
+
+ const STATUS_NEW = "جدید";
+ const STATUS_NEW_FOLLOWER = "فالوور جدید";
+ const STATUS_PENDING = "در انتظار پاسخ";
+ const STATUS_CHECK_NEEDED = "نیازمند بررسی";
+ const STATUS_RESPONDED = "پاسخ داده";
+ const STATUS_NO_RESPONSE = "آماده حذف";
+ const STATUS_TODAY_CHECK = "بررسی امروز";
+
+ let allFollowers = [];
+ let filteredFollowersCurrent = [];
+
+ // DOM Elements
+ const dateRangeSelect = document.getElementById('date-range-select');
+ const startDateInput = document.getElementById('start-date');
+ const endDateInput = document.getElementById('end-date');
+ const customDateFields = document.getElementById('custom-date-fields');
+
+ const totalFollowersAddedEl = document.getElementById('total-followers-added');
+ const messagesSentEl = document.getElementById('messages-sent');
+ const responseRateEl = document.getElementById('response-rate');
+ const removedFollowersPercentageEl = document.getElementById('removed-followers-percentage');
+ const ghostFollowersPercentageEl = document.getElementById('ghost-followers-percentage');
+
+ // Status Breakdown Elements
+ const statusNewCountEl = document.getElementById('status-new-count');
+ const statusNewFollowerPercentageEl = document.getElementById('status-new-follower-percentage');
+ const statusPendingPercentageEl = document.getElementById('status-pending-percentage');
+ const statusCheckNeededPercentageEl = document.getElementById('status-check-needed-percentage');
+ const statusRespondedPercentageEl = document.getElementById('status-responded-percentage');
+ const statusTodayCheckPercentageEl = document.getElementById('status-today-check-percentage');
+ const statusNoResponsePercentageEl = document.getElementById('status-no-response-percentage');
+
+ const suggestionsList = document.getElementById('suggestions-list');
+
+ // Helper to format date for input[type="date"]
+ function getFormattedDate(date) {
+ const year = date.getFullYear();
+ const month = (date.getMonth() + 1).toString().padStart(2, '0');
+ const day = date.getDate().toString().padStart(2, '0');
+ return `${year}-${month}-${day}`;
+ }
+
+ // Set initial custom date pickers to today
+ const today = new Date();
+ startDateInput.value = getFormattedDate(today);
+ endDateInput.value = getFormattedDate(today);
+
+ // Event Listeners
+ dateRangeSelect.addEventListener('change', function() {
+ if (this.value === 'custom') {
+ customDateFields.classList.add('show');
+ } else {
+ customDateFields.classList.remove('show');
+ }
+ updateReport();
+ });
+
+ startDateInput.addEventListener('change', updateReport);
+ endDateInput.addEventListener('change', updateReport);
+
+ // Request data from parent و همگام‌سازی با تغییرات
+ window.addEventListener('message', function(event) {
+ if (event.data && event.data.type === 'followersData') {
+ allFollowers = event.data.payload;
+ updateReport();
+ }
+ // همگام‌سازی لحظه‌ای با تغییرات برنامه اصلی
+ if (event.data && event.data.type === 'followerUpdate') {
+ // به‌روزرسانی فالوور خاص
+ const updatedFollower = event.data.payload;
+ const index = allFollowers.findIndex(f => f.id === updatedFollower.id);
+ if (index !== -1) {
+ allFollowers[index] = updatedFollower;
+ updateReport();
+ }
+ }
+ if (event.data && event.data.type === 'followerAdded') {
+ // اضافه کردن فالوور جدید
+ allFollowers.push(event.data.payload);
+ updateReport();
+ }
+ if (event.data && event.data.type === 'followerRemoved') {
+ // حذف فالوور
+ const removedId = event.data.payload;
+ allFollowers = allFollowers.filter(f => f.id !== removedId);
+ updateReport();
+ }
+ });
+
+ // Function to calculate and display report
+ function updateReport() {
+ const selectedRange = dateRangeSelect.value;
+ let startDate = null;
+ let endDate = new Date();
+
+ switch (selectedRange) {
+ case 'all-time':
+ startDate = new Date(0);
+ break;
+ case 'last-7-days':
+ startDate = new Date();
+ startDate.setDate(startDate.getDate() - 7);
+ break;
+ case 'last-30-days':
+ startDate = new Date();
+ startDate.setDate(startDate.getDate() - 30);
+ break;
+ case 'last-90-days':
+ startDate = new Date();
+ startDate.setDate(startDate.getDate() - 90);
+ break;
+ case 'custom':
+ startDate = new Date(startDateInput.value);
+ endDate = new Date(endDateInput.value);
+ endDate.setHours(23, 59, 59, 999);
+ break;
+ }
+
+ // Filter followers based on the date range
+ filteredFollowersCurrent = allFollowers.filter(follower => {
+ const addedDate = new Date(follower.addedDate);
+ return addedDate >= startDate && addedDate <= endDate;
+ });
+
+ // Calculate statistics
+ const totalAdded = filteredFollowersCurrent.length;
+ 
+ const messagesSentCount = filteredFollowersCurrent.filter(f => f.messageSent).length;
+ 
+ const respondedFollowers = filteredFollowersCurrent.filter(f => f.status === STATUS_RESPONDED);
+ const actualRespondedCount = respondedFollowers.length;
+
+ const removedCount = filteredFollowersCurrent.filter(f => f.status === STATUS_NO_RESPONSE).length;
+ 
+ // For response rate, consider only those who received a message
+ const followersWithMessageSent = filteredFollowersCurrent.filter(f => f.messageSent).length;
+ const responseRate = followersWithMessageSent > 0 ? (actualRespondedCount / followersWithMessageSent * 100).toFixed(1) : 0;
+
+ // For removed percentage, consider all followers added in the period
+ const removedPercentage = totalAdded > 0 ? (removedCount / totalAdded * 100).toFixed(1) : 0;
+
+ // Ghost followers: those who received a message but didn't respond (pending, check_needed, today_check, no_response)
+ const ghostFollowersCount = filteredFollowersCurrent.filter(f => 
+ f.messageSent && 
+ (f.status === STATUS_PENDING || f.status === STATUS_CHECK_NEEDED || f.status === STATUS_TODAY_CHECK || f.status === STATUS_NO_RESPONSE)
+ ).length;
+ const ghostFollowersPercentage = followersWithMessageSent > 0 ? (ghostFollowersCount / followersWithMessageSent * 100).toFixed(1) : 0;
+
+ // Status Breakdown Counts
+ const statusCounts = {
+ [STATUS_NEW]: filteredFollowersCurrent.filter(f => f.status === STATUS_NEW).length,
+ [STATUS_NEW_FOLLOWER]: filteredFollowersCurrent.filter(f => f.status === STATUS_NEW_FOLLOWER).length,
+ [STATUS_PENDING]: filteredFollowersCurrent.filter(f => f.status === STATUS_PENDING).length,
+ [STATUS_CHECK_NEEDED]: filteredFollowersCurrent.filter(f => f.status === STATUS_CHECK_NEEDED).length,
+ [STATUS_RESPONDED]: actualRespondedCount,
+ [STATUS_TODAY_CHECK]: filteredFollowersCurrent.filter(f => f.status === STATUS_TODAY_CHECK).length,
+ [STATUS_NO_RESPONSE]: removedCount
+ };
+
+ // Update DOM
+ totalFollowersAddedEl.textContent = totalAdded;
+ messagesSentEl.textContent = messagesSentCount;
+ responseRateEl.textContent = `${responseRate}%`;
+ removedFollowersPercentageEl.textContent = `${removedPercentage}%`;
+ ghostFollowersPercentageEl.textContent = `${ghostFollowersPercentage}%`;
+
+ statusNewCountEl.textContent = `${statusCounts[STATUS_NEW]} (${totalAdded > 0 ? (statusCounts[STATUS_NEW] / totalAdded * 100).toFixed(1) : 0}%)`;
+ statusNewFollowerPercentageEl.textContent = `${statusCounts[STATUS_NEW_FOLLOWER]} (${totalAdded > 0 ? (statusCounts[STATUS_NEW_FOLLOWER] / totalAdded * 100).toFixed(1) : 0}%)`;
+ statusPendingPercentageEl.textContent = `${statusCounts[STATUS_PENDING]} (${totalAdded > 0 ? (statusCounts[STATUS_PENDING] / totalAdded * 100).toFixed(1) : 0}%)`;
+ statusCheckNeededPercentageEl.textContent = `${statusCounts[STATUS_CHECK_NEEDED]} (${totalAdded > 0 ? (statusCounts[STATUS_CHECK_NEEDED] / totalAdded * 100).toFixed(1) : 0}%)`;
+ statusRespondedPercentageEl.textContent = `${statusCounts[STATUS_RESPONDED]} (${totalAdded > 0 ? (statusCounts[STATUS_RESPONDED] / totalAdded * 100).toFixed(1) : 0}%)`;
+ statusTodayCheckPercentageEl.textContent = `${statusCounts[STATUS_TODAY_CHECK]} (${totalAdded > 0 ? (statusCounts[STATUS_TODAY_CHECK] / totalAdded * 100).toFixed(1) : 0}%)`;
+ statusNoResponsePercentageEl.textContent = `${statusCounts[STATUS_NO_RESPONSE]} (${totalAdded > 0 ? (statusCounts[STATUS_NO_RESPONSE] / totalAdded * 100).toFixed(1) : 0}%)`;
+
+ // Generate suggestions
+ generateSuggestions({
+ totalAdded,
+ messagesSentCount,
+ responseRate: parseFloat(responseRate),
+ removedPercentage: parseFloat(removedPercentage),
+ ghostFollowersPercentage: parseFloat(ghostFollowersPercentage),
+ statusPendingCount: statusCounts[STATUS_PENDING],
+ statusCheckNeededCount: statusCounts[STATUS_CHECK_NEEDED]
+ });
+ }
+
+ function generateSuggestions(data) {
+ suggestionsList.innerHTML = '';
+ const addSuggestion = (text, type = 'info') => {
+ const li = document.createElement('li');
+ let icon = '<i class="fas fa-info-circle"></i>';
+ if (type === 'warning') icon = '<i class="fas fa-exclamation-triangle"></i>';
+ if (type === 'danger') icon = '<i class="fas fa-times-circle"></i>';
+ if (type === 'success') icon = '<i class="fas fa-check-circle"></i>';
+ li.innerHTML = icon + text;
+ li.className = type;
+ suggestionsList.appendChild(li);
+ };
+
+ if (data.totalAdded === 0) {
+ addSuggestion('هنوز فالووری در این بازه زمانی ثبت نشده است. برای شروع، فالوورهای جدید را اضافه کنید.', 'info');
+ return;
+ }
+
+ if (data.responseRate < 20) {
+ addSuggestion('متأسفانه افراد غیرفعال در پیج شما زیاد هستند یا بیشتر فالوورهای شما روح (Ghost) هستند و به نظر می‌رسد که باید آن‌ها را حذف کنید.', 'danger');
+ } else if (data.responseRate >= 20 && data.responseRate < 50) {
+ addSuggestion('نرخ پاسخگویی متوسط است. با بهبود پیام‌ها یا زمان ارسال، می‌توانید آن را افزایش دهید.', 'warning');
+ } else {
+ addSuggestion('نرخ پاسخگویی عالی است! به همین روند ادامه دهید.', 'success');
+ }
+
+ if (data.ghostFollowersPercentage > 40) {
+ addSuggestion('درصد فالوورهای روح بالا است. روی پیگیری دستی فالوورهای "نیازمند بررسی" تمرکز کنید.', 'danger');
+ } else if (data.ghostFollowersPercentage > 20) {
+ addSuggestion('تعداد فالوورهای روح قابل توجه است. استراتژی‌های پیگیری خود را بازبینی کنید.', 'warning');
+ }
+
+ if (data.statusCheckNeededCount > 0) {
+ addSuggestion(`تعداد ${data.statusCheckNeededCount} فالوور در وضعیت "نیازمند بررسی" دارید. این فالوورها پیام را دیده‌اند اما پاسخ نداده‌اند. پیگیری دستی توصیه می‌شود.`, 'warning');
+ }
+ 
+ if (data.statusPendingCount > 0 && data.messagesSentCount > 0 && (data.statusPendingCount / data.messagesSentCount > 0.5)) {
+ addSuggestion(`بخش زیادی از فالوورها در وضعیت "در انتظار پاسخ" هستند. مطمئن شوید که موعد بررسی‌ها را به موقع انجام می‌دهید.`, 'info');
+ }
+
+ if (suggestionsList.children.length === 0) {
+ addSuggestion('همه چیز عالی به نظر می‌رسد! به مدیریت موثر فالوورهایتان ادامه دهید.', 'success');
+ }
+ }
+
+ // Request data from parent when the iframe loads
+ window.parent.postMessage({ type: 'requestFollowersData' }, '*');
+ </script>
+</body>
+</html>
