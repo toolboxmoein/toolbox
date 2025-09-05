@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آموزش ویدئویی</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Shared root variables for consistency */
+        :root {
+            --primary-color: #00D968;
+            --primary-light: #E6F8EE;
+            --secondary-color: #00B84B;
+            --dark-color: #333;
+            --light-color: #fff;
+            --bg-grey: #fcfcfc;
+            --border-color: #e0e0e0;
+            --transition: all 0.3s ease;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            background-color: var(--bg-grey);
+            color: var(--dark-color);
+            direction: rtl;
+            text-align: right;
+            line-height: 1.8;
+            padding-bottom: 20px; /* برای فضای پایین صفحه */
+        }
+
+        /* Header consistent with other pages */
+        .page-header {
+            text-align: center;
+            background-color: var(--light-color);
+            padding: 15px 20px;
+            border-bottom: 2px solid var(--primary-light);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .page-header h1 {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            font-weight: 700;
+        }
+
+        .intro-text {
+            max-width: 800px;
+            margin: 0px auto 30px; 
+            padding: 0 20px;
+            font-size: 1rem;
+            color: #555;
+            text-align: center;
+        }
+
+        .accordion-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .accordion-item {
+            background-color: var(--light-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden; /* مهم برای transition ارتفاع */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            cursor: pointer;
+            background-color: #ffffff;
+            transition: var(--transition);
+        }
+
+        .accordion-header:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .accordion-header.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-bottom: 1px solid var(--primary-color); 
+        }
+
+        .accordion-header .icon-main { /* آیکون اصلی کنار عنوان بخش */
+            margin-left: 10px; /* فاصله از متن در RTL */
+            font-size: 1.2rem;
+        }
+        .accordion-header .icon-chevron { /* آیکون پیکان */
+            margin-right: 15px; /* فاصله از لبه راست در RTL */
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-header.active .icon-chevron {
+            transform: rotate(-180deg);
+        }
+
+        .accordion-content {
+            background-color: #fcfcfc; /* پس‌زمینه کمی متفاوت برای محتوا */
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 20px; 
+        }
+
+        .accordion-content.active {
+            max-height: 500px; /* مقدار کافی برای باز شدن محتوا - می‌توانید بیشتر کنید */
+            padding: 15px 20px;
+        }
+
+        .accordion-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .accordion-content li {
+            padding: 10px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        .accordion-content li:last-child {
+            border-bottom: none;
+        }
+
+        .accordion-content a {
+            text-decoration: none;
+            color: var(--dark-color);
+            display: block;
+            transition: var(--transition);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+        }
+        .accordion-content a:hover {
+            color: var(--primary-color);
+            transform: translateX(-5px);
+        }
+        .accordion-content a i {
+            margin-left: 8px; /* فاصله آیکون از متن */
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .page-header h1 {
+                font-size: 1.3rem;
+            }
+            .intro-text {
+                font-size: 0.9rem;
+            }
+            .accordion-header {
+                font-size: 1rem;
+                padding: 12px 15px;
+            }
+            .accordion-content {
+                padding: 0 15px;
+            }
+            .accordion-content.active {
+                padding: 12px 15px;
+            }
+            .accordion-content a {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="page-header">
+    <h1>آموزش ویدئویی رادار اینستاگرام</h1>
+</header>
+
+<p class="intro-text">
+    برای اینکه روی این برنامه و کاربردش حسابی تسلط پیدا کنید قسمت به قسمت این ویدیوها رو ببینید.
+</p>
+
+<div class="accordion-container">
+
+    <!-- بخش 1: مقدمه -->
+    <div class="accordion-item">
+        <div class="accordion-header">
+            <span><i class="fas fa-play-circle icon-main"></i> بخش اول: مقدمه</span>
+            <i class="fas fa-chevron-down icon-chevron"></i>
+        </div>
+        <div class="accordion-content">
+            <ul>
+                <!-- لینک به صفحه جدید moghadame1.html -->
+                <li><a href="moghadame1.html"><i class="fas fa-video"></i> معرفی کلی رادار اینستاگرام</a></li>
+                <li><a href="#"><i class="fas fa-video"></i> نحوه شروع به کار و تنظیمات اولیه</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- بخش 2: کار با قسمت فالوور -->
+    <div class="accordion-item">
+        <div class="accordion-header">
+            <span><i class="fas fa-users icon-main"></i> بخش دوم: کار با قسمت فالوور</span>
+            <i class="fas fa-chevron-down icon-chevron"></i>
+        </div>
+        <div class="accordion-content">
+            <ul>
+                <li><a href="#"><i class="fas fa-video"></i> شناسایی فالوورهای غیرفعال</a></li>
+                <li><a href="#"><i class="fas fa-video"></i> مدیریت و دسته‌بندی فالوورها</a></li>
+                <li><a href="#"><i class="fas fa-video"></i> استفاده از فیلترها در بخش فالوور</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- بخش 3: کار با قسمت فالوینگ -->
+    <div class="accordion-item">
+        <div class="accordion-header">
+            <span><i class="fas fa-user-friends icon-main"></i> بخش سوم: کار با قسمت فالوینگ</span>
+            <i class="fas fa-chevron-down icon-chevron"></i>
+        </div>
+        <div class="accordion-content">
+            <ul>
+                <li><a href="#"><i class="fas fa-video"></i> مدیریت فالویینگ‌های خود</a></li>
+                <li><a href="#"><i class="fas fa-video"></i> حذف فالویینگ‌های غیرضروری</a></li>
+                <li><a href="#"><i class="fas fa-video"></i> روش‌های بهینه‌سازی لیست فالویینگ</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- بخش 4: دایرکت مارکتینگ -->
+    <div class="accordion-item">
+        <div class="accordion-header">
+            <span><i class="fas fa-paper-plane icon-main"></i> بخش چهارم: دایرکت مارکتینگ</span>
+            <i class="fas fa-chevron-down icon-chevron"></i>
+        </div>
+        <div class="accordion-content">
+            <ul>
+                <li><a href="#"><i class="fas fa-video"></i> مقدمه‌ای بر دایرکت مارکتینگ</a></li>
+                <li><a href="#"><i class="fas fa-video"></i> ارسال پیام‌های خودکار</a></li>
+                <li><a href="#"><i class="fas fa-video"></i> استفاده از الگوهای پیام</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- بخش 5: تقویم تولید محتوا -->
+    <div class="accordion-item">
+        <div class="accordion-header">
+            <span><i class="fas fa-calendar-alt icon-main"></i> بخش پنجم: تقویم تولید محتوا</span>
+            <i class="fas fa-chevron-down icon-chevron"></i>
+        </div>
+        <div class="accordion-content">
+            <ul>
+                <li><a href="#"><i class="fas fa-video"></i> ایجاد و مدیریت تقویم محتوا</a></li>
+                <li><a href="#"><i class="fas fa-video"></i> زمانبندی پست‌ها و استوری‌ها</a></li>
+                <li><a href="#"><i class="fas fa-video"></i> ایده‌پردازی برای محتوا</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- بخش 6: تعامل -->
+    <div class="accordion-item">
+        <div class="accordion-header">
+            <span><i class="fas fa-heart icon-main"></i> بخش ششم: تعامل</span>
+            <i class="fas fa-chevron-down icon-chevron"></i>
+        </div>
+        <div class="accordion-content">
+            <ul>
+                <li><a href="#"><i class="fas fa-video"></i> افزایش تعامل با فالوورها</a></li>
+                <li><a href="#"><i class="fas fa-video"></i> تحلیل و گزارش تعامل</a></li>
+                <li><a href="#"><i class="fas fa-video"></i> بهترین زمان برای تعامل</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- بخش 7: چک لیست تولید محتوا -->
+    <div class="accordion-item">
+        <div class="accordion-header">
+            <span><i class="fas fa-clipboard-list icon-main"></i> بخش هفتم: چک لیست تولید محتوا</span>
+            <i class="fas fa-chevron-down icon-chevron"></i>
+        </div>
+        <div class="accordion-content">
+            <ul>
+                <li><a href="#"><i class="fas fa-video"></i> کار با چک‌لیست‌های آماده</a></li>
+                <li><a href="#"><i class="fas fa-video"></i> ساخت چک‌لیست شخصی‌سازی شده</a></li>
+                <li><a href="#"><i class="fas fa-video"></i> نکات مهم در تولید محتوا</a></li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', function() {
+                const content = this.nextElementSibling; // content div is the next sibling
+                
+                // Toggle active class on header
+                this.classList.toggle('active');
+                
+                // Toggle active class and max-height for content
+                if (content.classList.contains('active')) {
+                    content.classList.remove('active');
+                    content.style.maxHeight = '0'; // Collapse
+                } else {
+                    content.classList.add('active');
+                    // Set max-height to scrollHeight for smooth expansion
+                    // Add a small buffer (e.g., 20px) to scrollHeight to prevent content from being cut off
+                    content.style.maxHeight = content.scrollHeight + 20 + 'px'; 
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
