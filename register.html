@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>ورود به رادار اینستاگرام</title>
+ 
+ <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+ 
+ <style>
+ :root {
+ --primary-color: #00D968;
+ --secondary-color: #00B84B;
+ --dark-color: #333;
+ --input-bg-color: #f0f0f0;
+ --text-grey: #666;
+ --border-radius: 16px;
+ --transition: all 0.3s ease;
+ --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+ }
+ 
+ * { margin: 0; padding: 0; box-sizing: border-box; }
+ 
+ body { 
+ font-family: 'Vazirmatn', Arial, sans-serif; 
+ background-color: #ffffff;
+ direction: rtl; 
+ text-align: right; 
+ color: var(--dark-color); 
+ line-height: 1.6; 
+ display: flex; 
+ justify-content: center; 
+ align-items: center; 
+ min-height: 100vh; 
+ padding: 20px; 
+ }
+ 
+ .auth-container { 
+ background: #ffffff;
+ padding: 30px 20px;
+ border-radius: var(--border-radius);
+ width: 90%;
+ max-width: 450px;
+ text-align: center; 
+ }
+ 
+ .logo-placeholder { 
+ width: 200px;
+ height: 60px;
+ background-image: url('images/logo.png'); 
+ background-size: contain; 
+ background-repeat: no-repeat; 
+ background-position: center; 
+ margin: 0 auto 40px;
+ }
+ 
+ .intro-text {
+ font-size: 16px;
+ color: var(--dark-color);
+ margin-bottom: 30px;
+ line-height: 1.8;
+ text-align: center;
+ padding: 0 10px;
+ }
+ 
+ .intro-text .app-name {
+ font-weight: 600;
+ color: var(--primary-color);
+ }
+ 
+ .form-group { 
+ margin-bottom: 15px; 
+ text-align: right; 
+ }
+ 
+ .form-row { 
+ display: grid; 
+ grid-template-columns: 1fr 1fr; 
+ gap: 15px; 
+ }
+ 
+ .form-group input { 
+ width: 100%; 
+ padding: 18px 20px;
+ border: none;
+ background-color: var(--input-bg-color);
+ border-radius: 12px;
+ font-family: 'Vazirmatn', Arial, sans-serif; 
+ font-size: 16px; 
+ text-align: right; 
+ direction: rtl; 
+ transition: var(--transition); 
+ color: var(--dark-color);
+ }
+ 
+ .form-group input::placeholder {
+ color: var(--text-grey);
+ text-align: right;
+ }
+ 
+ .form-group input:focus { 
+ outline: none; 
+ box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
+ background-color: #ffffff;
+ border: 1px solid var(--primary-color);
+ }
+ 
+ .form-group input.error { 
+ border: 1px solid #dc3545;
+ box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1); 
+ }
+ 
+ .password-strength { 
+ margin-top: 5px; 
+ font-size: 12px; 
+ text-align: right; 
+ padding-right: 5px; 
+ }
+ 
+ .auth-button { 
+ width: 100%; 
+ padding: 18px;
+ margin-top: 30px;
+ border: none; 
+ border-radius: 12px;
+ font-family: 'Vazirmatn', Arial, sans-serif; 
+ font-size: 16px; 
+ font-weight: 600; 
+ cursor: pointer; 
+ transition: var(--transition); 
+ background: var(--gradient); 
+ color: white;
+ }
+ 
+ .auth-button:hover:not(:disabled) { 
+ transform: translateY(-2px); 
+ }
+ 
+ .auth-button:disabled { 
+ opacity: 0.6; 
+ cursor: not-allowed; 
+ transform: none; 
+ }
+ 
+ .mode-switch { 
+ margin-top: 25px;
+ display: flex; 
+ justify-content: center; 
+ align-items: center;
+ font-size: 14px;
+ }
+ 
+ .mode-switch p {
+ margin-bottom: 0;
+ margin-left: 5px;
+ color: var(--text-grey);
+ }
+ 
+ .mode-switch button { 
+ background: none; 
+ border: none; 
+ color: var(--dark-color);
+ cursor: pointer; 
+ font-family: 'Vazirmatn', Arial, sans-serif; 
+ font-size: 14px; 
+ text-decoration: none;
+ font-weight: 500;
+ padding: 0;
+ }
+ 
+ .mode-switch button:hover { 
+ color: var(--primary-color);
+ text-decoration: underline;
+ }
+
+ .message { 
+ margin-top: 20px; 
+ padding: 12px; 
+ border-radius: 8px; 
+ font-size: 14px; 
+ text-align: center; 
+ }
+ 
+ .message.error { 
+ background-color: #f8d7da; 
+ color: #721c24; 
+ border: 1px solid #f5c6cb; 
+ }
+ 
+ .message.success { 
+ background-color: #d4edda; 
+ color: #155724; 
+ border: 1px solid #c3e6cb; 
+ }
+
+ .forgot-password-link {
+ display: block;
+ margin-top: 10px;
+ font-size: 13px;
+ color: var(--text-grey);
+ text-decoration: none;
+ text-align: center;
+ }
+ 
+ .forgot-password-link:hover {
+ color: var(--primary-color);
+ text-decoration: underline;
+ }
+
+ /* Modal styles for forgot password */
+ .modal-backdrop {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background-color: rgba(0, 0, 0, 0.6);
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ z-index: 1000;
+ opacity: 0;
+ visibility: hidden;
+ transition: opacity 0.3s ease, visibility 0.3s ease;
+ }
+ 
+ .modal-backdrop.show {
+ opacity: 1;
+ visibility: visible;
+ }
+ 
+ .modal-content {
+ background-color: #ffffff;
+ padding: 30px;
+ border-radius: var(--border-radius);
+ width: 90%;
+ max-width: 400px;
+ text-align: right;
+ transform: translateY(-50px);
+ opacity: 0;
+ transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+ }
+ 
+ .modal-backdrop.show .modal-content {
+ transform: translateY(0);
+ opacity: 1;
+ }
+ 
+ .modal-header {
+ font-size: 20px;
+ font-weight: 700;
+ color: var(--dark-color);
+ margin-bottom: 20px;
+ text-align: center;
+ }
+ 
+ .modal-body p {
+ font-size: 14px;
+ color: var(--text-grey);
+ margin-bottom: 20px;
+ line-height: 1.7;
+ }
+ 
+ .modal-body input {
+ width: 100%;
+ padding: 15px 18px;
+ border: 1px solid #e0e0e0;
+ border-radius: 8px;
+ font-family: 'Vazirmatn', Arial, sans-serif;
+ font-size: 15px;
+ text-align: right;
+ direction: rtl;
+ margin-bottom: 15px;
+ }
+ 
+ .modal-body input:focus {
+ outline: none;
+ border-color: var(--primary-color);
+ box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
+ }
+ 
+ .modal-buttons {
+ display: flex;
+ gap: 10px;
+ justify-content: center;
+ }
+ 
+ .modal-button {
+ flex: 1;
+ padding: 12px;
+ border: none;
+ border-radius: 8px;
+ font-family: 'Vazirmatn', Arial, sans-serif;
+ font-size: 15px;
+ font-weight: 600;
+ cursor: pointer;
+ transition: var(--transition);
+ }
+ 
+ .modal-button.primary {
+ background: var(--gradient);
+ color: white;
+ }
+ 
+ .modal-button.primary:hover {
+ transform: translateY(-2px);
+ }
+ 
+ .modal-button.secondary {
+ background-color: var(--input-bg-color);
+ color: var(--dark-color);
+ border: 1px solid #e0e0e0;
+ }
+ 
+ .modal-button.secondary:hover {
+ background-color: #e0e0e0;
+ }
+ 
+ .modal-message {
+ margin-top: 15px;
+ font-size: 13px;
+ text-align: center;
+ }
+ 
+ .modal-message.success { color: var(--primary-color); }
+ .modal-message.error { color: #dc3545; }
+ </style>
+</head>
+<body>
+
+<div class="auth-container">
+ <div class="logo-placeholder"></div>
+ 
+ <p class="intro-text" id="main-intro-text">
+ برای ورود و یا ثبت نام در <span class="app-name">رادار اینستاگرام</span> پست الکترونیک خود را وارد نمایید
+ </p>
+
+ <form id="authForm">
+ <div id="name-fields" style="display: none;">
+ <div class="form-row">
+ <div class="form-group">
+ <input type="text" id="firstName" placeholder="نام">
+ </div>
+ <div class="form-group">
+ <input type="text" id="lastName" placeholder="نام خانوادگی">
+ </div>
+ </div>
+ </div>
+
+ <div class="form-group">
+ <input type="email" id="email" required placeholder="ایمیل" autocomplete="email">
+ </div>
+
+ <div class="form-group">
+ <input type="password" id="password" required placeholder="رمز عبور" autocomplete="current-password">
+ <div id="password-strength" class="password-strength"></div>
+ </div>
+
+ <div class="form-group" id="confirm-password-field" style="display: none;">
+ <input type="password" id="confirmPassword" placeholder="تأیید رمز عبور">
+ </div>
+ 
+ <button type="submit" class="auth-button" id="primary-action">
+ <i class="fas fa-sign-in-alt"></i> ورود به رادار اینستاگرام
+ </button>
+ </form>
+ 
+ <a href="#" class="forgot-password-link" id="forgot-password-link">
+ رمز عبور خود را فراموش کرده‌اید؟
+ </a>
+
+ <div class="mode-switch">
+ <p id="switch-text">حساب کاربری ندارید؟</p>
+ <button type="button" id="mode-switch-btn">ثبت‌نام کنید</button>
+ </div>
+
+ <div id="message" class="message" style="display: none;"></div>
+</div>
+
+<!-- Forgot Password Modal -->
+<div id="forgot-password-modal" class="modal-backdrop">
+ <div class="modal-content">
+ <div class="modal-header">بازیابی رمز عبور</div>
+ <div class="modal-body">
+ <p>لطفاً ایمیل خود را وارد کنید تا لینک بازیابی رمز عبور برای شما ارسال شود.</p>
+ <input type="email" id="forgot-password-email" placeholder="ایمیل شما" required>
+ <div id="forgot-password-message" class="modal-message" style="display: none;"></div>
+ </div>
+ <div class="modal-buttons">
+ <button class="modal-button primary" id="send-reset-link-btn">ارسال لینک بازیابی</button>
+ <button class="modal-button secondary" id="cancel-reset-btn">لغو</button>
+ </div>
+ </div>
+</div>
+
+<script>
+console.log("✅ register.html: Script loaded");
+
+let currentMode = 'login';
+let currentDeviceId = null;
+
+// تولید Device ID
+function generateDeviceId() {
+ let deviceId = localStorage.getItem('deviceId');
+ if (!deviceId) {
+ deviceId = 'device-' + Math.random().toString(36).substr(2, 9) + '-' + Date.now();
+ localStorage.setItem('deviceId', deviceId);
+ console.log("Generated new deviceId:", deviceId);
+ } else {
+ console.log("Using existing deviceId:", deviceId);
+ }
+ return deviceId;
+}
+
+// نمایش پیام
+function showMessage(text, type = 'error') {
+ const messageDiv = document.getElementById('message');
+ messageDiv.textContent = text;
+ messageDiv.className = `message ${type}`;
+ messageDiv.style.display = 'block';
+}
+
+// بررسی نشست فعال
+async function checkExistingSession() {
+ const sessionToken = localStorage.getItem('sessionToken');
+ if (!sessionToken) {
+ console.log("No sessionToken found");
+ return false;
+ }
+ 
+ console.log("Found sessionToken, checking validity...");
+ 
+ try {
+ const response = await fetch('https://weathered-sun-e806.toolbox-moein.workers.dev/getsession', {
+ method: 'POST',
+ headers: {
+ 'Content-Type': 'application/json',
+ 'Authorization': `Bearer ${sessionToken}`
+ }
+ });
+ 
+ if (response.ok) {
+ const data = await response.json();
+ if (data.user) {
+ console.log("✅ Valid session found, redirecting to index.html");
+ window.location.href = 'index.html';
+ return true;
+ }
+ } else {
+ console.log("❌ Invalid session, removing token");
+ localStorage.removeItem('sessionToken');
+ }
+ } catch (error) {
+ console.error("Session check error:", error);
+ localStorage.removeItem('sessionToken');
+ }
+ 
+ return false;
+}
+
+// ورود
+async function performSignIn(email, password) {
+ console.log("🔄 Attempting signin for:", email);
+ 
+ try {
+ const response = await fetch('https://weathered-sun-e806.toolbox-moein.workers.dev/signin', {
+ method: 'POST',
+ headers: {
+ 'Content-Type': 'application/json'
+ },
+ body: JSON.stringify({
+ email: email,
+ password: password,
+ deviceId: currentDeviceId
+ })
+ });
+ 
+ const data = await response.json();
+ console.log("📡 Signin response:", response.status, data);
+ 
+ if (response.ok && data.sessionToken && data.user) {
+ console.log("✅ Signin successful");
+ localStorage.setItem('sessionToken', data.sessionToken);
+ showMessage('ورود موفقیت‌آمیز! در حال انتقال...', 'success');
+ 
+ setTimeout(() => {
+ console.log("🔄 Redirecting to index.html");
+ window.location.href = 'index.html';
+ }, 1500);
+ 
+ return true;
+ } else {
+ console.log("❌ Signin failed");
+ showMessage(data.error || 'خطای ورود', 'error');
+ return false;
+ }
+ } catch (error) {
+ console.error("❌ Signin error:", error);
+ showMessage('خطای شبکه در ورود', 'error');
+ return false;
+ }
+}
+
+// ثبت نام
+async function performSignUp(email, password, firstName, lastName) {
+ console.log("🔄 Attempting signup for:", email);
+ 
+ try {
+ const response = await fetch('https://weathered-sun-e806.toolbox-moein.workers.dev/signup', {
+ method: 'POST',
+ headers: {
+ 'Content-Type': 'application/json'
+ },
+ body: JSON.stringify({
+ email: email,
+ password: password,
+ firstName: firstName,
+ lastName: lastName
+ })
+ });
+ 
+ const data = await response.json();
+ console.log("📡 Signup response:", response.status, data);
+ 
+ if (response.ok && data.sessionToken && data.user) {
+ console.log("✅ Signup successful");
+ localStorage.setItem('sessionToken', data.sessionToken);
+ showMessage('ثبت‌نام موفقیت‌آمیز! در حال انتقال...', 'success');
+ 
+ setTimeout(() => {
+ console.log("🔄 Redirecting to index.html");
+ window.location.href = 'index.html';
+ }, 1500);
+ 
+ return true;
+ } else {
+ console.log("❌ Signup failed");
+ showMessage(data.error || 'خطای ثبت‌نام', 'error');
+ return false;
+ }
+ } catch (error) {
+ console.error("❌ Signup error:", error);
+ showMessage('خطای شبکه در ثبت‌نام', 'error');
+ return false;
+ }
+}
+
+// بازیابی رمز عبور
+async function requestPasswordReset(email) {
+ console.log("🔄 Requesting password reset for:", email);
+ 
+ try {
+ const response = await fetch('https://weathered-sun-e806.toolbox-moein.workers.dev/forgot-password', {
+ method: 'POST',
+ headers: {
+ 'Content-Type': 'application/json'
+ },
+ body: JSON.stringify({ email: email })
+ });
+ 
+ const data = await response.json();
+ console.log("📡 Password reset response:", response.status, data);
+ 
+ return {
+ success: response.ok,
+ message: data.message || data.error || 'خطای نامشخص'
+ };
+ } catch (error) {
+ console.error("❌ Password reset error:", error);
+ return {
+ success: false,
+ message: 'خطای شبکه'
+ };
+ }
+}
+
+// تعویض حالت
+function switchMode() {
+ const nameFields = document.getElementById('name-fields');
+ const confirmPasswordField = document.getElementById('confirm-password-field');
+ const primaryActionBtn = document.getElementById('primary-action');
+ const mainIntroText = document.getElementById('main-intro-text');
+ const switchText = document.getElementById('switch-text');
+ const modeSwitchBtn = document.getElementById('mode-switch-btn');
+ const forgotPasswordLink = document.getElementById('forgot-password-link');
+ const authForm = document.getElementById('authForm');
+ const messageDiv = document.getElementById('message');
+ const passwordStrength = document.getElementById('password-strength');
+ 
+ currentMode = (currentMode === 'login') ? 'signup' : 'login';
+ 
+ if (currentMode === 'signup') {
+ mainIntroText.innerHTML = 'برای ایجاد حساب کاربری جدید در <span class="app-name">رادار اینستاگرام</span> اطلاعات خود را وارد نمایید';
+ primaryActionBtn.innerHTML = '<i class="fas fa-user-plus"></i> ثبت‌نام در رادار اینستاگرام';
+ switchText.textContent = 'قبلاً ثبت‌نام کرده‌اید؟';
+ modeSwitchBtn.textContent = 'وارد شوید';
+ nameFields.style.display = 'block';
+ confirmPasswordField.style.display = 'block';
+ forgotPasswordLink.style.display = 'none';
+ } else {
+ mainIntroText.innerHTML = 'برای ورود و یا ثبت نام در <span class="app-name">رادار اینستاگرام</span> پست الکترونیک خود را وارد نمایید';
+ primaryActionBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> ورود به رادار اینستاگرام';
+ switchText.textContent = 'حساب کاربری ندارید؟';
+ modeSwitchBtn.textContent = 'ثبت‌نام کنید';
+ nameFields.style.display = 'none';
+ confirmPasswordField.style.display = 'none';
+ forgotPasswordLink.style.display = 'block';
+ }
+ 
+ authForm.reset();
+ messageDiv.style.display = 'none';
+ passwordStrength.textContent = '';
+ document.querySelectorAll('input.error').forEach(input => input.classList.remove('error'));
+}
+
+// اعتبارسنجی فرم
+function validateForm() {
+ const emailInput = document.getElementById('email');
+ const passwordInput = document.getElementById('password');
+ const firstNameInput = document.getElementById('firstName');
+ const lastNameInput = document.getElementById('lastName');
+ const confirmPasswordInput = document.getElementById('confirmPassword');
+ 
+ let isValid = true;
+ document.querySelectorAll('input.error').forEach(input => input.classList.remove('error'));
+ 
+ if (!emailInput.value.trim()) { 
+ emailInput.classList.add('error'); 
+ isValid = false; 
+ }
+ if (!passwordInput.value) { 
+ passwordInput.classList.add('error'); 
+ isValid = false; 
+ }
+ 
+ if (currentMode === 'signup') {
+ if (!firstNameInput.value.trim()) { 
+ firstNameInput.classList.add('error'); 
+ isValid = false; 
+ }
+ if (!lastNameInput.value.trim()) { 
+ lastNameInput.classList.add('error'); 
+ isValid = false; 
+ }
+ if (passwordInput.value.length < 6) {
+ passwordInput.classList.add('error');
+ showMessage('رمز عبور باید حداقل 6 کاراکتر باشد.', 'error');
+ isValid = false;
+ }
+ if (passwordInput.value !== confirmPasswordInput.value) {
+ confirmPasswordInput.classList.add('error');
+ showMessage('رمزهای عبور مطابقت ندارند.', 'error');
+ isValid = false;
+ }
+ }
+ 
+ return isValid;
+}
+
+// بررسی قدرت رمز عبور
+function checkPasswordStrength(password) {
+ const passwordStrength = document.getElementById('password-strength');
+ 
+ if (currentMode !== 'signup' || !password) {
+ passwordStrength.textContent = '';
+ return;
+ }
+ 
+ let strength = 0;
+ let feedback = '';
+ 
+ if (password.length >= 8) strength++;
+ if (/[a-z]/.test(password)) strength++;
+ if (/[A-Z]/.test(password)) strength++;
+ if (/[0-9]/.test(password)) strength++;
+ if (/[^A-Za-z0-9]/.test(password)) strength++;
+ 
+ if (password.length < 6) {
+ feedback = 'رمز عبور خیلی کوتاه است';
+ passwordStrength.style.color = '#dc3545';
+ } else if (strength < 3) {
+ feedback = 'رمز عبور ضعیف است';
+ passwordStrength.style.color = '#ffc107';
+ } else if (strength < 4) {
+ feedback = 'رمز عبور متوسط است';
+ passwordStrength.style.color = '#17a2b8';
+ } else {
+ feedback = 'رمز عبور قوی است';
+ passwordStrength.style.color = '#28a745';
+ }
+ 
+ passwordStrength.textContent = feedback;
+}
+
+// Modal functions
+function showModal(modal) {
+ modal.style.display = 'flex';
+ setTimeout(() => modal.classList.add('show'), 10);
+}
+
+function hideModal(modal) {
+ modal.classList.remove('show');
+ setTimeout(() => {
+ modal.style.display = 'none';
+ document.getElementById('forgot-password-email').value = '';
+ document.getElementById('forgot-password-message').style.display = 'none';
+ }, 300);
+}
+
+function showModalMessage(element, text, type) {
+ element.textContent = text;
+ element.className = `modal-message ${type}`;
+ element.style.display = 'block';
+}
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', function() {
+ console.log("✅ DOM loaded");
+ 
+ // تولید Device ID
+ currentDeviceId = generateDeviceId();
+ 
+ // بررسی نشست موجود
+ checkExistingSession();
+ 
+ // تعویض حالت
+ document.getElementById('mode-switch-btn').addEventListener('click', switchMode);
+ 
+ // بررسی قدرت رمز عبور
+ document.getElementById('password').addEventListener('input', function(e) {
+ checkPasswordStrength(e.target.value);
+ });
+ 
+ // ارسال فرم
+ document.getElementById('authForm').addEventListener('submit', async function(e) {
+ e.preventDefault();
+ console.log("=== FORM SUBMIT ===");
+ 
+ if (!validateForm()) {
+ console.log("❌ Form validation failed");
+ return;
+ }
+ 
+ const emailInput = document.getElementById('email');
+ const passwordInput = document.getElementById('password');
+ const firstNameInput = document.getElementById('firstName');
+ const lastNameInput = document.getElementById('lastName');
+ const primaryActionBtn = document.getElementById('primary-action');
+ 
+ const email = emailInput.value.trim();
+ const password = passwordInput.value;
+ 
+ primaryActionBtn.disabled = true;
+ primaryActionBtn.textContent = 'در حال پردازش...';
+ 
+ try {
+ let success = false;
+ 
+ if (currentMode === 'login') {
+ success = await performSignIn(email, password);
+ } else {
+ success = await performSignUp(email, password, firstNameInput.value.trim(), lastNameInput.value.trim());
+ }
+ 
+ console.log("Auth result:", success ? "SUCCESS" : "FAILED");
+ 
+ } catch (error) {
+ console.error("❌ Form submit error:", error);
+ showMessage('خطای غیرمنتظره رخ داد', 'error');
+ } finally {
+ primaryActionBtn.disabled = false;
+ primaryActionBtn.innerHTML = currentMode === 'login' 
+ ? '<i class="fas fa-sign-in-alt"></i> ورود به رادار اینستاگرام'
+ : '<i class="fas fa-user-plus"></i> ثبت‌نام در رادار اینستاگرام';
+ }
+ });
+ 
+ // فراموشی رمز عبور
+ const forgotPasswordLink = document.getElementById('forgot-password-link');
+ const forgotPasswordModal = document.getElementById('forgot-password-modal');
+ const forgotPasswordEmailInput = document.getElementById('forgot-password-email');
+ const sendResetLinkBtn = document.getElementById('send-reset-link-btn');
+ const cancelResetBtn = document.getElementById('cancel-reset-btn');
+ const forgotPasswordMessageDiv = document.getElementById('forgot-password-message');
+ 
+ forgotPasswordLink.addEventListener('click', function(e) {
+ e.preventDefault();
+ showModal(forgotPasswordModal);
+ forgotPasswordEmailInput.value = document.getElementById('email').value;
+ });
+ 
+ cancelResetBtn.addEventListener('click', function() {
+ hideModal(forgotPasswordModal);
+ });
+ 
+ forgotPasswordModal.addEventListener('click', function(e) {
+ if (e.target === forgotPasswordModal) {
+ hideModal(forgotPasswordModal);
+ }
+ });
+ 
+ sendResetLinkBtn.addEventListener('click', async function() {
+ const email = forgotPasswordEmailInput.value.trim();
+ if (!email) {
+ showModalMessage(forgotPasswordMessageDiv, "لطفاً ایمیل خود را وارد کنید.", 'error');
+ return;
+ }
+ 
+ sendResetLinkBtn.disabled = true;
+ forgotPasswordEmailInput.disabled = true;
+ showModalMessage(forgotPasswordMessageDiv, "در حال ارسال لینک بازیابی...", 'info');
+ 
+ try {
+ const result = await requestPasswordReset(email);
+ 
+ if (result.success) {
+ showModalMessage(forgotPasswordMessageDiv, result.message, 'success');
+ setTimeout(() => hideModal(forgotPasswordModal), 2000);
+ } else {
+ showModalMessage(forgotPasswordMessageDiv, result.message, 'error');
+ }
+ } catch (error) {
+ showModalMessage(forgotPasswordMessageDiv, "خطای شبکه رخ داد", 'error');
+ } finally {
+ sendResetLinkBtn.disabled = false;
+ forgotPasswordEmailInput.disabled = false;
+ }
+ });
+});
+
+console.log("✅ register.html: All event listeners attached");
+</script>
+
+</body>
+</html>
