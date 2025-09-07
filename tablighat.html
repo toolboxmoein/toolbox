@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- START: کد ضد کش اضافه شده -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<!-- END: کد ضد کش اضافه شده -->
+
+<title>تبلیغات در رادار اینستاگرام</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+:root {
+    --primary-color: #00D968;
+    --primary-light: #E6F8EE;
+    --secondary-color: #00B84B;
+    --dark-color: #333;
+    --light-color: #fff;
+    --bg-grey: #fcfcfc;
+    --grey-color: #7f8c8d;
+    --white-color: #ffffff;
+    --border-color: #ecf0f1;
+    --shadow: 0 10px 30px rgba(0, 217, 104, 0.1);
+    --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    --border-radius: 16px;
+    --button-border-radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+* {margin:0;padding:0;box-sizing:border-box;}
+body {
+    font-family: 'Vazirmatn', Arial, sans-serif;
+    background-color: var(--bg-grey);
+    color: var(--dark-color);
+    direction: rtl;
+    text-align: right;
+    line-height: 1.8;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    text-align: center;
+}
+
+.header {
+    text-align: center;
+    background-color: var(--light-color);
+    padding: 12px 15px; 
+    border-bottom: 2px solid var(--primary-light);
+    margin-bottom: 20px;
+}
+.header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--dark-color);
+    margin-bottom: 10px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 10px;
+}
+.header h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 50%;
+    transform: translateX(50%);
+    width: 80px;
+    height: 4px;
+    background: var(--gradient);
+    border-radius: 2px;
+}
+.header h1 i {
+    color: var(--primary-color);
+    margin-left: 10px;
+}
+
+.intro-text {
+    font-size: 1.1rem;
+    color: var(--grey-color);
+    margin: 20px auto 30px;
+    line-height: 1.8;
+    text-align: justify;
+    max-width: 700px;
+}
+
+.ad-options-section {
+    background-color: var(--white-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    padding: 25px;
+    margin-bottom: 30px;
+    text-align: right;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.section-title i {
+    color: var(--primary-color);
+    margin-left: 10px;
+    font-size: 1.8rem;
+}
+
+.ad-options-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.ad-option-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.ad-option-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 20px;
+    background-color: var(--bg-grey);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.ad-option-card:hover {
+    background-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.ad-option-icon {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    flex-shrink: 0;
+}
+.ad-option-text {
+    flex-grow: 1;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+.ad-option-arrow {
+    font-size: 1.2rem;
+    color: var(--grey-color);
+    transition: transform 0.3s ease;
+}
+.ad-option-card.active .ad-option-arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+    background-color: var(--white-color);
+    border-radius: 12px;
+    margin-top: 10px;
+    padding: 0 20px;
+    text-align: justify;
+    color: var(--grey-color);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.dropdown-content.show {
+    max-height: 200px;
+    padding: 20px;
+}
+.highlight {
+    color: var(--secondary-color);
+    font-weight: 700;
+}
+
+.order-button {
+    width: 100%;
+    max-width: 300px;
+    margin: 30px auto 0;
+    padding: 15px;
+    background: var(--gradient);
+    color: white;
+    border: none;
+    border-radius: var(--button-border-radius);
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Vazirmatn', Arial, sans-serif;
+    transition: var(--transition);
+    box-shadow: 0 5px 15px rgba(0, 217, 104, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.order-button:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+}
+
+.order-options {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+    background-color: var(--bg-grey);
+    border-radius: 12px;
+    margin-top: 20px;
+    padding: 0;
+}
+.order-options.show {
+    max-height: 300px;
+    padding: 20px;
+}
+
+.radio-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: var(--white-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.radio-option:hover {
+    background-color: var(--primary-light);
+}
+.radio-option.selected {
+    background-color: var(--primary-light);
+    border: 2px solid var(--primary-color);
+}
+
+.radio-option input[type="radio"] {
+    margin-left: 10px;
+    transform: scale(1.2);
+    accent-color: var(--primary-color);
+}
+
+.radio-option label {
+    font-weight: 600;
+    cursor: pointer;
+    flex-grow: 1;
+}
+
+.contact-buttons {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+    padding: 0;
+}
+.contact-buttons.show {
+    max-height: 200px;
+    padding: 15px 0 0 0;
+}
+
+.contact-button-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    justify-content: center;
+}
+
+.contact-button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: var(--button-border-radius);
+    font-family: 'Vazirmatn', Arial, sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.whatsapp-btn {
+    background-color: #25D366;
+    color: white;
+}
+.whatsapp-btn:hover {
+    background-color: #128C7E;
+    transform: translateY(-2px);
+}
+
+.telegram-btn {
+    background-color: #0088CC;
+    color: white;
+}
+.telegram-btn:hover {
+    background-color: #006699;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+    .container { padding: 10px; }
+    .header h1 { font-size: 28px; }
+    .header h1 i { font-size: 20px; }
+    .intro-text { font-size: 1rem; margin: 15px auto 20px; }
+    .section-title { font-size: 1.4rem; margin-bottom: 20px; }
+    .section-title i { font-size: 1.6rem; }
+    .ad-options-section { padding: 20px; }
+    
+    .ad-options-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .ad-option-card { padding: 15px; font-size: 1.1rem; }
+    .ad-option-icon { font-size: 1.5rem; }
+    .ad-option-arrow { font-size: 1rem; }
+    .dropdown-content.show { padding: 15px; }
+    .order-button { font-size: 16px; padding: 12px; max-width: 100%; }
+    
+    .radio-group, .contact-button-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    .radio-option, .contact-button {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+ <header class="header">
+ <h1><i class="fas fa-bullhorn"></i> تبلیغات در رادار اینستاگرام</h1>
+ </header>
+
+ <p class="intro-text">
+        اگه دنبال راهی برای معرفی پیج یا کسب‌وکارت هستی، اینجا جای مناسبی برات هست. توی رادار اینستاگرام، کلی کاربر فعال و علاقه‌مند داریم که منتظر آشنایی با کارهای جدید و جالبن.
+ </p>
+
+ <div class="ad-options-section">
+ <h2 class="section-title"><i class="fas fa-bullseye"></i> روش‌های تبلیغاتی ما</h2>
+ 
+ <div class="ad-options-row">
+  <div class="ad-option-wrapper">
+   <div class="ad-option-card" onclick="toggleDropdown(event)">
+    <span class="ad-option-icon"><i class="fas fa-image"></i></span>
+    <span class="ad-option-text">تبلیغ بنری</span>
+    <span class="ad-option-arrow"><i class="fas fa-chevron-down"></i></span>
+   </div>
+   <div class="dropdown-content">
+              بنر شما به مدت <span class="highlight">۲۴</span> ساعت با هزینه <span class="highlight">۵۰۰</span> هزار تومان در نقاط پربازدید برنامه نمایش داده میشه. امکان تمدید تا <span class="highlight">۳</span> روز متوالی با <span class="highlight">تخفیف ویژه</span> هم وجود داره.
+   </div>
+  </div>
+  
+  <div class="ad-option-wrapper">
+   <div class="ad-option-card" onclick="toggleDropdown(event)">
+    <span class="ad-option-icon"><i class="fas fa-paper-plane"></i></span>
+    <span class="ad-option-text">ارسال پیام</span>
+    <span class="ad-option-arrow"><i class="fas fa-chevron-down"></i></span>
+   </div>
+   <div class="dropdown-content">
+              با هزینه <span class="highlight">۶۰۰</span> هزار تومان، پیام شما برای کاربران هدف در برنامه ارسال شده و به صورت نوتیفیکیشن اطلاع رسانی میشه.
+   </div>
+  </div>
+ </div>
+
+ <!-- دکمه سفارش تبلیغ -->
+ <button class="order-button" onclick="toggleOrderOptions()">
+  <i class="fas fa-shopping-cart"></i> سفارش تبلیغ
+ </button>
+
+ <!-- گزینه‌های سفارش -->
+ <div id="orderOptions" class="order-options">
+  <div class="radio-group">
+   <div class="radio-option" onclick="selectAdType('banner')">
+    <input type="radio" id="bannerRadio" name="adType" value="banner">
+    <label for="bannerRadio">تبلیغ بنری</label>
+   </div>
+   <div class="radio-option" onclick="selectAdType('message')">
+    <input type="radio" id="messageRadio" name="adType" value="message">
+    <label for="messageRadio">ارسال پیام</label>
+   </div>
+  </div>
+
+  <!-- دکمه‌های تماس -->
+  <div id="contactButtons" class="contact-buttons">
+   <div class="contact-button-row">
+    <a href="#" id="whatsappLink" class="contact-button whatsapp-btn" target="_blank">
+     <i class="fab fa-whatsapp"></i> واتساپ
+    </a>
+    <a href="#" id="telegramLink" class="contact-button telegram-btn" target="_blank">
+     <i class="fab fa-telegram-plane"></i> تلگرام
+    </a>
+   </div>
+  </div>
+ </div>
+
+ </div>
+
+</div>
+
+<script>
+function toggleDropdown(event) {
+    const card = event.currentTarget;
+    const content = card.nextElementSibling;
+    const isActive = card.classList.contains('active');
+
+    // بستن تمام کشوهای باز
+    document.querySelectorAll('.ad-option-card.active').forEach(activeCard => {
+        activeCard.classList.remove('active');
+        activeCard.nextElementSibling.classList.remove('show');
+    });
+
+    // اگر کارت کلیک شده، از قبل باز نبوده، آن را باز کن
+    if (!isActive) {
+        card.classList.add('active');
+        content.classList.add('show');
+    }
+}
+
+function toggleOrderOptions() {
+    const orderOptions = document.getElementById('orderOptions');
+    if (orderOptions.classList.contains('show')) {
+        orderOptions.classList.remove('show');
+        document.getElementById('contactButtons').classList.remove('show');
+    } else {
+        orderOptions.classList.add('show');
+    }
+}
+
+function selectAdType(type) {
+    document.getElementById(type === 'banner' ? 'bannerRadio' : 'messageRadio').checked = true;
+    
+    document.querySelectorAll('.radio-option').forEach(option => {
+        option.classList.remove('selected');
+    });
+    
+    event.currentTarget.classList.add('selected');
+    
+    document.getElementById('contactButtons').classList.add('show');
+    
+    const whatsappNumber = 'YOUR_WHATSAPP_NUMBER'; // شماره واتساپ خود را وارد کنید
+    const telegramId = 'YOUR_TELEGRAM_ID'; // آیدی تلگرام خود را وارد کنید
+    
+    let message;
+    if (type === 'banner') {
+        message = 'سلام، می‌خواستم در برنامه رادار اینستاگرام، تبلیغ بنری سفارش بدم.';
+    } else {
+        message = 'سلام، می‌خواستم در برنامه رادار اینستاگرام، تبلیغ ارسال پیام رو سفارش بدم.';
+    }
+    
+    document.getElementById('whatsappLink').href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    document.getElementById('telegramLink').href = `https://t.me/${telegramId}?start=${encodeURIComponent(message)}`;
+}
+</script>
+
+</body>
+</html>
