@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پیام‌ها - رادار اینستاگرام</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00D968;
+            --primary-light: #E6F8EE;
+            --secondary-color: #00B84B;
+            --dark-color: #333;
+            --light-color: #f8f9fa;
+            --shadow: 0 10px 30px rgba(0, 217, 104, 0.1);
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --card-shadow: 0 15px 35px rgba(0, 217, 104, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            --border-radius: 16px;
+            --button-border-radius: 8px;
+            --border-color: #e0e0e0;
+            --grey-color: #6c757d;
+            --unread-color: #e74c3c; /* Red for unread indicator */
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Vazirmatn', Arial, sans-serif; 
+            background-color: var(--light-color); 
+            direction: rtl; 
+            text-align: right; 
+            color: var(--dark-color); 
+            line-height: 1.6; 
+            padding: 20px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .page-header { text-align: center; margin-bottom: 30px; }
+        .page-header h1 { font-size: 2.2rem; font-weight: 700; color: var(--dark-color); position: relative; display: inline-block; padding-bottom: 10px; }
+        .page-header h1::after { content: ''; position: absolute; bottom: 0; right: 50%; transform: translateX(50%); width: 80px; height: 4px; background: var(--gradient); border-radius: 2px; }
+        #messages-container { display: flex; flex-direction: column; gap: 20px; }
+        
+        /* Message Card Styles */
+        .message-card { 
+            background-color: #ffffff; 
+            border-radius: var(--border-radius); 
+            box-shadow: var(--card-shadow); 
+            padding: 25px; 
+            transition: var(--transition); 
+            border-right: 5px solid var(--primary-color); 
+            cursor: pointer;
+            position: relative;
+        }
+        .message-card:hover { 
+            transform: translateY(-5px); 
+            box-shadow: 0 20px 40px rgba(0, 217, 104, 0.15), 0 8px 20px rgba(0, 0, 0, 0.08); 
+        }
+
+        /* Unread State */
+        .message-card.unread {
+            border-right-color: var(--unread-color);
+            background-color: var(--primary-light);
+        }
+        .message-card.unread .message-title {
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+        .unread-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: var(--unread-color);
+            border-radius: 50%;
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+        .message-card.read .unread-indicator { display: none; }
+        .message-summary { display: block; }
+        .message-summary.hidden { display: none; }
+
+        .message-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 15px; 
+            padding-bottom: 10px; 
+            border-bottom: 1px solid var(--border-color); 
+        }
+        .message-title-group { display: flex; align-items: center; flex-grow: 1; }
+        .message-title { font-size: 1.2rem; font-weight: 600; color: var(--dark-color); margin: 0; }
+        .message-author { display: flex; align-items: center; font-weight: 600; color: var(--secondary-color); }
+        .message-author i { margin-left: 8px; font-size: 1.2rem; }
+        .message-timestamp { font-size: 0.85rem; color: var(--grey-color); flex-shrink: 0; }
+        
+        /* Full Content Styles */
+        .message-full-content {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed var(--border-color);
+            text-align: right;
+        }
+        .message-card.expanded .message-full-content { display: block; }
+        .full-message-body { font-size: 1rem; line-height: 1.8; color: #444; word-wrap: break-word; }
+        .full-message-body a { color: var(--secondary-color); text-decoration: none; font-weight: 500; }
+        .full-message-body a:hover { text-decoration: underline; }
+        .full-message-body img { max-width: 100%; height: auto; border-radius: 8px; margin-top: 10px; display: block; margin-right: auto; margin-left: auto; }
+        .full-message-body p { margin-bottom: 1em; }
+        .full-message-body h1, .full-message-body h2, .full-message-body h3 { margin-top: 1.5em; margin-bottom: 0.8em; }
+        .full-message-body ul, .full-message-body ol { margin-right: 20px; margin-bottom: 1em; }
+        .full-message-body blockquote { border-right: 4px solid var(--primary-color); padding-right: 15px; margin-right: 15px; font-style: italic; color: var(--grey-color); }
+        .highlight { color: var(--secondary-color); font-weight: 700; }
+        .cta-button {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 25px;
+            background: var(--gradient);
+            color: white !important; /* Ensure text is white */
+            text-decoration: none;
+            border-radius: var(--button-border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(0, 217, 104, 0.2);
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+            color: white;
+        }
+        .cta-button i { margin-right: 8px; }
+
+        #loading-state, #empty-state { text-align: center; padding: 50px; font-size: 1.1rem; color: var(--grey-color); }
+
+        /* Notification Banner Styles */
+        .notification-banner {
+            display: none;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1rem;
+            animation: fadeInDown 0.5s ease-out;
+        }
+        .notification-banner p { margin: 0; display: flex; align-items: center; }
+        .notification-banner p i { margin-left: 10px; font-size: 1.3rem; }
+        .notification-banner .close-btn { background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer; padding: 0 10px; line-height: 1; transition: var(--transition); }
+        .notification-banner .close-btn:hover { color: #eee; transform: scale(1.1); }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .page-header h1 { font-size: 1.8rem; }
+            .message-card { padding: 15px; }
+            .message-header { flex-direction: column; align-items: flex-start; }
+            .message-timestamp { margin-top: 5px; }
+            .message-title { font-size: 1.1rem; }
+            .unread-indicator { margin-left: 5px; }
+            .notification-banner { font-size: 1rem; padding: 10px 15px; }
+            .notification-banner p i { margin-left: 8px; font-size: 1.2rem; }
+            .notification-banner .close-btn { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-envelope-open-text"></i> پیام‌های ادمین</h1>
+        </div>
+
+        <!-- Notification Banner -->
+        <div id="notification-banner" class="notification-banner">
+            <p><i class="fas fa-bell"></i> شما <span id="unread-count">0</span> پیام جدید دارید!</p>
+            <button id="close-notification" class="close-btn">&times;</button>
+        </div>
+
+        <div id="messages-container">
+            <p id="loading-state">در حال بارگذاری پیام‌ها...</p>
+        </div>
+    </div>
+    <!-- Audio element for notification sound -->
+    <audio id="notificationSound" src="https://www.soundjay.com/buttons/beep-07a.mp3" preload="auto"></audio>
+    <script>
+        const WORKER_URL = 'https://weathered-sun-e806.toolbox-moein.workers.dev';
+        const messagesContainer = document.getElementById('messages-container');
+        let readMessages = JSON.parse(localStorage.getItem('readMessages')) || [];
+
+        const notificationBanner = document.getElementById('notification-banner');
+        const unreadCountSpan = document.getElementById('unread-count');
+        const closeNotificationBtn = document.getElementById('close-notification');
+        const notificationSound = document.getElementById('notificationSound');
+
+        const WELCOME_MESSAGE = {
+            id: 'static-welcome-message',
+            title: 'خوش آمد گویی',
+            message: `
+                <p>سلام به تمام شما رفقای گل!</p>
+                <p>خیلی خوشحالیم که به برنامه خودتون اعتماد کردید و کنار ما هستید. از محبت و همراهی‌تون یک دنیا ممنونیم.</p>
+                <p>امیدواریم با کمک قابلیت‌های برنامه، هر روز پیج اینستاگرامتون جون بگیره و کلی پیشرفت کنید. ما هم کنار شما هستیم تا بهترین‌ها رو تجربه کنید.</p>
+                <p>مخلصیم و با آرزوی موفقیت برای تک‌تک شما!</p>
+            `,
+            image: null,
+            timestamp: '۶ شهریور ۱۴۰۴' 
+        };
+
+        const AD_MESSAGE = {
+            id: 'static-ad-message',
+            title: 'تبلیغات در رادار اینستاگرام',
+            message: `
+                <p>اگه دنبال راهی برای بیشتر دیده شدن پیج یا کسب‌وکارت هستی، اینجا یه فرصت عالی برات فراهم شده!</p>
+                <p>با دو روش زیر می‌تونی تبلیغاتت رو ثبت کنی:</p>
+                <p><strong><span class="highlight">تبلیغ بنری:</span></strong> بنر شما به مدت <span class="highlight">۲۴</span> ساعت با هزینه <span class="highlight">۵۰۰</span> هزار تومان در نقاط پربازدید برنامه نمایش داده میشه.</p>
+                <p><strong><span class="highlight">ارسال پیام:</span></strong> پیام شما با هزینه <span class="highlight">۶۰۰</span> هزار تومان برای کاربران هدف ارسال شده و به صورت <span class="highlight">نوتیفیکیشن</span> اطلاع رسانی میشه.</p>
+                <div style="text-align: center;">
+                    <a href="tablighat.html" class="cta-button">برو به بخش تبلیغات <i class="fas fa-arrow-left"></i></a>
+                </div>
+            `,
+            image: null,
+            timestamp: '۷ شهریور ۱۴۰۴'
+        };
+
+        function formatTimestamp(timestamp) {
+            if (timestamp === '۶ شهریور ۱۴۰۴' || timestamp === '۷ شهریور ۱۴۰۴') {
+                return timestamp;
+            }
+            return new Date(timestamp).toLocaleString('fa-IR', {
+                year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+        }
+
+        function createMessageCard(messageData) {
+            const displayTitle = messageData.title || messageData.text || 'پیام قدیمی (بدون عنوان)';
+            const displayMessage = messageData.message || messageData.text || 'محتوای پیام قدیمی در دسترس نیست.';
+            
+            if (!messageData.id) {
+                console.warn('Skipping message due to missing unique ID:', messageData);
+                return null; 
+            }
+
+            const isRead = readMessages.includes(messageData.id);
+            const messageCard = document.createElement('div');
+            messageCard.className = `message-card ${isRead ? 'read' : 'unread'}`;
+            messageCard.dataset.id = messageData.id;
+
+            messageCard.innerHTML = `
+                <div class="message-summary">
+                    <div class="message-header">
+                        <div class="message-title-group">
+                            <span class="unread-indicator"></span>
+                            <h3 class="message-title">${displayTitle}</h3>
+                        </div>
+                        <div class="message-timestamp">${formatTimestamp(messageData.timestamp)}</div>
+                    </div>
+                </div>
+                <div class="message-full-content">
+                    <div class="full-message-body">${displayMessage}</div>
+                    ${messageData.image ? `<img src="${messageData.image}" alt="تصویر پست">` : ''}
+                </div>
+            `;
+
+            messageCard.addEventListener('click', (event) => {
+                // Prevent card expansion if the button is clicked
+                if (event.target.closest('.cta-button')) {
+                    return;
+                }
+                messageCard.classList.toggle('expanded');
+                if (messageCard.classList.contains('unread')) {
+                    markMessageAsRead(messageData.id, messageCard);
+                    updateNotificationCount();
+                }
+            });
+            return messageCard;
+        }
+
+        function markMessageAsRead(messageId, cardElement) {
+            if (!readMessages.includes(messageId)) {
+                readMessages.push(messageId);
+                localStorage.setItem('readMessages', JSON.stringify(readMessages));
+                cardElement.classList.remove('unread');
+                cardElement.classList.add('read');
+            }
+        }
+
+        function updateNotificationCount() {
+            const allMessageCards = document.querySelectorAll('.message-card');
+            let currentUnreadCount = 0;
+            allMessageCards.forEach(card => {
+                if (card.classList.contains('unread')) {
+                    currentUnreadCount++;
+                }
+            });
+
+            if (currentUnreadCount > 0) {
+                unreadCountSpan.textContent = currentUnreadCount;
+                notificationBanner.style.display = 'flex';
+            } else {
+                notificationBanner.style.display = 'none';
+            }
+        }
+
+        function requestNotificationPermission() {
+            if (!("Notification" in window)) {
+                console.warn("This browser does not support desktop notification.");
+                return;
+            }
+            if (Notification.permission === "granted") {
+                return;
+            }
+            if (Notification.permission !== "denied") {
+                Notification.requestPermission();
+            }
+        }
+
+        async function loadMessages() {
+            messagesContainer.innerHTML = '<p id="loading-state">در حال بارگذاری پیام‌ها...</p>';
+            notificationBanner.style.display = 'none';
+
+            try {
+                const existingReadMessages = JSON.parse(localStorage.getItem('readMessages')) || [];
+                const response = await fetch(`${WORKER_URL}/messages`);
+                if (!response.ok) throw new Error(`Failed to load messages: ${response.status} ${response.statusText}`);
+                
+                const data = await response.json();
+                let messages = data.messages || []; 
+                messagesContainer.innerHTML = '';
+                messages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                messages.unshift(AD_MESSAGE);
+                messages.unshift(WELCOME_MESSAGE);
+
+                let trulyNewUnreadCount = 0;
+                const messagesToRender = [];
+
+                messages.forEach(message => {
+                    if (message.id) { 
+                        if (!existingReadMessages.includes(message.id)) {
+                            trulyNewUnreadCount++;
+                        }
+                        messagesToRender.push(message);
+                    } else {
+                        console.warn('Skipping message due to missing unique ID. Message data:', message);
+                    }
+                });
+
+                if (messagesToRender.length === 0) {
+                     messagesContainer.innerHTML = '<p id="empty-state"><i class="fas fa-info-circle"></i> در حال حاضر هیچ پستی وجود ندارد.</p>';
+                } else {
+                    messagesToRender.forEach(message => {
+                        const card = createMessageCard(message);
+                        if (card) messagesContainer.appendChild(card);
+                    });
+                }
+                
+                updateNotificationCount();
+
+                if (trulyNewUnreadCount > 0 && Notification.permission === "granted") {
+                    new Notification("پیام جدید از ادمین", {
+                        body: `شما ${trulyNewUnreadCount} پیام جدید دارید.`,
+                        icon: 'https://example.com/favicon.ico'
+                    });
+                    notificationSound.play().catch(e => console.error("Error playing sound:", e));
+                }
+
+            } catch (error) {
+                console.error('Error loading messages:', error);
+                messagesContainer.innerHTML = '<p id="empty-state" style="color: red;"><i class="fas fa-exclamation-triangle"></i> خطا در دریافت پست‌ها. لطفاً بعداً دوباره تلاش کنید.</p>';
+                notificationBanner.style.display = 'none';
+            }
+        }
+
+        closeNotificationBtn.addEventListener('click', () => {
+            notificationBanner.style.display = 'none';
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            requestNotificationPermission();
+            loadMessages();
+        });
+    </script>
+</body>
+</html>
