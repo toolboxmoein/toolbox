@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاسبه کمیسیون - ابزارهای املاک</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazir:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazir', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .header .icon {
+            background: linear-gradient(135deg, #00D968, #00B84B);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #555;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: 'Vazir', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #00D968;
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: 'Vazir', sans-serif;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .form-group select:focus {
+            outline: none;
+            border-color: #00D968;
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #00D968, #00B84B);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .result {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result h3 {
+            color: #00B84B;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .result .amount {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .result .details {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #666;
+        }
+
+        .back-btn:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-group .form-group {
+            flex: 1;
+        }
+
+        .note {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-right"></i>
+        </a>
+        
+        <div class="header">
+            <div class="icon">
+                <i class="fas fa-percentage"></i>
+            </div>
+            <h1>محاسبه کمیسیون</h1>
+        </div>
+
+        <form id="commissionForm">
+            <div class="form-group">
+                <label for="propertyPrice">قیمت ملک (تومان)</label>
+                <input type="number" id="propertyPrice" placeholder="مثال: 5000000000" required>
+            </div>
+
+            <div class="form-group">
+                <label for="commissionType">نوع کمیسیون</label>
+                <select id="commissionType" required>
+                    <option value="">انتخاب کنید</option>
+                    <option value="sale">فروش</option>
+                    <option value="rent">رهن و اجاره</option>
+                    <option value="custom">درصد دلخواه</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="customPercentGroup" style="display: none;">
+                <label for="customPercent">درصد کمیسیون</label>
+                <input type="number" id="customPercent" placeholder="مثال: 2.5" step="0.1" min="0" max="10">
+            </div>
+
+            <div class="input-group" id="rentDetailsGroup" style="display: none;">
+                <div class="form-group">
+                    <label for="mortgage">رهن (تومان)</label>
+                    <input type="number" id="mortgage" placeholder="مبلغ رهن">
+                </div>
+                <div class="form-group">
+                    <label for="monthlyRent">اجاره ماهانه (تومان)</label>
+                    <input type="number" id="monthlyRent" placeholder="اجاره ماهانه">
+                </div>
+            </div>
+
+            <button type="submit" class="calculate-btn">
+                <i class="fas fa-calculator"></i>
+                محاسبه کمیسیون
+            </button>
+        </form>
+
+        <div class="result" id="result">
+            <h3>نتیجه محاسبه</h3>
+            <div class="amount" id="commissionAmount"></div>
+            <div class="details" id="commissionDetails"></div>
+        </div>
+
+        <div class="note">
+            <i class="fas fa-info-circle"></i>
+            نرخ کمیسیون معمول: فروش ۲-۳٪، رهن و اجاره ۱-۲٪
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('commissionForm');
+            const commissionType = document.getElementById('commissionType');
+            const customPercentGroup = document.getElementById('customPercentGroup');
+            const rentDetailsGroup = document.getElementById('rentDetailsGroup');
+            const result = document.getElementById('result');
+            
+            // نمایش/مخفی کردن فیلدهای اضافی
+            commissionType.addEventListener('change', function() {
+                const type = this.value;
+                
+                if (type === 'custom') {
+                    customPercentGroup.style.display = 'block';
+                    rentDetailsGroup.style.display = 'none';
+                } else if (type === 'rent') {
+                    customPercentGroup.style.display = 'none';
+                    rentDetailsGroup.style.display = 'block';
+                } else {
+                    customPercentGroup.style.display = 'none';
+                    rentDetailsGroup.style.display = 'none';
+                }
+            });
+
+            // محاسبه کمیسیون
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const propertyPrice = parseFloat(document.getElementById('propertyPrice').value);
+                const type = document.getElementById('commissionType').value;
+                
+                if (!propertyPrice || !type) {
+                    alert('لطفاً تمام فیلدهای ضروری را پر کنید');
+                    return;
+                }
+                
+                let commissionPercent = 0;
+                let commissionAmount = 0;
+                let details = '';
+                
+                switch(type) {
+                    case 'sale':
+                        commissionPercent = 2.5; // درصد معمول فروش
+                        commissionAmount = propertyPrice * (commissionPercent / 100);
+                        details = `کمیسیون فروش با نرخ ${commissionPercent}٪ از قیمت ملک`;
+                        break;
+                        
+                    case 'rent':
+                        const mortgage = parseFloat(document.getElementById('mortgage').value) || 0;
+                        const monthlyRent = parseFloat(document.getElementById('monthlyRent').value) || 0;
+                        const totalRentValue = mortgage + (monthlyRent * 12);
+                        
+                        commissionPercent = 1.5; // درصد معمول رهن و اجاره
+                        commissionAmount = totalRentValue * (commissionPercent / 100);
+                        details = `کمیسیون رهن و اجاره با نرخ ${commissionPercent}٪ از ارزش کل (رهن + ۱۲ ماه اجاره)`;
+                        break;
+                        
+                    case 'custom':
+                        commissionPercent = parseFloat(document.getElementById('customPercent').value);
+                        if (!commissionPercent) {
+                            alert('لطفاً درصد کمیسیون را وارد کنید');
+                            return;
+                        }
+                        commissionAmount = propertyPrice * (commissionPercent / 100);
+                        details = `کمیسیون با نرخ دلخواه ${commissionPercent}٪`;
+                        break;
+                }
+                
+                // نمایش نتیجه
+                document.getElementById('commissionAmount').textContent = 
+                    commissionAmount.toLocaleString('fa-IR') + ' تومان';
+                document.getElementById('commissionDetails').textContent = details;
+                
+                result.classList.add('show');
+                result.scrollIntoView({ behavior: 'smooth' });
+            });
+
+            // فرمت کردن اعداد هنگام تایپ
+            const numberInputs = document.querySelectorAll('input[type="number"]');
+            numberInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    // حذف کاراکترهای غیرعددی
+                    this.value = this.value.replace(/[^0-9.]/g, '');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

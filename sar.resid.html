@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت چک‌ها</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- CDN for Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #00D968;
+            --primary-light: #E6F8EE;            --secondary-color: #00B84B;
+            --warning-color: #ffc107;
+            --warning-light: #fff8e1;
+            --danger-color: #dc3545;
+            --danger-light: #f8d7da;
+            --info-color: #17a2b8;
+            --dark-color: #333;
+            --text-muted: #6c757d;
+            --border-radius: 16px;
+            --button-border-radius: 12px;
+            --border-color: #e0e0e0;
+            --grey-color: #6c757d;            --grey-medium: #dee2e6;
+            --grey-light: #f8f9fa;
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --card-shadow: 0 15px 35px rgba(0, 217, 104, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Vazirmatn', Arial, sans-serif; color: var(--dark-color); line-height: 1.6; background-color: var(--grey-light); min-height: 100vh; }
+        
+        .page-header { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            width: 100%; 
+            max-width: 900px; 
+            margin: 10px auto; 
+            padding: 10px 20px; 
+            height: 60px; 
+        }
+        .header-logo-container { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            flex-grow: 1; 
+        }
+        .header-logo-container img { height: 38px; width: auto; }
+
+        main { width: 100%; max-width: 900px; margin: 0 auto; padding: 0 20px 120px; }
+        .today-date-display { text-align: center; margin-bottom: 25px; padding: 10px; background-color: var(--primary-light); border-radius: var(--button-border-radius); color: var(--secondary-color); font-weight: 500; border: 1px solid var(--primary-color); }
+        .main-navigation-buttons { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 25px; }
+        .main-nav-btn { flex: 1; padding: 12px 10px; border: 1px solid var(--border-color); background-color: white; border-radius: var(--button-border-radius); cursor: pointer; font-family: 'Vazirmatn', sans-serif; font-size: 1rem; font-weight: 500; color: var(--text-muted); transition: var(--transition); box-shadow: 0 4px 6px rgba(0,0,0,0.05); white-space: nowrap; }
+        .main-nav-btn.active { background: var(--gradient); color: white; border-color: transparent; font-weight: 600; box-shadow: 0 5px 20px rgba(0, 217, 104, 0.4); transform: translateY(-2px); }
+        
+        #filter-container { display: none; flex-direction: column; gap: 15px; margin-bottom: 25px; }
+        .filter-row { display: flex; gap: 15px; }
+        .filter-select-wrapper { flex: 1; position: relative; }
+        .search-wrapper { flex: 2; position: relative; }
+        .filter-select, .search-input { width: 100%; padding: 12px 15px; border: 1px solid var(--border-color); border-radius: var(--button-border-radius); outline: none; font-size: 0.95rem; font-family: 'Vazirmatn', Arial, sans-serif; transition: var(--transition); background-color: white; -webkit-appearance: none; -moz-appearance: none; appearance: none; color: var(--dark-color); }
+        .filter-select { padding-right: 15px; padding-left: 35px; cursor: pointer; }
+        .filter-select-wrapper::after { content: '\f078'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+        .search-wrapper::before { content: '\f002'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .search-input { padding-right: 40px; }
+        .filter-select:focus, .search-input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.2); }
+
+        .section-content { display: none; width: 100%; }
+        .section-content.active { display: block; }
+        
+        .card { background: white; border-radius: var(--border-radius); padding: 25px 30px; margin-bottom: 25px; box-shadow: var(--card-shadow); }
+        .check-type-selector { display: flex; margin-bottom: 25px; background-color: var(--grey-light); border-radius: var(--button-border-radius); padding: 5px; border: 1px solid var(--grey-medium); }
+        .type-btn { flex: 1; padding: 10px; border: none; background-color: transparent; border-radius: var(--button-border-radius); cursor: pointer; font-family: 'Vazirmatn', sans-serif; font-size: 1rem; font-weight: 500; color: var(--grey-color); transition: all 0.3s ease; }
+        .type-btn.active { background-color: white; color: var(--primary-color); box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08); }
+        .form-group { margin-bottom: 20px; }
+        
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.9rem; color: var(--secondary-color); }
+        .form-control { width: 100%; padding: 12px 15px; border: 1px solid var(--grey-medium); border-radius: var(--button-border-radius); outline: none; font-size: 1rem; font-family: 'Vazirmatn', Arial, sans-serif; transition: var(--transition); background-color: var(--grey-light); }
+        .form-control:focus { border-color: var(--primary-color); background-color: white; box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1); }
+        
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 576px) { .form-row { grid-template-columns: 1fr; } }
+        
+        #amount-in-words-container { display: flex; flex-wrap: wrap; gap: 10px; padding-top: 10px; min-height: 40px; }
+        #amount-in-words-rial, #amount-in-words-toman { padding: 5px 15px; border-radius: var(--button-border-radius); font-size: 0.85rem; font-weight: 500; border: 1px solid; line-height: 1.8; margin: 0; }
+        #amount-in-words-rial { background-color: var(--primary-light); border-color: var(--primary-color); color: var(--secondary-color); }
+        #amount-in-words-toman { background-color: var(--grey-light); border-color: var(--grey-medium); color: var(--text-muted); }
+
+        .input-with-icon { position: relative; }
+        .input-with-icon .form-control { padding-left: 45px; }
+        .contacts-icon-btn { position: absolute; left: 5px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--grey-color); font-size: 1.3rem; cursor: pointer; padding: 5px; transition: color 0.2s; }
+        .contacts-icon-btn:hover { color: var(--primary-color); }
+        .input-with-actions { position: relative; }
+        .input-with-actions .form-control { padding-left: 90px; }
+        .input-actions-container { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 8px; }
+        .input-action-btn { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            width: 32px; 
+            height: 32px; 
+            border-radius: 50%; 
+            text-decoration: none; 
+            color: white !important; 
+            font-size: 0.9rem; 
+            transition: var(--transition); 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15); 
+        }
+        .input-action-btn.call { background-color: var(--primary-color); } 
+        .input-action-btn.sms { background-color: var(--info-color); } 
+        .input-action-btn:hover { transform: scale(1.1); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .input-action-btn.disabled { background-color: var(--grey-medium); pointer-events: none; cursor: not-allowed; box-shadow: none; }
+        
+        .date-input-wrapper { position: relative; }
+        .date-input-wrapper .form-control { padding-left: 40px; cursor: pointer; }
+        .date-input-wrapper .fa-calendar-alt { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }        
+        .btn-submit { width: 100%; padding: 12px; background: var(--gradient); color: white; border: none; border-radius: var(--button-border-radius); font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: var(--transition); margin-top: 10px; font-family: 'Vazirmatn', sans-serif; }
+        
+        .check-list-item { background-color: white; border-radius: var(--border-radius); padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); border: 1px solid var(--border-color); border-right-width: 5px; border-left-width: 1px; cursor: pointer; transition: var(--transition); user-select: none; -webkit-user-select: none; position: relative; }
+        .check-list-item:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); border-color: var(--primary-color); }
+        .check-list-item.received { border-right-color: var(--primary-color); }
+        .check-list-item.paid { border-right-color: var(--warning-color); }
+        .list-item-main { display: flex; justify-content: space-between; align-items: flex-start; }
+        .list-item-info { display: flex; align-items: center; gap: 15px; }        .list-item-icon { font-size: 1.5rem; width: 30px; text-align: center; }
+        .list-item-icon.received { color: var(--primary-color); }
+        .list-item-icon.paid { color: var(--warning-color); }
+        .list-item-person { font-size: 1.1rem; font-weight: 600; }
+        
+        .list-item-bank { font-size: 0.9rem; color: var(--text-muted); }
+        .list-item-amount { text-align: left; }
+        .list-item-amount-value { font-size: 1.2rem; font-weight: 700; color: var(--dark-color); }
+        .list-item-amount-unit { font-size: 0.8rem; color: var(--text-muted); }
+        .list-item-footer { border-top: 1px dashed var(--border-color); margin-top: 15px; padding-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: var(--text-muted); }
+        .list-item-date { display: flex; align-items: center; gap: 5px; }
+
+        .status-button-container { position: absolute; bottom: 15px; left: 20px; z-index: 10; }
+        .status-select-btn { background-color: #FFD700; color: #333; border: none; padding: 8px 16px; border-radius: var(--button-border-radius); font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: var(--transition); font-family: 'Vazirmatn', sans-serif; box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3); }
+        .status-select-btn:hover { background-color: #FFC000; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4); }
+                .status-dropdown { position: absolute; bottom: 100%; left: 0; background: white; border: 1px solid var(--border-color); border-radius: var(--button-border-radius); box-shadow: 0 8px 25px rgba(0,0,0,0.15); z-index: 1000; min-width: 180px; display: none; margin-bottom: 5px; max-height: 200px; overflow-y: auto;}
+        .status-dropdown.active { display: block; }
+        .status-option { padding: 12px 16px; cursor: pointer; transition: var(--transition); border-bottom: 1px solid var(--grey-light); font-size: 0.9rem; }
+        .status-option:last-child { border-bottom: none; }
+        .status-option:hover { background-color: var(--primary-light); color: var(--primary-color); }
+        .status-option:first-child { border-top-left-radius: var(--button-border-radius); border-top-right-radius: var(--button-border-radius); }
+        .status-option:last-child { border-bottom-left-radius: var(--button-border-radius); border-bottom-right-radius: var(--button-border-radius); }
+
+        .popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1001; opacity: 0; transition: opacity 0.3s ease-in-out; }
+        .popup-overlay.active { display: flex; opacity: 1; }
+        .popup-content { background: white; padding: 25px; border-radius: var(--border-radius); box-shadow: var(--card-shadow); width: 90%; max-width: 420px; position: relative; transform: scale(0.9); transition: transform 0.3s ease-in-out; text-align: center; }
+        .popup-overlay.active .popup-content { transform: scale(1); }
+        
+        .popup-close-btn { 
+            position: absolute; 
+            top: 15px; 
+            left: 15px; 
+            background-color: var(--danger-color); 
+            color: white !important; 
+            border: none; 
+            border-radius: 50%; 
+            width: 30px; 
+            height: 30px; 
+            line-height: 30px; 
+            text-align: center; 
+            font-size: 1.1rem; 
+            cursor: pointer; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+            z-index: 10; 
+            transition: var(--transition); 
+        }
+        .popup-close-btn:hover { 
+            background-color: #c82333; 
+            transform: scale(1.1);         }
+        .popup-confirm-btn { width: 100%; padding: 12px; background: var(--gradient); color: white; border: none; border-radius: var(--button-border-radius); font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: var(--transition); margin-top: 20px; font-family: 'Vazirmatn', sans-serif; }
+        .popup-confirm-btn:hover { opacity: 0.9; box-shadow: 0 5px 15px rgba(0, 217, 104, 0.3); transform: translateY(-2px); }
+
+        #check-action-popup .popup-content h3 { margin-bottom: 25px; font-weight: 600; color: var(--dark-color); }
+        .action-popup-buttons { display: flex; gap: 15px; margin-top: 10px; }
+        .action-popup-buttons .btn { flex: 1; padding: 12px; border-radius: var(--button-border-radius); font-size: 1rem; font-weight: 500; cursor: pointer; transition: var(--transition); font-family: 'Vazirmatn', sans-serif; border: 1px solid transparent; }
+        .action-popup-buttons .btn-edit { background-color: var(--primary-light); color: var(--primary-color); border-color: var(--primary-color); }
+        .action-popup-buttons .btn-delete { background-color: var(--danger-light); color: var(--danger-color); border-color: var(--danger-color); }
+        .action-popup-buttons .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        
+        .datetime-picker-button { width: 100%; padding: 8px 15px; border: 1px solid var(--grey-medium); border-radius: var(--button-border-radius); font-family: 'Vazirmatn', Arial, sans-serif; transition: var(--transition); background: var(--grey-light); color: var(--dark-color); font-size: 1rem; cursor: pointer; text-align: right; display: flex; align-items: center; justify-content: space-between; height: 50px; position: relative; }
+        .datetime-picker-button.active-selection { background: var(--primary-light); color: var(--primary-color); font-weight: 500; }
+        .time-display-container { display: flex; justify-content: space-around; align-items: center; width: 100%; }
+        .time-part { display: flex; flex-direction: column; align-items: center; }
+        .time-label { font-size: 0.8rem; color: var(--grey-color); }
+        .time-value { font-size: 1.2rem; font-weight: 600; }
+        .datetime-picker-button.active-selection .time-value { color: var(--primary-color); }
+        
+        .date-picker-wheel { display: flex; justify-content: center; height: 200px; overflow: hidden; position: relative; }
+        .date-picker-wheel::before, .date-picker-wheel::after { content: ''; position: absolute; left: 0; right: 0; height: 80px; background: linear-gradient(to bottom, white, rgba(255, 255, 255, 0)); z-index: 1; pointer-events: none; }
+        .date-picker-wheel::before { top: 0; }
+        .date-picker-wheel::after { bottom: 0; background: linear-gradient(to top, white, rgba(255, 255, 255, 0)); }
+        .picker-highlight { position: absolute; top: 50%; left: 10px; right: 10px; transform: translateY(-50%); height: 40px; background: var(--primary-light); border-radius: var(--button-border-radius); border-top: 2px solid var(--primary-color); border-bottom: 2px solid var(--primary-color); z-index: 0; }
+        .picker-column { flex: 1; overflow-y: scroll; scroll-snap-type: y mandatory; -ms-overflow-style: none; scrollbar-width: none; position: relative; z-index: 2; }
+        .picker-column::-webkit-scrollbar { display: none; }
+        .picker-column ul { list-style: none; padding: 80px 0; }
+        .picker-item { 
+            height: 40px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 1.1rem; 
+            color: var(--secondary-color); /* <-- DATE COLOR IS SET HERE */
+            scroll-snap-align: center; 
+            transition: color 0.2s; 
+        }
+        .picker-item.disabled { color: var(--grey-medium); cursor: not-allowed; pointer-events: none; }
+        
+        .time-input-container { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 20px; direction: ltr; }
+        .time-input-container input { width: 80px; text-align: center; font-size: 1.5rem; font-weight: 600; }
+        .time-input-container input::placeholder { font-size: 0.9rem; font-weight: 400; color: var(--grey-color); }
+        .time-input-container span { font-size: 1.5rem; color: var(--grey-color); }
+        .am-pm-selector { display: flex; gap: 10px; margin-bottom: 20px; }        .am-pm-btn { flex: 1; padding: 10px; border: 1px solid var(--grey-medium); background: var(--grey-light); border-radius: var(--button-border-radius); cursor: pointer; transition: var(--transition); font-family: 'Vazirmatn', sans-serif; }
+        .am-pm-btn.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
+        
+        #check-details-popup .popup-content {
+            padding: 20px 25px; 
+            text-align: right;        }
+        #check-details-popup .details-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px; 
+            margin-bottom: 15px;  
+            border-bottom: 1px solid var(--border-color);
+        }
+        #check-details-popup .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 12px 20px; 
+        }
+        #check-details-popup .detail-item.full-width {
+            grid-column: 1 / -1; 
+        }
+        #check-details-popup .detail-item strong {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 2px;
+            color: var(--text-muted);
+        }
+        
+        .details-amount { font-size: 1.5rem; font-weight: 700; color: var(--dark-color); }
+        .details-type { padding: 4px 12px; border-radius: var(--button-border-radius); font-size: 1rem; font-weight: 500; }
+        .details-type.received { background-color: var(--primary-light); color: var(--primary-color); }
+        .details-type.paid { background-color: var(--warning-light); color: var(--warning-color); }
+        .detail-item { font-size: 1rem; }
+        .detail-item span { font-weight: 500; word-break: break-word; }
+        .detail-item-flex { display: flex; justify-content: space-between; align-items: center; }
+        .detail-actions { display: flex; gap: 8px; }
+        .detail-action-btn { padding: 5px 14px; border-radius: var(--button-border-radius); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: var(--transition); border: 1px solid transparent; }
+        .detail-action-btn.call-btn { background-color: var(--primary-light); color: var(--primary-color); border-color: var(--primary-color); }
+        .detail-action-btn.sms-btn { background-color: var(--grey-light); color: var(--text-muted); border-color: var(--grey-medium); }
+        
+        #toast-notification { position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background-color: var(--dark-color); color: white; padding: 12px 25px; border-radius: var(--button-border-radius); box-shadow: 0 5px 15px rgba(0,0,0,0.2); font-size: 1rem; z-index: 1002; transition: bottom 0.5s ease-in-out; display: flex; align-items: center; gap: 10px; text-align: center; }
+        #toast-notification.show { bottom: 30px; }
+        
+        .floating-btn-container { display: none; position: fixed; bottom: 20px; left: 0; right: 0; z-index: 1000; text-align: center; }
+        #open-filter-panel-btn { width: auto; padding: 12px 25px; font-size: 1.1rem; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
+        .filter-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1050; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0s 0.3s; }
+        .filter-overlay.active { opacity: 1; visibility: visible; transition: opacity 0.3s ease, visibility 0s; }
+        .filter-panel { position: fixed; bottom: 0; left: 0; width: 100%; background-color: white; border-top-left-radius: var(--border-radius); border-top-right-radius: var(--border-radius); box-shadow: 0 -5px 25px rgba(0,0,0,0.1); transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1051; max-height: 85vh; display: flex; flex-direction: column; }
+        .filter-overlay.active .filter-panel { transform: translateY(0); }
+        .filter-panel-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid var(--border-color); flex-shrink: 0; }
+        .filter-panel-header h2 { font-size: 1.2rem; font-weight: 600; }
+        .filter-panel-header .btn-submit { margin-top: 0; padding: 8px 20px; font-size: 1rem; width: auto; flex-shrink: 0; }
+        .filter-panel-header .popup-close-btn { position: static; font-size: 2rem; width: auto; height: auto; line-height: 1; font-weight: 400; background: transparent !important; color: var(--text-muted) !important; box-shadow: none; }
+        .filter-panel-content { padding: 10px 25px 25px; overflow-y: auto; }
+        .filter-group { margin-top: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
+        .filter-group:last-child { border-bottom: none; padding-bottom: 10px; }
+        .filter-group h3 { font-size: 1.1rem; margin-bottom: 15px; color: var(--dark-color); font-weight: 500; }
+        .radio-group { display: flex; flex-wrap: wrap; gap: 10px; }
+        .radio-group label { display: flex; align-items: center; cursor: pointer; font-size: 1rem; position: relative; }
+        .radio-group input[type="radio"] { display: none; }
+        .radio-group label span { padding: 8px 20px; border: 1px solid var(--border-color); border-radius: var(--button-border-radius); transition: var(--transition); text-align: center; }
+        .radio-group input[type="radio"]:checked + span { background-color: var(--primary-light); border-color: var(--primary-color); color: var(--secondary-color); font-weight: 500; }
+
+        /* Report Section Specific Styles */
+        .report-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 15px;
+        }
+        .summary-card {
+            background-color: var(--grey-light);
+            padding: 15px;
+            border-radius: var(--button-border-radius);
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+        .summary-card-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .summary-card-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+    </style>
+</head>
+<body>
+    <header class="page-header">
+        <div class="header-logo-container">
+            <!-- ---------- LOGO RESTORED ---------- -->
+            <img src="images/logo.png" alt="لوگو" id="header-logo">
+        </div>
+    </header>
+
+    <main>
+        <div id="today-date-display" class="today-date-display"></div>
+        <div class="main-navigation-buttons">            <button id="nav-register-check-btn" class="main-nav-btn">ثبت چک</button>
+            <button id="nav-list-checks-btn" class="main-nav-btn">لیست چک‌ها</button>
+            <button id="nav-reports-btn" class="main-nav-btn">گزارش‌ها</button>
+        </div>
+
+        <div id="filter-container">
+            <div class="filter-row">
+                <div class="filter-select-wrapper">
+                    <select id="date-filter-select" class="filter-select">
+                        <option value="all" selected>همه</option>
+                        <option value="today">امروز</option>
+                        <option value="next7">هفته بعد</option>
+                        <option value="last7">هفته قبل</option>
+                        <option value="next30">۳۰ روز بعد</option>
+                        <option value="last30">۳۰ روز قبل</option>
+                    </select>
+                </div>
+                <div class="search-wrapper">
+                    <input type="text" id="search-input" class="search-input" placeholder="نام، مبلغ و...">
+                </div>
+            </div>
+        </div>
+
+        <div id="check-registration-section" class="section-content">
+            <div class="check-type-selector">                <button class="type-btn active" data-type="received">دریافتی</button>                <button class="type-btn" data-type="paid">پرداختی</button>
+            </div>            <div class="card">
+                <form id="check-form" novalidate>
+                    <input type="hidden" id="check-type" name="checkType" value="received">
+                    <input type="hidden" id="edit-mode-check-id" name="editModeCheckId" value="">                    <input type="hidden" id="current-status" name="status" value="وضعیت نامشخص">
+                    <input type="hidden" id="issue-date-gregorian" name="issueDateGregorian">
+                    <input type="hidden" id="due-date-gregorian" name="dueDateGregorian">
+                    <input type="hidden" id="due-time-24h" name="dueTime24h">
+                    
+                    <div class="form-group">
+                        <label id="person-name-label" for="person-name">نام پرداخت‌کننده</label>
+                        <div class="input-with-icon">
+                            <input type="text" id="person-name" name="personName" class="form-control" required>
+                            <button type="button" class="contacts-icon-btn" id="person-contacts-btn" title="انتخاب از مخاطبین">
+                                <i class="fas fa-address-book"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="person-phone">شماره تماس</label>
+                        <div class="input-with-actions">
+                            <input type="tel" id="person-phone" name="personPhone" class="form-control" inputmode="tel">
+                            <div class="input-actions-container">
+                                <a href="#" id="call-btn-form" class="input-action-btn call disabled" title="تماس"><i class="fas fa-phone-alt"></i></a>
+                                <a href="#" id="sms-btn-form" class="input-action-btn sms disabled" title="پیامک"><i class="fas fa-envelope"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="person-national-id">کد ملی</label>
+                        <input type="text" id="person-national-id" name="nationalId" class="form-control" inputmode="numeric" maxlength="10">
+                    </div>
+                    <div class="form-group">
+                        <label for="bank-name">نام بانک</label>
+                        <input type="text" id="bank-name" name="bankName" class="form-control" list="bank-list" autocomplete="off">
+                        <datalist id="bank-list">
+                            <option value="ملت"></option><option value="ملی ایران"></option><option value="صادرات ایران"></option><option value="تجارت"></option><option value="سپه"></option><option value="مسکن"></option><option value="کشاورزی"></option><option value="پاسارگاد"></option><option value="پارسیان"></option><option value="سامان"></option><option value="اقتصاد نوین"></option><option value="کارآفرین"></option><option value="سینا"></option><option value="شهر"></option><option value="دی"></option><option value="آینده"></option><option value="گردشگری"></option><option value="ایران زمین"></option><option value="سرمایه"></option><option value="پست بانک ایران"></option><option value="توسعه صادرات ایران"></option><option value="صنعت و معدن"></option><option value="توسعه تعاون"></option><option value="خاورمیانه"></option><option value="موسسه اعتباری ملل"></option><option value="موسسه اعتباری نور"></option><option value="موسسه اعتباری کوثر"></option><option value="قرض‌الحسنه مهر ایران"></option><option value="قرض‌الحسنه رسالت"></option>
+                        </datalist>
+                    </div>
+                    <div class="form-group">
+                        <label for="check-amount">مبلغ چک (ریال)</label>
+                        <input type="text" id="check-amount" name="checkAmount" class="form-control" inputmode="numeric" required>
+                        <div id="amount-in-words-container">
+                            <p id="amount-in-words-rial"></p>
+                            <p id="amount-in-words-toman"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="check-serial">سریال چک</label>
+                        <input type="text" id="check-serial" name="checkSerial" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="sayadi-id">شناسه صیادی (۱۶ رقم)</label>
+                        <input type="text" id="sayadi-id" name="sayadiId" class="form-control" inputmode="numeric">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="issue-date-trigger">تاریخ صدور</label>
+                            <div class="date-input-wrapper">
+                                <input type="text" class="form-control" id="issue-date-trigger" placeholder="انتخاب تاریخ" readonly>
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="due-date-trigger">تاریخ سررسید</label>
+                            <div class="date-input-wrapper">
+                                <input type="text" class="form-control" id="due-date-trigger" placeholder="انتخاب تاریخ" readonly>
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="reminder-days-before">یادآوری قبل از سررسید</label>
+                        <select id="reminder-days-before" name="reminderDaysBefore" class="form-control">
+                            <option value="none" selected>یادآوری نشود</option>
+                            <option value="1">۱ روز قبل</option>
+                            <option value="3">۳ روز قبل</option>
+                            <option value="7">۷ روز قبل</option>
+                            <option value="30">۳۰ روز قبل</option>
+                            <option value="every">هر روز (تا سررسید)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="due-time-trigger">زمان یادآوری در روز سررسید</label>
+                        <button type="button" class="datetime-picker-button" id="due-time-trigger">
+                            <div class="time-display-container">
+                                <div class="time-part">
+                                    <span class="time-label">دقیقه</span>
+                                    <span id="display-minute" class="time-value">--</span>
+                                </div>
+                                <div class="time-part">
+                                    <span class="time-label">ساعت</span>
+                                    <span id="display-hour" class="time-value">--</span>
+                                </div>                            
+                            </div>
+                        </button>                    </div>
+                    <button type="submit" id="form-submit-btn" class="btn-submit">ثبت چک</button>
+                </form>
+            </div>
+        </div>
+        
+        <div id="list-checks-section" class="section-content">
+            <div id="check-list-container"></div>
+        </div>
+
+        <div id="reports-section" class="section-content">
+            <div class="card">
+                <form id="report-filter-form" onsubmit="return false;">                    <h2 style="margin-bottom: 25px; text-align: center; color: var(--secondary-color);">فیلتر گزارشات</h2>
+
+                    <div class="filter-group" style="padding-bottom: 10px; border: none;">
+                        <h3 style="margin-bottom: 10px;">نوع چک</h3>
+                        <div class="radio-group" style="flex-wrap: nowrap; justify-content: space-between; gap: 10px;">
+                            <label style="flex: 1;"><input type="radio" name="report_check_type" value="all" checked><span>همه</span></label>
+                            <label style="flex: 1;"><input type="radio" name="report_check_type" value="paid"><span>پرداختی</span></label>
+                            <label style="flex: 1;"><input type="radio" name="report_check_type" value="received"><span>دریافتی</span></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label for="report-status-filter">وضعیت چک</label>
+                        <select id="report-status-filter" class="form-control">
+                        </select>
+                    </div>                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="report-from-date-trigger">از تاریخ سررسید</label>
+                            <div class="date-input-wrapper">
+                                <input type="text" class="form-control" id="report-from-date-trigger" placeholder="اختیاری" readonly>
+                                <i class="fas fa-calendar-alt"></i>
+                                <input type="hidden" id="report-from-date-gregorian">                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="report-to-date-trigger">تا تاریخ سررسید</label>
+                            <div class="date-input-wrapper">
+                                <input type="text" class="form-control" id="report-to-date-trigger" placeholder="اختیاری" readonly>
+                                <i class="fas fa-calendar-alt"></i>                                <input type="hidden" id="report-to-date-gregorian">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="generate-report-btn" class="btn-submit">ساخت گزارش</button>
+                </form>
+            </div>
+
+            <div id="report-results-container">
+                <!-- Report results will be injected here -->
+            </div>
+        </div>
+    </main>
+    
+    <div class="popup-overlay" id="datePopup">
+        <div class="popup-content">
+            <button class="popup-close-btn" data-close-popup><i class="fas fa-times"></i></button>
+            <div class="date-picker-wheel">
+                <div class="picker-highlight"></div>
+                <div class="picker-column" id="day-picker"><ul></ul></div>
+                <div class="picker-column" id="month-picker"><ul></ul></div>
+                <div class="picker-column" id="year-picker"><ul></ul></div>
+            </div>
+            <button class="popup-confirm-btn" id="date-confirm-btn">تایید تاریخ</button>
+        </div>    </div>
+
+    <div class="popup-overlay" id="timeInputPopup">
+        <div class="popup-content">
+            <button class="popup-close-btn" data-close-popup><i class="fas fa-times"></i></button>
+            <div class="time-input-container">
+                <input type="text" id="time-input-hour" class="form-control" placeholder="ساعت" maxlength="2" inputmode="numeric">
+                <span>:</span>
+                <input type="text" id="time-input-minute" class="form-control" placeholder="دقیقه" maxlength="2" inputmode="numeric">
+            </div>
+            <div class="am-pm-selector">
+                <button class="am-pm-btn active" data-period="AM">قبل از ظهر</button>
+                <button class="am-pm-btn" data-period="PM">بعد از ظهر</button>
+            </div>
+            <button class="popup-confirm-btn" id="time-confirm-btn">تایید زمان</button>
+        </div>
+    </div>
+    
+    <div class="popup-overlay" id="check-details-popup">
+        <div class="popup-content">
+            <button class="popup-close-btn" data-close-popup><i class="fas fa-times"></i></button>
+            <div id="modal-content-wrapper"></div>
+        </div>
+    </div>
+
+    <!-- Action Popup for Edit/Delete -->
+    <div class="popup-overlay" id="check-action-popup">
+        <div class="popup-content">
+            <button class="popup-close-btn" data-close-popup><i class="fas fa-times"></i></button>
+            <h3>اقدامات</h3>
+            <p style="margin-bottom: 20px; color: var(--text-muted);">عملیات مورد نظر خود را برای این چک انتخاب کنید.</p>
+            <div class="action-popup-buttons">
+                <button id="edit-check-btn" class="btn btn-edit">ویرایش</button>
+                <button id="delete-check-btn" class="btn btn-delete">حذف</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-notification"><i class="fas fa-check-circle"></i><span id="toast-message"></span></div>
+    
+    <div id="floating-filter-btn-container" class="floating-btn-container">
+        <button id="open-filter-panel-btn" class="main-nav-btn active">
+            <i class="fas fa-filter"></i>&nbsp;فیلتر پیشرفته
+        </button>
+    </div>    <div class="filter-overlay" id="advanced-filter-overlay">
+        <div class="filter-panel" id="advanced-filter-panel">
+            <div class="filter-panel-header">                <button id="apply-filter-btn" class="btn-submit">اعمال فیلتر</button>                <h2>فیلتر</h2>
+                <button id="close-filter-panel-btn" class="popup-close-btn">&times;</button>
+            </div>
+            <div class="filter-panel-content">                <div class="filter-group">
+                    <h3>نوع چک</h3>
+                    <div class="radio-group">
+                        <label><input type="radio" name="filter_check_type" value="all" checked><span>همه</span></label>
+                        <label><input type="radio" name="filter_check_type" value="paid"><span>پرداختی</span></label>
+                        <label><input type="radio" name="filter_check_type" value="received"><span>دریافتی</span></label>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <h3>وضعیت چک</h3>
+                    <div class="radio-group">
+                        <label><input type="radio" name="filter_check_status" value="all" checked><span>همه</span></label>
+                        <label><input type="radio" name="filter_check_status" value="وضعیت نامشخص"><span>وضعیت نامشخص</span></label>
+                        <label><input type="radio" name="filter_check_status" value="پاس شده"><span>پاس شده</span></label>
+                        <label><input type="radio" name="filter_check_status" value="برگشت خورده"><span>برگشت خورده</span></label>
+                        <label><input type="radio" name="filter_check_status" value="منتقل شده"><span>منتقل شده</span></label>                        <label><input type="radio" name="filter_check_status" value="مسدود شده"><span>مسدود شده</span></label>
+                        <label><input type="radio" name="filter_check_status" value="ضمانت"><span>ضمانت</span></label>
+                        <label><input type="radio" name="filter_check_status" value="استرداد شده"><span>استرداد شده</span></label>
+                        <label><input type="radio" name="filter_check_status" value="مفقود شده"><span>مفقود شده</span></label>
+                        <label><input type="radio" name="filter_check_status" value="ابطال شده"><span>ابطال شده</span></label>
+                    </div>
+                </div>            </div>
+        </div>
+    </div>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Form & Basic Page Elements
+        const form = document.getElementById('check-form');        const formSubmitBtn = document.getElementById('form-submit-btn');
+        const editModeInput = document.getElementById('edit-mode-check-id');
+        const currentStatusInput = document.getElementById('current-status');
+        const checkTypeSelector = document.querySelector('.check-type-selector');
+        const personNameLabel = document.getElementById('person-name-label');
+        const personContactsBtn = document.getElementById('person-contacts-btn');
+        const personNameInput = document.getElementById('person-name');
+        const personPhoneInput = document.getElementById('person-phone');
+        const callBtnForm = document.getElementById('call-btn-form');
+        const smsBtnForm = document.getElementById('sms-btn-form');
+        const nationalIdInput = document.getElementById('person-national-id');
+        const bankNameInput = document.getElementById('bank-name');
+        const checkAmountInput = document.getElementById('check-amount');
+        const amountWordsRial = document.getElementById('amount-in-words-rial');
+        const amountWordsToman = document.getElementById('amount-in-words-toman');
+        const checkSerialInput = document.getElementById('check-serial');
+        const sayadiIdInput = document.getElementById('sayadi-id');
+                // Date & Time Picker Elements
+        const displayHour = document.getElementById('display-hour');
+        const displayMinute = document.getElementById('display-minute');
+        const issueDateTrigger = document.getElementById('issue-date-trigger');
+        const dueDateTrigger = document.getElementById('due-date-trigger');
+        const hiddenIssueDate = document.getElementById('issue-date-gregorian');
+        const hiddenDueDate = document.getElementById('due-date-gregorian');
+        const datePopup = document.getElementById('datePopup');
+        const confirmDateBtn = document.getElementById('date-confirm-btn');
+        const dayPicker = datePopup.querySelector('#day-picker ul');
+        const monthPicker = datePopup.querySelector('#month-picker ul');
+        const yearPicker = datePopup.querySelector('#year-picker ul');
+        const dueTimeTrigger = document.getElementById('due-time-trigger');
+        const timeInputPopup = document.getElementById('timeInputPopup');
+        const timeInputHour = document.getElementById('time-input-hour');
+        const timeInputMinute = document.getElementById('time-input-minute');
+        const amPmSelector = document.querySelector('.am-pm-selector');        const confirmTimeBtn = document.getElementById('time-confirm-btn');
+        const hiddenTime24h = document.getElementById('due-time-24h');
+        
+        // Navigation & Section Elements
+        const allSections = document.querySelectorAll('.section-content');
+        const checkRegistrationSection = document.getElementById('check-registration-section');
+        const listChecksSection = document.getElementById('list-checks-section');
+        const reportsSection = document.getElementById('reports-section');
+        const navRegisterCheckBtn = document.getElementById('nav-register-check-btn');
+        const navListChecksBtn = document.getElementById('nav-list-checks-btn');
+        const navReportsBtn = document.getElementById('nav-reports-btn');
+                // List & Details & Action Elements
+        const checkDetailsPopup = document.getElementById('check-details-popup');
+        const checkActionPopup = document.getElementById('check-action-popup');
+        const editCheckBtn = document.getElementById('edit-check-btn');
+        const deleteCheckBtn = document.getElementById('delete-check-btn');
+        const checkListContainer = document.getElementById('check-list-container');
+                // Simple Filter Elements
+        const filterContainer = document.getElementById('filter-container');
+        const dateFilterSelect = document.getElementById('date-filter-select');
+        const searchInput = document.getElementById('search-input');
+
+        // Advanced Filter Elements
+        const floatingFilterBtnContainer = document.getElementById('floating-filter-btn-container');
+        const openFilterPanelBtn = document.getElementById('open-filter-panel-btn');
+        const advancedFilterOverlay = document.getElementById('advanced-filter-overlay');
+        const closeFilterPanelBtn = document.getElementById('close-filter-panel-btn');
+        const applyFilterBtn = document.getElementById('apply-filter-btn');
+
+        // ----- Report Section Elements -----
+        const generateReportBtn = document.getElementById('generate-report-btn');
+        const reportStatusFilter = document.getElementById('report-status-filter');
+        const reportFromDateTrigger = document.getElementById('report-from-date-trigger');
+        const reportToDateTrigger = document.getElementById('report-to-date-trigger');
+        const hiddenReportFromDate = document.getElementById('report-from-date-gregorian');
+        const hiddenReportToDate = document.getElementById('report-to-date-gregorian');
+        const reportResultsContainer = document.getElementById('report-results-container');        let reportChartInstance = null;
+
+        // State & Constants
+        let checks = [];
+        let activeDatePicker = null;
+        let pressTimer = null;
+        let activeCheckIndex = null;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        const LONG_PRESS_DURATION = 1000;
+        const MOVE_THRESHOLD = 10;
+        const ITEM_HEIGHT = 40;
+        const persianMonths = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
+        const todayForValidation = new Date();
+        todayForValidation.setHours(0, 0, 0, 0);
+                const statusOptions = [ 'وضعیت نامشخص', 'پاس شده', 'برگشت خورده', 'منتقل شده', 'مسدود شده', 'ضمانت', 'استرداد شده', 'مفقود شده', 'ابطال شده' ];
+        
+        // --- Utility Functions (Unchanged) ---
+        const toPersianNumbers = (str) => String(str).replace(/[0-9]/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+        const toEnglishNumbers = (str) => String(str).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+        function toJalali(gy, gm, gd) { var g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]; var gy2 = (gm > 2) ? (gy + 1) : gy; var days = 355666 + (365 * gy) + Math.floor((gy2 + 3) / 4) - Math.floor((gy2 + 99) / 100) + Math.floor((gy2 + 399) / 400) + gd + g_d_m[gm - 1]; var jy = -1595 + (33 * Math.floor(days / 12053)); days %= 12053; jy += 4 * Math.floor(days / 1461); days %= 1461; if (days > 365) { jy += Math.floor((days - 1) / 365); days = (days - 1) % 365; } var jm = (days < 186) ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30); var jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30)); return { year: jy, month: jm, day: jd }; }
+        function toGregorian(jy, jm, jd) { var days = (365 * (jy - 1)) + Math.floor((jy - 1) / 4) - Math.floor((jy - 1) / 100) + Math.floor((jy - 1) / 400) + 286 + ((jm < 7) ? ((jm - 1) * 31) : (((jm - 7) * 30) + 186)) + jd; var gy = 1600 + 400 * Math.floor(days / 146097); days %= 146097; if (days > 36524) { gy += 100 * Math.floor(--days / 36524); days %= 36524; if (days >= 365) days++; } gy += 4 * Math.floor(days / 1461); days %= 1461; gy += Math.floor((days - 1) / 365); days = (days - 1) % 365 + 1; var gd = days; var sal_a = [0, 31, ((gy % 4 === 0 && gy % 100 !== 0) || (gy % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; var gm; for (gm = 1; gm <= 12; gm++) { if (gd <= sal_a[gm]) break; gd -= sal_a[gm]; } return new Date(gy, gm - 1, gd); }
+        const isJalaliLeap = (jy) => (((((jy - 474) % 2820) + 474) + 38) * 682) % 2816 < 682;
+        function formatDateNumeric(year, month, day) { const y = toPersianNumbers(String(year)); const m = toPersianNumbers(String(month).padStart(2, '0')); const d = toPersianNumbers(String(day).padStart(2, '0')); return `${y}/${m}/${d}`; }
+        function showToast(message, isError = false) { const toast = document.getElementById('toast-notification'); const toastMessage = document.getElementById('toast-message'); toastMessage.textContent = message; toast.style.backgroundColor = isError ? 'var(--danger-color)' : 'var(--dark-color)'; toast.classList.add('show'); setTimeout(() => { toast.classList.remove('show'); }, 3000); }
+        function updatePersonInfoLabels(type) { personNameLabel.textContent = type === 'received' ? 'نام پرداخت‌کننده' : 'نام دریافت‌کننده'; }
+        function numberToWords(numStr) { if (!numStr || parseInt(numStr, 10) === 0) return 'صفر'; let num = parseInt(numStr, 10); if (num >= 1000000000000000) return 'عدد بسیار بزرگ است'; const yakan = ['', 'یک', 'دو', 'سه', 'چهار', 'پنج', 'شش', 'هفت', 'هشت', 'نه']; const dahgan = ['', '', 'بیست', 'سی', 'چهل', 'پنجاه', 'شصت', 'هفتاد', 'هشتاد', 'نود']; const sadgan = ['', 'صد', 'دویست', 'سیصد', 'چهارصد', 'پانصد', 'ششصد', 'هفتصد', 'هشتصد', 'نهصد']; const dah_ta_nozda = ['ده', 'یازده', 'دوازده', 'سیزده', 'چهارده', 'پانزده', 'شانزده', 'هفده', 'هجده', 'نوزده']; const scales = ['', 'هزار', 'میلیون', 'میلیارد', 'تریلیون']; function threeDigitToWords(n) { let res = []; const sad = Math.floor(n / 100); const dah = Math.floor((n % 100) / 10); const yak = n % 10; if (sad > 0) res.push(sadgan[sad]); if (dah === 1) { res.push(dah_ta_nozda[yak]); } else { if (dah > 1) res.push(dahgan[dah]); if (yak > 0) res.push(yakan[yak]); } return res.join(' و '); } if (num < 1000) return threeDigitToWords(num); let parts = []; let scaleIndex = 0; while (num > 0) { const threeDigits = num % 1000; if (threeDigits > 0) { let wordPart = threeDigitToWords(threeDigits); if (scales[scaleIndex]) { wordPart += ' ' + scales[scaleIndex]; } parts.unshift(wordPart); } num = Math.floor(num / 1000); scaleIndex++; } return parts.join(' و '); }
+        function generatePickerColumn(element, values, selectedValue, disablePast = false) { if (!element) return; element.innerHTML = ''; const today = new Date(); const todayJalali = toJalali(today.getFullYear(), today.getMonth() + 1, today.getDate()); const selectedJalaliYear = getSelectedValue(yearPicker); const selectedJalaliMonth = getSelectedValue(monthPicker); values.forEach(value => { const item = document.createElement('li'); item.className = 'picker-item'; item.textContent = toPersianNumbers(value.text); item.dataset.value = value.value; if (disablePast) { const isPast = selectedJalaliYear < todayJalali.year || (selectedJalaliYear == todayJalali.year && selectedJalaliMonth < todayJalali.month) || (selectedJalaliYear == todayJalali.year && selectedJalaliMonth == todayJalali.month && value.value < todayJalali.day); if (isPast) { item.classList.add('disabled'); } } element.appendChild(item); }); const selectedIndex = values.findIndex(v => v.value == selectedValue); if (element.parentElement) { element.parentElement.scrollTop = selectedIndex * ITEM_HEIGHT; } }
+        function updateDaysColumn(disablePast) { if (!yearPicker || !monthPicker || !dayPicker) return; const year = getSelectedValue(yearPicker); const month = getSelectedValue(monthPicker); const currentDay = getSelectedValue(dayPicker); const daysInMonth = (month < 7) ? 31 : (month < 12) ? 30 : isJalaliLeap(year) ? 30 : 29; const dayValues = Array.from({ length: daysInMonth }, (_, i) => ({ value: i + 1, text: i + 1 })); const newSelectedDay = Math.min(currentDay, daysInMonth); generatePickerColumn(dayPicker, dayValues, newSelectedDay, disablePast); }
+        function getSelectedValue(pickerUl) { if (!pickerUl || !pickerUl.parentElement) return 1; const index = Math.round(pickerUl.parentElement.scrollTop / ITEM_HEIGHT); if (pickerUl.children[index]) { return pickerUl.children[index].dataset.value; } return 1; }
+        function openDatePicker(visibleInput, hiddenInput) { activeDatePicker = { visibleInput, hiddenInput }; const now = new Date(); const initialDate = toJalali(now.getFullYear(), now.getMonth() + 1, now.getDate()); const yearValues = Array.from({ length: 10 }, (_, i) => ({ value: initialDate.year + i, text: initialDate.year + i })); const monthValues = persianMonths.map((m, i) => ({ value: i + 1, text: m })); generatePickerColumn(yearPicker, yearValues, initialDate.year); generatePickerColumn(monthPicker, monthValues, initialDate.month); updateDaysColumn(true); const dayIndex = initialDate.day - 1; if (dayPicker && dayPicker.parentElement) { dayPicker.parentElement.scrollTop = dayIndex * ITEM_HEIGHT; } datePopup.classList.add('active'); }
+        async function pickContact() { if ('contacts' in navigator && 'select' in navigator.contacts) { try { const contacts = await navigator.contacts.select(['name', 'tel'], { multiple: false }); if (contacts.length > 0) { const contact = contacts[0]; if (contact.name && contact.name.length > 0) { personNameInput.value = contact.name[0]; } if (contact.tel && contact.tel.length > 0) { personPhoneInput.value = toPersianNumbers(contact.tel[0]); updateFormActionButtons(); } } } catch (ex) { console.error("Error picking contact:", ex); } } else { showToast('مرورگر شما از انتخاب مخاطب پشتیبانی نمی‌کند.'); } }
+        function sendSystemNotification(title, options) { if (!('Notification' in window)) { return; } if (Notification.permission === 'granted') { new Notification(title, options); } }
+        function scheduleNotification(check) { if (!check.dueDateGregorian || !check.dueTime24h) return; const now = new Date(); const dueDate = new Date(`${check.dueDateGregorian}T${check.dueTime24h}`); const amountRial = parseInt(check.checkAmount).toLocaleString('fa-IR'); const amountToman = Math.floor(parseInt(check.checkAmount) / 10).toLocaleString('fa-IR'); const notificationBody = `مبلغ: ${amountRial} ریال (${amountToman} تومان)\nطرف حساب: ${check.personName}\nتاریخ سررسید: ${check.dueDateText}`; const timeUntilDue = dueDate.getTime() - now.getTime(); if (timeUntilDue > 0) { setTimeout(() => { sendSystemNotification('یادآوری سررسید چک', { body: notificationBody, icon: 'images/logo.png' }); }, timeUntilDue); } const reminderDaysBefore = check.reminderDaysBefore; if (reminderDaysBefore !== 'none') { const daysToLoop = reminderDaysBefore === 'every' ? 30 : parseInt(reminderDaysBefore, 10); for (let i = 1; i <= daysToLoop; i++) { const reminderDate = new Date(dueDate); reminderDate.setDate(dueDate.getDate() - i); const timeUntilReminder = reminderDate.getTime() - now.getTime(); if (timeUntilReminder > 0) { setTimeout(() => { const title = `یادآوری چک برای ${toPersianNumbers(i)} روز دیگر`; sendSystemNotification(title, { body: notificationBody, icon: 'images/logo.png' }); }, timeUntilReminder); } if (reminderDaysBefore !== 'every') break; } } }        function updateFormActionButtons() { const phoneValue = toEnglishNumbers(personPhoneInput.value || ''); const isValid = phoneValue.length === 11 && phoneValue.startsWith('09'); if (isValid) { callBtnForm.href = `tel:${phoneValue}`; smsBtnForm.href = `sms:${phoneValue}`; callBtnForm.classList.remove('disabled'); smsBtnForm.classList.remove('disabled'); } else { callBtnForm.href = '#'; smsBtnForm.href = '#'; callBtnForm.classList.add('disabled'); smsBtnForm.classList.add('disabled'); } }
+        function createStatusDropdown(checkIndex) { const dropdown = document.createElement('div'); dropdown.className = 'status-dropdown'; dropdown.innerHTML = statusOptions.map(status => `<div class="status-option" data-status="${status}">${status}</div>`).join(''); dropdown.addEventListener('click', (e) => { e.stopPropagation(); const statusOption = e.target.closest('.status-option'); if (statusOption) { const newStatus = statusOption.dataset.status; updateCheckStatus(checkIndex, newStatus); closeAllStatusDropdowns(); } }); return dropdown; }
+        function updateCheckStatus(checkIndex, newStatus) { if (checks[checkIndex]) { checks[checkIndex].status = newStatus; renderCheckList(); showToast(`وضعیت چک به "${newStatus}" تغییر پیدا کرد.`); } }
+        function closeAllStatusDropdowns() { document.querySelectorAll('.status-dropdown').forEach(dropdown => dropdown.remove()); }
+        
+        function renderCheckList() {
+            closeAllStatusDropdowns();
+            const simpleDateFilter = dateFilterSelect.value;            const searchTerm = toEnglishNumbers(searchInput.value || '').toLowerCase();
+            const advancedTypeFilter = document.querySelector('input[name="filter_check_type"]:checked').value;
+            const advancedStatusFilter = document.querySelector('input[name="filter_check_status"]:checked').value;
+            let filteredChecks = [...checks];
+
+            if (searchTerm) { filteredChecks = filteredChecks.filter(check => { const values = [check.personName || '', check.bankName || '', toEnglishNumbers(check.personPhone || ''), toEnglishNumbers(check.checkSerial || ''), toEnglishNumbers(check.sayadiId || ''), toEnglishNumbers(check.checkAmount || '')].join(' ').toLowerCase(); return values.includes(searchTerm); }); }
+            if (simpleDateFilter !== 'all') { const todayStart = new Date(); todayStart.setHours(0, 0, 0, 0); filteredChecks = filteredChecks.filter(check => { if (!check.dueDateGregorian) { return false; } const dueDate = new Date(check.dueDateGregorian); if (isNaN(dueDate.getTime())) { return false; } dueDate.setHours(0, 0, 0, 0); switch (simpleDateFilter) { case 'today': return dueDate.getTime() === todayStart.getTime(); case 'next7': { const next7 = new Date(todayStart); next7.setDate(todayStart.getDate() + 7); return dueDate >= todayStart && dueDate <= next7; } case 'last7': { const last7 = new Date(todayStart); last7.setDate(todayStart.getDate() - 7); return dueDate <= todayStart && dueDate >= last7; } case 'next30': { const next30 = new Date(todayStart); next30.setDate(todayStart.getDate() + 30); return dueDate >= todayStart && dueDate <= next30; } case 'last30': { const last30 = new Date(todayStart); last30.setDate(todayStart.getDate() - 30); return dueDate <= todayStart && dueDate >= last30; } default: return true; } }); }
+            if (advancedTypeFilter !== 'all') { filteredChecks = filteredChecks.filter(check => check.checkType === advancedTypeFilter); }
+            if (advancedStatusFilter !== 'all') { filteredChecks = filteredChecks.filter(check => check.status === advancedStatusFilter); }            
+            checkListContainer.innerHTML = '';
+            if (filteredChecks.length === 0) { checkListContainer.innerHTML = `<p style="text-align: center; color: var(--text-muted); padding: 40px 0;">هیچ چکی با این مشخصات یافت نشد.</p>`; return; }
+            let listHTML = '';
+            filteredChecks.forEach(check => { const originalIndex = checks.findIndex(c => c.id === check.id); const buttonText = (check.status && check.status !== 'وضعیت نامشخص') ? check.status : 'انتخاب وضعیت'; listHTML += ` <div class="check-list-item ${check.checkType}" data-check-index="${originalIndex}"> <div class="list-item-main"> <div class="list-item-info"> <i class="fas ${check.checkType === 'received' ? 'fa-arrow-down' : 'fa-arrow-up'} list-item-icon ${check.checkType}"></i> <div> <p class="list-item-person">${check.personName}</p> <p class="list-item-bank">${check.bankName || 'نامشخص'}</p> </div> </div> <div class="list-item-amount"> <p class="list-item-amount-value">${parseInt(check.checkAmount).toLocaleString('fa-IR')}</p> <p class="list-item-amount-unit">ریال</p> </div> </div> <div class="list-item-footer"> <span class="list-item-date"> <i class="fas fa-calendar-alt"></i> <span>سررسید: ${check.dueDateText}</span> </span> </div> <div class="status-button-container"> <button class="status-select-btn" data-check-index="${originalIndex}">${buttonText}</button> </div> </div>`; });
+            checkListContainer.innerHTML = listHTML;
+        }
+        function openCheckDetailsModal(checkIndex) {
+            const check = checks[checkIndex];
+            if (!check) return;
+            const phoneValueEn = toEnglishNumbers(check.personPhone || '');
+            let phoneActionsHTML = '';
+            if (phoneValueEn) {
+                phoneActionsHTML = `
+                <div class="detail-actions">                    <a href="tel:${phoneValueEn}" class="detail-action-btn call-btn">تماس</a>
+                    <a href="sms:${phoneValueEn}" class="detail-action-btn sms-btn">پیامک</a>
+                </div>`;
+            }
+            const timeText = check.dueTime24h ? `${toPersianNumbers(check.dueTime24h.split(':')[0])}:${toPersianNumbers(check.dueTime24h.split(':')[1])}` : 'ثبت نشده';
+            const reminderDaysMap = { '1': '۱ روز قبل', '3': '۳ روز قبل', '7': '۷ روز قبل', '30': '۳۰ روز قبل', 'every': 'هر روز (تا سررسید)', 'none': 'تنظیم نشده' };
+            const reminderDaysText = reminderDaysMap[check.reminderDaysBefore] || 'تنظیم نشده';
+            
+            let modalHTML = `
+                <div class="details-header">
+                    <span class="details-amount">${parseInt(check.checkAmount).toLocaleString('fa-IR')} ریال</span>
+                    <span class="details-type ${check.checkType}">${check.checkType === 'received' ? 'دریافتی' : 'پرداختی'}</span>
+                </div>
+                <div class="details-grid">
+                    <div class="detail-item full-width"><strong>نام طرف حساب</strong><span>${check.personName || '-'}</span></div>
+                    <div class="detail-item full-width">
+                        <strong>شماره تماس</strong>
+                        <div class="detail-item-flex">
+                            <span>${toPersianNumbers(check.personPhone || '') || '-'}</span>
+                            ${phoneActionsHTML}
+                        </div>
+                    </div>
+                    <div class="detail-item"><strong>کد ملی</strong><span>${toPersianNumbers(check.nationalId || '') || '-'}</span></div>
+                    <div class="detail-item"><strong>سریال چک</strong><span>${toPersianNumbers(check.checkSerial || '') || '-'}</span></div>
+                    <div class="detail-item full-width"><strong>نام بانک</strong><span>${check.bankName || '-'}</span></div>
+                    <div class="detail-item full-width"><strong>شناسه صیادی</strong><span>${toPersianNumbers(check.sayadiId || '') || '-'}</span></div>
+                    <div class="detail-item"><strong>تاریخ صدور</strong><span>${check.issueDateText || '-'}</span></div>
+                    <div class="detail-item"><strong>تاریخ سررسید</strong><span>${check.dueDateText || '-'}</span></div>
+                    <div class="detail-item"><strong>وضعیت چک</strong><span>${check.status || 'وضعیت نامشخص'}</span></div>
+                    <div class="detail-item"><strong>زمان یادآوری سررسید</strong><span>${timeText}</span></div>
+                    <div class="detail-item full-width"><strong>یادآوری قبل از سررسید</strong><span>${reminderDaysText}</span></div>
+                </div>`;
+            document.getElementById('modal-content-wrapper').innerHTML = modalHTML;
+            checkDetailsPopup.classList.add('active');
+        }
+        function showSection(sectionToShow, activeButton) {
+            document.querySelectorAll('.main-nav-btn').forEach(btn => btn.classList.remove('active'));
+            activeButton.classList.add('active');
+            allSections.forEach(section => section.classList.remove('active'));
+            sectionToShow.classList.add('active');
+            const isListPage = sectionToShow.id === 'list-checks-section';
+            filterContainer.style.display = isListPage ? 'flex' : 'none';
+            floatingFilterBtnContainer.style.display = isListPage ? 'block' : 'none';
+            if (isListPage) {
+                renderCheckList();
+            }            if (sectionToShow.id === 'reports-section') {
+                generateReport(); 
+            } else {
+                reportResultsContainer.innerHTML = '';
+            }
+        }
+        function setDefaultDates() { const today = new Date(); const todayJalali = toJalali(today.getFullYear(), today.getMonth() + 1, today.getDate()); const todayFormattedNumeric = formatDateNumeric(todayJalali.year, todayJalali.month, todayJalali.day); issueDateTrigger.value = todayFormattedNumeric; hiddenIssueDate.value = today.toISOString().split('T')[0]; dueDateTrigger.value = todayFormattedNumeric; hiddenDueDate.value = today.toISOString().split('T')[0]; }
+        function resetForm() { form.reset(); editModeInput.value = ''; formSubmitBtn.textContent = 'ثبت چک'; document.querySelectorAll('.active-selection').forEach(el => el.classList.remove('active-selection')); amountWordsRial.textContent = ''; amountWordsToman.textContent = ''; displayHour.textContent = "--"; displayMinute.textContent = "--"; updatePersonInfoLabels('received'); setDefaultDates(); updateFormActionButtons(); currentStatusInput.value = "وضعیت نامشخص"; }
+
+        // ----- Report Generation Functions -----
+        function populateReportFilters() {
+            reportStatusFilter.innerHTML = '<option value="all">همه وضعیت‌ها</option>';
+            statusOptions.forEach(status => {
+                const option = document.createElement('option');
+                option.value = status;
+                option.textContent = status;
+                reportStatusFilter.appendChild(option);
+            });
+        }
+        function generateReport() {
+            const typeFilter = document.querySelector('input[name="report_check_type"]:checked').value;
+            const statusFilter = reportStatusFilter.value;
+            const fromDateStr = hiddenReportFromDate.value;
+            const toDateStr = hiddenReportToDate.value;
+
+            let fromDate = fromDateStr ? new Date(fromDateStr) : null;
+            if (fromDate) fromDate.setHours(0, 0, 0, 0);
+            let toDate = toDateStr ? new Date(toDateStr) : null;
+            if (toDate) toDate.setHours(23, 59, 59, 999);
+
+            if (fromDate && toDate && fromDate > toDate) {
+                showToast('تاریخ شروع نمی‌تواند بعد از تاریخ پایان باشد.', true);
+                return;
+            }
+            const filteredChecks = checks.filter(check => {
+                if (typeFilter !== 'all' && check.checkType !== typeFilter) return false;
+                if (statusFilter !== 'all' && check.status !== statusFilter) return false;
+                
+                const dueDate = check.dueDateGregorian ? new Date(check.dueDateGregorian) : null;
+                if(!dueDate && (fromDate || toDate)) return false; 
+                
+                if (fromDate && dueDate < fromDate) return false;
+                if (toDate && dueDate > toDate) return false;
+                
+                return true;
+            });
+            renderReportResults(filteredChecks);
+        }
+
+        function renderReportResults(filteredChecks) {
+            if (checks.length === 0) {                 reportResultsContainer.innerHTML = `<div class="card"><p style="text-align: center; color: var(--text-muted); padding: 40px 0;">هیچ چکی برای گزارش‌گیری ثبت نشده است.</p></div>`;
+                 return;
+            }
+            if (filteredChecks.length === 0) {
+                reportResultsContainer.innerHTML = `<div class="card"><p style="text-align: center; color: var(--text-muted); padding: 40px 0;">هیچ چکی با فیلترهای اعمال‌شده یافت نشد.</p></div>`;
+                return;
+            }
+
+            const totalAmount = filteredChecks.reduce((sum, check) => sum + parseInt(toEnglishNumbers(check.checkAmount) || 0, 10), 0);
+            const receivedAmount = filteredChecks.filter(c => c.checkType === 'received').reduce((sum, check) => sum + parseInt(toEnglishNumbers(check.checkAmount) || 0, 10), 0);
+            const paidAmount = filteredChecks.filter(c => c.checkType === 'paid').reduce((sum, check) => sum + parseInt(toEnglishNumbers(check.checkAmount) || 0, 10), 0);
+            
+            const statusSummary = {};
+            filteredChecks.forEach(check => {
+                const status = check.status;
+                if (!statusSummary[status]) {
+                    statusSummary[status] = { count: 0, amount: 0 };
+                }
+                statusSummary[status].count++;
+                statusSummary[status].amount += parseInt(toEnglishNumbers(check.checkAmount) || 0, 10);
+            });
+
+            let resultsHTML = `
+                <div class="card">
+                    <h3 style="margin-bottom: 20px; text-align:center;">خلاصه گزارش</h3>
+                    <div class="report-summary-grid">
+                        <div class="summary-card"><div class="summary-card-title">تعداد کل</div><div class="summary-card-value">${toPersianNumbers(filteredChecks.length)}</div></div>
+                        <div class="summary-card"><div class="summary-card-title">مبلغ کل</div><div class="summary-card-value">${totalAmount.toLocaleString('fa-IR')}</div></div>
+                        <div class="summary-card"><div class="summary-card-title">جمع دریافتی</div><div class="summary-card-value" style="color:var(--primary-color);">${receivedAmount.toLocaleString('fa-IR')}</div></div>
+                        <div class="summary-card"><div class="summary-card-title">جمع پرداختی</div><div class="summary-card-value" style="color:var(--warning-color);">${paidAmount.toLocaleString('fa-IR')}</div></div>
+                    </div>
+                </div>                
+                <div class="card">
+                     <h3 style="margin-bottom: 20px; text-align:center;">گزارش تفکیکی وضعیت‌ها</h3>
+                     <div class="details-grid">
+                        ${Object.keys(statusSummary).map(status => `
+                            <div class="detail-item">
+                                <strong>${status}</strong>
+                                <span>${toPersianNumbers(statusSummary[status].count)} چک / ${statusSummary[status].amount.toLocaleString('fa-IR')} ریال</span>
+                            </div>
+                        `).join('')}
+                     </div>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px; text-align:center;">نمودار وضعیت چک‌ها</h3>
+                    <canvas id="report-chart"></canvas>
+                </div>
+                
+                <div class="card">                    <h3 style="margin-bottom: 20px; text-align:center;">لیست چک‌های گزارش</h3>
+                    <div id="report-list-items"></div>
+                </div>
+            `;
+            
+            reportResultsContainer.innerHTML = resultsHTML;
+
+            const listContainer = document.getElementById('report-list-items');
+            listContainer.innerHTML = filteredChecks.map(check => `
+                <div class="check-list-item ${check.checkType}" style="cursor: default; transform: none !important; border-width: 1px 1px 1px 5px; border-left-color: ${check.checkType === 'received' ? 'var(--primary-color)' : 'var(--warning-color)'}; border-right-color: var(--border-color)">
+                    <div class="list-item-main">
+                        <div class="list-item-info">
+                            <div>
+                                <p class="list-item-person">${check.personName}</p>
+                                <p class="list-item-bank">${check.bankName || 'نامشخص'}</p>
+                            </div>
+                        </div>
+                        <div class="list-item-amount">
+                            <p class="list-item-amount-value">${parseInt(check.checkAmount).toLocaleString('fa-IR')}</p>
+                            <p class="list-item-amount-unit">ریال</p>
+                        </div>
+                    </div>
+                    <div class="list-item-footer">
+                        <span class="list-item-date"><i class="fas fa-calendar-alt"></i> <span>سررسید: ${check.dueDateText}</span></span>
+                        <span style="font-weight: 500; padding: 3px 10px; border-radius: 8px; background-color: var(--grey-light); border: 1px solid var(--grey-medium); font-size: 0.85rem;">${check.status}</span>
+                    </div>
+                </div>`).join('');
+            
+            renderReportChart(statusSummary);
+        }
+        
+        function renderReportChart(summaryData) {
+            const ctx = document.getElementById('report-chart')?.getContext('2d');
+            if (!ctx) return;
+                        if (reportChartInstance) {
+                reportChartInstance.destroy();
+            }
+
+            const labels = Object.keys(summaryData);
+            const data = labels.map(label => summaryData[label].count);
+            
+            const statusColors = {
+                'پاس شده': 'rgba(0, 217, 104, 0.8)', 'برگشت خورده': 'rgba(220, 53, 69, 0.8)', 'مسدود شده': 'rgba(220, 53, 69, 0.6)', 'منتقل شده': 'rgba(23, 162, 184, 0.8)', 'ضمانت': 'rgba(255, 193, 7, 0.8)', 'وضعیت نامشخص': 'rgba(108, 117, 125, 0.7)', 'استرداد شده': 'rgba(0, 123, 255, 0.7)', 'مفقود شده': 'rgba(52, 58, 64, 0.7)', 'ابطال شده': 'rgba(108, 117, 125, 0.5)',
+            };
+            const backgroundColors = labels.map(label => statusColors[label] || `rgba(${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)}, 0.7)`);
+
+            reportChartInstance = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'تعداد چک',
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderColor: 'white',
+                        borderWidth: 2                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: { family: "'Vazirmatn', sans-serif", size: 12 }
+                            }
+                        },
+                        tooltip: {
+                             bodyFont: { family: "'Vazirmatn', sans-serif" },
+                            titleFont: { family: "'Vazirmatn', sans-serif" }
+                        }
+                    }
+                }
+            });        }
+        
+        // --- Event Listeners ---
+        navRegisterCheckBtn.addEventListener('click', () => { if (editModeInput.value === '') { resetForm(); } showSection(checkRegistrationSection, navRegisterCheckBtn); });
+        navListChecksBtn.addEventListener('click', () => { resetForm(); showSection(listChecksSection, navListChecksBtn); });
+        navReportsBtn.addEventListener('click', () => { resetForm(); showSection(reportsSection, navReportsBtn); });
+        checkTypeSelector.addEventListener('click', (e) => { if (e.target.classList.contains('type-btn')) { document.querySelector('.type-btn.active').classList.remove('active'); e.target.classList.add('active'); document.getElementById('check-type').value = e.target.dataset.type; updatePersonInfoLabels(e.target.dataset.type); } });
+        personContactsBtn.addEventListener('click', pickContact);
+        personNameInput.addEventListener('input', (e) => { e.target.value = e.target.value.replace(/[^آ-ی\s]/g, ''); });
+        personPhoneInput.addEventListener('input', (e) => { e.target.value = toPersianNumbers(toEnglishNumbers(e.target.value).replace(/\D/g, '')); updateFormActionButtons(); });
+        nationalIdInput.addEventListener('input', (e) => { e.target.value = toPersianNumbers(toEnglishNumbers(e.target.value).replace(/\D/g, '')); });
+        sayadiIdInput.addEventListener('input', (e) => { e.target.value = toPersianNumbers(toEnglishNumbers(e.target.value).replace(/\D/g, '')); });
+        checkSerialInput.addEventListener('input', (e) => { e.target.value = toPersianNumbers(toEnglishNumbers(e.target.value).replace(/[^0-9]/g, '')); });
+
+        // ---------- CHECK AMOUNT LOGIC IMPROVED ----------
+        checkAmountInput.addEventListener('input', (e) => {
+            let value = e.target.value;
+            let numberValueStr = toEnglishNumbers(value).replace(/\D/g, ''); // Correctly remove all non-digits
+
+            if (numberValueStr) {                // Prevent numbers that are too large
+                if (numberValueStr.length > 15) {                    numberValueStr = numberValueStr.slice(0, 15);
+                }
+                const num = parseInt(numberValueStr, 10);
+                e.target.value = toPersianNumbers(num.toLocaleString('en-US'));
+
+                const rialWords = numberToWords(numberValueStr);                amountWordsRial.textContent = `${rialWords} ریال`;
+
+                const tomanValueStr = numberValueStr.length > 1 ? numberValueStr.slice(0, -1) : '0';
+                const tomanWords = numberToWords(tomanValueStr);
+                
+                amountWordsToman.textContent = (tomanValueStr !== '0') ? `${tomanWords} تومان` : '';
+            } else {
+                e.target.value = '';
+                amountWordsRial.textContent = '';
+                amountWordsToman.textContent = '';
+            }
+        });
+
+        issueDateTrigger.addEventListener('click', () => openDatePicker(issueDateTrigger, hiddenIssueDate));
+        dueDateTrigger.addEventListener('click', () => openDatePicker(dueDateTrigger, hiddenDueDate));
+        reportFromDateTrigger.addEventListener('click', () => openDatePicker(reportFromDateTrigger, hiddenReportFromDate));
+        reportToDateTrigger.addEventListener('click', () => openDatePicker(reportToDateTrigger, hiddenReportToDate));
+        
+        [datePopup, timeInputPopup, checkDetailsPopup, checkActionPopup].forEach(popup => { popup.addEventListener('click', (e) => { if (e.target === popup || e.target.closest('.popup-close-btn')) { popup.classList.remove('active'); } }); });
+
+        yearPicker.parentElement.addEventListener('scroll', () => updateDaysColumn(true));
+        monthPicker.parentElement.addEventListener('scroll', () => updateDaysColumn(true));
+        confirmDateBtn.addEventListener('click', () => { if (!activeDatePicker) return; const day = getSelectedValue(dayPicker); const month = getSelectedValue(monthPicker); const year = getSelectedValue(yearPicker); const selectedDate = toGregorian(year, month, day); selectedDate.setHours(0, 0, 0, 0); const isPastRestricted = activeDatePicker.visibleInput !== issueDateTrigger && activeDatePicker.visibleInput !== reportFromDateTrigger && activeDatePicker.visibleInput !== reportToDateTrigger; if (isPastRestricted && selectedDate < todayForValidation) { showToast('انتخاب تاریخ گذشته برای این فیلد ممکن نیست.', true); return; } const { visibleInput, hiddenInput } = activeDatePicker; hiddenInput.value = selectedDate.toISOString().split('T')[0]; visibleInput.value = formatDateNumeric(year, month, day); datePopup.classList.remove('active'); });        dueTimeTrigger.addEventListener('click', () => timeInputPopup.classList.add('active'));
+        
+        timeInputHour.addEventListener('input', (e) => { let v_en = toEnglishNumbers(e.target.value).replace(/\D/g, ''); if (v_en.length > 2) { v_en = v_en.slice(0, 2); } const num = parseInt(v_en, 10); if (v_en.length === 1) { if (num >= 2 && num <= 9) { timeInputMinute.focus(); } } else if (v_en.length === 2) { if (num > 12) { v_en = '12'; } if (num === 0) { v_en = ''; } timeInputMinute.focus(); } e.target.value = toPersianNumbers(v_en); });
+        timeInputMinute.addEventListener('input', (e) => { let v = toEnglishNumbers(e.target.value).replace(/\D/g, ''); if (parseInt(v, 10) > 59) { v = '59'; } if (v.length > 2) { v = v.slice(0, 2); } e.target.value = toPersianNumbers(v); });
+        amPmSelector.addEventListener('click', (e) => { if (e.target.classList.contains('am-pm-btn')) { document.querySelector('.am-pm-btn.active').classList.remove('active'); e.target.classList.add('active'); } });
+        confirmTimeBtn.addEventListener('click', () => { let h = parseInt(toEnglishNumbers(timeInputHour.value), 10); let m = parseInt(toEnglishNumbers(timeInputMinute.value), 10); if (isNaN(h) || isNaN(m) || h > 12 || h < 1 || m > 59 || m < 0) { showToast("ساعت یا دقیقه نامعتبر است.", true); return; } displayHour.textContent = toPersianNumbers(String(h).padStart(2, '0')); displayMinute.textContent = toPersianNumbers(String(m).padStart(2, '0')); dueTimeTrigger.classList.add('active-selection'); const p = amPmSelector.querySelector('.active').dataset.period; if (p === 'PM' && h < 12) { h += 12; } if (p === 'AM' && h === 12) { h = 0; } hiddenTime24h.value = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`; timeInputPopup.classList.remove('active'); });
+        
+        form.addEventListener('submit', (e) => { e.preventDefault(); const formData = new FormData(e.target); const data = Object.fromEntries(formData.entries()); const sayadiValue = toEnglishNumbers(data.sayadiId || ''); if (sayadiValue && sayadiValue.length !== 16) { showToast('شناسه صیادی باید ۱۶ رقم باشد.', true); return; } const phoneValue = toEnglishNumbers(data.personPhone || ''); if (phoneValue && (phoneValue.length !== 11 || !phoneValue.startsWith('09'))) { showToast('شماره تماس باید ۱۱ رقمی و با ۰۹ شروع شود.', true); return; } data.issueDateText = issueDateTrigger.value; data.dueDateText = dueDateTrigger.value; data.checkAmount = toEnglishNumbers(data.checkAmount.replace(/[٬,]/g, '')); if (!data.personName || !data.checkAmount) { showToast('لطفاً نام و مبلغ را وارد کنید.', true); return; } data.status = currentStatusInput.value; if (data.editModeCheckId) { const indexToUpdate = checks.findIndex(c => c.id == data.editModeCheckId); if (indexToUpdate > -1) { const originalId = checks[indexToUpdate].id; checks[indexToUpdate] = { ...data, id: originalId }; showToast('چک با موفقیت ویرایش شد!'); } } else { data.id = Date.now(); checks.unshift(data); scheduleNotification(data); showToast('چک با موفقیت ثبت شد!'); } resetForm(); navListChecksBtn.click(); });        checkListContainer.addEventListener('click', (e) => { const statusBtn = e.target.closest('.status-select-btn'); if (statusBtn) { e.stopPropagation(); closeAllStatusDropdowns(); const checkIndex = parseInt(statusBtn.dataset.checkIndex, 10); const buttonContainer = statusBtn.parentElement; const dropdown = createStatusDropdown(checkIndex); buttonContainer.appendChild(dropdown); dropdown.classList.add('active'); return; } const card = e.target.closest('.check-list-item'); if (card) { const checkIndex = parseInt(card.dataset.checkIndex, 10); openCheckDetailsModal(checkIndex); } });
+        document.addEventListener('click', (e) => { if (!e.target.closest('.status-button-container')) { closeAllStatusDropdowns(); } });
+
+        const pressStart = (e) => { const card = e.target.closest('.check-list-item'); if (!card || e.target.closest('.status-button-container')) return; touchStartX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX; touchStartY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY; pressTimer = setTimeout(() => { pressTimer = null; activeCheckIndex = card.dataset.checkIndex; checkActionPopup.classList.add('active'); }, LONG_PRESS_DURATION); };
+        const pressMove = (e) => { if (!pressTimer) return; const touchX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX; const touchY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY; if (Math.abs(touchX - touchStartX) > MOVE_THRESHOLD || Math.abs(touchY - touchStartY) > MOVE_THRESHOLD) { clearTimeout(pressTimer); pressTimer = null; } };
+        const pressEnd = () => { if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; } };
+
+        checkListContainer.addEventListener('mousedown', pressStart); checkListContainer.addEventListener('touchstart', pressStart, { passive: true }); checkListContainer.addEventListener('mousemove', pressMove); checkListContainer.addEventListener('touchmove', pressMove, { passive: true }); checkListContainer.addEventListener('mouseup', pressEnd); checkListContainer.addEventListener('touchend', pressEnd); checkListContainer.addEventListener('contextmenu', (e) => e.preventDefault()); checkListContainer.addEventListener('mouseleave', () => { if(pressTimer) clearTimeout(pressTimer); });
+        
+        deleteCheckBtn.addEventListener('click', () => { if (activeCheckIndex === null || !checks[activeCheckIndex]) return; const checkToDelete = checks[activeCheckIndex]; const confirmMessage = `آیا از حذف چک "${checkToDelete.personName}" به مبلغ ${parseInt(checkToDelete.checkAmount).toLocaleString('fa-IR')} ریال اطمینان دارید؟`; if (confirm(confirmMessage)) { checks.splice(activeCheckIndex, 1); renderCheckList(); showToast('چک با موفقیت حذف شد.'); checkActionPopup.classList.remove('active'); activeCheckIndex = null; } });
+        editCheckBtn.addEventListener('click', () => { if (activeCheckIndex === null || !checks[activeCheckIndex]) return; const checkToEdit = checks[activeCheckIndex]; resetForm(); editModeInput.value = checkToEdit.id; currentStatusInput.value = checkToEdit.status; document.querySelector(`.type-btn[data-type="${checkToEdit.checkType}"]`).click(); personNameInput.value = checkToEdit.personName || ''; personPhoneInput.value = toPersianNumbers(checkToEdit.personPhone || ''); nationalIdInput.value = toPersianNumbers(checkToEdit.nationalId || ''); bankNameInput.value = checkToEdit.bankName || ''; checkAmountInput.value = toPersianNumbers(parseInt(checkToEdit.checkAmount).toLocaleString('en-US')); checkAmountInput.dispatchEvent(new Event('input', { bubbles: true })); checkSerialInput.value = toPersianNumbers(checkToEdit.checkSerial || ''); sayadiIdInput.value = toPersianNumbers(checkToEdit.sayadiId || ''); issueDateTrigger.value = checkToEdit.issueDateText || ''; hiddenIssueDate.value = checkToEdit.issueDateGregorian || ''; dueDateTrigger.value = checkToEdit.dueDateText || ''; hiddenDueDate.value = checkToEdit.dueDateGregorian || ''; document.getElementById('reminder-days-before').value = checkToEdit.reminderDaysBefore || 'none'; if (checkToEdit.dueTime24h) { const [h, m] = checkToEdit.dueTime24h.split(':'); hiddenTime24h.value = checkToEdit.dueTime24h; displayMinute.textContent = toPersianNumbers(m); let h12 = parseInt(h, 10) % 12; if (h12 === 0) h12 = 12; const period = parseInt(h, 10) >= 12 ? 'PM' : 'AM'; document.querySelector(`.am-pm-btn[data-period="${period}"]`).click(); displayHour.textContent = toPersianNumbers(String(h12).padStart(2, '0')); dueTimeTrigger.classList.add('active-selection'); } updateFormActionButtons(); formSubmitBtn.textContent = 'ویرایش چک'; checkActionPopup.classList.remove('active'); navRegisterCheckBtn.click(); });
+        
+        dateFilterSelect.addEventListener('change', renderCheckList); searchInput.addEventListener('input', renderCheckList);
+        function toggleFilterPanel(show) { if (show) { advancedFilterOverlay.classList.add('active'); } else { advancedFilterOverlay.classList.remove('active'); } }
+        openFilterPanelBtn.addEventListener('click', () => toggleFilterPanel(true));
+        closeFilterPanelBtn.addEventListener('click', () => toggleFilterPanel(false));
+        advancedFilterOverlay.addEventListener('click', (e) => { if (e.target === advancedFilterOverlay) { toggleFilterPanel(false); } });
+        applyFilterBtn.addEventListener('click', () => { renderCheckList(); toggleFilterPanel(false); });
+                generateReportBtn.addEventListener('click', generateReport);
+        
+        // Initial setup calls
+        function updateDateOnDisplay() { const todayDateDisplay = document.getElementById('today-date-display'); const persianDaysOfWeek = ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'جمعه', 'شنبه']; const now = new Date(); const todayJalali = toJalali(now.getFullYear(), now.getMonth() + 1, now.getDate()); const dayOfWeek = persianDaysOfWeek[now.getDay()]; todayDateDisplay.textContent = `${dayOfWeek}، ${toPersianNumbers(todayJalali.day)} ${persianMonths[todayJalali.month - 1]} ${toPersianNumbers(todayJalali.year)}`; }
+        function scheduleDateUpdate() { const now = new Date(); const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0); const msUntilMidnight = tomorrow.getTime() - now.getTime(); setTimeout(() => { updateDateOnDisplay(); setInterval(updateDateOnDisplay, 24 * 60 * 60 * 1000); }, msUntilMidnight); }
+        updateDateOnDisplay();
+        scheduleDateUpdate();        resetForm();
+        populateReportFilters();
+        showSection(checkRegistrationSection, navRegisterCheckBtn);
+        if ('Notification' in window && Notification.permission === 'default') { Notification.requestPermission(); }    });
+    </script>
+</body>
+</html>

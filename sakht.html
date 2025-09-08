@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاسبه هزینه ساخت - دستیار شخصی املاک</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00D968;
+            --primary-light: #4DF5A5;
+            --secondary-color: #00B84B;
+            --dark-color: #008E3A;
+            --light-color: #E6F8EE;
+            --complementary-color: #FF5722;
+            --complementary-light: #FF8A65;
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --complementary-gradient: linear-gradient(135deg, var(--complementary-color), var(--complementary-light));
+            --border-radius: 20px;
+            --button-border-radius: 12px;
+            --border-color: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background-color: #f9f9f9;
+            padding-bottom: 70px;
+        }
+
+        /* هدر */
+        .header {
+            background-color: #ffffff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .location-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .burger-menu {
+            width: 30px;
+            height: 30px;
+            background: var(--gradient);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0, 217, 104, 0.3);
+        }
+
+        .burger-menu span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background-color: #ffffff;
+            border-radius: 2px;
+            margin: 2px 0;
+            transition: var(--transition);
+        }
+
+        .logo-container {
+            height: 22px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* عنوان صفحه */
+        .page-title {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        /* محتوای اصلی */
+        .main-content {
+            padding: 15px;
+            margin: 0 15px 15px;
+        }
+
+        /* کارت محاسبه */
+        .calculator-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title i {
+            color: var(--primary-color);
+        }
+
+        /* فرم محاسبه */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #444;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: white;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23666' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 15px center;
+            padding-left: 35px;
+        }
+
+        .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
+        }
+
+        /* دکمه‌ها */
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--button-border-radius);
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 217, 104, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 217, 104, 0.3);
+        }
+
+        .btn-outline {
+            background: white;
+            color: #666;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-outline:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* نتیجه محاسبه */
+        .result-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .result-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-title i {
+            color: var(--primary-color);
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .result-value {
+            font-weight: 500;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .result-total {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px dashed #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-total-label {
+            color: #333;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .result-total-value {
+            font-weight: 700;
+            color: var(--dark-color);
+            font-size: 16px;
+        }
+
+        /* کارت توضیحات */
+        .info-card {
+            background-color: var(--light-color);
+            border-radius: 12px;
+            padding: 15px;
+            border-right: 4px solid var(--primary-color);
+        }
+
+        .info-card-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+            font-weight: 600;
+            font-size: 15px;
+            gap: 8px;
+        }
+
+        .info-card-title i {
+            color: var(--primary-color);
+        }
+
+        .info-card-content {
+            font-size: 13px;
+            color: #444;
+            line-height: 1.8;
+        }
+
+        .info-card-content ul {
+            padding-right: 20px;
+            margin-top: 10px;
+        }
+
+        .info-card-content li {
+            margin-bottom: 5px;
+        }
+
+        /* نوار پایین */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #999;
+            text-decoration: none;
+            font-size: 10px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 5px 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 3px;
+            color: var(--primary-color);
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        /* استایل منوی همبرگری */
+        .hamburger-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1200;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .hamburger-menu {
+            position: fixed;
+            top: 0;
+            right: -80%;
+            width: 75%;
+            max-width: 360px;
+            height: 100%;
+            background-color: #ffffff;
+            box-shadow: -3px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1300;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hamburger-menu.active {
+            right: 0;
+        }
+
+        .hamburger-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--light-color);
+        }
+
+        .hamburger-logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .hamburger-logo-image {
+            height: 35px;
+        }
+
+        .hamburger-close {
+            width: 36px;
+            height: 36px;
+            background-color: var(--light-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-close:hover {
+            background-color: var(--primary-light);
+        }
+
+        .hamburger-close i {
+            color: #333333;
+            font-size: 18px;
+        }
+
+        .hamburger-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .hamburger-nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #333333;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-nav-item:hover {
+            background-color: var(--light-color);
+            transform: translateX(-5px);
+        }
+
+        .hamburger-nav-item.active {
+            background: var(--gradient);
+            color: #ffffff;
+        }
+
+        .hamburger-nav-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--light-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-nav-item.active .hamburger-nav-icon {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .hamburger-nav-icon i {
+            color: var(--primary-color);
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-nav-item.active .hamburger-nav-icon i {
+            color: #ffffff;
+        }
+
+        .hamburger-nav-text {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .hamburger-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid var(--light-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hamburger-footer-logo {
+            width: 40px;
+            height: auto;
+            margin-bottom: 8px;
+        }
+
+        .hamburger-version {
+            font-size: 12px;
+            color: #666666;
+            text-align: center;
+        }
+
+        /* ریسپانسیو */
+        @media (max-width: 480px) {
+            .main-content {
+                margin: 0 10px 10px;
+            }
+
+            .btn {
+                padding: 10px 15px;
+                font-size: 13px;
+            }
+
+            .form-input,
+            .form-select {
+                padding: 10px 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- منوی همبرگری -->
+    <div class="hamburger-overlay" id="hamburgerOverlay"></div>
+    <div class="hamburger-menu" id="hamburgerMenu">
+        <div class="hamburger-header">
+            <div class="hamburger-logo">
+                <img src="images/logo.png" alt="لوگو" class="hamburger-logo-image">
+            </div>
+            <div class="hamburger-close" id="hamburgerClose">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+
+        <div class="hamburger-nav">
+            <a href="about-app.html" class="hamburger-nav-item">
+                <div class="hamburger-nav-icon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <div class="hamburger-nav-text">درباره برنامه</div>
+            </a>
+
+            <a href="#" class="hamburger-nav-item">
+                <div class="hamburger-nav-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="hamburger-nav-text">درباره ما</div>
+            </a>
+
+            <a href="contact.html" class="hamburger-nav-item">
+                <div class="hamburger-nav-icon">
+                    <i class="fas fa-phone-alt"></i>
+                </div>
+                <div class="hamburger-nav-text">راه‌های ارتباطی</div>
+            </a>
+
+            <a href="#" class="hamburger-nav-item">
+                <div class="hamburger-nav-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <div class="hamburger-nav-text">تنظیمات</div>
+            </a>
+
+            <a href="admin.html" class="hamburger-nav-item">
+                <div class="hamburger-nav-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div class="hamburger-nav-text">ادمین</div>
+            </a>
+
+            <a href="favorites.html" class="hamburger-nav-item">
+                <div class="hamburger-nav-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <div class="hamburger-nav-text">علاقه‌مندی‌ها</div>
+            </a>
+        </div>
+
+        <div class="hamburger-footer">
+            <img src="images/logo.png" alt="لوگو" class="hamburger-footer-logo">
+            <div class="hamburger-version">نسخه 1.0.0</div>
+        </div>
+    </div>
+
+    <!-- هدر -->
+    <header class="header">
+        <div class="location-container">
+            <div class="burger-menu" id="burgerMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <div class="logo-container">
+            <img src="images/logo.png" alt="">
+        </div>
+    </header>
+
+    <h1 class="page-title">محاسبه هزینه ساخت</h1>
+
+    <div class="main-content">
+        <!-- کارت محاسبه -->
+        <div class="calculator-card">
+            <h2 class="card-title">
+                <i class="fas fa-calculator"></i>
+                <span>محاسبه هزینه ساخت و ساز</span>
+            </h2>
+
+            <form id="constructionForm">
+                <div class="form-group">
+                    <label class="form-label">متراژ زمین (متر مربع)</label>
+                    <input type="number" class="form-input" id="landArea" placeholder="مثال: 200" min="1">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">تعداد طبقات</label>
+                    <input type="number" class="form-input" id="floors" placeholder="مثال: 4" min="1" max="20">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">نوع سازه</label>
+                    <select class="form-select" id="structureType">
+                        <option value="">انتخاب کنید</option>
+                        <option value="concrete">بتنی</option>
+                        <option value="steel">فلزی</option>
+                        <option value="brick">آجری</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">کیفیت ساخت</label>
+                    <select class="form-select" id="quality">
+                        <option value="">انتخاب کنید</option>
+                        <option value="luxury">لوکس</option>
+                        <option value="high">بالا</option>
+                        <option value="medium">متوسط</option>
+                        <option value="economic">اقتصادی</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">منطقه</label>
+                    <select class="form-select" id="region">
+                        <option value="">انتخاب کنید</option>
+                        <option value="north">شمال شهر</option>
+                        <option value="center">مرکز شهر</option>
+                        <option value="south">جنوب شهر</option>
+                        <option value="east">شرق شهر</option>
+                        <option value="west">غرب شهر</option>
+                    </select>
+                </div>
+
+                <div class="btn-container">
+                    <button type="button" class="btn btn-outline" id="resetBtn">
+                        <i class="fas fa-eraser"></i>
+                        <span>پاک کردن</span>
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="calculateBtn">
+                        <i class="fas fa-calculator"></i>
+                        <span>محاسبه هزینه</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- نتیجه محاسبه -->
+        <div class="result-container" id="resultContainer">
+            <h2 class="result-title">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <span>نتیجه محاسبه هزینه ساخت</span>
+            </h2>
+
+            <div class="result-item">
+                <div class="result-label">متراژ کل بنا</div>
+                <div class="result-value" id="totalArea">-</div>
+            </div>
+
+            <div class="result-item">
+                <div class="result-label">هزینه پایه ساخت (هر متر مربع)</div>
+                <div class="result-value" id="baseCost">-</div>
+            </div>
+
+            <div class="result-item">
+                <div class="result-label">هزینه مصالح</div>
+                <div class="result-value" id="materialsCost">-</div>
+            </div>
+
+            <div class="result-item">
+                <div class="result-label">هزینه دستمزد</div>
+                <div class="result-value" id="laborCost">-</div>
+            </div>
+
+            <div class="result-item">
+                <div class="result-label">هزینه نظارت و مهندسی</div>
+                <div class="result-value" id="engineeringCost">-</div>
+            </div>
+
+            <div class="result-item">
+                <div class="result-label">هزینه مجوزها و پروانه ساخت</div>
+                <div class="result-value" id="permitCost">-</div>
+            </div>
+
+            <div class="result-total">
+                <div class="result-total-label">جمع کل هزینه ساخت</div>
+                <div class="result-total-value" id="totalCost">-</div>
+            </div>
+        </div>
+
+        <!-- کارت توضیحات -->
+        <div class="info-card">
+            <div class="info-card-title">
+                <i class="fas fa-info-circle"></i>
+                <span>نکات مهم</span>
+            </div>
+            <div class="info-card-content">
+                <p>محاسبات انجام شده تقریبی بوده و بر اساس میانگین قیمت‌های سال ۱۴۰۴ می‌باشد. هزینه‌های واقعی ممکن است با توجه به عوامل زیر متفاوت باشد:</p>
+                <ul>
+                    <li>نوسانات قیمت مصالح ساختمانی</li>
+                    <li>تغییرات دستمزد نیروی کار</li>
+                    <li>طراحی خاص و جزئیات معماری</li>
+                    <li>تجهیزات و امکانات ویژه</li>
+                    <li>شرایط زمین و خاک منطقه</li>
+                </ul>
+                <p>برای محاسبه دقیق‌تر، توصیه می‌شود با مهندسین مشاور و پیمانکاران ساختمانی مشورت نمایید.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- نوار پایین -->
+    <div class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>خانه</span>
+        </a>
+        <a href="index.html" class="nav-item" id="showAllToolsBtn">
+            <i class="fas fa-th-large"></i>
+            <span>همه ابزارها</span>
+        </a>
+        <a href="favorites.html" class="nav-item">
+            <i class="fas fa-heart"></i>
+            <span>علاقه‌مندی‌ها</span>
+        </a>
+    </div>
+
+    <script>
+        // باز و بسته کردن منوی همبرگری
+        const burgerMenu = document.getElementById('burgerMenu');
+        const hamburgerMenu = document.getElementById('hamburgerMenu');
+        const hamburgerOverlay = document.getElementById('hamburgerOverlay');
+        const hamburgerClose = document.getElementById('hamburgerClose');
+
+        burgerMenu.addEventListener('click', function() {
+            hamburgerMenu.classList.add('active');
+            hamburgerOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        function closeHamburgerMenu() {
+            hamburgerMenu.classList.remove('active');
+            hamburgerOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        hamburgerClose.addEventListener('click', closeHamburgerMenu);
+        hamburgerOverlay.addEventListener('click', closeHamburgerMenu);
+
+        // فرم محاسبه
+        const constructionForm = document.getElementById('constructionForm');
+        const landArea = document.getElementById('landArea');
+        const floors = document.getElementById('floors');
+        const structureType = document.getElementById('structureType');
+        const quality = document.getElementById('quality');
+        const region = document.getElementById('region');
+        const resetBtn = document.getElementById('resetBtn');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const resultContainer = document.getElementById('resultContainer');
+
+        // فیلدهای نتیجه
+        const totalArea = document.getElementById('totalArea');
+        const baseCost = document.getElementById('baseCost');
+        const materialsCost = document.getElementById('materialsCost');
+        const laborCost = document.getElementById('laborCost');
+        const engineeringCost = document.getElementById('engineeringCost');
+        const permitCost = document.getElementById('permitCost');
+        const totalCost = document.getElementById('totalCost');
+
+        // ریست کردن فرم
+        resetBtn.addEventListener('click', function() {
+            constructionForm.reset();
+            resultContainer.classList.remove('active');
+        });
+
+        // محاسبه هزینه
+        constructionForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // بررسی اعتبار فرم
+            if (!validateForm()) {
+                alert('لطفاً تمام فیلدها را به درستی پر کنید.');
+                return;
+            }
+            
+            // محاسبات
+            calculateCosts();
+            
+            // نمایش نتایج
+            resultContainer.classList.add('active');
+            
+            // اسکرول به نتایج
+            resultContainer.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // اعتبارسنجی فرم
+        function validateForm() {
+            if (!landArea.value || landArea.value <= 0) return false;
+            if (!floors.value || floors.value <= 0) return false;
+            if (!structureType.value) return false;
+            if (!quality.value) return false;
+            if (!region.value) return false;
+            
+            return true;
+        }
+
+        // محاسبه هزینه‌ها
+        function calculateCosts() {
+            // محاسبه متراژ کل
+            const totalAreaValue = parseFloat(landArea.value) * parseFloat(floors.value);
+            
+            // قیمت پایه بر اساس نوع سازه
+            let basePrice = 0;
+            switch (structureType.value) {
+                case 'concrete':
+                    basePrice = 12000000; // بتنی
+                    break;
+                case 'steel':
+                    basePrice = 10500000; // فلزی
+                    break;
+                case 'brick':
+                    basePrice = 8500000; // آجری
+                    break;
+            }
+            
+            // ضریب کیفیت
+            let qualityFactor = 1;
+            switch (quality.value) {
+                case 'luxury':
+                    qualityFactor = 1.8; // لوکس
+                    break;
+                case 'high':
+                    qualityFactor = 1.4; // بالا
+                    break;
+                case 'medium':
+                    qualityFactor = 1; // متوسط
+                    break;
+                case 'economic':
+                    qualityFactor = 0.8; // اقتصادی
+                    break;
+            }
+            
+            // ضریب منطقه
+            let regionFactor = 1;
+            switch (region.value) {
+                case 'north':
+                    regionFactor = 1.3; // شمال شهر
+                    break;
+                case 'center':
+                    regionFactor = 1.1; // مرکز شهر
+                    break;
+                case 'west':
+                    regionFactor = 1.2; // غرب شهر
+                    break;
+                case 'east':
+                    regionFactor = 1; // شرق شهر
+                    break;
+                case 'south':
+                    regionFactor = 0.9; // جنوب شهر
+                    break;
+            }
+            
+            // محاسبه قیمت پایه با اعمال ضرایب
+            const finalBasePrice = basePrice * qualityFactor * regionFactor;
+            
+            // محاسبه هزینه‌های مختلف
+            const materialsValue = totalAreaValue * finalBasePrice * 0.6; // مصالح حدود 60% هزینه
+            const laborValue = totalAreaValue * finalBasePrice * 0.25; // دستمزد حدود 25% هزینه
+            const engineeringValue = totalAreaValue * finalBasePrice * 0.08; // مهندسی حدود 8% هزینه
+            const permitValue = totalAreaValue * finalBasePrice * 0.07; // مجوزها حدود 7% هزینه
+            
+            // محاسبه کل هزینه
+            const totalValue = materialsValue + laborValue + engineeringValue + permitValue;
+            
+            // نمایش نتایج
+            totalArea.textContent = totalAreaValue.toLocaleString() + ' متر مربع';
+            baseCost.textContent = formatPrice(finalBasePrice) + ' تومان';
+            materialsCost.textContent = formatPrice(materialsValue) + ' تومان';
+            laborCost.textContent = formatPrice(laborValue) + ' تومان';
+            engineeringCost.textContent = formatPrice(engineeringValue) + ' تومان';
+            permitCost.textContent = formatPrice(permitValue) + ' تومان';
+            totalCost.textContent = formatPrice(totalValue) + ' تومان';
+        }
+
+        // فرمت قیمت
+        function formatPrice(price) {
+            return Math.round(price).toLocaleString();
+        }
+    </script>
+</body>
+
+</html>

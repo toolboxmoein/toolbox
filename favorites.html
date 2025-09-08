@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>علاقه‌مندی‌ها - دستیار شخصی املاک</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00D968;
+            --primary-light: #4DF5A5;
+            --secondary-color: #00B84B;
+            --dark-color: #008E3A;
+            --light-color: #E6F8EE;
+            --complementary-color: #FF5722; /* رنگ مکمل سبز (نارنجی/قرمز) */
+            --complementary-light: #FF8A65;
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --complementary-gradient: linear-gradient(135deg, var(--complementary-color), var(--complementary-light));
+            --border-radius: 20px;
+            --button-border-radius: 12px;
+            --border-color: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background-color: #f9f9f9;
+            padding-bottom: 70px; /* فاصله برای منوی پایین */
+        }
+
+        /* هدر با استایل اپلیکیشن غذا */
+        .header {
+            background-color: #ffffff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .location-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .location-icon {
+            color: var(--primary-color);
+            margin-left: 5px;
+            font-size: 18px;
+        }
+
+        /* منوی همبرگری جدید */
+        .burger-menu {
+            width: 30px;
+            height: 30px;
+            background: var(--gradient);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0, 217, 104, 0.3);
+        }
+
+        .burger-menu:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 217, 104, 0.4);
+        }
+
+        .burger-menu span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background-color: #ffffff;
+            border-radius: 2px;
+            margin: 2px 0;
+            transition: var(--transition);
+        }
+
+        .burger-menu:hover span {
+            width: 20px;
+        }
+
+        /* لوگو - نمایش کامل بدون ماسک */
+        .logo-container {
+            height: 22px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* عنوان صفحه */
+        .page-title {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        /* پیام خالی بودن */
+        .empty-message {
+            text-align: center;
+            padding: 30px 15px;
+            color: #666;
+            font-size: 15px;
+            display: none;
+        }
+
+        .empty-message i {
+            font-size: 40px;
+            color: #ccc;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        /* محاسبات - سه دکمه در هر ردیف */
+        .favorites-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 0 15px;
+            margin-bottom: 15px;
+        }
+
+        .favorite-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            background-color: white;
+            padding: 12px 8px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .favorite-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .favorite-image {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: var(--light-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .favorite-name {
+            font-size: 11px;
+            color: #333;
+            text-align: center;
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        /* آیکون علاقه‌مندی */
+        .favorite-icon {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 25px;
+            height: 25px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .favorite-icon i {
+            color: #FF5722;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .favorite-icon:hover {
+            background-color: rgba(255, 255, 255, 1);
+            transform: scale(1.1);
+        }
+
+        /* پیام برای دکمه‌های غیرفعال و علاقه‌مندی */
+        .toast-message {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            text-align: center;
+            max-width: 80%;
+        }
+
+        .toast-message.show {
+            opacity: 1;
+        }
+
+        /* نوار پایین - دکمه‌های مربعی با لبه‌های گرد */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #999;
+            text-decoration: none;
+            font-size: 10px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 5px 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 3px;
+            color: var(--primary-color);
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        /* استایل منوی همبرگری */
+        .hamburger-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1200;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .hamburger-menu {
+            position: fixed;
+            top: 0;
+            right: -80%;
+            width: 75%;
+            max-width: 360px;
+            height: 100%;
+            background-color: #ffffff;
+            box-shadow: -3px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1300;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hamburger-menu.active {
+            right: 0;
+        }
+
+        .hamburger-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--light-color);
+        }
+
+        .hamburger-logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .hamburger-logo-image {
+            height: 35px;
+        }
+
+        .hamburger-close {
+            width: 36px;
+            height: 36px;
+            background-color: var(--light-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-close:hover {
+            background-color: var(--primary-light);
+        }
+
+        .hamburger-close i {
+            color: #333333;
+            font-size: 18px;
+        }
+
+        .hamburger-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .hamburger-nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #333333;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-nav-item:hover {
+            background-color: var(--light-color);
+            transform: translateX(-5px);
+        }
+
+        .hamburger-nav-item.active {
+            background: var(--gradient);
+            color: #ffffff;
+        }
+
+        .hamburger-nav-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--light-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-nav-item.active .hamburger-nav-icon {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .hamburger-nav-icon i {
+            color: var(--primary-color);
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-nav-item.active .hamburger-nav-icon i {
+            color: #ffffff;
+        }
+
+        .hamburger-nav-text {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .hamburger-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid var(--light-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hamburger-footer-logo {
+            width: 40px;
+            height: auto;
+            margin-bottom: 8px;
+        }
+
+        .hamburger-version {
+            font-size: 12px;
+            color: #666666;
+            text-align: center;
+        }
+
+        /* ریسپانسیو */
+        @media (max-width: 480px) {
+            .favorite-image {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .favorite-name {
+                font-size: 10px;
+            }
+
+            .favorite-item {
+                padding: 10px 6px;
+            }
+
+            .favorite-icon {
+                width: 22px;
+                height: 22px;
+                top: 3px;
+                right: 3px;
+            }
+
+            .favorite-icon i {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- منوی همبرگری -->
+    <div class="hamburger-overlay" id="hamburgerOverlay"></div>
+    <div class="hamburger-menu" id="hamburgerMenu">
+        <div class="hamburger-header">
+            <div class="hamburger-logo">
+                <img src="images/logo.png" alt="لوگو" class="hamburger-logo-image">
+            </div>
+            <div class="hamburger-close" id="hamburgerClose">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+
+        <div class="hamburger-nav">
+            <a href="about-app.html" class="hamburger-nav-item">
+                <div class="hamburger-nav-icon">
+                    <i class="fas fa-info-circle"></i>
+                </div>
+                <div class="hamburger-nav-text">درباره برنامه</div>
+            </a>
+
+            <a href="#" class="hamburger-nav-item">
+                <div class="hamburger-nav-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="hamburger-nav-text">درباره ما</div>
+            </a>
+
+            <a href="contact.html" class="hamburger-nav-item">
+                <div class="hamburger-nav-icon">
+                    <i class="fas fa-phone-alt"></i>
+                </div>
+                <div class="hamburger-nav-text">راه‌های ارتباطی</div>
+            </a>
+
+            <a href="#" class="hamburger-nav-item">
+                <div class="hamburger-nav-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <div class="hamburger-nav-text">تنظیمات</div>
+            </a>
+
+            <a href="admin.html" class="hamburger-nav-item">
+                <div class="hamburger-nav-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div class="hamburger-nav-text">ادمین</div>
+            </a>
+
+            <a href="favorites.html" class="hamburger-nav-item active">
+                <div class="hamburger-nav-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <div class="hamburger-nav-text">علاقه‌مندی‌ها</div>
+            </a>
+        </div>
+
+        <div class="hamburger-footer">
+            <img src="images/logo.png" alt="لوگو" class="hamburger-footer-logo">
+            <div class="hamburger-version">نسخه 1.0.0</div>
+        </div>
+    </div>
+
+    <!-- پیام علاقه‌مندی -->
+    <div class="toast-message" id="favoriteToast">
+        <!-- پیام توسط JS تنظیم می‌شود -->
+    </div>
+
+    <!-- هدر با استایل اپلیکیشن غذا -->
+    <header class="header">
+        <div class="location-container">
+            <div class="burger-menu" id="burgerMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <div class="logo-container">
+            <img src="images/logo.png" alt="">
+        </div>
+    </header>
+
+    <h1 class="page-title">علاقه‌مندی‌های من</h1>
+
+    <!-- پیام خالی بودن -->
+    <div class="empty-message" id="emptyMessage">
+        <i class="fas fa-heart-broken"></i>
+        <p>هیچ موردی در علاقه‌مندی‌ها وجود ندارد</p>
+    </div>
+
+    <!-- لیست علاقه‌مندی‌ها -->
+    <div class="favorites-container" id="favoritesContainer">
+        <!-- آیتم‌ها به صورت پویا اضافه می‌شوند -->
+    </div>
+
+    <!-- نوار پایین - منوی پایین -->
+    <div class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>خانه</span>
+        </a>
+        <a href="index.html" class="nav-item" id="showAllToolsBtn">
+            <i class="fas fa-th-large"></i>
+            <span>همه ابزارها</span>
+        </a>
+        <a href="favorites.html" class="nav-item active">
+            <i class="fas fa-heart"></i>
+            <span>علاقه‌مندی‌ها</span>
+        </a>
+    </div>
+
+    <script>
+        // تعریف داده‌های ابزارها
+        const toolsData = {
+            // محاسبات
+            'calc1': {
+                name: 'قیمت آپارتمان',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="apartmentGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><rect x="13" y="8" width="44" height="54" rx="3" fill="url(#apartmentGradient)"/><rect x="19" y="15" width="10" height="10" rx="2" fill="#ffffff" opacity="0.8"/><rect x="41" y="15" width="10" height="10" rx="2" fill="#ffffff" opacity="0.8"/><rect x="19" y="30" width="10" height="10" rx="2" fill="#ffffff" opacity="0.8"/><rect x="41" y="30" width="10" height="10" rx="2" fill="#ffffff" opacity="0.8"/><rect x="19" y="45" width="10" height="10" rx="2" fill="#ffffff" opacity="0.8"/><rect x="41" y="45" width="10" height="10" rx="2" fill="#ffffff" opacity="0.8"/></svg>',
+                url: 'apartment-calculator.html',
+                category: 'calc'
+            },
+            'calc2': {
+                name: 'قیمت ویلا',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="villaGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><polygon points="35,8 10,30 60,30" fill="url(#villaGradient)"/><rect x="15" y="30" width="40" height="32" fill="url(#villaGradient)"/><rect x="25" y="40" width="20" height="22" rx="2" fill="#ffffff" opacity="0.8"/><rect x="30" y="45" width="10" height="17" fill="#ffffff" opacity="0.6"/></svg>',
+                url: 'villa-calculator.html',
+                category: 'calc'
+            },
+            'calc9': {
+                name: 'قدرالسهم آپارتمان',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="shareGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><circle cx="35" cy="35" r="25" fill="url(#shareGradient)"/><path d="M25 25 L45 25 L45 35 L35 35 L35 45 L25 45 Z" fill="#ffffff" opacity="0.8"/><rect x="30" y="30" width="8" height="8" fill="#ffffff" opacity="0.6"/></svg>',
+                url: 'apartment-share-calculator.html',
+                category: 'calc'
+            },
+            'calc10': {
+                name: 'قیمت کل آپارتمان',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="totalPriceGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><circle cx="35" cy="35" r="25" fill="url(#totalPriceGradient)"/><rect x="20" y="25" width="30" height="20" rx="3" fill="#ffffff" opacity="0.8"/><circle cx="27" cy="32" r="2" fill="#ffffff" opacity="0.6"/><circle cx="35" cy="32" r="2" fill="#ffffff" opacity="0.6"/><circle cx="43" cy="32" r="2" fill="#ffffff" opacity="0.6"/><rect x="25" y="38" width="20" height="2" rx="1" fill="#ffffff" opacity="0.6"/></svg>',
+                url: '#',
+                category: 'calc',
+                comingSoon: true
+            },
+            'calc4': {
+                name: 'تبدیل رهن و اجاره',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="convertGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><circle cx="35" cy="35" r="25" fill="url(#convertGradient)"/><path d="M25 30 L35 20 L45 30 M35 20 L35 50" stroke="#ffffff" stroke-width="3" fill="none" opacity="0.8"/><path d="M45 40 L35 50 L25 40 M35 50 L35 20" stroke="#ffffff" stroke-width="3" fill="none" opacity="0.8"/></svg>',
+                url: 'rent-converter.html',
+                category: 'calc'
+            },
+            'calc5': {
+                name: 'محاسبه کمیسیون',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="commissionGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><circle cx="35" cy="35" r="25" fill="url(#commissionGradient)"/><text x="35" y="42" text-anchor="middle" font-size="20" font-weight="bold" fill="#ffffff" opacity="0.8">%</text></svg>',
+                url: 'commission-calculator.html',
+                category: 'calc'
+            },
+            'calc6': {
+                name: 'محاسبه هزینه ساخت',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="constructionGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><circle cx="35" cy="35" r="25" fill="url(#constructionGradient)"/><path d="M25 40 L35 25 L45 40 L40 40 L40 50 L30 50 L30 40 Z" fill="#ffffff" opacity="0.8"/><rect x="32" y="42" width="6" height="8" fill="#ffffff" opacity="0.6"/></svg>',
+                url: '#',
+                category: 'calc',
+                comingSoon: true
+            },
+            'calc7': {
+                name: 'محاسبه قیمت اجاره',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="rentGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><circle cx="35" cy="35" r="25" fill="url(#rentGradient)"/><path d="M25 30 L35 20 L45 30 L40 30 L40 45 L30 45 L30 30 Z" fill="#ffffff" opacity="0.8"/><rect x="32" y="35" width="6" height="10" fill="#ffffff" opacity="0.6"/></svg>',
+                url: '#',
+                category: 'calc',
+                comingSoon: true
+            },
+            'calc11': {
+                name: 'حسابداری',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="accountingGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><circle cx="35" cy="35" r="25" fill="url(#accountingGradient)"/><path d="M20 25 L50 25 L50 45 L20 45 Z" fill="#ffffff" opacity="0.8"/><path d="M25 30 L45 30 M25 35 L45 35 M25 40 L45 40" stroke="url(#accountingGradient)" stroke-width="2"/><circle cx="35" cy="20" r="3" fill="#ffffff" opacity="0.8"/></svg>',
+                url: '#',
+                category: 'calc',
+                comingSoon: true
+            },
+            
+            // استعلامات
+            'inquiry1': {
+                name: 'استعلام سند',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="documentGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><rect x="20" y="10" width="30" height="40" rx="3" fill="url(#documentGradient)"/><rect x="25" y="18" width="20" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="25" y="25" width="15" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="25" y="32" width="18" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="25" y="39" width="12" height="2" rx="1" fill="#ffffff" opacity="0.8"/></svg>',
+                url: '#',
+                category: 'inquiry',
+                comingSoon: true
+            },
+            'inquiry2': {
+                name: 'استعلام وکالتنامه',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="powerOfAttorneyGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><rect x="18" y="12" width="34" height="46" rx="3" fill="url(#powerOfAttorneyGradient)"/><rect x="23" y="20" width="24" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="23" y="27" width="18" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="23" y="34" width="21" height="2" rx="1" fill="#ffffff" opacity="0.8"/><circle cx="35" cy="45" r="6" fill="#ffffff" opacity="0.3"/><path d="M32 45 L34 47 L38 43" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.8"/></svg>',
+                url: '#',
+                category: 'inquiry',
+                comingSoon: true
+            },
+            'inquiry3': {
+                name: 'استعلام چک',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="checkInquiryGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><rect x="15" y="25" width="40" height="20" rx="3" fill="url(#checkInquiryGradient)"/><rect x="20" y="30" width="15" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="20" y="35" width="10" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="20" y="40" width="12" height="2" rx="1" fill="#ffffff" opacity="0.8"/><circle cx="45" cy="35" r="5" fill="#ffffff" opacity="0.3"/><path d="M42 35 L44 37 L48 33" stroke="url(#checkInquiryGradient)" stroke-width="2" fill="none"/></svg>',
+                url: '#',
+                category: 'inquiry',
+                comingSoon: true
+            },
+            'inquiry4': {
+                name: 'استعلام کد پستی',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="postalCodeInquiryGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><circle cx="35" cy="35" r="25" fill="url(#postalCodeInquiryGradient)"/><rect x="25" y="20" width="20" height="30" rx="3" fill="#ffffff" opacity="0.8"/><rect x="28" y="25" width="14" height="2" rx="1" fill="url(#postalCodeInquiryGradient)" opacity="0.6"/><rect x="28" y="30" width="10" height="2" rx="1" fill="url(#postalCodeInquiryGradient)" opacity="0.6"/><rect x="28" y="35" width="12" height="2" rx="1" fill="url(#postalCodeInquiryGradient)" opacity="0.6"/><rect x="28" y="40" width="8" height="2" rx="1" fill="url(#postalCodeInquiryGradient)" opacity="0.6"/><rect x="28" y="45" width="14" height="2" rx="1" fill="url(#postalCodeInquiryGradient)" opacity="0.6"/></svg>',
+                url: '#',
+                category: 'inquiry',
+                comingSoon: true
+            },
+            'inquiry5': {
+                name: 'ثبت چک',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="checkRegistrationGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><rect x="15" y="25" width="40" height="20" rx="3" fill="url(#checkRegistrationGradient)"/><rect x="20" y="30" width="15" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="20" y="35" width="10" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="20" y="40" width="12" height="2" rx="1" fill="#ffffff" opacity="0.8"/><path d="M40 30 L45 35 L50 25" stroke="#ffffff" stroke-width="3" fill="none" opacity="0.8"/></svg>',
+                url: '#',
+                category: 'inquiry',
+                comingSoon: true
+            },
+            
+            // خدمات
+            'service1': {
+                name: 'سپردن ملک',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="handshakeGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><circle cx="35" cy="35" r="25" fill="url(#handshakeGradient)"/><path d="M20 35 L30 30 L40 35 L50 30" stroke="#ffffff" stroke-width="4" fill="none" opacity="0.8"/><circle cx="25" cy="35" r="3" fill="#ffffff" opacity="0.8"/><circle cx="45" cy="35" r="3" fill="#ffffff" opacity="0.8"/></svg>',
+                url: '#',
+                category: 'service',
+                comingSoon: true
+            },
+            'service2': {
+                name: 'مشاوره رایگان',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="consultationGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><circle cx="35" cy="35" r="25" fill="url(#consultationGradient)"/><circle cx="30" cy="30" r="8" fill="#ffffff" opacity="0.3"/><circle cx="40" cy="30" r="8" fill="#ffffff" opacity="0.3"/><path d="M25 45 Q35 50 45 45" stroke="#ffffff" stroke-width="3" fill="none" opacity="0.8"/></svg>',
+                url: '#',
+                category: 'service',
+                comingSoon: true
+            },
+            'service3': {
+                name: 'قراردادها',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="contractGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><rect x="18" y="12" width="34" height="46" rx="3" fill="url(#contractGradient)"/><rect x="23" y="20" width="24" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="23" y="27" width="18" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="23" y="34" width="21" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="23" y="41" width="15" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="23" y="48" width="20" height="2" rx="1" fill="#ffffff" opacity="0.8"/></svg>',
+                url: '#',
+                category: 'service',
+                comingSoon: true
+            },
+            'service4': {
+                name: 'اخبار ملکی',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="newsGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><rect x="15" y="15" width="40" height="40" rx="3" fill="url(#newsGradient)"/><rect x="20" y="22" width="30" height="4" rx="2" fill="#ffffff" opacity="0.8"/><rect x="20" y="30" width="20" height="2" rx="1" fill="#ffffff" opacity="0.6"/><rect x="20" y="35" width="25" height="2" rx="1" fill="#ffffff" opacity="0.6"/><rect x="20" y="40" width="18" height="2" rx="1" fill="#ffffff" opacity="0.6"/><rect x="20" y="45" width="22" height="2" rx="1" fill="#ffffff" opacity="0.6"/></svg>',
+                url: 'akhbar-melki.html',
+                category: 'service'
+            },
+            'service5': {
+                name: 'مشتریان',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="customersGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><circle cx="35" cy="35" r="25" fill="url(#customersGradient)"/><circle cx="25" cy="30" r="6" fill="#ffffff" opacity="0.8"/><circle cx="45" cy="30" r="6" fill="#ffffff" opacity="0.8"/><circle cx="35" cy="45" r="6" fill="#ffffff" opacity="0.8"/><path d="M20 40 Q25 35 30 40 M40 40 Q45 35 50 40 M30 50 Q35 45 40 50" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.6"/></svg>',
+                url: '#',
+                category: 'service',
+                comingSoon: true
+            },
+            'service6': {
+                name: 'قیمت بازار',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="marketPriceGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><circle cx="35" cy="35" r="25" fill="url(#marketPriceGradient)"/><path d="M15 45 L25 35 L35 40 L45 25 L55 30" stroke="#ffffff" stroke-width="3" fill="none" opacity="0.8"/><circle cx="25" cy="35" r="2" fill="#ffffff" opacity="0.8"/><circle cx="35" cy="40" r="2" fill="#ffffff" opacity="0.8"/><circle cx="45" cy="25" r="2" fill="#ffffff" opacity="0.8"/></svg>',
+                url: 'gheymat.bazar.html',
+                category: 'service'
+            },
+            'service9': {
+                name: 'فایل‌ها و فرم‌ها',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="filesGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><circle cx="35" cy="35" r="25" fill="url(#filesGradient)"/><rect x="25" y="20" width="20" height="25" rx="2" fill="#ffffff" opacity="0.8"/><rect x="28" y="25" width="14" height="2" rx="1" fill="url(#filesGradient)" opacity="0.6"/><rect x="28" y="30" width="10" height="2" rx="1" fill="url(#filesGradient)" opacity="0.6"/><rect x="28" y="35" width="12" height="2" rx="1" fill="url(#filesGradient)" opacity="0.6"/><rect x="28" y="40" width="8" height="2" rx="1" fill="url(#filesGradient)" opacity="0.6"/></svg>',
+                url: '#',
+                category: 'service',
+                comingSoon: true
+            },
+            'service10': {
+                name: 'ثبت فاکتور',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="invoiceGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><rect x="18" y="15" width="34" height="40" rx="3" fill="url(#invoiceGradient)"/><rect x="23" y="20" width="24" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="23" y="27" width="18" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="23" y="34" width="24" height="1" rx="0.5" fill="#ffffff" opacity="0.8"/><rect x="23" y="40" width="24" height="1" rx="0.5" fill="#ffffff" opacity="0.8"/><rect x="23" y="46" width="24" height="1" rx="0.5" fill="#ffffff" opacity="0.8"/></svg>',
+                url: '#',
+                category: 'service',
+                comingSoon: true
+            },
+            'service11': {
+                name: 'یادداشت‌ها',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="notesGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><rect x="18" y="15" width="34" height="40" rx="3" fill="url(#notesGradient)"/><rect x="23" y="20" width="24" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="23" y="27" width="18" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="23" y="34" width="21" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="23" y="41" width="15" height="2" rx="1" fill="#ffffff" opacity="0.8"/><rect x="23" y="48" width="20" height="2" rx="1" fill="#ffffff" opacity="0.8"/></svg>',
+                url: '#',
+                category: 'service',
+                comingSoon: true
+            },
+            
+            // سایت‌ها
+            'website1': {
+                name: 'سایت خودنویس',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="website1Gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><circle cx="35" cy="35" r="25" fill="url(#website1Gradient)"/><rect x="20" y="25" width="30" height="20" rx="2" fill="#ffffff" opacity="0.8"/><rect x="25" y="30" width="20" height="2" rx="1" fill="url(#website1Gradient)" opacity="0.6"/><rect x="25" y="35" width="15" height="2" rx="1" fill="url(#website1Gradient)" opacity="0.6"/><rect x="25" y="40" width="12" height="2" rx="1" fill="url(#website1Gradient)" opacity="0.6"/></svg>',
+                url: '#',
+                category: 'website',
+                comingSoon: true
+            },
+            'website2': {
+                name: 'سایت دارایی',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="website2Gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><circle cx="35" cy="35" r="25" fill="url(#website2Gradient)"/><path d="M20 30 L35 20 L50 30 L50 45 L20 45 Z" fill="#ffffff" opacity="0.8"/><rect x="30" y="35" width="10" height="10" rx="1" fill="url(#website2Gradient)" opacity="0.6"/></svg>',
+                url: '#',
+                category: 'website',
+                comingSoon: true
+            },
+            'website3': {
+                name: 'سایت ثبت اسناد',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="website3Gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><circle cx="35" cy="35" r="25" fill="url(#website3Gradient)"/><rect x="22" y="20" width="26" height="30" rx="2" fill="#ffffff" opacity="0.8"/><rect x="25" y="25" width="20" height="2" rx="1" fill="url(#website3Gradient)" opacity="0.6"/><rect x="25" y="30" width="15" height="2" rx="1" fill="url(#website3Gradient)" opacity="0.6"/><rect x="25" y="35" width="18" height="2" rx="1" fill="url(#website3Gradient)" opacity="0.6"/><rect x="25" y="40" width="12" height="2" rx="1" fill="url(#website3Gradient)" opacity="0.6"/><rect x="25" y="45" width="15" height="2" rx="1" fill="url(#website3Gradient)" opacity="0.6"/></svg>',
+                url: '#',
+                category: 'website',
+                comingSoon: true
+            },
+            'website4': {
+                name: 'سایت کاتب',
+                icon: '<svg width="45" height="45" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="website4Gradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D968" /><stop offset="100%" stop-color="#00B84B" /></linearGradient></defs><rect width="70" height="70" fill="transparent"/><circle cx="35" cy="35" r="25" fill="url(#website4Gradient)"/><rect x="25" y="20" width="20" height="30" rx="2" fill="#ffffff" opacity="0.8"/><path d="M30 30 L40 30 M30 35 L38 35 M30 40 L36 40 M30 45 L39 45" stroke="url(#website4Gradient)" stroke-width="2" fill="none"/></svg>',
+                url: '#',
+                category: 'website',
+                comingSoon: true
+            }
+        };
+
+        // نمایش علاقه‌مندی‌ها
+        function renderFavorites() {
+            const favoritesContainer = document.getElementById('favoritesContainer');
+            const emptyMessage = document.getElementById('emptyMessage');
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            
+            // پاک کردن محتوای قبلی
+            favoritesContainer.innerHTML = '';
+            
+            // اگر علاقه‌مندی وجود نداشت
+            if (favorites.length === 0) {
+                emptyMessage.style.display = 'block';
+                return;
+            }
+            
+            // نمایش علاقه‌مندی‌ها
+            emptyMessage.style.display = 'none';
+            
+            favorites.forEach(itemId => {
+                const toolInfo = toolsData[itemId];
+                
+                if (toolInfo) {
+                    const itemElement = document.createElement('a');
+                    itemElement.href = toolInfo.comingSoon ? '#' : toolInfo.url;
+                    itemElement.className = toolInfo.comingSoon ? 'favorite-item coming-soon-btn' : 'favorite-item';
+                    
+                    itemElement.innerHTML = `
+                        <div class="favorite-image">
+                            ${toolInfo.icon}
+                        </div>
+                        <div class="favorite-name">${toolInfo.name}</div>
+                        <div class="favorite-icon" data-id="${itemId}">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                    `;
+                    
+                    favoritesContainer.appendChild(itemElement);
+                }
+            });
+            
+            // اضافه کردن رویداد کلیک به دکمه‌های علاقه‌مندی
+            setupFavoriteButtons();
+            setupComingSoonButtons();
+        }
+
+        // تنظیم رویداد کلیک دکمه‌های علاقه‌مندی
+        function setupFavoriteButtons() {
+            const favoriteIcons = document.querySelectorAll('.favorite-icon');
+            const favoriteToast = document.getElementById('favoriteToast');
+            
+            favoriteIcons.forEach(icon => {
+                icon.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const itemId = this.getAttribute('data-id');
+                    
+                    // دریافت علاقه‌مندی‌های موجود
+                    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+                    
+                    // حذف از علاقه‌مندی‌ها
+                    favorites = favorites.filter(id => id !== itemId);
+                    localStorage.setItem('favorites', JSON.stringify(favorites));
+                    
+                    // نمایش پیام
+                    favoriteToast.textContent = 'از علاقه‌مندی‌ها حذف شد';
+                    favoriteToast.classList.add('show');
+                    setTimeout(() => {
+                        favoriteToast.classList.remove('show');
+                    }, 2000);
+                    
+                    // بروزرسانی نمایش
+                    renderFavorites();
+                });
+            });
+        }
+
+        // تنظیم رویداد کلیک دکمه‌های به زودی
+        function setupComingSoonButtons() {
+            const comingSoonButtons = document.querySelectorAll('.coming-soon-btn');
+            const favoriteToast = document.getElementById('favoriteToast');
+            
+            comingSoonButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // اگر روی آیکون علاقه‌مندی کلیک نشده باشد
+                    if (!e.target.closest('.favorite-icon')) {
+                        favoriteToast.textContent = 'این قابلیت به زودی فعال می‌شود';
+                        favoriteToast.classList.add('show');
+                        setTimeout(() => {
+                            favoriteToast.classList.remove('show');
+                        }, 2000);
+                    }
+                });
+            });
+        }
+
+        // باز و بسته کردن منوی همبرگری
+        const burgerMenu = document.getElementById('burgerMenu');
+        const hamburgerMenu = document.getElementById('hamburgerMenu');
+        const hamburgerOverlay = document.getElementById('hamburgerOverlay');
+        const hamburgerClose = document.getElementById('hamburgerClose');
+
+        burgerMenu.addEventListener('click', function() {
+            hamburgerMenu.classList.add('active');
+            hamburgerOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        function closeHamburgerMenu() {
+            hamburgerMenu.classList.remove('active');
+            hamburgerOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        hamburgerClose.addEventListener('click', closeHamburgerMenu);
+        hamburgerOverlay.addEventListener('click', closeHamburgerMenu);
+
+        // نمایش علاقه‌مندی‌ها هنگام بارگذاری صفحه
+        document.addEventListener('DOMContentLoaded', renderFavorites);
+    </script>
+</body>
+
+</html>

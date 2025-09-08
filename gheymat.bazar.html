@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کارت قیمت شیشه‌ای</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        .glass-price-card {
+            width: 100%;
+            max-width: 400px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            color: #333;
+            padding: 16px;
+            font-family: 'Vazirmatn', sans-serif;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+
+        /* هاله نورانی متحرک */
+        .glass-price-card::before {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 40%, transparent 70%);
+            border-radius: 50%;
+            top: -75px;
+            right: -75px;
+            animation: moveLight 15s infinite;
+            pointer-events: none;
+            filter: blur(20px);
+        }
+
+        /* هاله نورانی دوم */
+        .glass-price-card::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 40%, transparent 70%);
+            border-radius: 50%;
+            bottom: -50px;
+            left: -50px;
+            animation: moveLight2 20s infinite;
+            pointer-events: none;
+            filter: blur(15px);
+            animation-delay: 5s;
+        }
+
+        /* انیمیشن حرکت هاله اول */
+        @keyframes moveLight {
+            0% {
+                top: -75px;
+                right: -75px;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            50% {
+                top: 50%;
+                right: 50%;
+                transform: translate(50%, -50%);
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                top: 120%;
+                right: 120%;
+                opacity: 0;
+            }
+        }
+
+        /* انیمیشن حرکت هاله دوم */
+        @keyframes moveLight2 {
+            0% {
+                bottom: -50px;
+                left: -50px;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            40% {
+                bottom: 30%;
+                left: 20%;
+                opacity: 0.7;
+            }
+            70% {
+                bottom: 60%;
+                left: 80%;
+                opacity: 0.9;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                bottom: 120%;
+                left: 120%;
+                opacity: 0;
+            }
+        }
+
+        /* لایه اضافی برای هاله‌های رندوم */
+        .random-light {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 40%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(10px);
+            opacity: 0;
+        }
+
+        .random-light-1 {
+            animation: randomMove1 18s infinite;
+            animation-delay: 3s;
+        }
+
+        .random-light-2 {
+            animation: randomMove2 22s infinite;
+            animation-delay: 8s;
+        }
+
+        .random-light-3 {
+            animation: randomMove3 25s infinite;
+            animation-delay: 12s;
+        }
+
+        @keyframes randomMove1 {
+            0% { top: 10%; left: -40px; opacity: 0; }
+            20% { opacity: 0.8; }
+            50% { top: 70%; left: 60%; opacity: 0.6; }
+            80% { opacity: 0.8; }
+            100% { top: 10%; left: 110%; opacity: 0; }
+        }
+
+        @keyframes randomMove2 {
+            0% { bottom: 20%; right: -40px; opacity: 0; }
+            20% { opacity: 0.7; }
+            60% { bottom: 50%; right: 70%; opacity: 0.5; }
+            80% { opacity: 0.7; }
+            100% { bottom: 80%; right: 110%; opacity: 0; }
+        }
+
+        @keyframes randomMove3 {
+            0% { top: -40px; left: 20%; opacity: 0; }
+            20% { opacity: 0.6; }
+            50% { top: 60%; left: 80%; opacity: 0.7; }
+            80% { opacity: 0.6; }
+            100% { top: 110%; left: 20%; opacity: 0; }
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-header h3 {
+            margin: 0;
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .rotation-indicator {
+            font-size: 0.7em;
+            color: #3498db;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .last-update {
+            font-size: 0.6em;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+
+        .prices-row {
+            display: flex;
+            gap: 12px;
+            flex: 1;
+            opacity: 1;
+            transition: opacity 0.4s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .prices-row.changing {
+            opacity: 0;
+        }
+
+        .price-item {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .price-item .currency-name {
+            font-size: 0.65em;
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            justify-content: center;
+        }
+
+        .price-item .currency-name i {
+            font-size: 0.9em;
+        }
+
+        .fa-dollar-sign { color: #27ae60; }
+        .fa-euro-sign { color: #3498db; }
+        .fa-coins { color: #f39c12; }
+        .fa-chart-line { color: #e74c3c; }
+        .fa-sterling-sign { color: #9b59b6; }
+
+        .price-value {
+            font-size: 0.75em;
+            font-weight: 700;
+            margin-bottom: 6px;
+            direction: ltr;
+            color: #2c3e50;
+            min-height: 1.2em;
+        }
+
+        .price-change {
+            font-size: 0.6em;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            direction: ltr;
+            min-height: 1em;
+        }
+
+        .change-up { 
+            background-color: rgba(39, 174, 96, 0.2); 
+            color: #27ae60; 
+        }
+        .change-down { 
+            background-color: rgba(231, 76, 60, 0.2); 
+            color: #e74c3c; 
+        }
+        .change-neutral { 
+            background-color: rgba(149, 165, 166, 0.2); 
+            color: #95a5a6; 
+        }
+
+        .card-footer {
+            text-align: center;
+            font-size: 0.55em;
+            color: #7f8c8d;
+            margin-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .rotation-counter {
+            color: #f39c12;
+            font-weight: 600;
+        }
+
+        .status-indicator {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            font-size: 0.5em;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #2c3e50;
+            transition: opacity 0.3s ease;
+            z-index: 3;
+        }
+
+        .status-indicator.hidden { opacity: 0; }
+        .status-indicator.loading { 
+            background-color: rgba(255, 193, 7, 0.8); 
+            color: #856404;
+        }
+        .status-indicator.error { 
+            background-color: rgba(220, 53, 69, 0.8); 
+            color: #721c24;
+        }
+        .status-indicator.success { 
+            background-color: rgba(40, 167, 69, 0.8); 
+            color: #155724;
+        }
+
+        /* حذف پس‌زمینه رنگی */
+        body {
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
+        }
+
+        /* تبلت و موبایل */
+        @media (min-width: 480px) {
+            .glass-price-card { 
+                max-width: 500px; 
+                height: 130px;
+                padding: 18px; 
+            }
+            .card-header h3 { font-size: 0.9em; }
+            .last-update { font-size: 0.65em; }
+            .price-item .currency-name { font-size: 0.7em; }
+            .price-value { font-size: 0.8em; }
+            .price-change { font-size: 0.65em; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glass-price-card" onclick="openTGJU()">
+        <!-- هاله‌های نورانی رندوم -->
+        <div class="random-light random-light-1"></div>
+        <div class="random-light random-light-2"></div>
+        <div class="random-light random-light-3"></div>
+
+        <div class="card-header">
+            <h3>
+                نرخ لحظه‌ای 
+                <i class="fas fa-sync-alt rotation-indicator" id="rotationIcon"></i>
+            </h3>
+            <span class="last-update">آخرین بروزرسانی: <span id="updateTime">--:--</span></span>
+        </div>
+
+        <div class="prices-row" id="pricesRow">
+            <div class="price-item">
+                <div class="currency-name">
+                    <i class="fas fa-dollar-sign"></i> <span id="item1-name">دلار آمریکا</span>
+                </div>
+                <div class="price-value" id="item1-price">---</div>
+                <div class="price-change" id="item1-change">---</div>
+            </div>
+
+            <div class="price-item">
+                <div class="currency-name">
+                    <i class="fas fa-euro-sign"></i> <span id="item2-name">یورو</span>
+                </div>
+                <div class="price-value" id="item2-price">---</div>
+                <div class="price-change" id="item2-change">---</div>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <span>منبع: <a href="https://www.tgju.org" target="_blank">TGJU.org</a></span>
+            <span class="rotation-counter">مورد <span id="itemNumber">1</span> از <span id="totalItems">4</span></span>
+        </div>
+
+        <div id="status" class="status-indicator hidden"></div>
+    </div>
+
+    <script>
+    (function() {
+        'use strict';
+
+        // تنظیمات منابع قیمت
+        const PRICE_SOURCES = [
+            {
+                id: 'price_dollar_rl',
+                name: 'دلار آمریکا',
+                icon: 'fas fa-dollar-sign'
+            },
+            {
+                id: 'price_eur',
+                name: 'یورو',
+                icon: 'fas fa-euro-sign'
+            },
+            {
+                id: 'sekee',
+                name: 'سکه امامی',
+                icon: 'fas fa-coins'
+            },
+            {
+                id: 'geram18',
+                name: 'طلای ۱۸ عیار',
+                icon: 'fas fa-chart-line'
+            }
+        ];
+
+        let currentIndex = 0;
+        let isUpdating = false;
+        let allPricesData = [];
+        let rotationTimer = null;
+        let updateTimer = null;
+        let firstLoadComplete = false;
+        
+        const UPDATE_INTERVAL = 60 * 1000; // هر دقیقه
+        const ROTATION_INTERVAL = 10 * 1000; // هر 10 ثانیه
+        const STORAGE_KEY = 'tgju_prices_simple_v1';
+
+        // المان‌های DOM
+        const elements = {
+            status: document.getElementById('status'),
+            updateTime: document.getElementById('updateTime'),
+            rotationIcon: document.getElementById('rotationIcon'),
+            pricesRow: document.getElementById('pricesRow'),
+            itemNumber: document.getElementById('itemNumber'),
+            totalItems: document.getElementById('totalItems')
+        };
+
+        // باز کردن سایت TGJU
+        window.openTGJU = function() {
+            window.open('https://www.tgju.org', '_blank', 'noopener,noreferrer');
+        };
+
+        // نمایش وضعیت
+        function showStatus(type, message = '') {
+            if (!elements.status) return;
+            
+            elements.status.className = 'status-indicator';
+            elements.status.classList.add(type);
+            
+            const icons = {
+                loading: 'fas fa-spinner fa-spin',
+                success: 'fas fa-check',
+                error: 'fas fa-exclamation-triangle'
+            };
+            
+            elements.status.innerHTML = `<i class="${icons[type] || ''}"></i> ${message}`;
+            
+            if (type !== 'loading') {
+                setTimeout(() => elements.status.classList.add('hidden'), 3000);
+            }
+        }
+
+        // فرمت کردن اعداد
+        function formatNumber(value) {
+            if (!value || value === '0' || value === '---') return '---';
+            
+            const cleanValue = value.toString().replace(/[,٬\s]/g, '');
+            const num = parseFloat(cleanValue);
+            
+            if (isNaN(num)) return '---';
+            return num.toLocaleString('fa-IR');
+        }
+
+        // فرمت کردن تغییرات
+        function formatChange(change) {
+            if (!change || change === '0' || change === '---') return { text: '---', type: 'neutral' };
+            
+            const changeStr = change.toString();
+            const isPositive = changeStr.includes('+') || (!changeStr.includes('-') && parseFloat(changeStr.replace(/[,٬\s]/g, '')) > 0);
+            const isNegative = changeStr.includes('-') || parseFloat(changeStr.replace(/[,٬\s]/g, '')) < 0;
+            
+            const cleanChange = changeStr.replace(/[,٬\s]/g, '');
+            const value = parseFloat(cleanChange.replace(/[+%-]/g, ''));
+            
+            if (isNaN(value) || value === 0) return { text: '---', type: 'neutral' };
+
+            const sign = isPositive ? '+' : (isNegative ? '-' : '');
+            const formatted = sign + Math.abs(value).toLocaleString('fa-IR');
+            const text = changeStr.includes('%') ? formatted + '%' : formatted;
+            const type = isPositive ? 'up' : (isNegative ? 'down' : 'neutral');
+
+            return { text, type };
+        }
+
+        // دریافت قیمت‌ها
+        async function fetchPrices() {
+            if (isUpdating) return false;
+            
+            isUpdating = true;
+            showStatus('loading', 'دریافت...');
+
+            try {
+                const apiUrl = `https://call5.tgju.org/ajax.json?${new Date().getTime()}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Referer': 'https://www.tgju.org/'
+                    },
+                    cache: 'no-store'
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data && data.current) {
+                    allPricesData = [];
+                    
+                    PRICE_SOURCES.forEach(source => {
+                        const apiData = data.current[source.id];
+                        
+                        if (apiData) {
+                            allPricesData.push({
+                                price: apiData.p || '---',
+                                change: apiData.dp || '0',
+                                name: source.name,
+                                icon: source.icon
+                            });
+                        }
+                    });
+
+                    if (allPricesData.length > 0) {
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(allPricesData));
+                        updateDisplay();
+                        updateTime();
+                        showStatus('success', 'بروز شد');
+                        isUpdating = false;
+                        return true;
+                    }
+                }
+                
+                throw new Error('داده‌های معتبر یافت نشد');
+                
+            } catch (error) {
+                console.error('خطا در دریافت:', error);
+                showStatus('error', 'خطا');
+            }
+
+            isUpdating = false;
+            return false;
+        }
+
+        // بروزرسانی نمایش
+        function updateDisplay() {
+            if (allPricesData.length === 0) return;
+
+            elements.pricesRow.classList.add('changing');
+            
+            setTimeout(() => {
+                // نمایش دو مورد از شاخص فعلی
+                for (let i = 0; i < 2; i++) {
+                    const dataIndex = (currentIndex + i) % allPricesData.length;
+                    const itemData = allPricesData[dataIndex];
+                    
+                    const nameEl = document.getElementById(`item${i + 1}-name`);
+                    const priceEl = document.getElementById(`item${i + 1}-price`);
+                    const changeEl = document.getElementById(`item${i + 1}-change`);
+                    const iconEl = nameEl.parentElement.querySelector('i');
+                    
+                    nameEl.textContent = itemData.name;
+                    iconEl.className = itemData.icon;
+                    priceEl.textContent = formatNumber(itemData.price);
+                    
+                    const change = formatChange(itemData.change);
+                    changeEl.textContent = change.text;
+                    changeEl.className = `price-change change-${change.type}`;
+                }
+                
+                // بروزرسانی شمارنده
+                elements.itemNumber.textContent = Math.floor(currentIndex / 2) + 1;
+                elements.totalItems.textContent = Math.ceil(allPricesData.length / 2);
+                
+                elements.pricesRow.classList.remove('changing');
+            }, 200);
+        }
+
+        // چرخش موارد
+        function rotateItems() {
+            if (!firstLoadComplete || allPricesData.length === 0) return;
+            
+            currentIndex = (currentIndex + 2) % allPricesData.length;
+            updateDisplay();
+            
+            // انیمیشن آیکون
+            elements.rotationIcon.style.transform = 'rotate(360deg)';
+            elements.rotationIcon.style.transition = 'transform 0.3s ease';
+            setTimeout(() => {
+                elements.rotationIcon.style.transform = 'rotate(0deg)';
+                elements.rotationIcon.style.transition = 'none';
+            }, 300);
+        }
+
+        // شروع چرخش
+        function startRotation() {
+            if (rotationTimer) clearInterval(rotationTimer);
+            rotationTimer = setInterval(rotateItems, ROTATION_INTERVAL);
+        }
+
+        // بروزرسانی زمان
+        function updateTime() {
+            elements.updateTime.textContent = new Date().toLocaleTimeString('fa-IR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // راه‌اندازی
+        async function initialize() {
+            // بارگذاری داده‌های ذخیره شده
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (savedData) {
+                try {
+                    allPricesData = JSON.parse(savedData);
+                    if (allPricesData.length > 0) {
+                        firstLoadComplete = true;
+                        updateDisplay();
+                        updateTime();
+                    }
+                } catch (e) {
+                    console.warn('خطا در بارگذاری:', e);
+                }
+            }
+
+            // دریافت قیمت‌های جدید
+            setTimeout(async () => {
+                const success = await fetchPrices();
+                
+                if (success) {
+                    firstLoadComplete = true;
+                    updateDisplay();
+                    
+                    if (!rotationTimer) {
+                        setTimeout(startRotation, 2000);
+                    }
+                } else if (firstLoadComplete && !rotationTimer) {
+                    setTimeout(startRotation, 2000);
+                }
+            }, 1000);
+
+            // بروزرسانی دوره‌ای
+            setInterval(fetchPrices, UPDATE_INTERVAL);
+        }
+
+        // شروع
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initialize);
+        } else {
+            initialize();
+        }
+
+    })();
+    </script>
+
+</body>
+</html>

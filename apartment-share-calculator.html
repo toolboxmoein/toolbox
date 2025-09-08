@@ -1,0 +1,1828 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاسبه قدرالسهم آپارتمان</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00D968;
+            --primary-light: #4DF5A5;
+            --secondary-color: #00B84B;
+            --dark-color: #008E3A;
+            --light-color: #E6F8EE;
+            --shadow: 0 10px 30px rgba(0, 217, 104, 0.1);
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --card-shadow: 0 15px 35px rgba(0, 217, 104, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            --hover-transform: translateY(-5px);
+            --border-radius: 16px;
+            --button-border-radius: 8px;
+            --border-color: #e0e0e0;
+            --grey-color: #6c757d;
+            --success-color: #28a745;
+            --red-color: #e53935;
+            --text-black-color: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background-color: #ffffff;
+        }
+
+        .header-container {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+
+        .topbar {
+            background-color: #ffffff;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo-container {
+            height: 50px;
+            width: 150px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #ffffff;
+        }
+
+        .logo-image {
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        #menuButton {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 10;
+        }
+
+        #menuButton span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: var(--primary-color);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .menu-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .menu-panel {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 320px;
+            height: 100%;
+            background: linear-gradient(to bottom, #ffffff, #f8fff9);
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15);
+            z-index: 1001;
+            padding: 30px;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            border-left: 3px solid var(--primary-color, #00D968);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .menu-overlay.active .menu-panel {
+            right: 0;
+        }
+
+        .menu-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 217, 104, 0.2);
+        }
+
+        .menu-logo {
+            max-width: 140px;
+            height: auto;
+            display: block;
+        }
+
+        .close-menu {
+            background-color: #e53935;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: white;
+            transition: all 0.3s ease;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .close-menu:hover {
+            background-color: #d32f2f;
+            transform: translateY(-50%) rotate(90deg);
+        }
+
+        .menu-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .menu-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu-item {
+            margin-bottom: 8px;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .menu-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--primary-color, #00D968);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .menu-link:hover {
+            background-color: rgba(0, 217, 104, 0.1);
+            color: var(--primary-color, #00D968);
+            padding-right: 20px;
+        }
+
+        .menu-link:hover::before {
+            transform: scaleY(1);
+        }
+
+        .menu-icon {
+            margin-left: 12px;
+            width: 20px;
+            text-align: center;
+            color: var(--primary-color, #00D968);
+            transition: all 0.3s ease;
+        }
+
+        .menu-link:hover .menu-icon {
+            color: var(--primary-color, #00D968);
+        }
+
+        .menu-footer {
+            padding: 15px;
+            border-top: 1px solid rgba(0, 217, 104, 0.2);
+            text-align: center;
+            font-size: 0.9rem;
+            color: #6c757d;
+            background-color: rgba(0, 217, 104, 0.05);
+            border-radius: 10px;
+            margin-top: auto;
+        }
+
+        .menu-version {
+            display: inline-block;
+            padding: 3px 10px;
+            background-color: rgba(0, 217, 104, 0.1);
+            color: var(--primary-color, #00D968);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 480px) {
+            .menu-panel {
+                width: 280px;
+                padding: 20px;
+            }
+
+            .close-menu {
+                left: 5px;
+            }
+        }
+
+        .help-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .help-modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .help-modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 650px;
+            max-height: 80vh;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease-in-out;
+            text-align: justify;
+            overflow-y: auto;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .help-modal-overlay.active .help-modal-content {
+            transform: scale(1);
+        }
+
+        .help-modal-content h2 {
+            margin-top: 0;
+            text-align: center;
+            color: var(--dark-color);
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .help-modal-content p {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #444;
+            margin-bottom: 18px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .help-modal-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .help-modal-content .paragraph-black-text {
+            color: var(--text-black-color);
+        }
+
+        .help-modal-content .red-text {
+            color: var(--red-color);
+            font-weight: 600;
+        }
+
+        .help-modal-content .paragraph-black-text .red-text {
+            color: var(--red-color);
+        }
+
+        .help-modal-content strong.red-text {
+            font-weight: 700;
+        }
+
+        .help-modal-close {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: #e53935;
+            border: none;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .help-modal-close:hover {
+            background-color: #d32f2f;
+            transform: rotate(90deg);
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 15px;
+            min-height: calc(100vh - 90px);
+        }
+
+        .guide-text {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 35px;
+            font-size: 1.15rem;
+            color: #555;
+            max-width: 680px;
+            line-height: 1.7;
+            position: relative;
+        }
+
+        .guide-text::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+
+        .guide-text .highlight {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 650px;
+            margin-bottom: 25px;
+        }
+
+        .form-row {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 10px;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+        }
+
+        .form-row.center {
+            justify-content: center;
+        }
+
+        .form-row.center .form-group {
+            flex: 0 0 70%;
+            max-width: 400px;
+        }
+
+        .form-group {
+            flex: 0 0 calc(50% - 5px);
+            text-align: right;
+            min-width: 0;
+        }
+
+        .form-group.full-width {
+            flex: 1;
+        }
+
+        label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+            color: #333;
+            font-size: 14px;
+            position: relative;
+            padding-right: 15px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        label::before {
+            content: '•';
+            position: absolute;
+            right: 0;
+            top: -2px;
+            color: var(--primary-color);
+            font-size: 18px;
+        }
+
+        select,
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            transition: var(--transition);
+            background-color: #f9f9f9;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+
+        select:focus,
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
+            background-color: #fff;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .result-container {
+            background: linear-gradient(135deg, rgba(0, 217, 104, 0.05), rgba(0, 184, 75, 0.1));
+            border-radius: 14px;
+            padding: 20px;
+            margin-top: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid rgba(0, 217, 104, 0.1);
+            width: 100%;
+            max-width: 650px;
+        }
+
+        .result-label {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .result-value {
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .result-value:last-child {
+            margin-bottom: 0;
+        }
+
+        .calculation-type-selector {
+            width: 100%;
+            max-width: 650px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .type-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .type-button {
+            padding: 12px 20px;
+            border: 2px solid var(--primary-color);
+            background-color: transparent;
+            color: var(--primary-color);
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .type-button.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .type-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 217, 104, 0.3);
+        }
+
+        .variable-units-container {
+            display: none;
+            width: 100%;
+            max-width: 650px;
+            margin-bottom: 20px;
+        }
+
+        .entry-method-guide {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 14px;
+            color: #555;
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px dashed #ddd;
+        }
+
+        .entry-method-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .entry-method-row {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .entry-method-option {
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            flex: 1;
+            max-width: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .entry-method-option.active {
+            background-color: var(--light-color);
+            border-color: var(--primary-color);
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+
+        .entry-method-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .entry-method-content {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .entry-method-content.active {
+            display: block;
+        }
+
+        .or-text {
+            color: var(--red-color);
+            font-weight: 600;
+            margin-right: 5px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .units-list {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            margin-bottom: 15px;
+        }
+
+        .unit-entry {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .unit-entry:last-child {
+            margin-bottom: 0;
+        }
+
+        .unit-entry input {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .remove-unit-btn {
+            background-color: var(--red-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: var(--transition);
+            white-space: nowrap;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .remove-unit-btn:hover {
+            background-color: #d32f2f;
+            transform: translateY(-2px);
+        }
+
+        .add-unit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition);
+            width: 100%;
+            margin-top: 10px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .add-unit-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .units-summary {
+            background-color: rgba(0, 217, 104, 0.05);
+            border: 1px solid rgba(0, 217, 104, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .summary-title {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .summary-item:last-child {
+            margin-bottom: 0;
+            font-weight: 600;
+            border-top: 1px solid rgba(0, 217, 104, 0.3);
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+
+        .floor-entry {
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .floor-header {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .floor-content {
+            display: flex;
+            gap: 10px;
+        }
+
+        .floor-content input {
+            flex: 1;
+        }
+
+        .tooltip-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: var(--grey-color);
+            color: #fff;
+            text-align: center;
+            line-height: 16px;
+            font-size: 10px;
+            margin-right: 5px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+            pointer-events: none;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+
+        .tooltip-icon:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: var(--button-border-radius);
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            text-align: center;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 217, 104, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 217, 104, 0.4);
+        }
+
+        .navigation-buttons {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            max-width: 650px;
+        }
+
+        .bold-placeholder::placeholder {
+            font-weight: 700;
+        }
+
+        .toast-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            text-align: center;
+            max-width: 80%;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .toast-message.show {
+            opacity: 1;
+        }
+
+        .calc-specific-unit {
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .calc-specific-unit h4 {
+            font-size: 15px;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .total-area-direct {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        @media (max-width: 480px) {
+
+            .form-container,
+            .result-container,
+            .navigation-buttons,
+            .guide-text,
+            .calculation-type-selector,
+            .variable-units-container {
+                max-width: 100%;
+            }
+
+            .form-row {
+                flex-direction: row;
+                flex-wrap: nowrap;
+                gap: 8px;
+            }
+
+            .form-group {
+                flex: 0 0 calc(50% - 4px);
+            }
+
+            .form-row.center .form-group {
+                flex: 0 0 85%;
+                max-width: 100%;
+            }
+
+            label {
+                font-size: 13px;
+                margin-bottom: 6px;
+            }
+
+            select,
+            input[type="text"] {
+                font-size: 13px;
+                padding: 8px 10px;
+            }
+
+            .guide-text {
+                font-size: 1rem;
+                margin-bottom: 30px;
+            }
+
+            .guide-text::after {
+                width: 120px;
+                bottom: -10px;
+            }
+
+            .logo-container {
+                height: 45px;
+                width: 135px;
+            }
+
+            .type-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .type-button {
+                max-width: 100%;
+            }
+
+            .unit-entry {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .unit-entry input {
+                width: 100%;
+            }
+
+            .entry-method-row {
+                flex-direction: column;
+            }
+
+            .entry-method-option {
+                max-width: 100%;
+            }
+
+            .floor-content {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 350px) {
+            .form-row {
+                gap: 6px;
+            }
+
+            .form-group {
+                flex: 0 0 calc(50% - 3px);
+            }
+
+            label {
+                font-size: 12px;
+                padding-right: 12px;
+            }
+
+            select,
+            input[type="text"] {
+                font-size: 12px;
+                padding: 7px 8px;
+            }
+
+            .logo-container {
+                height: 40px;
+                width: 120px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header-container">
+        <div class="topbar">
+            <button id="menuButton" aria-label="منو محاسبه قدرالسهم">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="logo-container">
+                <img src="images/logo.png" alt="لوگوی برنامه" class="logo-image">
+            </div>
+        </div>
+    </header>
+
+    <div id="helpModalOverlay" class="help-modal-overlay">
+        <div class="help-modal-content">
+            <button id="closeHelpModal" class="help-modal-close">&times;</button>
+            <h2>فرمول محاسبه قدرالسهم</h2>
+            <p><strong><span class="red-text">فرمول اصلی:</span></strong><br>
+                قدرالسهم = (متراژ واحد × متراژ کل عرصه) ÷ متراژ کل بنای مفید</p>
+            
+            <p><strong><span class="red-text">توضیح فرمول:</span></strong><br>
+                این فرمول برای تعیین سهم هر واحد آپارتمانی از زمین (عرصه) استفاده می‌شود. ابتدا متراژ واحد مورد نظر را در متراژ کل زمین ضرب کرده، سپس بر مجموع متراژ تمام واحدهای ساختمان (بنای مفید) تقسیم می‌کنیم.</p>
+        </div>
+    </div>
+
+    <div class="toast-message" id="comingSoonToast">
+        این قابلیت به زودی فعال می‌شود
+    </div>
+
+    <main>
+        <p class="guide-text">
+            برای محاسبه <span class="highlight">قدرالسهم آپارتمان</span> از عرصه، نوع محاسبه را انتخاب کرده و اطلاعات مورد نیاز را وارد کنید.
+        </p>
+        
+        <div class="calculation-type-selector">
+            <label style="padding-right: 0; font-size: 16px; margin-bottom: 15px;">نوع محاسبه را انتخاب کنید:</label>
+            <div class="type-buttons">
+                <button class="type-button active" id="sameAreaBtn">واحدهای با متراژ یکسان</button>
+                <button class="type-button" id="differentAreaBtn">واحدهای با متراژ متفاوت</button>
+            </div>
+        </div>
+
+        <!-- فرم واحدهای یکسان -->
+        <div class="form-container" id="sameAreaForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="floors-same">تعداد طبقات:</label>
+                    <input type="text" id="floors-same" placeholder="تعداد طبقات"
+                        oninput="handlePersianNumberInput(this); calculateSameAreaShare()">
+                </div>
+                <div class="form-group">
+                    <label for="units-per-floor">واحد در هر طبقه:</label>
+                    <input type="text" id="units-per-floor" placeholder="تعداد واحد در هر طبقه"
+                        oninput="handlePersianNumberInput(this); calculateSameAreaShare()">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="unit-area-same">متراژ هر واحد:</label>
+                    <input type="text" id="unit-area-same" placeholder="متراژ هر واحد (متر)"
+                        oninput="handlePersianNumberInput(this); calculateSameAreaShare()">
+                </div>
+                <div class="form-group">
+                    <label for="land-area-same">متراژ عرصه:</label>
+                    <input type="text" id="land-area-same" placeholder="متراژ کل زمین (متر)"
+                        oninput="handlePersianNumberInput(this); calculateSameAreaShare()">
+                </div>
+            </div>
+        </div>
+
+        <!-- فرم واحدهای متفاوت -->
+        <div class="form-container" id="differentAreaForm" style="display: none;">
+            <div class="form-row center">
+                <div class="form-group">
+                    <label for="land-area-diff">متراژ عرصه:</label>
+                    <input type="text" id="land-area-diff" placeholder="متراژ کل زمین (متر)"
+                        oninput="handlePersianNumberInput(this); updateDifferentAreaResults()">
+                </div>
+            </div>
+            
+            <div class="entry-method-guide">
+                لطفاً یکی از روش‌های زیر را برای وارد کردن بنای مفید انتخاب کنید
+            </div>
+        </div>
+
+        <div class="variable-units-container" id="variableUnitsContainer">
+            <div class="entry-method-options">
+                <div class="entry-method-row">
+                    <div class="entry-method-option active" id="totalOption" onclick="switchEntryMethod('total')">
+                        ورود کل بنای مفید
+                        <span class="tooltip-icon">؟
+                            <span class="tooltip-text">مجموع متراژ کل واحدهای مسکونی بدون محاسبه مشاعات، راهرو، آسانسور و پارکینگ</span>
+                        </span>
+                    </div>
+                    <div class="entry-method-option" id="individualOption" onclick="switchEntryMethod('individual')">
+                        <span class="or-text">یا</span> ورود تک‌تک واحدها
+                    </div>
+                </div>
+                <div class="entry-method-row">
+                    <div class="entry-method-option" id="floorOption" onclick="switchEntryMethod('floor')">
+                        <span class="or-text">یا</span> ورود طبقه به طبقه
+                    </div>
+                </div>
+            </div>
+
+            <!-- روش ورود کل بنای مفید -->
+            <div class="entry-method-content active" id="totalContent">
+                <div class="total-area-direct">
+                    <label for="total-building-area" style="padding-right: 0;">کل بنای مفید 
+                        <span class="tooltip-icon">؟
+                            <span class="tooltip-text">مجموع متراژ کل واحدهای مسکونی بدون محاسبه مشاعات، راهرو، آسانسور و پارکینگ</span>
+                        </span>
+                    </label>
+                    <input type="text" id="total-building-area" placeholder="متراژ کل بنای مفید (متر)" 
+                        oninput="handlePersianNumberInput(this); updateTotalAreaResults()">
+                </div>
+            </div>
+
+            <!-- روش ورود تک تک واحدها -->
+            <div class="entry-method-content" id="individualContent">
+                <label style="padding-right: 0; font-size: 15px; margin-bottom: 15px;">واحدهای ساختمان را وارد کنید:</label>
+                <div class="units-list" id="unitsList">
+                    <div class="unit-entry">
+                        <input type="text" placeholder="متراژ واحد (متر)" 
+                            oninput="handlePersianNumberInput(this); updateDifferentAreaResults()">
+                        <button type="button" class="remove-unit-btn" onclick="removeUnit(this)">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
+                </div>
+                <button type="button" class="add-unit-btn" onclick="addUnit()">
+                    <i class="fas fa-plus"></i> افزودن واحد جدید
+                </button>
+            </div>
+
+            <!-- روش ورود طبقه به طبقه -->
+            <div class="entry-method-content" id="floorContent">
+                <label style="padding-right: 0; font-size: 15px; margin-bottom: 15px;">متراژ واحدها را به تفکیک طبقه وارد کنید:</label>
+                <div id="floorsList">
+                    <div class="floor-entry">
+                        <div class="floor-header">
+                            <span>طبقه ۱</span>
+                            <button type="button" class="remove-unit-btn" onclick="removeFloor(this)" style="display: none;">
+                                <i class="fas fa-trash"></i> حذف طبقه
+                            </button>
+                        </div>
+                        <div class="floor-content">
+                            <input type="text" placeholder="متراژ کل طبقه (متر)" 
+                                oninput="handlePersianNumberInput(this); updateDifferentAreaResults()">
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="add-unit-btn" onclick="addFloor()">
+                    <i class="fas fa-plus"></i> افزودن طبقه جدید
+                </button>
+            </div>
+            
+            <div class="units-summary" id="unitsSummary" style="display: none;">
+                <div class="summary-title">خلاصه واحدها</div>
+                <div id="summaryContent"></div>
+            </div>
+
+            <div class="calc-specific-unit">
+                <h4>محاسبه قدرالسهم واحد مورد نظر</h4>
+                <input type="text" id="specific-unit-area" placeholder="متراژ واحد مورد نظر (متر)" 
+                    oninput="handlePersianNumberInput(this); updateSpecificUnitResult()">
+            </div>
+        </div>
+
+        <div class="result-container">
+            <span class="result-label">کل بنای مفید 
+                <span class="tooltip-icon">؟
+                    <span class="tooltip-text">مجموع متراژ کل واحدهای مسکونی بدون محاسبه مشاعات، راهرو، آسانسور و پارکینگ</span>
+                </span>
+            </span>
+            <span class="result-value" id="total-useful-area">۰ متر</span>
+            <span class="result-label">قدرالسهم از عرصه:</span>
+            <span class="result-value" id="share-result">۰ متر</span>
+        </div>
+
+        <div class="navigation-buttons">
+            <button class="btn btn-primary" id="resetButton" onclick="resetForm()">
+                <i class="fas fa-calculator"></i> محاسبه مجدد
+            </button>
+        </div>
+    </main>
+
+    <script>
+        let calculationType = 'same'; // 'same' or 'different'
+        let entryMethod = 'total'; // 'individual', 'floor', 'total'
+        let floorCounter = 1;
+
+        function toFarsiNumber(n) {
+            const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return String(n).replace(/\d/g, x => farsiDigits[x]);
+        }
+
+        function toEnglishNumber(s) {
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            const englishDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            let result = String(s);
+            for (let i = 0; i < 10; i++) {
+                result = result.replace(new RegExp(persianDigits[i], 'g'), englishDigits[i]);
+            }
+            return result;
+        }
+
+        function formatNumberWithCommas(number) {
+            if (number === null || number === undefined) return '';
+            const parts = String(number).split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return parts.join('.');
+        }
+
+        function handlePersianNumberInput(input) {
+            let value = input.value.replace(/[^\d۰-۹.]/g, '');
+            value = toEnglishNumber(value);
+            value = value.replace(/[^0-9.]/g, '');
+            
+            // Make sure we only have one decimal point
+            const parts = value.split('.');
+            if (parts.length > 2) {
+                value = parts[0] + '.' + parts.slice(1).join('');
+            }
+            
+            input.value = toFarsiNumber(value);
+        }
+
+        function switchCalculationType(type) {
+            calculationType = type;
+            const sameBtn = document.getElementById('sameAreaBtn');
+            const diffBtn = document.getElementById('differentAreaBtn');
+            const sameForm = document.getElementById('sameAreaForm');
+            const diffForm = document.getElementById('differentAreaForm');
+            const variableContainer = document.getElementById('variableUnitsContainer');
+
+            if (type === 'same') {
+                sameBtn.classList.add('active');
+                diffBtn.classList.remove('active');
+                sameForm.style.display = 'block';
+                diffForm.style.display = 'none';
+                variableContainer.style.display = 'none';
+            } else {
+                sameBtn.classList.remove('active');
+                diffBtn.classList.add('active');
+                sameForm.style.display = 'none';
+                diffForm.style.display = 'block';
+                variableContainer.style.display = 'block';
+            }
+            
+            // Reset results
+            document.getElementById('total-useful-area').innerText = toFarsiNumber('0') + ' متر';
+            document.getElementById('share-result').innerText = toFarsiNumber('0') + ' متر';
+        }
+
+        function switchEntryMethod(method) {
+            entryMethod = method;
+            
+            // Update option status
+            document.querySelectorAll('.entry-method-option').forEach(option => option.classList.remove('active'));
+            document.getElementById(method + 'Option').classList.add('active');
+            
+            // Update content visibility
+            document.querySelectorAll('.entry-method-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(method + 'Content').classList.add('active');
+            
+            // Update results based on the new method
+            updateDifferentAreaResults();
+        }
+
+        function addUnit() {
+            const unitsList = document.getElementById('unitsList');
+            const newUnit = document.createElement('div');
+            newUnit.className = 'unit-entry';
+            newUnit.innerHTML = `
+                <input type="text" placeholder="متراژ واحد (متر)" 
+                    oninput="handlePersianNumberInput(this); updateDifferentAreaResults()">
+                <button type="button" class="remove-unit-btn" onclick="removeUnit(this)">
+                    <i class="fas fa-trash"></i> حذف
+                </button>
+            `;
+            unitsList.appendChild(newUnit);
+            updateDifferentAreaResults();
+        }
+
+        function removeUnit(button) {
+            const unitEntry = button.parentNode;
+            const unitsList = document.getElementById('unitsList');
+            
+            // حداقل یک واحد باید باقی بماند
+            if (unitsList.children.length > 1) {
+                unitEntry.remove();
+                updateDifferentAreaResults();
+            }
+        }
+
+        function addFloor() {
+            floorCounter++;
+            const floorsList = document.getElementById('floorsList');
+            const newFloor = document.createElement('div');
+            newFloor.className = 'floor-entry';
+            newFloor.innerHTML = `
+                <div class="floor-header">
+                    <span>طبقه ${toFarsiNumber(floorCounter)}</span>
+                    <button type="button" class="remove-unit-btn" onclick="removeFloor(this)">
+                        <i class="fas fa-trash"></i> حذف طبقه
+                    </button>
+                </div>
+                <div class="floor-content">
+                    <input type="text" placeholder="متراژ کل طبقه (متر)" 
+                        oninput="handlePersianNumberInput(this); updateDifferentAreaResults()">
+                </div>
+            `;
+            floorsList.appendChild(newFloor);
+            
+            // Show remove button for first floor if we have more than one floor
+            if (floorCounter === 2) {
+                const firstFloorRemoveBtn = document.querySelector('#floorsList .floor-entry:first-child .remove-unit-btn');
+                if (firstFloorRemoveBtn) {
+                    firstFloorRemoveBtn.style.display = 'block';
+                }
+            }
+            
+            updateDifferentAreaResults();
+        }
+
+        function removeFloor(button) {
+            const floorEntry = button.closest('.floor-entry');
+            const floorsList = document.getElementById('floorsList');
+            
+            if (floorsList.children.length > 1) {
+                floorEntry.remove();
+                
+                // Re-number floors
+                floorCounter = 0;
+                document.querySelectorAll('#floorsList .floor-entry').forEach(floor => {
+                    floorCounter++;
+                    floor.querySelector('.floor-header span').innerText = 'طبقه ' + toFarsiNumber(floorCounter);
+                });
+                
+                // Hide remove button for first floor if only one floor left
+                if (floorCounter === 1) {
+                    const firstFloorRemoveBtn = document.querySelector('#floorsList .floor-entry:first-child .remove-unit-btn');
+                    if (firstFloorRemoveBtn) {
+                        firstFloorRemoveBtn.style.display = 'none';
+                    }
+                }
+                
+                updateDifferentAreaResults();
+            }
+        }
+
+        function updateUnitsSummary(units) {
+            const summary = document.getElementById('unitsSummary');
+            const summaryContent = document.getElementById('summaryContent');
+            
+            if (units.length === 0) {
+                summary.style.display = 'none';
+                return;
+            }
+
+            // گروه‌بندی واحدها بر اساس متراژ
+            const groupedUnits = {};
+            let totalArea = 0;
+            
+            units.forEach(area => {
+                if (area > 0) {
+                    groupedUnits[area] = (groupedUnits[area] || 0) + 1;
+                    totalArea += area;
+                }
+            });
+
+            if (Object.keys(groupedUnits).length === 0) {
+                summary.style.display = 'none';
+                return;
+            }
+
+            let summaryHTML = '';
+            Object.keys(groupedUnits).sort((a, b) => b - a).forEach(area => {
+                const count = groupedUnits[area];
+                summaryHTML += `
+                    <div class="summary-item">
+                        <span>واحد ${toFarsiNumber(area)} متری:</span>
+                        <span>${toFarsiNumber(count)} واحد</span>
+                    </div>
+                `;
+            });
+            
+            summaryHTML += `
+                <div class="summary-item">
+                    <span>مجموع:</span>
+                    <span>${toFarsiNumber(units.length)} واحد - ${toFarsiNumber(formatNumberWithCommas(totalArea))} متر</span>
+                </div>
+            `;
+
+            summaryContent.innerHTML = summaryHTML;
+            summary.style.display = 'block';
+        }
+
+        function calculateSameAreaShare() {
+            const floorsStr = toEnglishNumber(document.getElementById('floors-same').value.replace(/,/g, ''));
+            const unitsPerFloorStr = toEnglishNumber(document.getElementById('units-per-floor').value.replace(/,/g, ''));
+            const unitAreaStr = toEnglishNumber(document.getElementById('unit-area-same').value.replace(/,/g, ''));
+            const landAreaStr = toEnglishNumber(document.getElementById('land-area-same').value.replace(/,/g, ''));
+
+            const floors = parseFloat(floorsStr) || 0;
+            const unitsPerFloor = parseFloat(unitsPerFloorStr) || 0;
+            const unitArea = parseFloat(unitAreaStr) || 0;
+            const landArea = parseFloat(landAreaStr) || 0;
+
+            const totalUsefulAreaElement = document.getElementById('total-useful-area');
+            const shareResultElement = document.getElementById('share-result');
+
+            if (floors > 0 && unitsPerFloor > 0 && unitArea > 0 && landArea > 0) {
+                // محاسبه کل بنای مفید
+                const totalUsefulArea = floors * unitsPerFloor * unitArea;
+                
+                // محاسبه قدرالسهم: (متراژ واحد × متراژ عرصه) ÷ کل بنای مفید
+                const sharePerUnit = (unitArea * landArea) / totalUsefulArea;
+
+                if (totalUsefulAreaElement) {
+                    totalUsefulAreaElement.innerText = toFarsiNumber(formatNumberWithCommas(totalUsefulArea.toFixed(2))) + ' متر';
+                }
+                if (shareResultElement) {
+                    shareResultElement.innerText = toFarsiNumber(sharePerUnit.toFixed(2)) + ' متر';
+                }
+            } else {
+                if (totalUsefulAreaElement) {
+                    totalUsefulAreaElement.innerText = toFarsiNumber('0') + ' متر';
+                }
+                if (shareResultElement) {
+                    shareResultElement.innerText = toFarsiNumber('0') + ' متر';
+                }
+            }
+        }
+
+        function updateDifferentAreaResults() {
+            switch (entryMethod) {
+                case 'individual':
+                    calculateIndividualUnits();
+                    break;
+                case 'floor':
+                    calculateFloorByFloor();
+                    break;
+                case 'total':
+                    updateTotalAreaResults();
+                    break;
+            }
+        }
+
+        function calculateIndividualUnits() {
+            const landAreaStr = toEnglishNumber(document.getElementById('land-area-diff').value.replace(/,/g, ''));
+            const landArea = parseFloat(landAreaStr) || 0;
+
+            const totalUsefulAreaElement = document.getElementById('total-useful-area');
+            const shareResultElement = document.getElementById('share-result');
+
+            // جمع‌آوری اطلاعات واحدها
+            const unitInputs = document.querySelectorAll('#unitsList input');
+            let units = [];
+            let totalUsefulArea = 0;
+
+            unitInputs.forEach(input => {
+                const area = parseFloat(toEnglishNumber(input.value.replace(/,/g, ''))) || 0;
+                if (area > 0) {
+                    units.push(area);
+                    totalUsefulArea += area;
+                }
+            });
+
+            // به‌روزرسانی خلاصه واحدها
+            updateUnitsSummary(units);
+
+            if (totalUsefulArea > 0) {
+                // نمایش کل بنای مفید
+                if (totalUsefulAreaElement) {
+                    totalUsefulAreaElement.innerText = toFarsiNumber(formatNumberWithCommas(totalUsefulArea.toFixed(2))) + ' متر';
+                }
+                
+                updateSpecificUnitResult(totalUsefulArea, landArea);
+            } else {
+                if (totalUsefulAreaElement) {
+                    totalUsefulAreaElement.innerText = toFarsiNumber('0') + ' متر';
+                }
+                if (shareResultElement) {
+                    shareResultElement.innerText = toFarsiNumber('0') + ' متر';
+                }
+            }
+        }
+
+        function calculateFloorByFloor() {
+            const landAreaStr = toEnglishNumber(document.getElementById('land-area-diff').value.replace(/,/g, ''));
+            const landArea = parseFloat(landAreaStr) || 0;
+
+            const totalUsefulAreaElement = document.getElementById('total-useful-area');
+            const shareResultElement = document.getElementById('share-result');
+
+            // جمع‌آوری اطلاعات طبقات
+            const floorInputs = document.querySelectorAll('#floorsList input');
+            let totalUsefulArea = 0;
+
+            floorInputs.forEach(input => {
+                const area = parseFloat(toEnglishNumber(input.value.replace(/,/g, ''))) || 0;
+                if (area > 0) {
+                    totalUsefulArea += area;
+                }
+            });
+
+            if (totalUsefulArea > 0) {
+                // نمایش کل بنای مفید
+                if (totalUsefulAreaElement) {
+                    totalUsefulAreaElement.innerText = toFarsiNumber(formatNumberWithCommas(totalUsefulArea.toFixed(2))) + ' متر';
+                }
+                
+                updateSpecificUnitResult(totalUsefulArea, landArea);
+            } else {
+                if (totalUsefulAreaElement) {
+                    totalUsefulAreaElement.innerText = toFarsiNumber('0') + ' متر';
+                }
+                if (shareResultElement) {
+                    shareResultElement.innerText = toFarsiNumber('0') + ' متر';
+                }
+            }
+        }
+
+        function updateTotalAreaResults() {
+            const landAreaStr = toEnglishNumber(document.getElementById('land-area-diff').value.replace(/,/g, ''));
+            const totalAreaStr = toEnglishNumber(document.getElementById('total-building-area').value.replace(/,/g, ''));
+            
+            const landArea = parseFloat(landAreaStr) || 0;
+            const totalArea = parseFloat(totalAreaStr) || 0;
+
+            const totalUsefulAreaElement = document.getElementById('total-useful-area');
+            
+            if (totalArea > 0) {
+                // نمایش کل بنای مفید
+                if (totalUsefulAreaElement) {
+                    totalUsefulAreaElement.innerText = toFarsiNumber(formatNumberWithCommas(totalArea.toFixed(2))) + ' متر';
+                }
+                
+                updateSpecificUnitResult(totalArea, landArea);
+            } else {
+                if (totalUsefulAreaElement) {
+                    totalUsefulAreaElement.innerText = toFarsiNumber('0') + ' متر';
+                }
+                document.getElementById('share-result').innerText = toFarsiNumber('0') + ' متر';
+            }
+        }
+
+        function updateSpecificUnitResult(totalUsefulArea = null, landArea = null) {
+            // اگر مقادیر ورودی داده نشده، آنها را دریافت می‌کنیم
+            if (totalUsefulArea === null) {
+                if (entryMethod === 'total') {
+                    const totalAreaStr = toEnglishNumber(document.getElementById('total-building-area').value.replace(/,/g, ''));
+                    totalUsefulArea = parseFloat(totalAreaStr) || 0;
+                } else {
+                    const totalAreaText = document.getElementById('total-useful-area').innerText;
+                    const totalAreaMatch = totalAreaText.match(/[\d۰-۹.,]+/);
+                    if (totalAreaMatch) {
+                        totalUsefulArea = parseFloat(toEnglishNumber(totalAreaMatch[0].replace(/,/g, ''))) || 0;
+                    } else {
+                        totalUsefulArea = 0;
+                    }
+                }
+            }
+            
+            if (landArea === null) {
+                const landAreaStr = toEnglishNumber(document.getElementById('land-area-diff').value.replace(/,/g, ''));
+                landArea = parseFloat(landAreaStr) || 0;
+            }
+
+            const specificUnitAreaStr = toEnglishNumber(document.getElementById('specific-unit-area').value.replace(/,/g, ''));
+            const specificUnitArea = parseFloat(specificUnitAreaStr) || 0;
+            
+            const shareResultElement = document.getElementById('share-result');
+
+            if (specificUnitArea > 0 && totalUsefulArea > 0 && landArea > 0) {
+                // محاسبه قدرالسهم: (متراژ واحد × متراژ عرصه) ÷ کل بنای مفید
+                const sharePerUnit = (specificUnitArea * landArea) / totalUsefulArea;
+                
+                if (shareResultElement) {
+                    shareResultElement.innerText = toFarsiNumber(sharePerUnit.toFixed(2)) + ' متر (واحد ' + toFarsiNumber(specificUnitArea.toString()) + ' متری)';
+                }
+            } else {
+                if (shareResultElement) {
+                    shareResultElement.innerText = toFarsiNumber('0') + ' متر';
+                }
+            }
+        }
+
+        function resetForm() {
+            // Reset same area form
+            document.getElementById('floors-same').value = '';
+            document.getElementById('units-per-floor').value = '';
+            document.getElementById('unit-area-same').value = '';
+            document.getElementById('land-area-same').value = '';
+            
+            // Reset different area form
+            document.getElementById('land-area-diff').value = '';
+            document.getElementById('specific-unit-area').value = '';
+            document.getElementById('total-building-area').value = '';
+            
+            // Reset individual units
+            const unitsList = document.getElementById('unitsList');
+            unitsList.innerHTML = `
+                <div class="unit-entry">
+                    <input type="text" placeholder="متراژ واحد (متر)" 
+                        oninput="handlePersianNumberInput(this); updateDifferentAreaResults()">
+                    <button type="button" class="remove-unit-btn" onclick="removeUnit(this)">
+                        <i class="fas fa-trash"></i> حذف
+                    </button>
+                </div>
+            `;
+            
+            // Reset floor by floor
+            const floorsList = document.getElementById('floorsList');
+            floorsList.innerHTML = `
+                <div class="floor-entry">
+                    <div class="floor-header">
+                        <span>طبقه ۱</span>
+                        <button type="button" class="remove-unit-btn" onclick="removeFloor(this)" style="display: none;">
+                            <i class="fas fa-trash"></i> حذف طبقه
+                        </button>
+                    </div>
+                    <div class="floor-content">
+                        <input type="text" placeholder="متراژ کل طبقه (متر)" 
+                            oninput="handlePersianNumberInput(this); updateDifferentAreaResults()">
+                    </div>
+                </div>
+            `;
+            floorCounter = 1;
+            
+            // Hide summary
+            document.getElementById('unitsSummary').style.display = 'none';
+            
+            // Reset results
+            document.getElementById('total-useful-area').innerText = toFarsiNumber('0') + ' متر';
+            document.getElementById('share-result').innerText = toFarsiNumber('0') + ' متر';
+            
+            // Focus on first input based on current type
+            if (calculationType === 'same') {
+                const firstInput = document.getElementById('floors-same');
+                if (firstInput) firstInput.focus();
+            } else {
+                const firstInput = document.getElementById('land-area-diff');
+                if (firstInput) firstInput.focus();
+            }
+        }
+
+        function createMenuHTML() {
+            const menuOverlay = document.createElement('div');
+            menuOverlay.className = 'menu-overlay';
+            menuOverlay.id = 'menuOverlayElement';
+
+            const menuPanel = document.createElement('div');
+            menuPanel.className = 'menu-panel';
+            const menuHeader = document.createElement('div');
+            menuHeader.className = 'menu-header';
+            const logoImage = document.createElement('img');
+            logoImage.className = 'menu-logo';
+            logoImage.src = 'images/logo.png';
+            logoImage.alt = 'لوگوی برنامه';
+
+            const closeButton = document.createElement('button');
+            closeButton.className = 'close-menu';
+            closeButton.id = 'closeMenuButton';
+
+            const closeIcon = document.createElement('i');
+            closeIcon.className = 'fas fa-times';
+            closeButton.appendChild(closeIcon);
+            menuHeader.appendChild(logoImage);
+            menuHeader.appendChild(closeButton);
+            menuPanel.appendChild(menuHeader);
+
+            const menuContent = document.createElement('div');
+            menuContent.className = 'menu-content';
+
+            const menuHTML = `
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a class="menu-link" id="helpMenuItem">
+                            <i class="menu-icon fas fa-question-circle"></i>
+                            <span>راهنما</span>
+                        </a>
+                    </li>
+                </ul>
+            `;
+            menuContent.innerHTML = menuHTML;
+            menuPanel.appendChild(menuContent);
+
+            const menuFooter = document.createElement('div');
+            menuFooter.className = 'menu-footer';
+            menuFooter.innerHTML = `
+                <span class="menu-version">نسخه ۱.۰.۰</span>
+            `;
+            menuPanel.appendChild(menuFooter);
+            menuOverlay.appendChild(menuPanel);
+            if (document.body) {
+                document.body.appendChild(menuOverlay);
+            }
+        }
+
+        function setupMenuEvents() {
+            const menuButton = document.getElementById('menuButton');
+            const menuOverlay = document.getElementById('menuOverlayElement');
+            const closeMenuBtn = document.getElementById('closeMenuButton');
+            const helpMenuItem = document.getElementById('helpMenuItem');
+            const helpModalOverlay = document.getElementById('helpModalOverlay');
+            const closeHelpModalBtn = document.getElementById('closeHelpModal');
+
+            if (menuButton && menuOverlay) {
+                menuButton.addEventListener('click', function () {
+                    menuOverlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+
+            if (closeMenuBtn && menuOverlay) {
+                closeMenuBtn.addEventListener('click', function () {
+                    menuOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+
+            if (menuOverlay) {
+                menuOverlay.addEventListener('click', function (e) {
+                    if (e.target === menuOverlay) {
+                        menuOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+
+            if (helpMenuItem && helpModalOverlay && menuOverlay) {
+                helpMenuItem.addEventListener('click', function () {
+                    helpModalOverlay.classList.add('active');
+                    menuOverlay.classList.remove('active'); 
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+
+            if (closeHelpModalBtn && helpModalOverlay) {
+                closeHelpModalBtn.addEventListener('click', function () {
+                    helpModalOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+            
+            if (helpModalOverlay) {
+                helpModalOverlay.addEventListener('click', function (e) {
+                    if (e.target === helpModalOverlay) {
+                        helpModalOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+
+            const resetButton = document.getElementById('resetButton');
+            if (resetButton) {
+                resetButton.addEventListener('click', function() {
+                    resetForm();
+                });
+            }
+
+            // Type selection buttons
+            document.getElementById('sameAreaBtn').addEventListener('click', function() {
+                switchCalculationType('same');
+            });
+
+            document.getElementById('differentAreaBtn').addEventListener('click', function() {
+                switchCalculationType('different');
+            });
+
+            // Entry method options
+            document.getElementById('totalOption').addEventListener('click', function() {
+                switchEntryMethod('total');
+            });
+            
+            document.getElementById('individualOption').addEventListener('click', function() {
+                switchEntryMethod('individual');
+            });
+            
+            document.getElementById('floorOption').addEventListener('click', function() {
+                switchEntryMethod('floor');
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function () {
+            createMenuHTML();
+            setupMenuEvents();
+
+            // تنظیم مقادیر اولیه
+            calculateSameAreaShare();
+            
+            // Setup specific unit calculation
+            document.getElementById('specific-unit-area').addEventListener('input', function() {
+                updateSpecificUnitResult();
+            });
+        });
+    </script>
+</body>
+</html>

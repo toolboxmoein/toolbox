@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>املاک معین رامسر | تماس با ما</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0bff00;
+            --primary-light: #4DF5A5;
+            --secondary-color: #00B84B;
+            --dark-color: #008E3A;
+            --light-color: #E6F8EE;
+            --shadow: 0 10px 30px rgba(11, 255, 0, 0.1);
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.05), 0 5px 10px rgba(0, 0, 0, 0.03);
+            --hover-transform: translateY(-3px);
+            --border-radius: 25px;
+            --button-border-radius: 12px;
+            --border-color: #f0f0f0;
+            --grey-color: #6c757d;
+            --success-color: #28a745;
+            --red-color: #e53935;
+            --text-black-color: #333;
+            
+            /* رنگ‌های مخصوص اپلیکیشن‌ها - کدهای رنگ رسمی */
+            --telegram-color: #0088cc;
+            --whatsapp-color: #25D366;
+            --instagram-color: #E1306C;
+            --instagram-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            --call-color: #f5f5f5;
+            --sms-color: #f5f5f5;
+            --address-color: #f5f5f5;
+            --address-text-color: #555555;
+            --highlight-color: #e53935; /* رنگ قرمز برای کلمات مهم */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header-container {
+            width: 100%;
+            border-bottom: 1px solid var(--border-color);
+            padding: 8px 0;
+        }
+
+        .logo-container {
+            height: auto;
+            width: auto;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-image {
+            width: auto;
+            height: auto;
+            max-height: 30px; /* سایز کوچکتر لوگو */
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            width: 100%;
+            max-width: 600px;
+            margin: 15px auto;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .contact-card:hover {
+            transform: var(--hover-transform);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-container {
+            width: 110px;
+            height: 110px;
+            position: relative;
+            margin: 20px auto;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .profile-container:hover::before {
+            content: 'بزرگنمایی';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            z-index: 2;
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .profile-container:hover .profile-image {
+            transform: scale(1.05);
+        }
+
+        /* انیمیشن محسوس‌تر دور پروفایل */
+        .profile-container {
+            box-shadow: 0 0 15px rgba(0, 184, 75, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 15px rgba(0, 184, 75, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(11, 255, 0, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 15px rgba(0, 184, 75, 0.2);
+            }
+        }
+
+        /* هاله سبز زیباتر با افکت مواج */
+        .profile-container::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, 
+                var(--primary-light) 0%, 
+                var(--secondary-color) 25%, 
+                var(--primary-color) 50%, 
+                var(--secondary-color) 75%, 
+                var(--primary-light) 100%);
+            background-size: 200% auto;
+            z-index: 1;
+            opacity: 0.9;
+            animation: gradient-shift 3s infinite linear;
+        }
+
+        .profile-container::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, 
+                transparent 0%,
+                transparent 50%,
+                var(--secondary-color) 50%,
+                var(--primary-color) 100%);
+            border-top-left-radius: 25px;
+            z-index: 1;
+            opacity: 0.9;
+            animation: glow 2s infinite alternate;
+            filter: drop-shadow(0 0 8px var(--primary-color));
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes glow {
+            0% { opacity: 0.7; filter: drop-shadow(0 0 5px var(--primary-light)); }
+            50% { opacity: 1; filter: drop-shadow(0 0 12px var(--primary-color)); }
+            100% { opacity: 0.7; filter: drop-shadow(0 0 5px var(--primary-light)); }
+        }
+
+        .contact-content {
+            padding: 0 20px 20px 20px;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .contact-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-black-color);
+            margin-bottom: 3px;
+            line-height: 1.3;
+        }
+
+        .contact-subtitle {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 10px 0 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .trust-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+        }
+
+        .trust-badge i {
+            color: var(--secondary-color);
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .trust-badge span {
+            font-size: 11px;
+            color: var(--grey-color);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .contact-bio {
+            font-size: 14px;
+            color: var(--grey-color);
+            margin-bottom: 15px;
+            line-height: 1.7;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .contact-message {
+            font-size: 14px;
+            color: var(--grey-color);
+            margin: 15px 0;
+            line-height: 1.8;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .highlight {
+            color: var(--highlight-color);
+            font-weight: 600;
+        }
+
+        .button-row {
+            display: flex;
+            width: 100%;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .contact-button {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--address-text-color);
+            height: 45px;
+            border-radius: var(--button-border-radius);
+            transition: var(--transition);
+            text-align: center;
+            font-weight: 500;
+            font-size: 14px;
+            background-color: var(--call-color);
+            border: 1px solid #e0e0e0;
+        }
+
+        .contact-button i {
+            font-size: 18px;
+            margin-left: 0;
+            color: var(--secondary-color);
+        }
+
+        .app-button {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--address-text-color);
+            height: 45px;
+            border-radius: var(--button-border-radius);
+            transition: var(--transition);
+            text-align: center;
+            font-weight: 500;
+            font-size: 14px;
+            background-color: var(--address-color);
+            border: 1px solid #e0e0e0;
+        }
+
+        .address-button {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--address-text-color);
+            height: 45px;
+            border-radius: var(--button-border-radius);
+            transition: var(--transition);
+            text-align: center;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            white-space: nowrap;
+            background-color: var(--address-color);
+            border: 1px solid #e0e0e0;
+        }
+
+        .address-button i {
+            font-size: 18px;
+            margin-left: 8px;
+            color: var(--secondary-color);
+        }
+
+        .contact-button:hover, .app-button:hover, .address-button:hover {
+            transform: var(--hover-transform);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            opacity: 0.9;
+            background-color: #f0f0f0;
+        }
+
+        .address-content {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-top: 5px;
+            border-radius: 10px;
+            display: none;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-black-color);
+            border: 1px dashed #ddd;
+        }
+
+        .address-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        /* مدال بزرگنمایی عکس */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.85);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 80%;
+            max-height: 80%;
+            margin-top: 50px;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            animation: zoomIn 0.3s;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .working-hours {
+            text-align: center;
+            margin: 10px 0;
+            font-size: 12px;
+            color: var(--grey-color);
+            border-top: 1px dashed #eee;
+            padding-top: 10px;
+        }
+
+        .working-hours strong {
+            color: var(--dark-color);
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 480px) {
+            .profile-container {
+                width: 100px;
+                height: 100px;
+                margin: 15px auto;
+            }
+
+            .contact-title {
+                font-size: 18px;
+            }
+
+            .contact-subtitle {
+                font-size: 14px;
+            }
+
+            .contact-bio {
+                font-size: 13px;
+            }
+
+            .contact-message {
+                font-size: 13px;
+            }
+
+            .contact-button, .app-button, .address-button {
+                font-size: 13px;
+            }
+
+            .modal-content {
+                max-width: 95%;
+                max-height: 80%;
+                margin-top: 70px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header-container">
+        <div class="logo-container">
+            <!-- عکس لوگو با سایز کوچکتر -->
+            <img src="images/logo.png" alt="لوگوی دستیار املاک" class="logo-image">
+        </div>
+    </header>
+
+    <main>
+        <div class="contact-card">
+            <div class="profile-container" id="profileContainer">
+                <img src="images/baba.png" alt="محمد کاظم معین" class="profile-image" id="profileImage" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMTAiIGhlaWdodD0iMTEwIj48cmVjdCB3aWR0aD0iMTEwIiBoZWlnaHQ9IjExMCIgZmlsbD0iI2Y4ZjhmOCIvPjxjaXJjbGUgY3g9IjU1IiBjeT0iNDUiIHI9IjI1IiBmaWxsPSIjZTBlMGUwIi8+PHBhdGggZD0iTTU1LDg1IEMzNSw4NSAzMCw2NSAzMCw2NSBMODAsNjUgQzgwLDY1IDc1LDg1IDU1LDg1eiIgZmlsbD0iI2UwZTBlMCIvPjwvc3ZnPg=='">
+            </div>
+            
+            <div class="contact-content">
+                <div class="contact-header">
+                    <h1 class="contact-title">محمد کاظم معین</h1>
+                    <h2 class="contact-subtitle">املاک معین رامسر</h2>
+                </div>
+                
+                <!-- نشان‌های اعتمادسازی - منتقل شده به بالای متن اصلی -->
+                <div class="trust-badges">
+                    <div class="trust-badge">
+                        <i class="fas fa-medal"></i>
+                        <span>۱۶ سال سابقه</span>
+                    </div>
+                    <div class="trust-badge">
+                        <i class="fas fa-handshake"></i>
+                        <span>مشاوره جهت خرید</span>
+                    </div>
+                    <div class="trust-badge">
+                        <i class="fas fa-certificate"></i>
+                        <span>جواز کسب </span>
+                    </div>
+                    <div class="trust-badge">
+                        <i class="fas fa-clipboard-check"></i>
+                        <span>معاملات تضمینی</span>
+                    </div>
+                </div>
+                
+                <p class="contact-bio">
+                    از سال ۱۳۸۸ در رامسر فعالیت داریم و انواع ملک‌های ساحلی، کوهپایه‌ای و فایل‌های بزرگ و کوچک را ارائه می‌دهیم.
+                </p>
+                
+                <p class="contact-message">
+                    برای <span class="highlight">خرید</span> ملک یا <span class="highlight">همکاری</span> با ما، از طریق راه‌های ارتباطی زیر تماس بگیرید.
+                </p>
+                
+                <div class="button-row">
+                    <a href="tel:+989113930981" class="contact-button call">
+                        <i class="fas fa-phone-alt"></i>
+                    </a>
+                    
+                    <a href="sms:+989113930981" class="contact-button sms">
+                        <i class="fas fa-sms"></i>
+                    </a>
+                </div>
+                
+                <div class="button-row">
+                    <a href="https://t.me/Amlak_moein" class="app-button telegram">
+                        تلگرام
+                    </a>
+                    
+                    <a href="https://wa.me/989113930981" class="app-button whatsapp">
+                        واتساپ
+                    </a>
+                    
+                    <a href="https://instagram.com/moein_ramsar" class="app-button instagram">
+                        اینستاگرام
+                    </a>
+                </div>
+                
+                <div class="button-row">
+                    <div class="address-button address" id="addressBtn">
+                        <i class="fas fa-map-marker-alt"></i>
+                        آدرس دفتر
+                    </div>
+                    
+                    <div class="address-button location" id="locationBtn">
+                        <i class="fas fa-directions"></i>
+                        لوکیشن دفتر
+                    </div>
+                </div>
+                
+                <div class="address-content" id="addressContent">
+                    مازندران، رامسر، خیابان عباس مفرد، نرسیده به دانشگاه آزاد، جنب فروشگاه افق کوروش
+                </div>
+                
+                <div class="address-content" id="locationContent">
+                    <a href="https://nshn.ir/rbW89MIxXInd" style="color: var(--secondary-color); text-decoration: none; display: block; text-align: center;">
+                        <i class="fas fa-map-marked-alt" style="font-size: 24px; margin-bottom: 10px;"></i>
+                        <br>
+                        مشاهده و مسیریابی در نقشه
+                    </a>
+                </div>
+                
+                <!-- ساعات کاری به‌روزرسانی شده -->
+                <div class="working-hours">
+                    <strong>ساعات کاری:</strong> شنبه تا پنج‌شنبه ۸:۳۰ تا ۱۳:۰۰ و ۱۵:۰۰ تا ۲۱:۰۰
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- مدال بزرگنمایی عکس -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // دکمه آدرس
+            const addressBtn = document.getElementById('addressBtn');
+            const addressContent = document.getElementById('addressContent');
+            
+            // دکمه لوکیشن
+            const locationBtn = document.getElementById('locationBtn');
+            const locationContent = document.getElementById('locationContent');
+            
+            // کلیک روی دکمه آدرس
+            addressBtn.addEventListener('click', function() {
+                // اگر محتوای آدرس فعال نیست، فعال کن
+                if (!addressContent.classList.contains('active')) {
+                    // ابتدا همه محتوای کشویی را مخفی کن
+                    document.querySelectorAll('.address-content').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    
+                    // سپس محتوای آدرس را نمایش بده
+                    addressContent.classList.add('active');
+                } else {
+                    // اگر محتوای آدرس فعال است، مخفی کن
+                    addressContent.classList.remove('active');
+                }
+            });
+            
+            // کلیک روی دکمه لوکیشن
+            locationBtn.addEventListener('click', function() {
+                // اگر محتوای لوکیشن فعال نیست، فعال کن
+                if (!locationContent.classList.contains('active')) {
+                    // ابتدا همه محتوای کشویی را مخفی کن
+                    document.querySelectorAll('.address-content').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    
+                    // سپس محتوای لوکیشن را نمایش بده
+                    locationContent.classList.add('active');
+                } else {
+                    // اگر محتوای لوکیشن فعال است، مخفی کن
+                    locationContent.classList.remove('active');
+                }
+            });
+            
+            // بزرگنمایی عکس
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const profileContainer = document.getElementById('profileContainer');
+            const profileImg = document.getElementById('profileImage');
+            const closeBtn = document.getElementsByClassName('close')[0];
+            
+            profileContainer.addEventListener('click', function() {
+                modal.style.display = "block";
+                modalImg.src = profileImg.src;
+            });
+            
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = "none";
+            });
+            
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

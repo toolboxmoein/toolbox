@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منوی جعبه لایتنر املاک</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00A859;
+            --primary-light: #E6F8EE;
+            --secondary-color: #007D45;
+            --dark-color: #2D3748;
+            --light-color: #f8f9fa;
+            --shadow: 0 10px 30px rgba(0, 168, 89, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        body {
+            background-color: white;
+            color: var(--dark-color);
+            min-height: 100vh;
+        }
+
+        .menu-container {
+            width: 100%;
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .close-menu {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e53935;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .close-menu:hover {
+            transform: scale(1.1);
+            background-color: #c62828;
+        }
+
+        .menu-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            /* Increased size */
+            width: 150px; /* Increased from 120px */
+            margin: 0 auto 15px;
+        }
+
+        .logo img {
+            width: 100%;
+            height: auto;
+        }
+
+        .menu-list {
+            list-style: none;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .menu-item {
+            margin-bottom: 15px;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: white;
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: var(--transition);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .menu-link:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+            color: var(--primary-color);
+        }
+
+        .menu-link i {
+            font-size: 1.4rem;
+            margin-left: 15px;
+            color: var(--primary-color);
+        }
+
+        .menu-link .menu-text {
+            flex-grow: 1;
+            text-align: right;
+        }
+
+        .menu-link .arrow {
+            margin-right: 10px;
+            color: #aaa;
+        }
+
+        @media (max-width: 480px) {
+            .menu-container {
+                padding: 20px;
+            }
+            .menu-link {
+                padding: 12px 15px;
+            }
+            .menu-link i {
+                font-size: 1.2rem;
+                margin-left: 10px;
+            }
+            .logo {
+                /* Increased size for mobile */
+                width: 120px; /* Increased from 100px */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-container">
+        <button class="close-menu" id="close-menu"><i class="fas fa-times"></i></button>
+
+        <div class="menu-header">
+            <div class="logo">
+                <img src="images/logo.png" alt="لوگو املاک">
+            </div>
+        </div>
+
+        <ul class="menu-list">
+            <!-- Removed: برنامه مرور -->
+            <!-- Removed: افزودن ملک جدید -->
+            <li class="menu-item">
+                <a href="lightner.review.html" class="menu-link">
+                    <i class="fas fa-redo-alt"></i>
+                    <span class="menu-text">مرور کارت‌ها</span>
+                    <i class="fas fa-chevron-left arrow"></i>
+                </a>
+            </li>
+            <!-- NEW: آزمون چهار گزینه‌ای -->
+            <li class="menu-item">
+                <a href="lightner.quiz.html" class="menu-link">
+                    <i class="fas fa-list-check"></i>
+                    <span class="menu-text">آزمون چهار گزینه‌ای</span>
+                    <i class="fas fa-chevron-left arrow"></i>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <i class="fas fa-question-circle"></i>
+                    <span class="menu-text">راهنمای استفاده</span>
+                    <i class="fas fa-chevron-left arrow"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        document.getElementById('close-menu').addEventListener('click', function() {
+            window.location.href = 'lightner.html';
+        });
+    </script>
+</body>
+</html>

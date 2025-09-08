@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استعلام وکالتنامه</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00D968;
+            --secondary-color: #00B84B;
+            --light-color: #E6F8EE;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .logo-section {
+            margin-bottom: 30px;
+        }
+
+        .ssaa-logo {
+            max-width: 120px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background: var(--gradient);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 217, 104, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 217, 104, 0.4);
+        }
+
+        .loading {
+            margin-top: 20px;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--light-color);
+            border-left-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-section">
+            <img src="https://my.ssaa.ir/portal/ssar/static/images/logo-fa.png" alt="لوگو سازمان سنجش" class="ssaa-logo">
+        </div>
+        
+        <h1>استعلام وکالتنامه</h1>
+        <p class="description">برای استعلام اصالت وکالتنامه از طریق سامانه رسمی سازمان سنجش، روی دکمه زیر کلیک کنید.</p>
+        
+        <a href="https://my.ssaa.ir/portal/ssar/originality-document" target="_blank" class="btn">
+            <i class="fas fa-external-link-alt"></i>
+            ورود به سامانه استعلام
+        </a>
+        
+        <div class="loading">
+            در حال هدایت به سایت رسمی...
+            <span class="spinner"></span>
+        </div>
+    </div>
+
+    <script>
+        // هدایت خودکار بعد از 2 ثانیه
+        setTimeout(function() {
+            window.open('https://my.ssaa.ir/portal/ssar/originality-document', '_blank');
+        }, 2000);
+    </script>
+</body>
+</html>

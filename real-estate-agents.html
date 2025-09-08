@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت مشاوران املاک</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00D968;
+            --primary-light: #4DF5A5;
+            --secondary-color: #00B84B;
+            --dark-color: #008E3A;
+            --light-color: #E6F8EE;
+            --shadow: 0 10px 30px rgba(0, 217, 104, 0.1);
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --card-shadow: 0 15px 35px rgba(0, 217, 104, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            --hover-transform: translateY(-5px);
+            --border-radius: 16px;
+            --button-border-radius: 8px;
+            --border-color: #e0e0e0;
+            --grey-color: #6c757d;
+            --success-color: #28a745;
+            --red-color: #e53935;
+            --text-black-color: #333;
+            --yellow-color: #FFC107;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background-color: #ffffff;
+        }
+
+        .header-container {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+
+        .topbar {
+            background-color: #ffffff;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo-container {
+            height: 50px;
+            width: 150px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #ffffff;
+        }
+
+        .logo-image {
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        #menuButton {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 10;
+        }
+
+        #menuButton span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 15px;
+            min-height: calc(100vh - 90px);
+        }
+
+        .guide-text {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            color: #555;
+            max-width: 680px;
+            line-height: 1.7;
+            position: relative;
+        }
+
+        .guide-text::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 2px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .guide-text .highlight {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .search-container {
+            width: 100%;
+            max-width: 650px;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: #f9f9f9;
+            border: 1px solid var(--border-color);
+            border-radius: var(--button-border-radius);
+            padding: 10px 15px;
+            transition: var(--transition);
+        }
+
+        .search-box:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
+            background-color: #fff;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 14px;
+            text-align: right;
+            padding: 0 10px;
+        }
+
+        .search-icon {
+            color: var(--primary-color);
+            font-size: 18px;
+        }
+
+        .advisors-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 80px;
+        }
+
+        .advisor-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+            position: relative;
+            cursor: pointer;
+            border: 1px solid #f0f0f0;
+        }
+
+        .advisor-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 217, 104, 0.15);
+        }
+
+        .card-content {
+            padding: 15px;
+            position: relative;
+            text-align: center;
+        }
+
+        .profile-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-light);
+            margin: 0 auto 10px auto;
+            display: block;
+        }
+
+        .profile-placeholder {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            margin: 0 auto 10px auto;
+        }
+
+        .advisor-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-black-color);
+            margin-bottom: 8px;
+            text-align: right;
+        }
+
+        .office-name {
+            font-size: 14px;
+            color: var(--grey-color);
+            margin-bottom: 8px;
+            text-align: right;
+        }
+
+        .location-info {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            color: var(--primary-color);
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .location-icon {
+            color: var(--primary-color);
+            margin-right: 5px;
+            font-size: 14px;
+        }
+
+        .experience-info {
+            font-size: 13px;
+            color: var(--text-black-color);
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .floating-button {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 217, 104, 0.3);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .floating-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 217, 104, 0.4);
+        }
+
+        .floating-button i {
+            font-size: 24px;
+        }
+
+        /* Detail Page Styles */
+        .advisor-detail {
+            width: 100%;
+            max-width: 800px;
+            display: none;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: var(--button-border-radius);
+            padding: 10px 15px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: var(--transition);
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 217, 104, 0.2);
+        }
+
+        .profile-header {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .profile-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 30px;
+            margin-left: 15px;
+        }
+
+        .profile-detail-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-color);
+            margin-left: 15px;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-black-color);
+            margin-bottom: 5px;
+            text-align: right;
+        }
+
+        .profile-office {
+            font-size: 16px;
+            color: var(--grey-color);
+            margin-bottom: 8px;
+            text-align: right;
+        }
+
+        .profile-location {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            color: var(--primary-color);
+            font-size: 14px;
+            gap: 5px;
+            margin-bottom: 8px;
+        }
+
+        .profile-experience {
+            font-size: 14px;
+            color: var(--text-black-color);
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .edit-profile-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+        }
+
+        .edit-profile-btn:hover {
+            background: var(--secondary-color);
+            transform: scale(1.1);
+        }
+
+        .info-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .contact-section {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .contact-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            text-align: right;
+        }
+
+        .contact-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-label {
+            font-size: 16px;
+            color: var(--text-black-color);
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        .contact-number {
+            flex: 1;
+            font-size: 16px;
+            color: var(--text-black-color);
+            text-align: center;
+        }
+
+        .contact-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .contact-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 16px;
+        }
+
+        .contact-btn:hover {
+            background: var(--secondary-color);
+            transform: scale(1.1);
+        }
+
+        .sms-btn {
+            background: var(--grey-color);
+        }
+
+        .sms-btn:hover {
+            background: #5a6268;
+        }
+
+        .info-list {
+            list-style: none;
+        }
+
+        .info-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: right;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-size: 14px;
+            color: var(--grey-color);
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-black-color);
+        }
+
+        .action-button {
+            background: var(--light-color);
+            color: var(--primary-color);
+            border: none;
+            border-radius: var(--button-border-radius);
+            padding: 8px 15px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .action-button:hover {
+            background: var(--primary-light);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            display: none;
+        }
+
+        .modal {
+            background: white;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .close-button {
+            background: transparent;
+            border: none;
+            color: var(--grey-color);
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-button:hover {
+            color: var(--red-color);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-black-color);
+            position: relative;
+            padding-right: 15px;
+        }
+
+        .form-label::before {
+            content: '•';
+            position: absolute;
+            right: 0;
+            top: -2px;
+            color: var(--primary-color);
+            font-size: 18px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
+            background-color: #fff;
+            outline: none;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .form-col {
+            flex: 1;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            transition: var(--transition);
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
+            background-color: #fff;
+            outline: none;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: var(--button-border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            text-align: center;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 217, 104, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 217, 104, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: #f0f0f0;
+            color: var(--grey-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+
+        .btn-danger {
+            background-color: var(--red-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(229, 57, 53, 0.4);
+        }
+
+        .btn-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--dark-color);
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--button-border-radius);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            display: none;
+            animation: toastFadeIn 0.3s ease;
+        }
+
+        @keyframes toastFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--grey-color);
+            grid-column: 1 / -1;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: var(--primary-light);
+        }
+
+        .empty-state p {
+            font-size: 16px;
+        }
+
+        .pending-approval {
+            background-color: var(--yellow-color);
+            color: white;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .advisors-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                max-width: 100%;
+            }
+
+            .advisor-card {
+                border-radius: 10px;
+            }
+
+            .card-content {
+                padding: 12px;
+            }
+
+            .advisor-name {
+                font-size: 14px;
+            }
+
+            .office-name {
+                font-size: 12px;
+            }
+
+            .location-info {
+                font-size: 12px;
+            }
+
+            .experience-info {
+                font-size: 12px;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-icon, .profile-detail-image {
+                margin-left: 0;
+                margin-bottom: 15px;
+            }
+
+            .profile-location {
+                justify-content: center;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .profile-image {
+                width: 50px;
+                height: 50px;
+            }
+
+            .profile-placeholder {
+                width: 50px;
+                height: 50px;
+                font-size: 16px;
+            }
+
+            .contact-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .contact-actions {
+                align-self: flex-end;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .advisors-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .guide-text {
+                font-size: 1rem;
+            }
+
+            .floating-button {
+                bottom: 20px;
+                left: 20px;
+                width: 50px;
+                height: 50px;
+            }
+
+            .action-button {
+                margin-top: 10px;
+                width: 100%;
+            }
+
+            .logo-container {
+                height: 45px;
+                width: 135px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header-container">
+        <div class="topbar">
+            <button id="menuButton" aria-label="منو">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="logo-container">
+                <img src="images/logo.png" alt="لوگوی برنامه" class="logo-image">
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <p class="guide-text">
+            به <span class="highlight">مشاورین املاک سایر شهرها</span> دسترسی پیدا کنید.
+        </p>
+
+        <!-- جستجو -->
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="searchInput" class="search-input" placeholder="جستجوی مشاور یا شهر">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+        </div>
+
+        <!-- لیست مشاوران -->
+        <div class="advisors-grid" id="advisorsGrid">
+            <!-- کارت‌های مشاوران اینجا نمایش داده می‌شوند -->
+        </div>
+
+        <!-- صفحه جزئیات مشاور -->
+        <div class="advisor-detail" id="advisorDetail">
+            <button class="back-button" id="backButton">
+                <i class="fas fa-arrow-right"></i>
+                بازگشت
+            </button>
+
+            <div class="profile-header">
+                <div class="profile-icon" id="profileIconContainer">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-info">
+                    <h2 class="profile-name" id="detailName"></h2>
+                    <div class="profile-office" id="detailOfficeName"></div>
+                    <div class="profile-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span id="detailProvince"></span>
+                        <span> - </span>
+                        <span id="detailCity"></span>
+                    </div>
+                    <div class="profile-experience" id="detailExperience"></div>
+                </div>
+                <button class="edit-profile-btn" id="editProfileBtn" style="display: none;">
+                    <i class="fas fa-pencil-alt"></i>
+                </button>
+            </div>
+
+            <div class="info-card">
+                <!-- بخش تماس -->
+                <div class="contact-section">
+                    <div class="contact-row">
+                        <span class="contact-label">شماره تماس:</span>
+                        <span class="contact-number" id="detailPhone"></span>
+                        <div class="contact-actions">
+                            <button class="contact-btn" id="callPhoneButton" title="تماس">
+                                <i class="fas fa-phone"></i>
+                            </button>
+                            <button class="contact-btn sms-btn" id="smsPhoneButton" title="پیامک">
+                                <i class="fas fa-sms"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="contact-row">
+                        <span class="contact-label">تلفن دفتر:</span>
+                        <span class="contact-number" id="detailOfficePhone"></span>
+                        <div class="contact-actions">
+                            <button class="contact-btn" id="callOfficePhoneButton" title="تماس">
+                                <i class="fas fa-phone"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- سایر اطلاعات -->
+                <ul class="info-list">
+                    <li class="info-item">
+                        <div class="info-label">آدرس و لوکیشن</div>
+                        <div class="info-value" id="detailAddress"></div>
+                        <button class="action-button" id="openLocationButton">
+                            <i class="fas fa-map"></i> باز کردن لوکیشن
+                        </button>
+                    </li>
+                    <li class="info-item">
+                        <div class="info-label">توضیحات</div>
+                        <div class="info-value" id="detailDescription"></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- دکمه شناور -->
+        <div class="floating-button" id="addAdvisorButton">
+            <i class="fas fa-plus"></i>
+        </div>
+    </main>
+
+    <!-- مودال افزودن/ویرایش مشاور -->
+    <div class="modal-overlay" id="advisorModalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">افزودن مشاور جدید</h3>
+                <button class="close-button" id="closeModalButton">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="advisorForm">
+                    <div class="form-group">
+                        <label class="form-label" for="name">نام کامل</label>
+                        <input type="text" id="name" class="form-input" placeholder="نام و نام خانوادگی" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label" for="province">استان</label>
+                                <input type="text" id="province" class="form-input" placeholder="استان" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label" for="city">شهر</label>
+                                <input type="text" id="city" class="form-input" placeholder="شهر" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="phone">شماره تماس</label>
+                        <input type="tel" id="phone" class="form-input" placeholder="۰۹۱۲۳۴۵۶۷۸۹" required maxlength="11">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="officeName">نام دفتر</label>
+                        <input type="text" id="officeName" class="form-input" placeholder="نام دفتر املاک" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="officePhone">شماره تلفن دفتر</label>
+                        <input type="tel" id="officePhone" class="form-input" placeholder="۰۱۱-۱۲۳۴۵۶۷۸" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="experience">سابقه کاری</label>
+                        <input type="text" id="experience" class="form-input" placeholder="مثال: ۵ سال" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="telegram">آیدی تلگرام</label>
+                        <input type="text" id="telegram" class="form-input" placeholder="بدون @ وارد کنید">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="whatsapp">شماره واتساپ</label>
+                        <input type="tel" id="whatsapp" class="form-input" placeholder="۰۹۱۲۳۴۵۶۷۸۹">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="instagram">نام کاربری اینستاگرام</label>
+                        <input type="text" id="instagram" class="form-input" placeholder="بدون @ وارد کنید">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="location">لینک لوکیشن</label>
+                        <input type="text" id="location" class="form-input" placeholder="لینک گوگل مپ را وارد کنید">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="address">آدرس پستی</label>
+                        <textarea id="address" class="form-textarea" placeholder="آدرس دقیق پستی" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="description">توضیحات</label>
+                        <textarea id="description" class="form-textarea" placeholder="توضیحات تکمیلی"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-icon" id="saveAdvisorButton">
+                    <i class="fas fa-check"></i> ثبت
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- اعلان (Toast) -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // تبدیل اعداد انگلیسی به فارسی
+        function toFarsiNumber(n) {
+            const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return n.toString().replace(/\d/g, x => farsiDigits[x]);
+        }
+
+        // تبدیل اعداد فارسی به انگلیسی
+        function toEnglishNumber(s) {
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            let result = s.toString();
+            for (let i = 0; i < 10; i++) {
+                const regex = new RegExp(persianDigits[i], 'g');
+                result = result.replace(regex, i);
+            }
+            return result;
+        }
+
+        // شبیه‌سازی تصاویر پروفایل از واتساپ/تلگرام
+        function generateProfileImage(phone, name) {
+            const sampleImages = [
+                'https://i.pravatar.cc/150?img=1',
+                'https://i.pravatar.cc/150?img=2',
+                'https://i.pravatar.cc/150?img=3',
+                'https://i.pravatar.cc/150?img=4',
+                'https://i.pravatar.cc/150?img=5'
+            ];
+            
+            const phoneHash = phone.replace(/\D/g, '').slice(-1);
+            return sampleImages[parseInt(phoneHash) % sampleImages.length];
+        }
+
+        // داده‌های نمونه مشاوران
+        let advisors = [
+            {
+                id: 1,
+                name: 'محمد کاظم معین',
+                city: 'رامسر',
+                province: 'مازندران',
+                phone: '۰۹۱۱۳۹۳۰۹۸۱',
+                officeName: 'املاک معین',
+                officePhone: '۰۱۱۵۵۲۶۰۵۹۸',
+                experience: '۱۶ سال سابقه کاری',
+                address: 'رامسر، خیابان عباس مفرد، نرسیده به دانشگاه آزاد، جنب فروشگاه کوروش',
+                description: 'مشاور حرفه‌ای با تخصص در املاک تجاری و مسکونی.',
+                telegram: 'moein',
+                whatsapp: '۰۹۱۱۳۹۳۰۹۸۱',
+                instagram: 'moein',
+                location: 'https://maps.app.goo.gl/xyz',
+                profileImage: generateProfileImage('۰۹۱۱۳۹۳۰۹۸۱', 'محمد کاظم معین'),
+                isPinned: true,
+                isApproved: true,
+                userId: 'user1',
+                order: 1
+            },
+            {
+                id: 2,
+                name: 'محسن معین',
+                city: 'رامسر',
+                province: 'مازندران',
+                phone: '۰۹۱۱۲۹۰۳۹۳۲',
+                officeName: 'املاک معین',
+                officePhone: '۰۱۱۵۵۲۶۰۵۹۸',
+                experience: '۳ سال سابقه کاری',
+                address: 'رامسر، خیابان عباس مفرد، نرسیده به دانشگاه آزاد، جنب فروشگاه کوروش',
+                description: 'متخصص در فروش و اجاره املاک مسکونی.',
+                telegram: 'mohsen',
+                whatsapp: '۰۹۱۱۲۹۰۳۹۳۲',
+                instagram: 'mohsen',
+                location: 'https://maps.app.goo.gl/xyz',
+                profileImage: generateProfileImage('۰۹۱۱۲۹۰۳۹۳۲', 'محسن معین'),
+                isPinned: true,
+                isApproved: true,
+                userId: 'user2',
+                order: 2
+            },
+            {
+                id: 3,
+                name: 'پژمان طالشی',
+                city: 'رامسر',
+                province: 'مازندران',
+                phone: '۰۹۱۱۳۹۳۰۹۸۳',
+                officeName: 'املاک معین',
+                officePhone: '۰۱۱۵۵۲۶۰۵۹۸',
+                experience: '۴ سال سابقه کاری',
+                address: 'رامسر، خیابان عباس مفرد، نرسیده به دانشگاه آزاد، جنب فروشگاه کوروش',
+                description: 'متخصص در املاک تجاری و صنعتی.',
+                telegram: 'pejman',
+                whatsapp: '۰۹۱۱۳۹۳۰۹۸۳',
+                instagram: 'pejman',
+                location: 'https://maps.app.goo.gl/xyz',
+                profileImage: generateProfileImage('۰۹۱۱۳۹۳۰۹۸۳', 'پژمان طالشی'),
+                isPinned: true,
+                isApproved: true,
+                userId: 'user3',
+                order: 3
+            },
+            {
+                id: 4,
+                name: 'محمد کاظم معین',
+                city: 'رامسر',
+                province: 'مازندران',
+                phone: '۰۹۱۱۳۹۳۰۹۸۱',
+                officeName: 'املاک معین',
+                officePhone: '۰۱۱۵۵۲۶۰۵۹۸',
+                experience: '۱۶ سال سابقه کاری',
+                address: 'رامسر، خیابان عباس مفرد، نرسیده به دانشگاه آزاد، جنب فروشگاه کوروش',
+                description: 'مشاور حرفه‌ای با تخصص در املاک تجاری و مسکونی.',
+                telegram: 'moein',
+                whatsapp: '۰۹۱۱۳۹۳۰۹۸۱',
+                instagram: 'moein',
+                location: 'https://maps.app.goo.gl/xyz',
+                profileImage: generateProfileImage('۰۹۱۱۳۹۳۰۹۸۱', 'محمد کاظم معین'),
+                isPinned: true,
+                isApproved: true,
+                userId: 'user1',
+                order: 4
+            }
+        ];
+
+        // متغیرهای سراسری
+        let currentAdvisorId = null;
+        let mainPage = true;
+        let currentUserId = 'user1';
+
+        // مرتب‌سازی مشاوران بر اساس ترتیب مشخص
+        function sortAdvisors(advisorsList) {
+            return advisorsList.sort((a, b) => {
+                // ابتدا بر اساس سنجاق شدن
+                if (a.isPinned && !b.isPinned) return -1;
+                if (!a.isPinned && b.isPinned) return 1;
+                
+                // سپس بر اساس ترتیب مشخص شده
+                return (a.order || 999) - (b.order || 999);
+            });
+        }
+
+        // تماس تلفنی
+        function makePhoneCall(phoneNumber) {
+            const cleanNumber = toEnglishNumber(phoneNumber).replace(/[^\d]/g, '');
+            window.location.href = `tel:${cleanNumber}`;
+        }
+
+        // ارسال پیامک
+        function sendSMS(phoneNumber) {
+            const cleanNumber = toEnglishNumber(phoneNumber).replace(/[^\d]/g, '');
+            window.location.href = `sms:${cleanNumber}`;
+        }
+
+        // نمایش مشاوران در گرید
+        function renderAdvisors(searchQuery = '') {
+            const advisorsGrid = document.getElementById('advisorsGrid');
+            advisorsGrid.innerHTML = '';
+
+            let filteredAdvisors = advisors.filter(advisor => 
+                advisor.isApproved && (
+                    advisor.name.includes(searchQuery) || 
+                    advisor.city.includes(searchQuery) ||
+                    advisor.province.includes(searchQuery)
+                )
+            );
+
+            // مرتب‌سازی
+            filteredAdvisors = sortAdvisors(filteredAdvisors);
+
+            if (filteredAdvisors.length === 0) {
+                advisorsGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <p>هیچ مشاوری یافت نشد.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredAdvisors.forEach(advisor => {
+                const card = document.createElement('div');
+                card.className = 'advisor-card';
+                card.dataset.id = advisor.id;
+                
+                const profileImageHtml = advisor.profileImage ? 
+                    `<img src="${advisor.profileImage}" alt="${advisor.name}" class="profile-image" onerror="this.outerHTML='<div class=\\'profile-placeholder\\'>${advisor.name.charAt(0)}</div>'">` :
+                    `<div class="profile-placeholder">${advisor.name.charAt(0)}</div>`;
+                
+                card.innerHTML = `
+                    <div class="card-content">
+                        ${!advisor.isApproved ? '<div class="pending-approval">در انتظار تأیید</div>' : ''}
+                        ${profileImageHtml}
+                        <h3 class="advisor-name">${advisor.name}</h3>
+                        <p class="office-name">${advisor.officeName}</p>
+                        <div class="location-info">
+                            <i class="fas fa-map-marker-alt location-icon"></i>
+                            ${advisor.province} - ${advisor.city}
+                        </div>
+                        <div class="experience-info">${advisor.experience}</div>
+                    </div>
+                `;
+                
+                advisorsGrid.appendChild(card);
+            });
+        }
+
+        // نمایش جزئیات مشاور
+        function showAdvisorDetail(id) {
+            const advisor = advisors.find(a => a.id === id);
+            if (!advisor) return;
+
+            document.getElementById('detailName').textContent = advisor.name;
+            document.getElementById('detailOfficeName').textContent = advisor.officeName;
+            document.getElementById('detailProvince').textContent = advisor.province;
+            document.getElementById('detailCity').textContent = advisor.city;
+            document.getElementById('detailExperience').textContent = advisor.experience;
+            document.getElementById('detailPhone').textContent = advisor.phone;
+            document.getElementById('detailOfficePhone').textContent = advisor.officePhone;
+            document.getElementById('detailAddress').textContent = advisor.address;
+            document.getElementById('detailDescription').textContent = advisor.description;
+
+            // نمایش عکس پروفایل در صفحه جزئیات
+            const profileIconContainer = document.getElementById('profileIconContainer');
+            if (advisor.profileImage) {
+                profileIconContainer.innerHTML = `<img src="${advisor.profileImage}" alt="${advisor.name}" class="profile-detail-image" onerror="this.outerHTML='<div class=\\'profile-icon\\'>${advisor.name.charAt(0)}</div>'">`;
+            } else {
+                profileIconContainer.innerHTML = `<div class="profile-icon">${advisor.name.charAt(0)}</div>`;
+            }
+
+            // نمایش دکمه ویرایش فقط برای صاحب پروفایل
+            const editBtn = document.getElementById('editProfileBtn');
+            if (advisor.userId === currentUserId) {
+                editBtn.style.display = 'flex';
+                editBtn.onclick = () => {
+                    currentAdvisorId = advisor.id;
+                    showAdvisorModal(true);
+                };
+            } else {
+                editBtn.style.display = 'none';
+            }
+
+            // تنظیم دکمه‌های تماس
+            document.getElementById('callPhoneButton').onclick = (e) => {
+                e.preventDefault();
+                makePhoneCall(advisor.phone);
+            };
+
+            document.getElementById('smsPhoneButton').onclick = (e) => {
+                e.preventDefault();
+                sendSMS(advisor.phone);
+            };
+
+            document.getElementById('callOfficePhoneButton').onclick = (e) => {
+                e.preventDefault();
+                makePhoneCall(advisor.officePhone);
+            };
+
+            document.getElementById('openLocationButton').onclick = () => {
+                window.open(advisor.location, '_blank');
+            };
+
+            document.getElementById('advisorsGrid').style.display = 'none';
+            document.getElementById('advisorDetail').style.display = 'block';
+            document.querySelector('.search-container').style.display = 'none';
+            document.querySelector('.guide-text').style.display = 'none';
+            mainPage = false;
+        }
+
+        // بازگشت به صفحه اصلی
+        function backToMain() {
+            document.getElementById('advisorsGrid').style.display = 'grid';
+            document.getElementById('advisorDetail').style.display = 'none';
+            document.querySelector('.search-container').style.display = 'block';
+            document.querySelector('.guide-text').style.display = 'block';
+            mainPage = true;
+        }
+
+        // نمایش مودال افزودن/ویرایش مشاور
+        function showAdvisorModal(isEdit = false) {
+            const modalTitle = document.getElementById('modalTitle');
+            const form = document.getElementById('advisorForm');
+            
+            if (isEdit) {
+                modalTitle.textContent = 'ویرایش مشاور';
+                const advisor = advisors.find(a => a.id === currentAdvisorId);
+                if (advisor) {
+                    document.getElementById('name').value = advisor.name;
+                    document.getElementById('province').value = advisor.province;
+                    document.getElementById('city').value = advisor.city;
+                    document.getElementById('phone').value = advisor.phone;
+                    document.getElementById('officeName').value = advisor.officeName;
+                    document.getElementById('officePhone').value = advisor.officePhone;
+                    document.getElementById('experience').value = advisor.experience.replace(' سابقه کاری', '');
+                    document.getElementById('telegram').value = advisor.telegram;
+                    document.getElementById('whatsapp').value = advisor.whatsapp;
+                    document.getElementById('instagram').value = advisor.instagram;
+                    document.getElementById('location').value = advisor.location;
+                    document.getElementById('address').value = advisor.address;
+                    document.getElementById('description').value = advisor.description;
+                }
+            } else {
+                modalTitle.textContent = 'افزودن مشاور جدید';
+                form.reset();
+            }
+            
+            document.getElementById('advisorModalOverlay').style.display = 'flex';
+        }
+
+        // ذخیره مشاور (افزودن یا ویرایش)
+        function saveAdvisor() {
+            const formData = {
+                name: document.getElementById('name').value,
+                province: document.getElementById('province').value,
+                city: document.getElementById('city').value,
+                phone: document.getElementById('phone').value,
+                officeName: document.getElementById('officeName').value,
+                officePhone: document.getElementById('officePhone').value,
+                experience: document.getElementById('experience').value + ' سابقه کاری',
+                telegram: document.getElementById('telegram').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                instagram: document.getElementById('instagram').value,
+                location: document.getElementById('location').value,
+                address: document.getElementById('address').value,
+                description: document.getElementById('description').value
+            };
+            
+            if (currentAdvisorId) {
+                // ویرایش مشاور موجود
+                const index = advisors.findIndex(a => a.id === currentAdvisorId);
+                if (index !== -1) {
+                    const advisor = advisors[index];
+                    // بررسی مالکیت
+                    if (advisor.userId === currentUserId) {
+                        advisors[index] = { 
+                            ...advisor, 
+                            ...formData, 
+                            profileImage: generateProfileImage(formData.phone, formData.name),
+                            isApproved: false 
+                        };
+                        showToast('تغییرات برای تأیید ارسال شد');
+                    } else {
+                        showToast('شما مجاز به ویرایش این پروفایل نیستید');
+                        return;
+                    }
+                }
+            } else {
+                // افزودن مشاور جدید
+                const newId = advisors.length > 0 ? Math.max(...advisors.map(a => a.id)) + 1 : 1;
+                advisors.push({ 
+                    id: newId, 
+                    ...formData, 
+                    isPinned: false, 
+                    isApproved: false,
+                    profileImage: generateProfileImage(formData.phone, formData.name),
+                    userId: currentUserId,
+                    order: 999
+                });
+                showToast('پروفایل جدید برای تأیید ارسال شد');
+            }
+            
+            document.getElementById('advisorModalOverlay').style.display = 'none';
+            renderAdvisors(document.getElementById('searchInput').value);
+            
+            // اگر در صفحه جزئیات هستیم، آن را به‌روزرسانی کنیم
+            if (!mainPage && currentAdvisorId) {
+                showAdvisorDetail(currentAdvisorId);
+            }
+        }
+
+        // نمایش پیام toast
+        function showToast(message, duration = 3000) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, duration);
+        }
+
+        // تنظیم رویدادها
+        function setupEventListeners() {
+            // جستجو
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                renderAdvisors(e.target.value);
+            });
+            
+            // کلیک روی کارت مشاور
+            document.getElementById('advisorsGrid').addEventListener('click', (e) => {
+                const card = e.target.closest('.advisor-card');
+                if (card) {
+                    const id = parseInt(card.dataset.id);
+                    showAdvisorDetail(id);
+                }
+            });
+            
+            // دکمه افزودن مشاور
+            document.getElementById('addAdvisorButton').addEventListener('click', () => {
+                currentAdvisorId = null;
+                showAdvisorModal(false);
+            });
+            
+            // دکمه بازگشت
+            document.getElementById('backButton').addEventListener('click', backToMain);
+            
+            // دکمه بستن مودال افزودن/ویرایش
+            document.getElementById('closeModalButton').addEventListener('click', () => {
+                document.getElementById('advisorModalOverlay').style.display = 'none';
+            });
+            
+            // دکمه ذخیره مشاور
+            document.getElementById('saveAdvisorButton').addEventListener('click', saveAdvisor);
+        }
+
+        // راه‌اندازی اولیه
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAdvisors();
+            setupEventListeners();
+        });
+    </script>
+</body>
+</html>

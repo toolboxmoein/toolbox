@@ -1,0 +1,2377 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کارت ویزیت دیجیتال</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00D968;
+            --primary-light: #4DF5A5;
+            --secondary-color: #00B84B;
+            --dark-color: #008E3A;
+            --light-color: #E6F8EE;
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --border-radius: 20px;
+            --button-border-radius: 12px;
+            --border-color: #e0e0e0;
+            --text-color: #333;
+            --grey-color: #6c757d;
+            --background-color: #f9f9f9;
+            --card-background: #ffffff;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            color: var(--text-color);            background-color: var(--background-color);
+            padding-bottom: 80px; /* Space for bottom nav */
+            overflow-x: hidden;
+        }
+
+        .container {
+            padding: 20px 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background-color: #fff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1001;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;            color: var(--text-color);
+            flex: 1;
+            text-align: center;
+        }
+
+        .hamburger-button {
+            width: 30px;
+            height: 30px;
+            background: var(--gradient);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0, 217, 104, 0.3);
+            border: none;
+            padding: 0;
+        }
+
+        .hamburger-button span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background-color: #fff;
+            border-radius: 2px;
+            margin: 2px 0;
+            transition: var(--transition);
+        }
+
+        .logo-container {
+            height: 22px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-container img {
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .page-section {
+            display: none;
+        }        .page-section.active {
+            display: block;
+        }
+
+        .cards-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Force exactly two columns */
+            gap: 15px;
+            padding: 0; /* Removed horizontal padding to allow centering via parent */
+            margin-bottom: 15px;
+            max-width: 100%; /* Will take full width of its flex container */
+        }
+
+        /* Centering the grid container itself for "تمام کارت‌ها" */
+        #myCardsPage .container {
+            display: flex;            justify-content: center; /* Centers the .cards-list flex item */
+            padding: 20px 15px; /* Re-added container padding */
+        }
+
+        .business-card {            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            padding: 15px 10px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            width: 100%;
+            max-width: 180px; /* Keep max-width for individual cards */
+        }
+
+        .business-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;            gap: 8px;
+            margin-bottom: 12px;
+            width: 100%;
+        }
+
+        .card-name {
+            font-size: 14px;
+            color: var(--text-color);
+            text-align: center;
+            font-weight: 600;
+            word-wrap: break-word;
+        }
+
+        .card-company {
+            font-size: 11px;
+            color: var(--grey-color);
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+        .business-card .button-group {
+            display: flex;
+            flex-direction: row;
+            gap: 5px;
+            margin-top: 8px;
+            width: 100%;            justify-content: center;
+        }
+
+        .business-card .button {
+            flex: 1;
+            padding: 6px 4px;
+            font-size: 0.75rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .business-card .button.send-btn {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .business-card .button.send-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        .button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--button-border-radius);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .button-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 217, 104, 0.2);
+        }
+
+        .button-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 217, 104, 0.3);
+        }        .button.secondary {
+            background: #f0f0f0;
+            color: var(--text-color);
+            box-shadow: none;
+        }
+
+        .button.secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .form-container {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--button-border-radius);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--button-border-radius);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
+        }
+
+        .person-fieldset {
+            border: 1px solid var(--border-color);
+            border-radius: var(--button-border-radius);
+            padding: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .person-legend {
+            font-weight: 600;
+            padding: 0 10px;
+            color: var(--primary-color);
+        }
+
+        .upload-photo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        .upload-photo-label {
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .upload-photo-label:hover {
+            text-decoration: underline;
+        }
+
+        .photo-preview {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border-color);            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .add-person-btn {
+            background: var(--light-color);
+            color: var(--primary-color);
+            border: 1px dashed var(--primary-color);
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .add-person-btn:hover {
+            background: var(--secondary-color);
+            color: white;
+            border-style: solid;        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .single-button-group {            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .single-button-group .button {            min-width: 120px;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+
+        .location-input-container {
+            position: relative;
+        }
+
+        .location-button {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .location-button:hover {
+            background: var(--secondary-color);
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 10px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 5px 10px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 3px;            color: var(--primary-color);
+        }
+
+        .nav-item.active {
+            color: var(--secondary-color);
+        }
+
+        .nav-item.active i {
+            color: var(--secondary-color);
+        }
+
+        .hamburger-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);            z-index: 1200;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .hamburger-menu {            position: fixed;
+            top: 0;
+            right: -80%;
+            width: 75%;
+            max-width: 360px;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: -3px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1300;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }        .hamburger-menu.active {
+            right: 0;
+        }
+
+        .hamburger-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            margin-bottom: 20px;            border-bottom: 1px solid var(--light-color);
+        }
+
+        .hamburger-logo-sidebar {
+            flex-grow: 1; /* Allows it to take up available space */
+            text-align: center; /* Centers the image within the sidebar div */
+        }
+
+        .hamburger-logo-image {
+            height: 25px;
+        }
+
+        .hamburger-close {
+            width: 36px;
+            height: 36px;
+            background-color: #ff4444;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-close:hover {
+            background-color: #cc0000;
+            transform: rotate(90deg);
+        }
+
+        .hamburger-close i {
+            color: white;
+            font-size: 18px;
+        }
+
+        .hamburger-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .hamburger-nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;            border-radius: 12px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-nav-item:hover {
+            background-color: var(--light-color);
+            transform: translateX(-5px);
+        }
+
+        .hamburger-nav-item.active {
+            background: var(--gradient);
+            color: #fff;
+        }
+
+        .hamburger-nav-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--light-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-nav-item.active .hamburger-nav-icon {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .hamburger-nav-icon i {
+            color: var(--primary-color);
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-nav-item.active .hamburger-nav-icon i {            color: #fff;
+        }
+
+        .hamburger-nav-text {
+            font-size: 14px; /* Slightly smaller font size */
+            font-weight: 500;
+        }
+
+        .toast-message {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            text-align: center;
+            max-width: 80%;
+        }
+
+        .toast-message.show {
+            opacity: 1;
+        }
+
+        /* send-card-page is now a regular page-section, not fixed */
+        /* .send-card-page styling is removed/integrated into page-section */
+
+        .send-card-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 15px;        }
+
+        .search-container {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .search-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        /* New wrapper for search input and icon */
+        .search-input-wrapper {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 45px 12px 15px; /* Added left padding for icon */
+            border: 1px solid var(--border-color);
+            border-radius: var(--button-border-radius);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px; /* Position inside the input */
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--grey-color);
+            font-size: 16px;
+            pointer-events: none; /* Allows clicks to pass through to the input */
+        }
+
+        .customers-list-section {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .customers-list-title {
+            font-size: 16px;            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .customer-select-item {
+            background: white;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .customer-select-item:hover {
+            background: var(--light-color);
+        }
+
+        .customer-select-item.selected {
+            border-color: var(--primary-color);
+            background: var(--light-color);
+        }
+
+        .customer-select-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .customer-select-name {
+            font-weight: 600;
+            color: var(--text-color);        }
+
+        .customer-select-type {
+            font-size: 12px;
+            background: var(--primary-color);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .customer-select-phone {            font-size: 13px;
+            color: var(--grey-color);
+            margin-top: 4px;
+        }
+
+        .send-options-section {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            display: none; /* Hidden by default */
+        }
+
+        .send-options-section.active {            display: block;
+        }
+
+        .send-options-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .send-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            justify-content: center;
+        }
+
+        .send-option-btn {
+            display: flex;            flex-direction: column;
+            align-items: center;
+            background: var(--light-color);
+            border-radius: 10px;
+            padding: 12px 18px;
+            border: none;
+            color: var(--primary-color);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            min-width: 80px;
+            font-family: 'Vazirmatn', sans-serif; /* Explicitly set Vazirmatn */
+        }        .send-option-btn i {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+
+        .send-option-btn:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .new-customer-section {
+            background: var(--card-background);
+            border-radius: var(--border-radius);            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .new-customer-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .customer-info-container {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .customer-info-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .phone-error {            color: #ff4444;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-control.error {
+            border-color: #ff4444;
+            box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.1);
+        }        .customer-card {
+            background: white;
+            border-radius: 12px;            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .customer-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .customer-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .customer-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .customer-type {
+            font-size: 12px;
+            background: var(--light-color);
+            color: var(--primary-color);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .customer-phone {
+            font-size: 14px;
+            color: var(--grey-color);
+            margin-bottom: 10px;
+        }
+
+        .customer-actions {            display: flex;
+            gap: 8px;
+        }
+
+        .customer-actions .button {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            min-width: auto;
+        }
+
+        .card-preview-modal {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 2002;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .card-preview-modal.active {            visibility: visible;
+            opacity: 1;
+        }
+
+        .card-preview-box {
+            background: #fff;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 20px;
+            box-shadow: 0 4px 32px rgba(0, 0, 0, 0.13);
+            position: relative;
+        }
+
+        .card-preview-close {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .card-preview-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-right: 40px;
+        }
+
+        .person-preview {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .person-preview-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }        .person-preview-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .person-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+            align-items: flex-start; /* Align label and value to start if text wraps */
+        }
+
+        .person-detail-label {
+            color: var(--grey-color);
+            font-weight: 500;
+            flex-shrink: 0; /* Prevent label from shrinking */
+            margin-left: 10px; /* Space between label and value */
+        }
+
+        .person-detail-value {
+            color: var(--text-color);
+            text-align: left; /* Ensure value aligns to left in RTL */
+            word-break: break-all; /* Break long words */
+        }
+
+        .person-detail-value a {
+            color: var(--primary-color);
+            text-decoration: none;
+            word-break: break-all;
+        }
+        .person-detail-value a:hover {
+            text-decoration: underline;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--grey-color);
+            font-size: 14px;
+        }
+
+        /* New: Customer type filter buttons container */
+        .customer-type-filters {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px; /* Smaller gap for small buttons */
+            margin-bottom: 20px;
+            padding: 0 10px; /* Some padding to prevent touching edges */
+        }
+        .filter-btn {
+            padding: 8px 12px; /* Smaller padding */
+            font-size: 0.85rem; /* Smaller font */
+            border-radius: 8px;
+            white-space: nowrap; /* Prevent text wrapping */
+            flex-grow: 1; /* Allow buttons to grow to fill space */
+            min-width: 80px; /* Minimum width for buttons */
+            max-width: 120px; /* Max width to control wrapping */
+        }        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 2px 8px rgba(0, 217, 104, 0.2);
+        }
+        .filter-btn.active:hover {            background: var(--secondary-color);
+        }
+
+        /* Custom Confirmation Modal */
+        .confirm-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 2500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }        .confirm-modal-overlay.active {
+            visibility: visible;
+            opacity: 1;        }
+
+        .confirm-modal-box {
+            background: #fff;
+            border-radius: 16px;
+            max-width: 340px;
+            width: 90%;
+            padding: 24px 20px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        .confirm-modal-icon {
+            font-size: 48px;
+            color: #ffc107; /* Warning color */
+            margin-bottom: 15px;
+        }
+
+        .confirm-modal-message {
+            font-size: 16px;
+            color: var(--text-color);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .confirm-modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .confirm-modal-buttons .button {            flex: 1;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+        }
+
+        .confirm-modal-buttons .confirm-yes {            background: #dc3545; /* Red for delete */
+            color: white;
+            font-family: 'Vazirmatn', sans-serif; /* Ensure Vazirmatn */
+        }        .confirm-modal-buttons .confirm-yes:hover {
+            background: #c82333;
+        }
+
+        .confirm-modal-buttons .confirm-no {
+            background: #f0f0f0;
+            color: var(--text-color);
+            font-family: 'Vazirmatn', sans-serif; /* Ensure Vazirmatn */
+        }
+
+        .confirm-modal-buttons .confirm-no:hover {
+            background: #e0e0e0;
+        }
+
+        /* Contact Import/Save Buttons */
+        .contact-action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            justify-content: center; /* Center buttons */
+        }
+
+        .contact-action-buttons .button {
+            flex: 1;
+            min-width: 120px;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            font-family: 'Vazirmatn', sans-serif; /* Ensure Vazirmatn */
+        }
+
+        .contact-action-buttons .button.import-contact {
+            background: #17a2b8; /* Info color */
+            color: white;
+        }
+
+        .contact-action-buttons .button.import-contact:hover {
+            background: #138496;
+        }
+
+        .contact-action-buttons .button.save-contact {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .contact-action-buttons .button.save-contact:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Contact Management Page Specific Styles */
+        .contact-management-section {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .contact-management-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .file-input-group {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .file-input-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 10px;            border: 1px solid var(--border-color);
+            border-radius: var(--button-border-radius);
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .file-input::file-selector-button {
+            background: var(--light-color);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-left: 10px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .file-input::file-selector-button:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- مودال نمایش کارت -->
+    <div class="card-preview-modal" id="cardPreviewModal">
+        <div class="card-preview-box">
+            <button class="card-preview-close" id="closeCardPreview"><i class="fas fa-times"></i></button>
+            <div id="cardPreviewContent"></div>
+        </div>
+    </div>
+    <!-- مودال تایید حذف -->
+    <div class="confirm-modal-overlay" id="confirmModal">
+        <div class="confirm-modal-box">
+            <i class="fas fa-exclamation-triangle confirm-modal-icon"></i>
+            <p class="confirm-modal-message" id="confirmMessage"></p>            <div class="confirm-modal-buttons">
+                <button class="button confirm-yes" id="confirmYes">بله، حذف کن</button>
+                <button class="button confirm-no" id="confirmNo">خیر</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- منوی همبرگری -->
+    <div class="hamburger-overlay" id="hamburgerOverlay"></div>
+    <div class="hamburger-menu" id="hamburgerMenu">
+        <div class="hamburger-header">
+            <div class="hamburger-logo-sidebar">
+                <img src="images/logo.png" alt="لوگو" class="hamburger-logo-image">
+            </div>
+            <div class="hamburger-close" id="hamburgerClose"><i class="fas fa-times"></i></div>
+        </div>
+        <div class="hamburger-nav">
+            <a href="#" class="hamburger-nav-item" data-page="customerInfo">
+                <div class="hamburger-nav-icon"><i class="fas fa-user-plus"></i></div>
+                <div class="hamburger-nav-text">افزودن مشتری</div>
+            </a>
+            <a href="#" class="hamburger-nav-item" data-page="home">
+                <div class="hamburger-nav-icon"><i class="fas fa-users"></i></div>
+                <div class="hamburger-nav-text">مشتریان</div>            </a>
+            <a href="#" class="hamburger-nav-item" data-page="createCard">                <div class="hamburger-nav-icon"><i class="fas fa-id-card"></i></div>                <div class="hamburger-nav-text">افزودن کارت ویزیت</div>
+            </a>            <a href="#" class="hamburger-nav-item" data-page="myCards">
+                <div class="hamburger-nav-icon"><i class="fas fa-address-card"></i></div>
+                <div class="hamburger-nav-text">تمام کارت‌ها</div>
+            </a>
+            <a href="#" class="hamburger-nav-item" data-page="sendCard">
+                <div class="hamburger-nav-icon"><i class="fas fa-share-alt"></i></div>
+                <div class="hamburger-nav-text">ارسال کارت ویزیت</div>
+            </a>
+            <a href="#" class="hamburger-nav-item" data-page="contactManagement">
+                <div class="hamburger-nav-icon"><i class="fas fa-address-book"></i></div>
+                <div class="hamburger-nav-text">مدیریت مخاطبین</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- پیام Toast -->
+    <div class="toast-message" id="toast"></div>
+
+    <!-- هدر اصلی برنامه -->
+    <header class="header">
+        <button id="hamburgerButton" class="hamburger-button">
+            <span></span>
+            <span></span>
+            <span></span>        </button>
+        <h1 class="header-title" id="mainHeaderTitle">کارت ویزیت دیجیتال</h1>
+        <div style="width: 30px; height: 30px;"></div> <!-- Placeholder to balance header -->
+    </header>
+
+    <main>
+        <!-- صفحه افزودن مشتری -->
+        <div id="customerInfoPage" class="page-section active">
+            <div class="container">
+                <div class="customer-info-container">
+                    <h2 class="customer-info-title" id="customerFormTitle">افزودن مشتری جدید</h2>
+                    <form id="customerInfoForm">
+                        <div class="form-group">
+                            <label class="form-label" for="customerName">نام و نام خانوادگی</label>
+                            <input type="text" id="customerName" class="form-control" placeholder="نام و نام خانوادگی مشتری" required>
+                            <div class="contact-action-buttons">
+                                <button type="button" class="button secondary import-contact" id="importContactBtn">
+                                    <i class="fas fa-address-book"></i> انتخاب از مخاطبین
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="customerPhone">شماره تماس</label>
+                            <input type="tel" id="customerPhone" class="form-control" placeholder="09xxxxxxxxx" maxlength="11" required>
+                            <div class="phone-error" id="phoneError">شماره تماس باید 11 رقم و با 09 شروع شود</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="customerType">نوع مشتری</label>
+                            <select id="customerType" class="form-select" required>
+                                <option value="">انتخاب کنید...</option>
+                                <option value="buyer">خریدار</option>
+                                <option value="seller">فروشنده</option>
+                                <option value="landlord">موجر</option>
+                                <option value="tenant">مستاجر</option>
+                                <option value="partner">همکار</option>
+                                <option value="other">سایر</option>
+                            </select>
+                        </div>
+
+                        <div class="single-button-group">
+                            <button type="submit" class="button button-primary" id="submitCustomerBtn">ثبت مشتری</button>
+                            <button type="button" class="button secondary" id="cancelCustomerEditBtn" style="display: none;">لغو ویرایش</button>
+                            <button type="button" class="button secondary" id="clearCustomerFormBtn">پاک کردن فرم</button>
+                        </div>
+                        <div class="contact-action-buttons" id="saveMainCustomerContactSection" style="display: none;">
+                            <button type="button" class="button button-primary save-contact" id="saveMainCustomerContactBtn">
+                                <i class="fas fa-save"></i> ذخیره در مخاطبین گوشی
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- صفحه مشتریان -->
+        <div id="homePage" class="page-section">
+            <div class="container">
+                <div class="customers-search-container">
+                    <div class="search-input-wrapper">
+                        <input type="text" id="customersSearchInput" class="customers-search-input" placeholder="جستجو در مشتریان...">                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                </div>
+
+                <!-- New: Customer type filter buttons -->
+                <div class="customer-type-filters">
+                    <button class="button secondary filter-btn active" data-filter-type="all">همه</button>
+                    <button class="button secondary filter-btn" data-filter-type="buyer">خریدار</button>
+                    <button class="button secondary filter-btn" data-filter-type="seller">فروشنده</button>
+                    <button class="button secondary filter-btn" data-filter-type="landlord">موجر</button>
+                    <button class="button secondary filter-btn" data-filter-type="tenant">مستاجر</button>
+                    <button class="button secondary filter-btn" data-filter-type="partner">همکار</button>
+                    <button class="button secondary filter-btn" data-filter-type="other">سایر</button>
+                </div>
+
+                <div id="homeCustomersList">
+                    <!-- مشتریان در اینجا نمایش داده می‌شوند -->
+                </div>
+            </div>
+        </div>
+        <!-- صفحه افزودن کارت -->
+        <div id="createCardPage" class="page-section">
+            <div class="container">
+                <div class="form-container">
+                    <form id="cardForm">
+                        <div class="form-group">
+                            <label class="form-label" for="cardPhotoInput">عکس پروفایل کارت</label>
+                            <div class="upload-photo-container">
+                                <img src="" alt="Card Profile" class="photo-preview" id="cardPhotoPreview">
+                                <label class="upload-photo-label">انتخاب عکس
+                                    <input type="file" id="cardPhotoInput" accept="image/*" style="display:none;">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="cardTitle">نام کارت ویزیت</label>
+                            <input type="text" id="cardTitle" class="form-control" placeholder="مثلاً املاک معین رامسر" required>
+                        </div>
+                        <hr style="border: none; border-top: 1px solid var(--border-color); margin: 25px 0;">
+                        <div id="peopleFieldsContainer"></div>
+                        <button type="button" id="addPersonBtn" class="button add-person-btn">
+                            <i class="fas fa-plus"></i> افزودن شخص جدید
+                        </button>
+                        <div class="single-button-group">
+                            <button type="submit" class="button button-primary">ذخیره</button>
+                            <button type="button" class="button secondary" id="previewCardBtn">نمایش کارت</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- صفحه تمام کارت‌ها -->
+        <div id="myCardsPage" class="page-section"></div>
+
+        <!-- صفحه ارسال کارت (حالا یک صفحه عادی) -->
+        <div id="sendCardPage" class="page-section">
+            <div class="container">
+                <div class="form-group">
+                    <label class="form-label" for="cardSelectForSend">انتخاب کارت ویزیت برای ارسال</label>
+                    <select id="cardSelectForSend" class="form-select"></select>
+                </div>
+
+                <div class="search-container">
+                    <div class="search-title">جستجو در مشتریان</div>
+                    <div class="search-input-wrapper">
+                        <input type="text" id="customerSearchInput" class="search-input" placeholder="نام مشتری را جستجو کنید...">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                </div>
+
+                <div class="customers-list-section" id="sendCustomersListSection">
+                    <div class="customers-list-title">انتخاب مشتری از لیست:</div>
+                    <div id="sendCustomersList"></div>
+                </div>
+                <div class="send-options-section" id="sendOptionsSection">
+                    <div class="send-options-title">انتخاب روش ارسال:</div>
+                    <div class="send-options">                        <button class="send-option-btn" data-send-method="whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>واتساپ</span>
+                        </button>
+                        <button class="send-option-btn" data-send-method="telegram">
+                            <i class="fab fa-telegram-plane"></i>
+                            <span>تلگرام</span>
+                        </button>
+                        <button class="send-option-btn" data-send-method="sms">
+                            <i class="fas fa-sms"></i>
+                            <span>پیامک</span>
+                        </button>
+                        <button class="send-option-btn" data-send-method="copy-link">
+                            <i class="fas fa-link"></i>
+                            <span>کپی لینک</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="new-customer-section">
+                    <div class="new-customer-title">یا مشتری جدید اضافه کنید:</div>
+                    <form id="quickCustomerForm">
+                        <div class="form-group">
+                            <label class="form-label" for="quickCustomerName">نام و نام خانوادگی</label>
+                            <input type="text" id="quickCustomerName" class="form-control" placeholder="نام و نام خانوادگی" required>
+                            <div class="contact-action-buttons">
+                                <button type="button" class="button secondary import-contact" id="importQuickContactBtn">
+                                    <i class="fas fa-address-book"></i> انتخاب از مخاطبین
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="quickCustomerPhone">شماره تماس</label>
+                            <input type="tel" id="quickCustomerPhone" class="form-control" placeholder="09xxxxxxxxx" maxlength="11" required>
+                            <div class="phone-error" id="quickPhoneError">شماره تماس باید 11 رقم و با 09 شروع شود</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="quickCustomerType">نوع مشتری</label>
+                            <select id="quickCustomerType" class="form-select" required>
+                                <option value="">نوع مشتری...</option>
+                                <option value="buyer">خریدار</option>
+                                <option value="seller">فروشنده</option>
+                                <option value="landlord">موجر</option>
+                                <option value="tenant">مستاجر</option>
+                                <option value="partner">همکار</option>
+                                <option value="other">سایر</option>
+                            </select>
+                        </div>                        <button type="submit" class="button button-primary" style="width: 100%; margin-top: 10px;">ثبت مشتری</button>
+                    </form>
+
+                    <div class="send-options-section" id="newCustomerSendOptions" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+                        <div class="send-options-title">انتخاب روش ارسال برای مشتری جدید:</div>
+                        <div class="send-options">
+                            <button class="send-option-btn" data-send-method="whatsapp" data-for-new="true">
+                                <i class="fab fa-whatsapp"></i>                                <span>واتساپ</span>
+                            </button>
+                            <button class="send-option-btn" data-send-method="telegram" data-for-new="true">
+                                <i class="fab fa-telegram-plane"></i>
+                                <span>تلگرام</span>
+                            </button>
+                            <button class="send-option-btn" data-send-method="sms" data-for-new="true">
+                                <i class="fas fa-sms"></i>
+                                <span>پیامک</span>
+                            </button>                            <button class="send-option-btn" data-send-method="copy-link" data-for-new="true">
+                                <i class="fas fa-link"></i>
+                                <span>کپی لینک</span>
+                            </button>
+                        </div>
+                        <div class="contact-action-buttons">
+                            <button type="button" class="button button-primary save-contact" id="saveNewCustomerContactBtn">                                <i class="fas fa-save"></i> ذخیره در مخاطبین گوشی
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- صفحه مدیریت مخاطبین (جدید) -->
+        <div id="contactManagementPage" class="page-section">
+            <div class="container">
+                <div class="contact-management-section">
+                    <h2 class="contact-management-title">خروجی گرفتن از مخاطبین</h2>
+                    <p style="text-align: center; margin-bottom: 20px; color: var(--grey-color);">تمام مخاطبین شما در یک فایل CSV (قابل باز شدن در Excel) ذخیره خواهند شد.</p>
+                    <button type="button" class="button button-primary" style="width: 100%;" id="exportContactsBtn">
+                        <i class="fas fa-download"></i> خروجی گرفتن (Excel/CSV)
+                    </button>
+                </div>
+
+                <div class="contact-management-section">
+                    <h2 class="contact-management-title">بازگردانی مخاطبین</h2>
+                    <p style="text-align: center; margin-bottom: 20px; color: var(--grey-color);">فایل CSV مخاطبین خود را برای بازگردانی انتخاب کنید.</p>
+                    <form id="importContactsForm">
+                        <div class="file-input-group">
+                            <input type="file" id="importFileInput" class="file-input" accept=".csv" required>
+                        </div>
+                        <button type="submit" class="button button-primary" style="width: 100%;">
+                            <i class="fas fa-upload"></i> بازگردانی مخاطبین
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- نوار پایین -->
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active" data-page="customerInfo">
+            <i class="fas fa-user-plus"></i>
+            <span>مشتری جدید</span>
+        </a>
+        <a href="#" class="nav-item" data-page="home">
+            <i class="fas fa-users"></i>
+            <span>مشتریان</span>
+        </a>
+        <a href="#" class="nav-item" data-page="createCard">
+            <i class="fas fa-id-card"></i>
+            <span>کارت جدید</span>
+        </a>
+        <a href="#" class="nav-item" data-page="myCards">
+            <i class="fas fa-address-card"></i>
+            <span>تمام کارت‌ها</span>
+        </a>
+    </div>
+
+    <script>
+    // Start of IIFE to encapsulate the entire script
+    (function() {        'use strict';
+
+        // A more robust CSV to Array function (from a known reliable source)
+        // This function correctly handles commas within quoted fields and newlines.
+        function CSVToArray(strData, strDelimiter) {
+            strDelimiter = (strDelimiter || ",");
+            var objPattern = new RegExp(
+                (
+                    "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
+                    "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
+                    "([^\"\\" + strDelimiter + "\\r\\n]*))"
+                ),
+                "gi"
+            );
+            var arrData = [[]];
+            var arrMatches = null;
+            while (arrMatches = objPattern.exec( strData )) {
+                var strMatchedDelimiter = arrMatches[ 1 ];
+                if (strMatchedDelimiter.length && (strMatchedDelimiter !== strDelimiter)) {
+                    arrData.push( [] );
+                }                var strMatchedValue;
+                if (arrMatches[ 2 ]) {
+                    strMatchedValue = arrMatches[ 2 ].replace(
+                        new RegExp( "\"\"", "g" ),"\""
+                    );
+                } else {
+                    strMatchedValue = arrMatches[ 3 ];
+                }
+                arrData[ arrData.length - 1 ].push( strMatchedValue );
+            }
+            return arrData;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            let businessCards = JSON.parse(localStorage.getItem('bcard_cards_v6')) || [];
+            let customerData = JSON.parse(localStorage.getItem('bcard_customers_v6')) || [];
+            let currentCardId = null; // Used for editing a card
+            let currentCustomerForSend = null; // Stores the customer object for sending
+            let newCustomerForSend = null; // Stores the newly created customer object in send modal
+            let currentCustomerForEdit = null; // Stores the customer object when editing in main form
+            let filteredCustomers = [...customerData]; // For search functionality
+            let currentFilterType = 'all'; // Tracks the currently active customer type filter
+
+            const SVG_USER_ICON = `<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="25" cy="25" r="25" fill="#e0e0e0"/><circle cx="25" cy="20" r="9" fill="#bdbdbd"/><ellipse cx="25" cy="36" rx="14" ry="9" fill="#bdbdbd"/></svg>`;
+
+            const defaultProfileImg = 'data:image/svg+xml;utf8,' + encodeURIComponent(SVG_USER_ICON);
+
+            const customerTypeLabels = {
+                all: 'همه', // Added for filter button
+                buyer: 'خریدار',
+                seller: 'فروشنده',
+                landlord: 'موجر',
+                tenant: 'مستاجر',
+                partner: 'همکار',
+                other: 'سایر'
+            };
+
+            const pageTitles = {
+                customerInfo: "افزودن مشتری جدید",
+                home: "مشتریان",
+                createCard: "افزودن کارت ویزیت",
+                myCards: "تمام کارت‌ها",
+                sendCard: "ارسال کارت ویزیت",
+                contactManagement: "مدیریت مخاطبین"
+            };
+
+            const DOM = {
+                pages: {
+                    customerInfo: document.getElementById('customerInfoPage'),
+                    home: document.getElementById('homePage'),
+                    createCard: document.getElementById('createCardPage'),
+                    myCards: document.getElementById('myCardsPage'),
+                    sendCard: document.getElementById('sendCardPage'),
+                    contactManagement: document.getElementById('contactManagementPage')
+                },
+                hamburger: {
+                    menu: document.getElementById('hamburgerMenu'),
+                    overlay: document.getElementById('hamburgerOverlay'),
+                    button: document.getElementById('hamburgerButton'),
+                    close: document.getElementById('hamburgerClose')
+                },
+                toast: document.getElementById('toast'),
+                peopleFieldsContainer: document.getElementById('peopleFieldsContainer'),
+                addPersonBtn: document.getElementById('addPersonBtn'),
+                cardForm: document.getElementById('cardForm'),
+                mainHeaderTitle: document.getElementById('mainHeaderTitle'),
+                previewCardBtn: document.getElementById('previewCardBtn'),
+                customerInfoForm: document.getElementById('customerInfoForm'),
+                customerFormTitle: document.getElementById('customerFormTitle'),
+                submitCustomerBtn: document.getElementById('submitCustomerBtn'),
+                cancelCustomerEditBtn: document.getElementById('cancelCustomerEditBtn'),
+                clearCustomerFormBtn: document.getElementById('clearCustomerFormBtn'),
+                homeCustomersList: document.getElementById('homeCustomersList'),
+                cardPreviewModal: document.getElementById('cardPreviewModal'),
+                closeCardPreview: document.getElementById('closeCardPreview'),
+                cardPreviewContent: document.getElementById('cardPreviewContent'),
+                sendCustomersList: document.getElementById('sendCustomersList'),                quickCustomerForm: document.getElementById('quickCustomerForm'),
+                customerSearchInput: document.getElementById('customerSearchInput'),
+                sendOptionsSection: document.getElementById('sendOptionsSection'),
+                customersSearchInput: document.getElementById('customersSearchInput'),
+                cardSelectForSend: document.getElementById('cardSelectForSend'),                newCustomerSendOptions: document.getElementById('newCustomerSendOptions'),
+                confirmModal: document.getElementById('confirmModal'),
+                confirmMessage: document.getElementById('confirmMessage'),
+                confirmYes: document.getElementById('confirmYes'),
+                confirmNo: document.getElementById('confirmNo'),
+                importContactBtn: document.getElementById('importContactBtn'),
+                importQuickContactBtn: document.getElementById('importQuickContactBtn'),
+                saveMainCustomerContactSection: document.getElementById('saveMainCustomerContactSection'),
+                saveMainCustomerContactBtn: document.getElementById('saveMainCustomerContactBtn'),
+                saveNewCustomerContactBtn: document.getElementById('saveNewCustomerContactBtn'),
+                exportContactsBtn: document.getElementById('exportContactsBtn'),
+                importFileInput: document.getElementById('importFileInput'),
+                importContactsForm: document.getElementById('importContactsForm'),
+                cardPhotoInput: document.getElementById('cardPhotoInput'),
+                cardPhotoPreview: document.getElementById('cardPhotoPreview')            };
+
+            let confirmAction = null;
+
+            const showConfirmModal = (message, onConfirm) => {                DOM.confirmMessage.textContent = message;
+                DOM.confirmModal.classList.add('active');                confirmAction = onConfirm;
+            };
+
+            const hideConfirmModal = () => {
+                DOM.confirmModal.classList.remove('active');
+                confirmAction = null;
+            };
+
+            DOM.confirmYes.addEventListener('click', () => {
+                if (confirmAction) {
+                    confirmAction();
+                }
+                hideConfirmModal();
+            });
+
+            DOM.confirmNo.addEventListener('click', hideConfirmModal);
+            DOM.confirmModal.addEventListener('click', (e) => {
+                if (e.target === DOM.confirmModal) {
+                    hideConfirmModal();
+                }
+            });
+
+            const saveData = () => {
+                localStorage.setItem('bcard_cards_v6', JSON.stringify(businessCards));
+                localStorage.setItem('bcard_customers_v6', JSON.stringify(customerData));
+            };
+
+            const showToast = (message) => {
+                DOM.toast.textContent = message;
+                DOM.toast.classList.add('show');
+                setTimeout(() => DOM.toast.classList.remove('show'), 3000);
+            };
+
+            const validatePhoneNumber = (phone) => {
+                const phoneRegex = /^09\d{9}$/;
+                return phoneRegex.test(phone);
+            };
+
+            const getCurrentLocation = () => {
+                return new Promise((resolve, reject) => {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            (position) => {
+                                const lat = position.coords.latitude;
+                                const lng = position.coords.longitude;
+                                resolve(`https://maps.google.com/?q=${lat},${lng}`);
+                            },
+                            (error) => {
+                                reject('خطا در دریافت موقعیت مکانی');
+                            }
+                        );
+                    } else {
+                        reject('مرورگر شما از موقعیت‌یابی پشتیبانی نمی‌کند');
+                    }
+                });
+            };
+
+            const saveContactToPhone = (name, phone) => {
+                if (!name || !phone) {                    showToast('نام و شماره تلفن برای ذخیره مخاطب لازم است.');
+                    return;
+                }
+                const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL;TYPE=CELL:${phone}\nEND:VCARD`;
+                const blob = new Blob([vcard], { type: 'text/vcard;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${name}.vcf`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                showToast('فایل مخاطب برای ذخیره در گوشی شما آماده شد.');
+            };
+
+            const importContact = async (nameInput, phoneInput) => {
+                if ('contacts' in navigator && 'ContactsManager' in window) {                    try {
+                        const properties = ['name', 'tel'];
+                        const options = { multiple: false };
+                        const contacts = await navigator.contacts.select(properties, options);
+                        if (contacts.length > 0) {
+                            const contact = contacts[0];
+                            if (contact.name && contact.name.length > 0) {
+                                nameInput.value = contact.name[0];
+                            }                            if (contact.tel && contact.tel.length > 0) {
+                                let tel = contact.tel[0].replace(/\D/g, '');
+                                if (tel.length >= 10 && tel.startsWith('9')) {
+                                    tel = '0' + tel;
+                                }
+                                phoneInput.value = tel;
+                                const event = new Event('input');
+                                phoneInput.dispatchEvent(event);
+                            }
+                            showToast('مخاطب با موفقیت وارد شد.');
+                        } else {
+                            showToast('هیچ مخاطبی انتخاب نشد.');
+                        }
+                    } catch (error) {
+                        console.error("Failed to import contact:", error);
+                        showToast('خطا در دسترسی به مخاطبین. لطفا مجوز دسترسی را بدهید.');
+                    }
+                } else {
+                    showToast('مرورگر شما از قابلیت انتخاب مخاطب پشتیبانی نمی‌کند.');
+                }
+            };
+
+            const exportCustomersToCSV = () => {                if (customerData.length === 0) {
+                    showToast('هیچ مشتری برای خروجی گرفتن وجود ندارد.');
+                    return;
+                }
+                const headers = ["نام و نام خانوادگی", "شماره تماس", "نوع مشتری", "تاریخ ثبت"];
+                const rows = customerData.map(customer => [
+                    customer.name,
+                    customer.phone,
+                    customerTypeLabels[customer.type] || customer.type,
+                    new Date(customer.createdAt).toLocaleDateString('fa-IR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+                ]);
+                let csvContent = "\uFEFF" + headers.map(h => `"${h}"`).join(",") + "\n";
+                rows.forEach(row => {
+                    csvContent += row.map(field => `"${String(field || '').replace(/"/g, '""')}"`).join(",") + "\n";
+                });
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.setAttribute('href', url);
+                link.setAttribute('download', 'customers.csv');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                showToast('مخاطبین با موفقیت به فایل CSV صادر شدند.');
+            };
+
+            const importCustomersFromCSV = (file) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const text = e.target.result;
+                    const lines = CSVToArray(text);
+                    if (lines.length < 2 || lines[0].length === 0) {
+                        showToast('فایل CSV نامعتبر است یا خالی است.');
+                        return;
+                    }
+                    const newCustomers = [];
+                    for (let i = 1; i < lines.length; i++) {
+                        const parts = lines[i];
+                        if (parts && parts.length >= 3) {
+                            const name = parts[0] ? parts[0].trim() : '';
+                            const phone = parts[1] ? parts[1].trim() : '';
+                            const typeLabel = parts[2] ? parts[2].trim() : '';
+                            const type = Object.keys(customerTypeLabels).find(key => customerTypeLabels[key] === typeLabel) || 'other';
+                            if (name && validatePhoneNumber(phone)) {
+                                newCustomers.push({
+                                    id: Date.now().toString() + '-' + i,
+                                    name,
+                                    phone,                                    type,
+                                    createdAt: new Date().toISOString()
+                                });
+                            }
+                        }                    }
+                    if (newCustomers.length > 0) {
+                        showConfirmModal(`آیا مایلید ${newCustomers.length} مشتری جدید را اضافه کنید؟ (مشتریان فعلی حفظ خواهند شد)`, () => {
+                            customerData.push(...newCustomers);
+                            saveData();
+                            showToast(`${newCustomers.length} مشتری با موفقیت بازگردانی شد.`);
+                            filterCustomers(DOM.customersSearchInput.value, currentFilterType);
+                        });
+                    } else {
+                        showToast('هیچ مشتری معتبری در فایل یافت نشد.');
+                    }
+                };
+                reader.onerror = () => {
+                    showToast('خطا در خواندن فایل.');
+                };
+                reader.readAsText(file);
+            };
+
+            const filterCustomers = (searchTerm, typeFilter = currentFilterType) => {
+                currentFilterType = typeFilter;
+                let tempCustomers = [...customerData];
+                if (searchTerm) {
+                    tempCustomers = tempCustomers.filter(customer =>
+                        customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||                        customer.phone.includes(searchTerm) ||
+                        (customerTypeLabels[customer.type] && customerTypeLabels[customer.type].toLowerCase().includes(searchTerm.toLowerCase()))
+                    );
+                }
+                if (typeFilter !== 'all') {
+                    tempCustomers = tempCustomers.filter(customer => customer.type === typeFilter);
+                }
+                filteredCustomers = tempCustomers;
+                renderHomeCustomers();
+            };
+
+            const renderCustomersInSendModal = () => {
+                if (filteredCustomers.length === 0) {
+                    DOM.sendCustomersList.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--grey-color);">هیچ مشتری یافت نشد</div>';
+                    return;
+                }
+                let customersHtml = '';
+                filteredCustomers.forEach(customer => {
+                    const isSelected = currentCustomerForSend && currentCustomerForSend.id === customer.id ? 'selected' : '';
+                    customersHtml += `
+                        <div class="customer-select-item ${isSelected}" data-customer-id="${customer.id}">
+                            <div class="customer-select-info">
+                                <div class="customer-select-name">${customer.name}</div>
+                                <div class="customer-select-type">${customerTypeLabels[customer.type] || customer.type}</div>
+                            </div>
+                            <div class="customer-select-phone">${customer.phone}</div>                        </div>`;
+                });
+                DOM.sendCustomersList.innerHTML = customersHtml;
+                if (currentCustomerForSend && businessCards.length > 0) {
+                    DOM.sendOptionsSection.classList.add('active');
+                } else {
+                    DOM.sendOptionsSection.classList.remove('active');
+                }
+            };
+
+            const renderHomeCustomers = () => {
+                if (filteredCustomers.length === 0) {
+                    DOM.homeCustomersList.innerHTML = `<div class="empty-message"><i class="fas fa-users" style="font-size: 48px; color: var(--grey-color); margin-bottom: 15px;"></i><p>هیچ مشتری یافت نشد</p></div>`;
+                    return;
+                }
+                let customersHtml = '';
+                filteredCustomers.forEach(customer => {
+                    customersHtml += `
+                        <div class="customer-card">
+                            <div class="customer-info">
+                                <div class="customer-name">${customer.name}</div>
+                                <div class="customer-type">${customerTypeLabels[customer.type] || customer.type}</div>
+                            </div>
+                            <div class="customer-phone">${customer.phone}</div>
+                            <div class="customer-actions">
+                                <button class="button secondary send-btn" data-action="send-customer" data-id="${customer.id}">ارسال کارت</button>
+                                <button class="button secondary" data-action="edit-customer" data-id="${customer.id}">ویرایش</button>
+                                <button class="button secondary" data-action="delete-customer" data-id="${customer.id}">حذف</button>
+                            </div>
+                        </div>`;
+                });
+                DOM.homeCustomersList.innerHTML = customersHtml;
+            };
+
+            const showCardPreview = () => {
+                const title = document.getElementById('cardTitle').value.trim();
+                if (!title) {
+                    showToast('نام کارت ویزیت الزامی است.');
+                    return;
+                }
+                const cardPhoto = DOM.cardPhotoPreview.src === defaultProfileImg ? '' : DOM.cardPhotoPreview.src;
+                const people = [];
+                const personFieldsets = DOM.peopleFieldsContainer.querySelectorAll('.person-fieldset');
+                personFieldsets.forEach(fieldset => {
+                    people.push({
+                        name: fieldset.querySelector('.person-name').value.trim(),
+                        photo: fieldset.querySelector('.photo-preview').src,
+                        phone: fieldset.querySelector('.person-phone').value.trim(),
+                        whatsapp: fieldset.querySelector('.person-whatsapp').value.trim(),
+                        telegram: fieldset.querySelector('.person-telegram').value.trim(),
+                        instagram: fieldset.querySelector('.person-instagram').value.trim(),
+                        address: fieldset.querySelector('.person-address').value.trim(),
+                        location: fieldset.querySelector('.person-location').value.trim(),
+                    });
+                });
+                let previewHtml = `<h2 class="card-preview-title">${title}</h2>`;
+                let mainCardPhoto = cardPhoto;
+                if (!mainCardPhoto && people.length > 0) {
+                    mainCardPhoto = people[0].photo;
+                }
+                if (!mainCardPhoto) {
+                    mainCardPhoto = defaultProfileImg;
+                }
+                previewHtml += `<div class="person-preview" style="text-align: center; margin-bottom: 25px;"><img src="${mainCardPhoto}" alt="Card Main Photo" class="photo-preview" style="width: 80px; height: 80px; margin: 0 auto 15px;"><div class="person-preview-name" style="font-size: 1.2rem; font-weight: 700;">${title}</div></div>`;
+                people.forEach((person, index) => {
+                    const hasAnyDetail = person.phone || person.whatsapp || person.telegram || person.instagram || person.address || person.location;                    if (person.name || hasAnyDetail) {
+                        previewHtml += `<div class="person-preview"><div class="person-preview-header"><img src="${person.photo || defaultProfileImg}" alt="Profile" class="photo-preview"><div class="person-preview-name">${person.name || `شخص ${index + 1}`}</div></div>`;
+                        if (person.phone) {
+                            previewHtml += `<div class="person-detail"><span class="person-detail-label">تلفن:</span><span class="person-detail-value"><a href="tel:${person.phone}">${person.phone}</a></span></div>`;
+                        }
+                        if (person.whatsapp) {
+                            const cleanedPhone = person.whatsapp.replace(/\D/g, '');
+                            previewHtml += `<div class="person-detail"><span class="person-detail-label">واتساپ:</span><span class="person-detail-value"><a href="https://wa.me/${cleanedPhone}" target="_blank">${person.whatsapp}</a></span></div>`;
+                        }
+                        if (person.telegram) {                            const cleanedTelegram = person.telegram.replace(/^@/, '');
+                            previewHtml += `<div class="person-detail"><span class="person-detail-label">تلگرام:</span><span class="person-detail-value"><a href="https://t.me/${cleanedTelegram}" target="_blank">${person.telegram}</a></span></div>`;
+                        }
+                        if (person.instagram) {
+                            previewHtml += `<div class="person-detail"><span class="person-detail-label">اینستاگرام:</span><span class="person-detail-value"><a href="https://instagram.com/${person.instagram}" target="_blank">${person.instagram}</a></span></div>`;
+                        }
+                        if (person.address) {
+                            previewHtml += `<div class="person-detail"><span class="person-detail-label">آدرس:</span><span class="person-detail-value">${person.address}</span></div>`;
+                        }
+                        if (person.location) {                            previewHtml += `<div class="person-detail"><span class="person-detail-label">موقعیت:</span><span class="person-detail-value"><a href="${person.location}" target="_blank">مشاهده در نقشه</a></span></div>`;
+                        }
+                        previewHtml += `</div>`;
+                    }
+                });
+                DOM.cardPreviewContent.innerHTML = previewHtml;
+                DOM.cardPreviewModal.classList.add('active');
+            };
+
+            const changePage = (pageId, cardIdForEdit = null) => {                currentCardId = cardIdForEdit;
+                Object.values(DOM.pages).forEach(p => p.classList.remove('active'));
+                if (DOM.pages[pageId]) {
+                    DOM.pages[pageId].classList.add('active');
+                    DOM.mainHeaderTitle.textContent = pageTitles[pageId] || "کارت ویزیت دیجیتال";
+                    document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
+                        item.classList.toggle('active', item.getAttribute('data-page') === pageId);
+                    });
+                    document.querySelectorAll('.hamburger-nav-item').forEach(item => {
+                        item.classList.toggle('active', item.getAttribute('data-page') === pageId);                    });
+                    if (pageId === 'home') {
+                        DOM.customersSearchInput.value = '';
+                        document.querySelectorAll('.customer-type-filters .filter-btn').forEach(btn => btn.classList.remove('active'));
+                        document.querySelector('.customer-type-filters .filter-btn[data-filter-type="all"]').classList.add('active');
+                        filterCustomers('', 'all');
+                    }
+                    if (pageId === 'createCard') renderCreateCardPage();
+                    if (pageId === 'myCards') renderMyCardsPage();
+                    if (pageId === 'customerInfo') {
+                        initializeCustomerForm();
+                    }
+                    if (pageId === 'sendCard') {
+                        openSendCardPage(businessCards[0]?.id || null, currentCustomerForSend);
+                        currentCustomerForSend = null;
+                    }
+                }
+                DOM.hamburger.menu.classList.remove('active');
+                DOM.hamburger.overlay.classList.remove('active');
+            };
+
+            const renderPersonFields = (person = {}, index) => {
+                const fieldset = document.createElement('fieldset');
+                fieldset.className = 'person-fieldset';
+                fieldset.dataset.index = index;
+                fieldset.innerHTML = `
+                    <legend class="person-legend">شخص ${index + 1}</legend>
+                    <div class="form-group">
+                        <label class="form-label">نام و نام خانوادگی</label>
+                        <input type="text" class="form-control person-name" value="${person.name || ''}">
+                    </div>
+                    <div class="form-group">                        <div class="upload-photo-container">
+                            <img src="${person.photo || defaultProfileImg}" alt="Preview" class="photo-preview">
+                            <label class="upload-photo-label">افزودن عکس<input type="file" class="person-photo-input" accept="image/*" style="display:none;"></label>
+                        </div>
+                    </div>
+                    <div class="form-group"><label class="form-label">شماره تماس</label><input type="tel" class="form-control person-phone" value="${person.phone || ''}"></div>
+                    <div class="form-group"><label class="form-label">واتساپ</label><input type="tel" class="form-control person-whatsapp" value="${person.whatsapp || ''}"></div>
+                    <div class="form-group"><label class="form-label">تلگرام</label><input type="text" class="form-control person-telegram" placeholder="@username" value="${person.telegram || ''}"></div>
+                    <div class="form-group"><label class="form-label">اینستاگرام</label><input type="text" class="form-control person-instagram" placeholder="username" value="${person.instagram || ''}"></div>
+                    <div class="form-group"><label class="form-label">آدرس</label><input type="text" class="form-control person-address" value="${person.address || ''}" placeholder="آدرس کامل"></div>
+                    <div class="form-group">
+                        <label class="form-label">موقعیت مکانی</label>
+                        <div class="location-input-container">
+                            <input type="text" class="form-control person-location" value="${person.location || ''}" placeholder="لینک موقعیت مکانی را اینجا وارد کنید">
+                            <button type="button" class="location-button" data-index="${index}">انتخاب</button>
+                        </div>
+                    </div>`;
+                DOM.peopleFieldsContainer.appendChild(fieldset);
+            };
+
+            const renderCreateCardPage = () => {
+                DOM.peopleFieldsContainer.innerHTML = '';
+                const cardTitleInput = document.getElementById('cardTitle');
+                if (currentCardId) {
+                    const card = businessCards.find(c => c.id === currentCardId);
+                    if (!card) {
+                        currentCardId = null;
+                        renderCreateCardPage();
+                        return;                    }
+                    DOM.mainHeaderTitle.textContent = `ویرایش: ${card.title}`;
+                    cardTitleInput.value = card.title || '';
+                    DOM.cardPhotoPreview.src = card.cardPhoto || defaultProfileImg;
+                    card.people.forEach((person, index) => renderPersonFields(person, index));
+                } else {
+                    cardTitleInput.value = '';
+                    DOM.cardPhotoPreview.src = defaultProfileImg;
+                    renderPersonFields({}, 0);
+                }
+            };
+
+            const renderMyCardsPage = () => {
+                const pageContainer = DOM.pages.myCards;
+                pageContainer.innerHTML = `<div class="container"><div id="myCardsList" class="cards-list"></div></div>`;
+                const listContainer = pageContainer.querySelector('#myCardsList');
+                if (businessCards.length === 0) {
+                    listContainer.innerHTML = `<div style="text-align: center; padding: 50px; color: var(--grey-color); grid-column: 1 / -1;">هیچ کارت ویزیتی ایجاد نشده است.</div>`;
+                    return;
+                }
+                businessCards.forEach(card => {
+                    const firstPerson = card.people[0] || {};
+                    const cardDisplayPhoto = card.cardPhoto || firstPerson.photo || defaultProfileImg;
+                    const cardEl = document.createElement('div');
+                    cardEl.className = 'business-card';
+                    cardEl.innerHTML = `
+                        <div class="card-info">
+                            <img src="${cardDisplayPhoto}" alt="Profile" class="photo-preview">                            <div class="card-name">${card.title}</div>
+                            <div class="card-company">${firstPerson.name || 'بدون نام'}</div>
+                        </div>
+                        <div class="button-group">
+                            <button class="button secondary" data-action="edit-card" data-id="${card.id}">ویرایش</button>
+                            <button class="button secondary send-btn" data-action="send-card-action" data-id="${card.id}">ارسال</button>
+                            <button class="button secondary" data-action="delete-card" data-id="${card.id}">حذف</button>
+                        </div>`;
+                    listContainer.appendChild(cardEl);
+                });
+            };
+
+            const populateCardSelectForSend = (selectedCardId = null) => {
+                DOM.cardSelectForSend.innerHTML = '';                if (businessCards.length === 0) {
+                    DOM.cardSelectForSend.innerHTML = '<option value="">هیچ کارتی برای ارسال وجود ندارد</option>';
+                    DOM.cardSelectForSend.disabled = true;
+                    return;
+                }
+                DOM.cardSelectForSend.disabled = false;                businessCards.forEach(card => {
+                    const option = document.createElement('option');
+                    option.value = card.id;
+                    option.textContent = card.title;
+                    DOM.cardSelectForSend.appendChild(option);
+                });
+                if (selectedCardId && businessCards.some(card => card.id === selectedCardId)) {
+                    DOM.cardSelectForSend.value = selectedCardId;
+                } else if (businessCards.length > 0) {
+                    DOM.cardSelectForSend.value = businessCards[0].id;
+                }
+            };
+
+            const openSendCardPage = (cardIdToSelect = null, customerToPreselect = null) => {
+                if (businessCards.length === 0) {
+                    showToast('ابتدا باید یک کارت ویزیت ایجاد کنید.');
+                    changePage('createCard');
+                    return;
+                }
+                if (!cardIdToSelect && businessCards.length > 0) {
+                    cardIdToSelect = businessCards[0].id;
+                } else if (!cardIdToSelect) {
+                    showToast('هیچ کارتی برای ارسال یافت نشد.');
+                    changePage('myCards');
+                    return;
+                }
+                changePage('sendCard');
+                DOM.sendCardPage.dataset.cardId = cardIdToSelect;
+                currentCustomerForSend = customerToPreselect;
+                newCustomerForSend = null;
+                populateCardSelectForSend(cardIdToSelect);
+                filteredCustomers = [...customerData];
+                renderCustomersInSendModal();
+                DOM.sendOptionsSection.classList.remove('active');
+                DOM.newCustomerSendOptions.style.display = 'none';
+                DOM.quickCustomerForm.reset();
+                document.getElementById('quickCustomerPhone').classList.remove('error');
+                document.getElementById('quickPhoneError').style.display = 'none';
+            };
+
+            const handleSendMethod = (method, cardId, customerToSend) => {
+                const card = businessCards.find(c => c.id === cardId);
+                if (!card) {
+                    showToast('خطا: کارت مورد نظر برای ارسال یافت نشد.');                    return;
+                }
+                const cardLink = `https://yourdomain.com/card/${cardId}`;
+                let message = `کارت ویزیت دیجیتال ${card.title} را ببینید: ${cardLink}`;
+                if (customerToSend) {
+                    message = `سلام ${customerToSend.name} عزیز، کارت ویزیت دیجیتال ${card.title} را ببینید: ${cardLink}`;
+                }
+                switch (method) {
+                    case 'whatsapp':
+                        window.open(`https://wa.me/${customerToSend ? customerToSend.phone : ''}?text=${encodeURIComponent(message)}`, '_blank');
+                        break;
+                    case 'telegram':
+                        window.open(`https://t.me/share/url?url=${encodeURIComponent(cardLink)}&text=${encodeURIComponent(message)}`, '_blank');
+                        break;
+                    case 'sms':
+                        if (customerToSend && customerToSend.phone) {
+                            window.open(`sms:${customerToSend.phone}?body=${encodeURIComponent(message)}`);
+                        } else {
+                            showToast('شماره تلفن مشتری برای ارسال پیامک در دسترس نیست.');
+                        }
+                        break;
+                    case 'copy-link':
+                        navigator.clipboard.writeText(cardLink).then(() => showToast('لینک کارت کپی شد!')).catch(() => showToast('خطا در کپی لینک.'));
+                        break;
+                }
+            };
+
+            DOM.customerSearchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.trim();
+                filterCustomers(searchTerm, 'all'); // Reset type filter on search
+                currentCustomerForSend = null;
+                DOM.sendOptionsSection.classList.remove('active');
+                DOM.newCustomerSendOptions.style.display = 'none';
+            });
+
+            DOM.customersSearchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.trim();
+                filterCustomers(searchTerm, currentFilterType);
+            });
+
+            DOM.addPersonBtn.addEventListener('click', () => {
+                const newIndex = DOM.peopleFieldsContainer.children.length;
+                renderPersonFields({}, newIndex);
+            });
+
+            DOM.peopleFieldsContainer.addEventListener('click', async (e) => {
+                if (e.target.matches('.location-button')) {
+                    const index = e.target.dataset.index;
+                    const locationInput = document.querySelector(`[data-index="${index}"] .person-location`);
+                    try {
+                        showToast('در حال دریافت موقعیت مکانی...');
+                        const locationUrl = await getCurrentLocation();
+                        locationInput.value = locationUrl;
+                        showToast('موقعیت مکانی با موفقیت دریافت شد.');
+                    } catch (error) {
+                        showToast(error);
+                    }
+                }
+            });
+
+            DOM.peopleFieldsContainer.addEventListener('change', e => {
+                if (e.target.matches('.person-photo-input')) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        const previewImg = e.target.closest('.upload-photo-container').querySelector('.photo-preview');
+                        reader.onload = (event) => {
+                            previewImg.src = event.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }
+            });
+
+            DOM.cardPhotoInput.addEventListener('change', e => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        DOM.cardPhotoPreview.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    DOM.cardPhotoPreview.src = defaultProfileImg;
+                }
+            });
+
+            DOM.sendCustomersList.addEventListener('click', (e) => {
+                const item = e.target.closest('.customer-select-item');                if (item) {
+                    DOM.sendCustomersList.querySelectorAll('.customer-select-item').forEach(el => el.classList.remove('selected'));
+                    item.classList.add('selected');
+                    currentCustomerForSend = customerData.find(c => c.id === item.dataset.customerId);
+                    DOM.sendOptionsSection.classList.add('active');
+                    DOM.newCustomerSendOptions.style.display = 'none';
+                }            });
+
+            DOM.quickCustomerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('quickCustomerName').value.trim();
+                const phone = document.getElementById('quickCustomerPhone').value.trim();
+                const type = document.getElementById('quickCustomerType').value;                if (!name || !phone || !type) {
+                    showToast('لطفاً تمام فیلدها را پر کنید.');
+                    return;
+                }
+                if (!validatePhoneNumber(phone)) {
+                    document.getElementById('quickCustomerPhone').classList.add('error');
+                    document.getElementById('quickPhoneError').style.display = 'block';
+                    showToast('شماره تماس نامعتبر است.');
+                    return;
+                }
+                newCustomerForSend = {
+                    id: Date.now().toString(), name, phone, type, createdAt: new Date().toISOString()
+                };
+                customerData.push(newCustomerForSend);
+                saveData();
+                showToast('مشتری جدید ثبت شد. حالا روش ارسال را انتخاب کنید.');
+                DOM.quickCustomerForm.reset();
+                document.getElementById('quickCustomerPhone').classList.remove('error');
+                document.getElementById('quickPhoneError').style.display = 'none';
+                DOM.sendCustomersList.innerHTML = '';
+                DOM.sendOptionsSection.classList.remove('active');
+                DOM.newCustomerSendOptions.style.display = 'block';
+                currentCustomerForSend = null;
+            });
+
+            document.getElementById('quickCustomerPhone').addEventListener('input', (e) => {
+                const phoneInput = e.target;
+                const phoneError = document.getElementById('quickPhoneError');
+                if (e.target.value.trim() && !validatePhoneNumber(e.target.value.trim())) {
+                    phoneInput.classList.add('error');
+                    phoneError.style.display = 'block';
+                } else {
+                    phoneInput.classList.remove('error');
+                    phoneError.style.display = 'none';
+                }
+            });
+
+            DOM.cardForm.addEventListener('submit', e => {
+                e.preventDefault();
+                const title = document.getElementById('cardTitle').value.trim();
+                if (!title) {
+                    showToast('نام کارت ویزیت الزامی است.');
+                    return;
+                }
+                const cardPhoto = DOM.cardPhotoPreview.src === defaultProfileImg ? '' : DOM.cardPhotoPreview.src;
+                const people = [];
+                DOM.peopleFieldsContainer.querySelectorAll('.person-fieldset').forEach(fieldset => {
+                    people.push({
+                        name: fieldset.querySelector('.person-name').value.trim(),
+                        photo: fieldset.querySelector('.photo-preview').src,
+                        phone: fieldset.querySelector('.person-phone').value.trim(),
+                        whatsapp: fieldset.querySelector('.person-whatsapp').value.trim(),
+                        telegram: fieldset.querySelector('.person-telegram').value.trim(),
+                        instagram: fieldset.querySelector('.person-instagram').value.trim(),
+                        address: fieldset.querySelector('.person-address').value.trim(),
+                        location: fieldset.querySelector('.person-location').value.trim(),
+                    });
+                });
+                if (currentCardId) {
+                    const index = businessCards.findIndex(c => c.id === currentCardId);
+                    if (index !== -1) {
+                        businessCards[index].title = title;
+                        businessCards[index].cardPhoto = cardPhoto;
+                        businessCards[index].people = people;
+                        showToast('کارت با موفقیت ویرایش شد.');
+                    }
+                } else {
+                    const newCard = { id: Date.now().toString(), title, cardPhoto, people };
+                    businessCards.push(newCard);
+                    showToast('کارت جدید با موفقیت ایجاد شد.');
+                }
+                saveData();                currentCardId = null;
+                changePage('myCards');
+            });
+
+            DOM.previewCardBtn.addEventListener('click', showCardPreview);
+
+            DOM.closeCardPreview.addEventListener('click', () => {
+                DOM.cardPreviewModal.classList.remove('active');
+            });
+
+            DOM.cardPreviewModal.addEventListener('click', (e) => {
+                if (e.target === DOM.cardPreviewModal) {                    DOM.cardPreviewModal.classList.remove('active');
+                }
+            });
+
+            const initializeCustomerForm = () => {
+                document.getElementById('customerPhone').classList.remove('error');
+                document.getElementById('phoneError').style.display = 'none';
+                if (currentCustomerForEdit) {
+                    document.getElementById('customerName').value = currentCustomerForEdit.name;
+                    document.getElementById('customerPhone').value = currentCustomerForEdit.phone;
+                    document.getElementById('customerType').value = currentCustomerForEdit.type;
+                    DOM.customerFormTitle.textContent = "ویرایش مشتری";
+                    DOM.submitCustomerBtn.textContent = "ذخیره تغییرات";
+                    DOM.cancelCustomerEditBtn.style.display = 'inline-flex';
+                    DOM.saveMainCustomerContactSection.style.display = 'none';
+                } else {
+                    DOM.customerInfoForm.reset();
+                    DOM.customerFormTitle.textContent = "افزودن مشتری جدید";
+                    DOM.submitCustomerBtn.textContent = "ثبت مشتری";
+                    DOM.cancelCustomerEditBtn.style.display = 'none';
+                    DOM.saveMainCustomerContactSection.style.display = 'none';
+                }
+            };
+
+            DOM.customerInfoForm.addEventListener('submit', e => {
+                e.preventDefault();
+                const name = document.getElementById('customerName').value.trim();
+                const phone = document.getElementById('customerPhone').value.trim();
+                const type = document.getElementById('customerType').value;
+                if (!name || !phone || !type) {
+                    showToast('لطفاً تمام فیلدها را پر کنید.');
+                    return;
+                }
+                if (!validatePhoneNumber(phone)) {
+                    document.getElementById('customerPhone').classList.add('error');
+                    document.getElementById('phoneError').style.display = 'block';
+                    showToast('شماره تماس نامعتبر است.');                    return;
+                }
+                if (currentCustomerForEdit) {
+                    const index = customerData.findIndex(c => c.id === currentCustomerForEdit.id);
+                    if (index !== -1) {
+                        customerData[index] = { ...customerData[index], name, phone, type };
+                        showToast('مشتری با موفقیت ویرایش شد.');
+                    }
+                } else {
+                    const newCustomer = { id: Date.now().toString(), name, phone, type, createdAt: new Date().toISOString() };
+                    customerData.push(newCustomer);
+                    showToast('مشتری جدید با موفقیت ثبت شد.');
+                    DOM.saveMainCustomerContactSection.style.display = 'block';
+                    DOM.saveMainCustomerContactBtn.onclick = () => saveContactToPhone(newCustomer.name, newCustomer.phone);
+                }
+                saveData();
+                currentCustomerForEdit = null;
+                initializeCustomerForm();
+                filterCustomers(DOM.customersSearchInput.value, currentFilterType);
+            });
+
+            DOM.clearCustomerFormBtn.addEventListener('click', () => {
+                currentCustomerForEdit = null;
+                initializeCustomerForm();
+            });
+
+            DOM.cancelCustomerEditBtn.addEventListener('click', () => {
+                currentCustomerForEdit = null;
+                initializeCustomerForm();
+            });
+
+            document.getElementById('customerPhone').addEventListener('input', (e) => {
+                const phoneInput = e.target;
+                const phoneError = document.getElementById('phoneError');
+                if (e.target.value.trim() && !validatePhoneNumber(e.target.value.trim())) {
+                    phoneInput.classList.add('error');
+                    phoneError.style.display = 'block';
+                } else {
+                    phoneInput.classList.remove('error');
+                    phoneError.style.display = 'none';
+                }
+            });
+
+            document.body.addEventListener('click', e => {
+                const target = e.target.closest('[data-action]');
+                if (!target) return;
+                const { action, id } = target.dataset;
+                if (action === 'edit-card') {
+                    changePage('createCard', id);
+                } else if (action === 'delete-card') {
+                    showConfirmModal('آیا از حذف این کارت ویزیت اطمینان دارید؟', () => {
+                        businessCards = businessCards.filter(c => c.id !== id);
+                        saveData();
+                        renderMyCardsPage();
+                        showToast('کارت با موفقیت حذف شد.');
+                    });
+                } else if (action === 'send-card-action') {
+                    openSendCardPage(id);
+                } else if (action === 'edit-customer') {
+                    currentCustomerForEdit = customerData.find(c => c.id === id);
+                    if (currentCustomerForEdit) {
+                        changePage('customerInfo');
+                        showToast('اطلاعات مشتری برای ویرایش بارگذاری شد.');
+                    } else {
+                        showToast('مشتری مورد نظر برای ویرایش یافت نشد.');
+                    }
+                } else if (action === 'delete-customer') {
+                    showConfirmModal('آیا از حذف این مشتری اطمینان دارید؟', () => {
+                        customerData = customerData.filter(c => c.id !== id);
+                        saveData();
+                        filterCustomers(DOM.customersSearchInput.value, currentFilterType);
+                        showToast('مشتری با موفقیت حذف شد.');
+                    });
+                } else if (action === 'send-customer') {
+                    const customerToPreselect = customerData.find(c => c.id === id);
+                    openSendCardPage(businessCards[0]?.id || null, customerToPreselect);
+                }
+            });
+
+            document.querySelectorAll('#sendOptionsSection .send-option-btn, #newCustomerSendOptions .send-option-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const method = e.currentTarget.dataset.sendMethod;
+                    const cardId = DOM.cardSelectForSend.value;
+                    const isForNew = e.currentTarget.dataset.forNew === 'true';
+                    if (!cardId) {
+                        showToast('لطفاً ابتدا یک کارت ویزیت برای ارسال انتخاب کنید.');
+                        return;
+                    }
+                    let customerToSend = isForNew ? newCustomerForSend : currentCustomerForSend;
+                    if (customerToSend) {
+                        handleSendMethod(method, cardId, customerToSend);
+                    } else {
+                        showToast('لطفاً ابتدا مشتری را از لیست انتخاب کنید یا مشتری جدید ثبت کنید.');
+                    }
+                });
+            });
+
+            DOM.saveNewCustomerContactBtn.addEventListener('click', () => {
+                if (newCustomerForSend) {
+                    saveContactToPhone(newCustomerForSend.name, newCustomerForSend.phone);
+                } else {
+                    showToast('مشتری جدیدی برای ذخیره در مخاطبین موجود نیست.');
+                }
+            });
+
+            DOM.importContactBtn.addEventListener('click', () => importContact(document.getElementById('customerName'), document.getElementById('customerPhone')));
+            DOM.importQuickContactBtn.addEventListener('click', () => importContact(document.getElementById('quickCustomerName'), document.getElementById('quickCustomerPhone')));
+            DOM.exportContactsBtn.addEventListener('click', exportCustomersToCSV);
+
+            DOM.importContactsForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const file = DOM.importFileInput.files[0];
+                if (file) {                    importCustomersFromCSV(file);
+                } else {
+                    showToast('لطفاً یک فایل CSV برای بازگردانی انتخاب کنید.');
+                }
+            });
+
+            document.querySelector('.customer-type-filters').addEventListener('click', (e) => {
+                const targetBtn = e.target.closest('.filter-btn');
+                if (targetBtn) {
+                    document.querySelectorAll('.customer-type-filters .filter-btn').forEach(btn => btn.classList.remove('active'));
+                    targetBtn.classList.add('active');
+                    const selectedType = targetBtn.dataset.filterType;
+                    filterCustomers(DOM.customersSearchInput.value, selectedType);
+                }
+            });
+
+            document.querySelectorAll('.nav-item, .hamburger-nav-item').forEach(item => {
+                item.addEventListener('click', e => {
+                    e.preventDefault();
+                    const page = item.getAttribute('data-page');
+                    if (page) changePage(page);
+                });
+            });
+
+            DOM.hamburger.button.addEventListener('click', () => {
+                DOM.hamburger.menu.classList.add('active');
+                DOM.hamburger.overlay.classList.add('active');
+            });
+
+            [DOM.hamburger.close, DOM.hamburger.overlay].forEach(el => {
+                el.addEventListener('click', () => {
+                    DOM.hamburger.menu.classList.remove('active');
+                    DOM.hamburger.overlay.classList.remove('active');
+                });
+            });
+
+            // Initialize the application on the customerInfo page
+            changePage('customerInfo');
+
+        });
+    })();
+    </script>
+</body>
+</html>

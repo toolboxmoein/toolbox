@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+ <!-- START: کد ضد کش اضافه شده (برای اطمینان از تازگی HTML) -->
+ <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+ <meta http-equiv="Pragma" content="no-cache" />
+ <meta http-equiv="Expires" content="0" />
+ <!-- END: کد ضد کش اضافه شده -->
+
+ <title>جعبه ابزار املاک</title>
+ 
+ <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css2?family=Khandevane:wght@400;500;600;700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+ 
+ <!-- START: اضافه شده برای نمایش favicon.ico -->
+ <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+ <!-- END: اضافه شده برای نمایش favicon.ico -->
+
+ <style>
+    :root {
+        /* متغیرهای رنگی از کد شماره ۲ (جعبه ابزار املاک) برای ظاهر جدید */
+        --primary-color: #0bff00;
+        --primary-light: #e6ffe6; /* استفاده از یک نسخه روشن‌تر سازگار */
+        --secondary-color: #00cc00;
+        --dark-color: #009900;
+        --light-color: #f0f0f0; /* پس‌زمینه اصلی بدنه */
+        --complementary-color: #0bff00;
+        --complementary-light: #6cff64;
+        --complementary-dark: #00cc00;
+        
+        /* متغیرهای عمومی و ساختاری */
+        --transition: all 0.3s ease;
+        --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        --complementary-gradient: linear-gradient(135deg, var(--complementary-color), var(--complementary-light));
+        --border-radius: 20px;
+        --button-border-radius: 12px;
+        --border-color: #e0e0e0;
+        --disabled-color: #aaaaaa;
+        --font-family: 'Vazirmatn', Arial, sans-serif;
+        --font-size-base: 14px;
+        
+        /* متغیرهای دارک مود */
+        --dark-mode-bg: #121212;
+        --dark-mode-text: #ffffff;
+        --dark-mode-card: #1e1e1e;
+        --dark-mode-border: #333333;
+        --arrow-color: #ef00f6;
+        
+        /* متغیرهای باقی‌مانده از کد شماره ۱ برای سازگاری */
+        --shadow: 0 10px 30px rgba(11, 255, 0, 0.1);
+        --card-shadow: 0 15px 35px rgba(11, 255, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+        --subtle-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        --grey-color: #6c757d;
+        --danger-color: #e74c3c;
+        --text-color: #333333;
+        --text-light: #666666;
+        --bg-color: #f9f9f9;
+        --white: #ffffff;
+    }
+    
+    /* --- استایل‌های پایه و عمومی --- */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: var(--font-family);
+        background-color: var(--light-color); 
+        direction: rtl;
+        text-align: right;
+        color: var(--text-color); 
+        line-height: 1.6;
+        position: relative;
+        overflow-x: hidden;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        font-size: var(--font-size-base);
+    }
+    
+    body.dark-mode {
+        background-color: var(--dark-mode-bg);
+        color: var(--dark-mode-text);
+    }
+
+    /* --- استایل‌های مربوط به احراز هویت و پیغام‌ها (از کد ۱) --- */
+    .payment-notification {
+        position: fixed; top: -150px; left: 50%; transform: translateX(-50%); width: 90%;
+        max-width: 450px; background-color: var(--white); border-radius: var(--border-radius);
+        box-shadow: var(--card-shadow); display: flex; align-items: center; padding: 16px 20px;
+        z-index: 10001; transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border-top: 4px solid; font-family: 'Vazirmatn', Arial, sans-serif;
+    }
+    .payment-notification.show { top: 20px; }
+    .payment-notification.success { border-color: var(--primary-color); }
+    .payment-notification.failed { border-color: var(--danger-color); }
+    .notification-content strong { font-size: 16px; font-weight: 700; color: var(--dark-color); display: block; }
+    .notification-content p { font-size: 14px; color: var(--grey-color); margin: 0; line-height: 1.5; }
+    .notification-close { margin-right: auto; background: none; border: none; font-size: 24px; color: var(--grey-color); cursor: pointer; padding: 0 5px; }
+    
+    .no-session-container { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: var(--white); position: fixed; top: 0; left: 0; width: 100%; z-index: 9999; }
+    .no-session-content { background: #fff; padding: 40px; border-radius: 0; box-shadow: none; width: 100%; max-width: 100%; height: 100vh; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+    .no-session-content h2 { margin-bottom: 20px; color: var(--dark-color); }
+    .no-session-content p { margin-bottom: 30px; color: var(--grey-color); line-height: 1.6; }
+    .no-session-content button { width: 100%; max-width: 450px; padding: 14px; border: none; border-radius: var(--button-border-radius); font-size: 16px; cursor: pointer; font-family: 'Vazirmatn', Arial, sans-serif; margin-bottom: 10px; transition: var(--transition); }
+    .login-button { background: var(--gradient); color: white; }
+    .login-button:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+
+    /* --- هدر و سایدبار (ساختار از کد ۱، ظاهر بروز شده) --- */
+    .header { 
+        background-color: #ffffff; padding: 15px 0px 15px 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); display: flex;
+        justify-content: space-between; align-items: center;
+        position: sticky; top: 0; z-index: 1000; 
+    }
+    body.dark-mode .header {
+        background-color: var(--dark-mode-card);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    .hamburger-menu { flex: 0 0 auto; display: flex; justify-content: flex-start; }
+    .menu-tab-button { 
+        background-color: var(--primary-color); color: white; border: none;
+        padding: 12px 50px 12px 25px; font-family: 'Vazirmatn', Arial, sans-serif;
+        font-size: 16px; font-weight: 600; cursor: pointer;
+        border-radius: 15px 0 0 15px; transition: var(--transition);
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .menu-tab-button:hover { background-color: var(--secondary-color); transform: translateX(5px); }
+    .logo-container { flex-grow: 1; display: flex; justify-content: center; } 
+    .logo-placeholder { 
+        width: 150px; height: 60px; background-image: url('images/logo.png'); 
+        background-size: contain; background-repeat: no-repeat;
+        background-position: center;
+    }
+    .header-icons-wrapper {
+        flex: 0 0 auto; /* تغییر برای جا دادن آیکون جدید */
+        display: flex; align-items: center; justify-content: flex-end;
+        gap: 10px; padding-left: 10px; /* کاهش پدینگ برای فضای بیشتر */
+    }
+    .header-icon-button {
+        background: none; border: none; font-size: 24px; cursor: pointer;
+        width: 44px; height: 44px; border-radius: 50%; display: flex;
+        justify-content: center; align-items: center; transition: var(--transition);
+        text-decoration: none; position: relative;
+    }
+    .header-icon-button:hover { background-color: var(--primary-light); }
+    #adsIcon, #messagesIcon, #searchButton { color: var(--primary-color); } /* آیکون سرچ اضافه شد */
+    
+    .unread-badge {
+        position: absolute; top: 4px; left: 4px; background-color: var(--danger-color);
+        color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 12px;
+        font-weight: 700; display: flex; justify-content: center; align-items: center;
+        line-height: 1; border: 2px solid var(--white); display: none;
+    }
+    .unread-badge.show { display: flex; }
+
+    .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); z-index: 999; opacity: 0; visibility: hidden; transition: var(--transition); }
+    .overlay.active { opacity: 1; visibility: visible; }
+    
+    .sidebar { position: fixed; top: 0; right: -100%; width: 75%; max-width: 360px; height: 100%; background-color: var(--white); box-shadow: -3px 0 15px rgba(0, 0, 0, 0.1); z-index: 1000; transition: right 0.3s ease-out; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; }
+    .sidebar.active { right: 0; }
+    .sidebar-header { display: flex; align-items: center; padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); position: relative; justify-content: flex-start; min-height: 60px; }
+    .sidebar-logo { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; justify-content: center; height: auto; width: auto; max-width: calc(100% - 80px); }
+    .sidebar-logo-image { height: 60px; width: auto; }
+    .sidebar-close { flex-shrink: 0; margin-left: auto; position: relative; z-index: 10; background: none; border: none; font-size: 24px; color: var(--grey-color); cursor: pointer; padding: 5px; }
+    .user-profile { padding: 10px 20px; margin-bottom: 15px; background: var(--gradient); border-radius: var(--border-radius); color: var(--white); text-align: center; }
+    .user-avatar { display: none; }
+    .user-info h3 { margin-top: 0; margin-bottom: 0; font-size: 15px; font-weight: 600; }
+    .user-info p { display: none; }
+    .sidebar-menu { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+    .sidebar-menu-item { display: flex; align-items: center; padding: 14px 16px; border-radius: var(--border-radius); text-decoration: none; color: var(--dark-color); transition: var(--transition); cursor: pointer; }
+    .sidebar-menu-item:hover { background-color: var(--primary-light); transform: translateX(-5px); }
+    .sidebar-menu-item.logout { background-color: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+    .sidebar-menu-item.logout:hover { background-color: #ffcdd2; }
+    .sidebar-menu-icon { width: 40px; height: 40px; background-color: var(--primary-light); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-left: 15px; }
+    .sidebar-menu-icon i { color: var(--primary-color); font-size: 18px; }
+    .sidebar-menu-item.logout .sidebar-menu-icon i { color: #c62828; }
+    .sidebar-menu-text { font-size: 15px; font-weight: 500; }
+    .sidebar-footer { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-color); text-align: center; }
+    .sidebar-version { font-size: 12px; color: var(--grey-color); }
+    
+    /* --- استایل‌های محتوای اصلی (ادغام شده از کد ۲) --- */
+    #app-container {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        background-color: #f2f2f2;
+        padding-bottom: 70px; /* فضا برای نوار پایین */
+    }
+    body.dark-mode #app-container { background-color: var(--dark-mode-bg); }
+
+    .header-banner {
+        width: calc(100% - 30px);
+        margin: 15px auto;
+        height: 80px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 12px;
+        box-shadow: var(--subtle-shadow);
+        overflow: hidden;
+    }
+    
+    .main-banner {
+        width: calc(100% - 30px);
+        margin: 15px auto;
+        height: 3cm; 
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: var(--border-radius);
+        box-shadow: var(--subtle-shadow);
+        overflow: hidden;
+    }
+
+    .date-banner {
+        width: calc(100% - 30px); height: 1cm; background: white; display: flex; justify-content: center;
+        align-items: center; color: black; font-weight: 600; font-size: 16px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        margin: 0 auto 15px auto; border-radius: 12px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        position: relative; overflow: visible; z-index: 20;
+    }
+
+    .price-component-container { padding: 0; margin: -1cm 0 0 0; background-color: #f2f2f2; position: relative; z-index: 1; }
+    body.dark-mode .price-component-container { background-color: var(--dark-mode-bg); }
+    .price-iframe { width: 100%; height: 200px; border: none; border-radius: 0; overflow: hidden; margin: 0; display: block; }
+    
+    .motivational-wrapper { padding: 0 15px; margin-bottom: 15px; margin-top: -1cm; }
+    .motivational-widget { position: relative; width: 100%; margin-top: 30px; }
+    .box-tag {
+        background-color: var(--secondary-color); color: white; font-size: 12px; font-weight: 600; padding: 4px 12px;
+        border-radius: 8px; display: inline-block; position: absolute; top: 10px; right: 15px; z-index: 1;
+    }
+    .motivational-quote-container {
+        width: 100%; height: 3cm; background-color: white; border-radius: 12px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        display: flex; justify-content: center; align-items: center; padding: 30px 20px 15px 20px; box-sizing: border-box;
+        overflow: hidden; position: relative;
+    }
+    body.dark-mode .motivational-quote-container { background-color: var(--dark-mode-card); box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); }
+    #daily-quote {
+        color: #333; font-size: 18px; font-weight: 500; text-shadow: none; margin: 0; width: 100%;
+        text-align: center; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2;
+        -webkit-box-orient: vertical; overflow: hidden;
+    }
+    body.dark-mode #daily-quote { color: var(--dark-mode-text); }
+    
+    .tabs-container {
+        background-color: white; padding: 0 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        margin-bottom: 15px; margin-top: 0; position: relative;
+    }
+    body.dark-mode .tabs-container { background-color: var(--dark-mode-card); box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); }
+    
+    .tabs-nav { display: flex; align-items: center; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; padding: 0 20px; }
+    .tabs-nav::-webkit-scrollbar { display: none; }
+    
+    .tab-button {
+        background: none; border: none; padding: 15px 10px; font-size: 14px; font-weight: 500;
+        color: #333333; cursor: pointer; transition: all 0.3s ease; border-bottom: 3px solid transparent;
+        white-space: nowrap; min-width: 80px; text-align: center; font-family: var(--font-family); flex-shrink: 0;
+    }
+    body.dark-mode .tab-button { color: var(--dark-mode-text); }
+    .tab-button.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+    .tab-button:hover { color: var(--primary-color); }
+    
+    .tab-scroll-arrow {
+        position: absolute; top: 50%; transform: translateY(-50%); width: 20px; height: 20px;
+        background-color: rgba(255, 255, 255, 0.8); border-radius: 50%; display: flex;
+        justify-content: center; align-items: center; z-index: 5; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        animation: pulse 1.5s infinite; pointer-events: none;
+    }
+    .tab-scroll-arrow.left { left: 5px; }
+    .tab-scroll-arrow.right { right: 5px; }
+    .tab-scroll-arrow i { color: var(--arrow-color); font-size: 12px; }
+    .tab-scroll-arrow.hidden { display: none; }
+    @keyframes pulse { 0% { transform: translateY(-50%) scale(1); opacity: 1; } 50% { transform: translateY(-50%) scale(1.2); opacity: 0.8; } 100% { transform: translateY(-50%) scale(1); opacity: 1; } }
+    
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .search-container { padding: 10px 15px; margin: 0 15px 15px 15px; display: none; }
+    .search-container.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+    .search-box { position: relative; width: 100%; }
+    .search-input { width: 100%; padding: 10px 40px 10px 15px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; font-family: var(--font-family); outline: none; }
+    body.dark-mode .search-input { background-color: var(--dark-mode-bg); border-color: var(--dark-mode-border); color: var(--dark-mode-text); }
+    .search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #999; font-size: 16px; }
+    
+    .calc-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 15px; margin-bottom: 15px; }
+    .calc-item { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; background-color: white; padding: 12px 8px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; position: relative; }
+    body.dark-mode .calc-item { background-color: var(--dark-mode-card); box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); }
+    .calc-item:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
+    body.dark-mode .calc-item:hover { box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); }
+    .calc-image { width: 45px; height: 45px; border-radius: 50%; overflow: hidden; background-color: var(--primary-light); display: flex; justify-content: center; align-items: center; }
+    body.dark-mode .calc-image { background-color: rgba(11, 255, 0, 0.1); }
+    .calc-image i { color: var(--primary-color); font-size: 24px; }
+    .calc-name { font-size: 11px; color: #333; text-align: center; font-weight: 500; line-height: 1.3; }
+    body.dark-mode .calc-name { color: var(--dark-mode-text); }
+    .calc-item.disabled { opacity: 0.7; }
+    .calc-item.disabled .calc-image { filter: grayscale(100%); }
+    .calc-item.disabled .calc-name { color: var(--disabled-color); }
+    
+    .banner-container { grid-column: span 3; width: 100%; margin: 4px 0; }
+    .banner-full {
+        width: 100%; height: 0; padding-top: 40%; background-size: cover;
+        background-position: center; border-radius: 12px; display: flex; align-items: center;
+        justify-content: center; color: white; font-weight: 600; font-size: 14px; text-align: center;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); position: relative; overflow: hidden; text-decoration: none;
+    }
+    
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background-color: white; display: flex; justify-content: space-around; padding: 12px 0; box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); z-index: 15; }
+    body.dark-mode .bottom-nav { background-color: var(--dark-mode-card); box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2); }
+    .nav-item { display: flex; flex-direction: column; align-items: center; color: #333; text-decoration: none; font-size: 11px; background-color: white; border-radius: 8px; padding: 5px 10px; transition: all 0.3s ease; }
+    body.dark-mode .nav-item { background-color: var(--dark-mode-card); color: #aaa; }
+    .nav-item i { font-size: 20px; margin-bottom: 3px; }
+    .nav-item:first-child i { color: var(--primary-color); }
+    .nav-item:nth-child(2) i { color: var(--complementary-color); }
+    .nav-item:nth-child(3) i { color: var(--primary-color); }
+    .nav-item:last-child i { color: var(--primary-color); }
+    .nav-item.active { color: var(--primary-color); }
+    
+    .toast-message {
+        position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+        background-color: rgba(0, 0, 0, 0.8); color: white; padding: 12px 20px;
+        border-radius: 8px; font-size: 14px; z-index: 1000; opacity: 0;
+        transition: opacity 0.3s ease; text-align: center; max-width: 80%;
+    }
+    .toast-message.show { opacity: 1; }
+    
+    .favorite-icon {
+        position: absolute; top: 5px; right: 5px; width: 25px; height: 25px;
+        background-color: rgba(255, 255, 255, 0.8); border-radius: 50%;
+        display: flex; justify-content: center; align-items: center; cursor: pointer;
+        z-index: 10; transition: all 0.3s ease;
+    }
+    body.dark-mode .favorite-icon { background-color: rgba(30, 30, 30, 0.8); }
+    .favorite-icon i { color: #ccc; font-size: 14px; transition: all 0.3s ease; }
+    .favorite-icon.active i { color: #ff3b30; }
+    .favorite-icon:hover { background-color: rgba(255, 255, 255, 1); transform: scale(1.1); }
+    body.dark-mode .favorite-icon:hover { background-color: rgba(50, 50, 50, 0.8); }
+    
+    /* --- استایل مودال‌ها --- */
+    #loading-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px); display: flex; justify-content: center;
+        align-items: center; z-index: 9999; opacity: 1; transition: opacity 0.5s ease-out;
+        pointer-events: none;
+    }
+    .spinner {
+        width: 60px; height: 60px; border: 5px solid rgba(0, 0, 0, 0.1);
+        border-left-color: var(--primary-color); border-radius: 50%;
+        animation: spin 1.2s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    .modal {
+        display: none; position: fixed; z-index: 10002; left: 0; top: 0; width: 100%; height: 100%;
+        overflow: auto; background-color: rgba(0,0,0,0.6); justify-content: center;
+        align-items: center; font-family: 'Vazirmatn', Arial, sans-serif;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+        background-color: var(--white); margin: auto; padding: 30px; border-radius: var(--border-radius);
+        box-shadow: var(--card-shadow); width: 90%; max-width: 450px; text-align: center;
+        position: relative; animation: fadeIn 0.3s;
+    }
+    .modal-content h2 { margin-bottom: 15px; color: var(--dark-color); font-size: 24px; }
+    .modal-content p { color: var(--grey-color); font-size: 16px; margin-bottom: 30px; }
+    .modal-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+    .modal-actions button {
+        width: 100%; padding: 14px; border: none; border-radius: var(--button-border-radius);
+        font-size: 16px; cursor: pointer; font-family: 'Vazirmatn', Arial, sans-serif;
+        transition: var(--transition); font-weight: 500;
+    }
+    .modal-actions .confirm-button { background: var(--gradient); color: white; }
+    .modal-actions .confirm-button:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+    .modal-actions .cancel-button { background: none; color: var(--grey-color); border: 1px solid var(--border-color); }
+    .modal-actions .cancel-button:hover { background-color: var(--primary-light); }
+    
+    .limit-modal {
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.7);
+        z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px;
+    }
+    .limit-modal.active { display: flex; }
+    .limit-modal-content {
+        background-color: white; border-radius: 15px; padding: 30px; max-width: 400px;
+        width: 100%; text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    body.dark-mode .limit-modal-content { background-color: var(--dark-mode-card); color: var(--dark-mode-text); }
+    .limit-modal-title { font-size: 18px; font-weight: 600; color: var(--primary-color); margin-bottom: 15px; font-family: var(--font-family); }
+    .limit-modal-text { font-size: 14px; line-height: 1.6; margin-bottom: 25px; color: #666; font-family: var(--font-family); }
+    body.dark-mode .limit-modal-text { color: #aaa; }
+    .limit-modal-buttons { display: flex; gap: 10px; justify-content: center; }
+    .limit-modal-btn { padding: 12px 20px; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-block; font-family: var(--font-family); }
+    .limit-modal-btn.primary { background: var(--gradient); color: white; }
+    .limit-modal-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(11, 255, 0, 0.3); }
+    .limit-modal-btn.secondary { background-color: #f0f0f0; color: #333; }
+    body.dark-mode .limit-modal-btn.secondary { background-color: var(--dark-mode-bg); color: var(--dark-mode-text); }
+    
+    #allToolsModal.modal { background-color: white; transform: translateY(100%); transition: transform 0.3s ease; padding-bottom: 70px; }
+    body.dark-mode #allToolsModal.modal { background-color: var(--dark-mode-bg); }
+    #allToolsModal.modal.active { transform: translateY(0); }
+    #allToolsModal .modal-content { width: 100%; height: 100%; background-color: white; padding: 0; overflow-y: auto; position: relative; max-width: none; border-radius: 0; box-shadow: none; animation: none; }
+    body.dark-mode #allToolsModal .modal-content { background-color: var(--dark-mode-bg); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; background-color: white; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); position: sticky; top: 0; z-index: 10; }
+    body.dark-mode .modal-header { background-color: var(--dark-mode-card); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); }
+    .modal-title { font-size: 18px; font-weight: 600; color: var(--primary-color); }
+    .close-modal { width: 30px; height: 30px; background-color: #ff3b30; border: none; border-radius: 50%; color: white; font-size: 16px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s ease; }
+    .close-modal:hover { transform: rotate(90deg); background-color: #e60000; }
+    .modal-section-title { padding: 15px 20px 5px; font-size: 16px; font-weight: 600; color: var(--primary-color); }
+    .modal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 10px 20px 20px; }
+    .modal-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; background-color: white; border-radius: 10px; padding: 12px 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; position: relative; }
+    body.dark-mode .modal-item { background-color: var(--dark-mode-card); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); }
+    .modal-item-icon { width: 45px; height: 45px; border-radius: 50%; background-color: var(--primary-light); display: flex; justify-content: center; align-items: center; margin-bottom: 8px; }
+    body.dark-mode .modal-item-icon { background-color: rgba(11, 255, 0, 0.1); }
+    .modal-item-icon i { font-size: 20px; color: var(--primary-color); }
+    .modal-item-name { font-size: 11px; color: #333; text-align: center; font-weight: 500; line-height: 1.3; }
+    body.dark-mode .modal-item-name { color: var(--dark-mode-text); }
+    
+    /* استایل‌های مربوط به حالت دسکتاپ و ریسپانسیو */
+    @media (max-width: 768px) {
+        .logo-placeholder { width: 150px; height: 60px; }
+        .menu-tab-button { font-size: 14px; padding: 10px 35px 10px 20px; }
+        .sidebar { width: 90%; }
+        .header-icons-wrapper { flex-basis: auto; padding-left: 10px; }
+    }
+    
+    @media (max-width: 480px) {
+        .calc-image, .modal-item-icon { width: 40px; height: 40px; }
+        .calc-name, .modal-item-name { font-size: 10px; }
+        .calc-item, .modal-item { padding: 10px 6px; }
+        .modal-grid { gap: 8px; }
+        .modal-item-icon i { font-size: 18px; }
+        .tab-button { font-size: 12px; padding: 12px 8px; min-width: 70px; }
+        .favorite-icon { width: 22px; height: 22px; top: 3px; right: 3px; }
+        .favorite-icon i { font-size: 12px; }
+        #daily-quote { font-size: 16px; }
+    }
+
+    /* استایل‌های حالت پرداخت از کد ۱ */
+    #payment-container { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: var(--light-color); position: fixed; top: 0; left: 0; width: 100%; z-index: 9998; }
+    #payment-container > div { background: #fff; padding: 40px; border-radius: var(--border-radius); box-shadow: var(--card-shadow); width: 100%; max-width: 450px; text-align: center; }
+    #payment-container h2 { margin-bottom: 10px; color: var(--dark-color); }
+    #payment-container p { margin-top: 10px; margin-bottom: 25px; color: var(--grey-color); font-size: 15px; }
+    #payment-container button { width: 100%; padding: 14px; border: none; border-radius: var(--button-border-radius); font-size: 16px; cursor: pointer; font-family: 'Vazirmatn', Arial, sans-serif; margin-bottom: 10px; transition: var(--transition); }
+    #payment-container #pay-now-button { background: var(--gradient); color: white; }
+    #payment-container #pay-now-button:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+    #payment-container #logout-button-payment { background: none; color: var(--grey-color); border: 1px solid var(--border-color); }
+    #payment-container #logout-button-payment:hover { background-color: var(--primary-light); }
+    #payment-container #payment-message { margin-top: 20px; color: red; font-size: 14px; }
+    body.loading::after { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.7) url('data:image/svg+xml;charset=UTF-8,%3csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3e%3cstyle%3e.spinner_V8m1%7btransform-origin:center;animation:spinner_zKoa 2s linear infinite%7d.spinner_V8m1 circle%7bstroke-linecap:round;animation:spinner_YpZS 1.5s ease-in-out infinite%7d@keyframes spinner_zKoa%7b100%25%7btransform:rotate(360deg)%7d%7d@keyframes spinner_YpZS%7b0%25%7bstroke-dasharray:0 150;stroke-dashoffset:0%7d47.5%25%7bstroke-dasharray:42 150;stroke-dashoffset:-16%7d95%25,100%25%7bstroke-dasharray:42 150;stroke-dashoffset:-59%7d%7d%3c/style%3e%3cg class="spinner_V8m1"%3e%3ccircle cx="20" cy="20" r="9.5" fill="none" stroke="%230bff00" stroke-width="3"%3e%3c/circle%3e%3c/g%3e%3c/svg%3e') center / 50px no-repeat; z-index: 10000; }
+    body.loading { pointer-events: none; }
+    
+    .header, #app-container { display: none; }
+    
+ </style>
+</head>
+<body>
+
+<!-- صفحه لودینگ از کد ۲ -->
+<div id="loading-overlay">
+    <div class="spinner"></div>
+</div>
+
+<!-- ساختار اصلی بدنه از کد ۱ (پیغام‌ها، مودال‌ها و...) -->
+<div id="no-session-container" class="no-session-container" style="display: none;">
+ <div class="no-session-content">
+ <i class="fas fa-sign-in-alt" style="font-size: 60px; color: var(--primary-color); margin-bottom: 20px;"></i>
+ <h2>ورود به حساب کاربری</h2>
+ <p>برای استفاده از جعبه ابزار املاک، لطفاً ابتدا وارد حساب کاربری خود شوید یا حساب جدید ایجاد کنید.</p>
+ <button class="login-button" onclick="goToRegister()">
+ <i class="fas fa-user-plus"></i> ورود / ثبت‌نام
+ </button>
+ </div>
+</div>
+
+<div id="payment-notification" class="payment-notification">
+ <i id="notification-icon" class="notification-icon fas"></i>
+ <div class="notification-content"><strong id="notification-title"></strong><p id="notification-message"></p></div>
+ <button id="notification-close" class="notification-close">&times;</button>
+</div>
+
+<div id="multiDeviceModal" class="modal">
+ <div class="modal-content">
+ <i class="fas fa-exclamation-triangle" style="font-size: 50px; color: var(--danger-color); margin-bottom: 20px;"></i>
+ <h2>ورود از دستگاه دیگر</h2>
+ <p id="multiDeviceMessage">شما با ایمیل <strong id="conflictingEmailDisplay"></strong> در دستگاه دیگری وارد شده‌اید. آیا می‌خواهید از آن دستگاه خارج و در این دستگاه وارد شوید؟</p>
+ <div class="modal-actions">
+ <button id="confirmSwitchDevice" class="confirm-button">بله، وارد شوم</button>
+ <button id="cancelSwitchDevice" class="cancel-button">خیر، لغو</button>
+ </div>
+ </div>
+</div>
+
+<!-- مودال‌های جدید از کد ۲ -->
+<div class="modal" id="allToolsModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">همه ابزارها</h3>
+            <button class="close-modal" id="closeAllToolsModal">×</button>
+        </div>
+        <div class="modal-section-title">ابزارهای فعال</div>
+        <div class="modal-grid">
+            <a href="apartment-calculator.html" class="modal-item limited-feature" data-feature="apartment-calculator">
+                <div class="modal-item-icon"><i class="fas fa-building"></i></div>
+                <div class="modal-item-name">قیمت آپارتمان</div>
+                <div class="favorite-icon" data-id="calc1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="villa-calculator.html" class="modal-item limited-feature" data-feature="villa-calculator">
+                <div class="modal-item-icon"><i class="fas fa-home"></i></div>
+                <div class="modal-item-name">قیمت ویلا</div>
+                <div class="favorite-icon" data-id="calc2"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="rent-converter.html" class="modal-item limited-feature" data-feature="rent-converter">
+                <div class="modal-item-icon"><i class="fas fa-exchange-alt"></i></div>
+                <div class="modal-item-name">تبدیل رهن و اجاره</div>
+                <div class="favorite-icon" data-id="calc4"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="hesabdari.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="modal-item-name">حسابداری</div>
+                <div class="favorite-icon" data-id="calc11"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="kharjkard-sakhteman.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-hammer"></i></div>
+                <div class="modal-item-name">خرجکرد ساختمان</div>
+                <div class="favorite-icon" data-id="calc6"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="sharj-sakhteman.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div class="modal-item-name">شارژ ساختمان</div>
+                <div class="favorite-icon" data-id="calc8"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="apartment-share-calculator.html" class="modal-item limited-feature" data-feature="apartment-share-calculator">
+                <div class="modal-item-icon"><i class="fas fa-calculator"></i></div>
+                <div class="modal-item-name">قدرالسهم آپارتمان</div>
+                <div class="favorite-icon" data-id="calc9"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="estelam.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-file-contract"></i></div>
+                <div class="modal-item-name">استعلام سند</div>
+                <div class="favorite-icon" data-id="inquiry1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="vekalatnameh.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-stamp"></i></div>
+                <div class="modal-item-name">استعلام وکالتنامه</div>
+                <div class="favorite-icon" data-id="inquiry2"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="sayadcheck.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-money-check-alt"></i></div>
+                <div class="modal-item-name">استعلام چک</div>
+                <div class="favorite-icon" data-id="inquiry3"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="sabtemelk.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-handshake"></i></div>
+                <div class="modal-item-name">سپردن ملک</div>
+                <div class="favorite-icon" data-id="service1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="moshavereh.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-comments"></i></div>
+                <div class="modal-item-name">مشاوره رایگان</div>
+                <div class="favorite-icon" data-id="service2"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="akhbar.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-newspaper"></i></div>
+                <div class="modal-item-name">اخبار ملکی</div>
+                <div class="favorite-icon" data-id="service3"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="hamkari.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-handshake"></i></div>
+                <div class="modal-item-name">همکاری با ما</div>
+                <div class="favorite-icon" data-id="service4"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="businesscard.html" class="modal-item limited-feature" data-feature="businesscard">
+                <div class="modal-item-icon"><i class="fas fa-id-card"></i></div>
+                <div class="modal-item-name">کارت ویزیت</div>
+                <div class="favorite-icon" data-id="service5"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="yaddasht.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-sticky-note"></i></div>
+                <div class="modal-item-name">یادداشت‌ها</div>
+                <div class="favorite-icon" data-id="service6"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="KHODNEVIS.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-globe"></i></div>
+                <div class="modal-item-name">سایت خودنویس</div>
+                <div class="favorite-icon" data-id="website1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="kateb.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-globe"></i></div>
+                <div class="modal-item-name">سامانه کاتب</div>
+                <div class="favorite-icon" data-id="website4"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="checklist-content.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-clipboard-check"></i></div>
+                <div class="modal-item-name">چک لیست تولید محتوا</div>
+                <div class="favorite-icon" data-id="social1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="follower-management.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-users"></i></div>
+                <div class="modal-item-name">مدیریت فالوورها</div>
+                <div class="favorite-icon" data-id="social2"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="content-calendar.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-calendar-alt"></i></div>
+                <div class="modal-item-name">تقویم تولید محتوا</div>
+                <div class="favorite-icon" data-id="social3"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="instagram-caption.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fab fa-instagram"></i></div>
+                <div class="modal-item-name">کپشن اینستاگرام</div>
+                <div class="favorite-icon" data-id="social4"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="direct-marketing.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-paper-plane"></i></div>
+                <div class="modal-item-name">دایرکت مارکتینگ</div>
+                <div class="favorite-icon" data-id="social5"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="daily-engagement.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-comments"></i></div>
+                <div class="modal-item-name">تعامل روزانه</div>
+                <div class="favorite-icon" data-id="social6"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="sabteman.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-globe"></i></div>
+                <div class="modal-item-name">سایت ثبت من</div>
+                <div class="favorite-icon" data-id="website3"><i class="far fa-heart"></i></div>
+            </a>
+        </div>
+        <div class="modal-section-title">به زودی فعال می‌شوند</div>
+        <div class="modal-grid">
+            <a href="#" class="modal-item disabled" id="totalPriceCalc">
+                <div class="modal-item-icon"><i class="fas fa-coins"></i></div>
+                <div class="modal-item-name">قیمت کل آپارتمان</div>
+                <div class="favorite-icon" data-id="calc10"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="commissionCalc">
+                <div class="modal-item-icon"><i class="fas fa-percentage"></i></div>
+                <div class="modal-item-name">محاسبه کمیسیون</div>
+                <div class="favorite-icon" data-id="calc5"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="constructionCalc">
+                <div class="modal-item-icon"><i class="fas fa-hammer"></i></div>
+                <div class="modal-item-name">هزینه ساخت</div>
+                <div class="favorite-icon" data-id="calc6"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="postalCodeInquiry">
+                <div class="modal-item-icon"><i class="fas fa-map-pin"></i></div>
+                <div class="modal-item-name">استعلام کد پستی</div>
+                <div class="favorite-icon" data-id="inquiry4"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="checkRegistration">
+                <div class="modal-item-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="modal-item-name">ثبت چک</div>
+                <div class="favorite-icon" data-id="inquiry5"><i class="far fa-heart"></i></div>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="limit-modal" id="limitModal">
+    <div class="limit-modal-content">
+        <h3 class="limit-modal-title">محدودیت استفاده رایگان</h3>
+        <p class="limit-modal-text">شما از حد مجاز استفاده رایگان (۳ بار) عبور کرده‌اید. برای ادامه استفاده از این قابلیت، لطفاً اشتراک خریداری کنید.</p>
+        <div class="limit-modal-buttons">
+            <a href="eshterak.html" class="limit-modal-btn primary">خرید اشتراک</a>
+            <button class="limit-modal-btn secondary" id="closeLimitModal">بستن</button>
+        </div>
+    </div>
+</div>
+<div class="toast-message" id="favoriteToast"></div>
+<div class="toast-message" id="disabledFeatureToast">این قابلیت به زودی فعال می‌شود</div>
+
+
+<div id="payment-container" style="display: none;">
+ <div>
+ <i class="fas fa-exclamation-circle" style="font-size: 60px; color: var(--primary-color); margin-bottom: 20px;"></i>
+ <h2>حساب شما فعال نیست</h2>
+ <p>دوره آزمایشی شما به پایان رسیده است. برای دسترسی کامل، اشتراک خود را فعال کنید.</p>
+ <button id="pay-now-button"><i class="fas fa-credit-card"></i> فعال‌سازی و پرداخت</button>
+ <button id="logout-button-payment"><i class="fas fa-sign-out-alt"></i> خروج از حساب</button>
+ <p id="payment-message"></p>
+ </div>
+</div>
+
+<!-- هدر و سایدبار از کد ۱ (با تغییرات) -->
+<header class="header">
+ <div class="hamburger-menu">
+    <button class="menu-tab-button" id="hamburgerIcon">منو</button>
+ </div>
+ <div class="logo-container">
+    <div class="logo-placeholder"></div> 
+ </div>
+ <div class="header-icons-wrapper">
+    <a href="#" class="header-icon-button" id="searchButton" title="جستجو"><i class="fas fa-search"></i></a>
+    <a href="tablighat.html" class="header-icon-button" id="adsIcon" title="تبلیغات"><i class="fas fa-bullhorn"></i></a>
+    <a href="message.html" class="header-icon-button" id="messagesIcon" title="پیام‌ها">
+        <i class="fas fa-envelope"></i>
+        <span id="unread-badge" class="unread-badge"></span>
+    </a>
+ </div>
+</header>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="sidebar" id="sidebar">
+ <div class="sidebar-header">
+    <div class="sidebar-logo"><img src="images/logo.png" alt="لوگو" class="sidebar-logo-image"></div>
+    <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
+ </div>
+ <div class="user-profile" id="userProfile">
+    <div class="user-avatar"><i class="fas fa-user"></i></div>
+    <div class="user-info"><h3 id="userName"></h3><p id="userEmail"></p></div>
+ </div>
+ <div class="sidebar-menu">
+    <a href="about-app.html" class="sidebar-menu-item"><div class="sidebar-menu-icon"><i class="fas fa-info-circle"></i></div><div class="sidebar-menu-text">درباره برنامه</div></a>
+    <a href="amoozesh.html" class="sidebar-menu-item"><div class="sidebar-menu-icon"><i class="fas fa-video"></i></div><div class="sidebar-menu-text">آموزش ویدئویی</div></a>
+    <a href="message.html" class="sidebar-menu-item"><div class="sidebar-menu-icon"><i class="fas fa-envelope"></i></div><div class="sidebar-menu-text">پیام‌ها</div></a>
+    <a href="karbari.html" class="sidebar-menu-item"><div class="sidebar-menu-icon"><i class="fas fa-user-circle"></i></div><div class="sidebar-menu-text">حساب کاربری</div></a>
+    <a href="contact.html" class="sidebar-menu-item"><div class="sidebar-menu-icon"><i class="fas fa-headset"></i></div><div class="sidebar-menu-text">راه‌های ارتباطی</div></a>
+    <a href="settings.html" class="sidebar-menu-item"><div class="sidebar-menu-icon"><i class="fas fa-cog"></i></div><div class="sidebar-menu-text">تنظیمات</div></a>
+    <a href="admin.html" class="sidebar-menu-item"><div class="sidebar-menu-icon"><i class="fas fa-user-shield"></i></div><div class="sidebar-menu-text">ادمین</div></a>
+    <div class="sidebar-menu-item logout" id="logoutButtonSidebar"><div class="sidebar-menu-icon"><i class="fas fa-sign-out-alt"></i></div><div class="sidebar-menu-text">خروج از حساب</div></div>
+ </div>
+ <div class="sidebar-footer"><div class="sidebar-version">نسخه 1.0.0</div></div>
+</div>
+
+<!-- محتوای اصلی صفحه -->
+<div id="app-container">
+    <div class="main-banner" style="background-image: url('images/sarbarg1.png');"></div>
+    <div class="date-banner" id="persianDateContainer"></div>
+    <div class="search-container" id="searchContainer">
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="جستجو..." id="searchInput">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+        <div class="search-results" id="searchResults"></div>
+    </div>
+    <div class="price-component-container">
+        <iframe src="gheymat.bazar.html" class="price-iframe" scrolling="no"></iframe>
+    </div>
+    <div class="motivational-wrapper">
+        <div class="motivational-widget">
+            <div class="motivational-quote-container">
+                <div class="box-tag">متن امروز</div>
+                <p id="daily-quote">در حال بارگذاری...</p>
+            </div>
+        </div>
+    </div>
+    <div class="tabs-container">
+        <div class="tab-scroll-arrow left" id="tabScrollLeft"><i class="fas fa-chevron-left"></i></div>
+        <div class="tabs-nav" id="tabsNav">
+            <button class="tab-button active" data-tab="calculations">محاسبات</button>
+            <button class="tab-button" data-tab="inquiries">استعلامات</button>
+            <button class="tab-button" data-tab="services">خدمات</button>
+            <button class="tab-button" data-tab="social">فضای مجازی</button>
+            <button class="tab-button" data-tab="websites">سایت‌ها</button>
+            <button class="tab-button" data-tab="education">آموزش</button>
+            <button class="tab-button" data-tab="tools">ابزارها</button>
+            <button class="tab-button" data-tab="files">فایل‌ها</button>
+        </div>
+        <div class="tab-scroll-arrow right" id="tabScrollRight"><i class="fas fa-chevron-right"></i></div>
+    </div>
+    
+    <div class="tab-content active" id="calculations-tab">
+        <div class="calc-container">
+            <!-- Row 1: Apartment, Villa, Rent Converter -->
+            <a href="apartment-calculator.html" class="calc-item limited-feature" data-feature="apartment-calculator">
+                <div class="calc-image"><i class="fas fa-building"></i></div>
+                <div class="calc-name">قیمت آپارتمان</div>
+                <div class="favorite-icon" data-id="calc1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="villa-calculator.html" class="calc-item limited-feature" data-feature="villa-calculator">
+                <div class="calc-image"><i class="fas fa-home"></i></div>
+                <div class="calc-name">قیمت ویلا</div>
+                <div class="favorite-icon" data-id="calc2"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="rent-converter.html" class="calc-item limited-feature" data-feature="rent-converter">
+                <div class="calc-image"><i class="fas fa-exchange-alt"></i></div>
+                <div class="calc-name">تبدیل رهن و اجاره</div>
+                <div class="favorite-icon" data-id="calc4"><i class="far fa-heart"></i></div>
+            </a>
+    
+            <!-- Row 2: Banner -->
+            <div class="banner-container">
+                <a href="calculator.html" class="banner-full" style="background-image: url('images/banner-calculations.jpg');"></a>
+            </div>
+    
+            <!-- Row 3 and onwards: Other Calculation buttons -->
+            <a href="apartment-share-calculator.html" class="calc-item limited-feature" data-feature="apartment-share-calculator">
+                <div class="calc-image"><i class="fas fa-calculator"></i></div>
+                <div class="calc-name">قدرالسهم آپارتمان</div>
+                <div class="favorite-icon" data-id="calc9"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="hesabdari.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-chart-line"></i></div>
+                <div class="calc-name">حسابداری</div>
+                <div class="favorite-icon" data-id="calc11"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="calc-item disabled" id="commissionCalc">
+                <div class="calc-image"><i class="fas fa-percentage"></i></div>
+                <div class="calc-name">محاسبه کمیسیون</div>
+                <div class="favorite-icon" data-id="calc5"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="kharjkard-sakhteman.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-hammer"></i></div>
+                <div class="calc-name">خرجکرد ساختمان</div>
+                <div class="favorite-icon" data-id="calc6"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="sharj-sakhteman.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div class="calc-name">شارژ ساختمان</div>
+                <div class="favorite-icon" data-id="calc8"><i class="far fa-heart"></i></div>
+            </a>
+        </div>
+    </div>
+    <div class="tab-content" id="inquiries-tab">
+        <div class="calc-container">
+            <a href="estelam.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-file-contract"></i></div>
+                <div class="calc-name">استعلام سند</div>
+                <div class="favorite-icon" data-id="inquiry1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="vekalatnameh.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-stamp"></i></div>
+                <div class="calc-name">استعلام وکالتنامه</div>
+                <div class="favorite-icon" data-id="inquiry2"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="sayadcheck.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-money-check-alt"></i></div>
+                <div class="calc-name">استعلام چک</div>
+                <div class="favorite-icon" data-id="inquiry3"><i class="far fa-heart"></i></div>
+            </a>
+            <div class="banner-container">
+                <a href="inquiry.html" class="banner-full" style="background-image: url('images/banner_estelamat.jpg');"></a>
+            </div>
+            <a href="taidiye-codeposti.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-map-pin"></i></div>
+                <div class="calc-name">تاییدیه کد پستی</div>
+                <div class="favorite-icon" data-id="inquiry4"><i class="far fa-heart"></i></div>
+            </a>
+        </div>
+    </div>
+    <div class="tab-content" id="services-tab">
+        <div class="calc-container">
+            <a href="sabtemelk.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-handshake"></i></div>
+                <div class="calc-name">سپردن ملک</div>
+                <div class="favorite-icon" data-id="service1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="moshavereh.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-comments"></i></div>
+                <div class="calc-name">مشاوره رایگان</div>
+                <div class="favorite-icon" data-id="service2"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="akhbar.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-newspaper"></i></div>
+                <div class="calc-name">اخبار ملکی</div>
+                <div class="favorite-icon" data-id="service3"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="hamkari.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-handshake"></i></div>
+                <div class="calc-name">همکاری با ما</div>
+                <div class="favorite-icon" data-id="service4"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="businesscard.html" class="calc-item limited-feature" data-feature="businesscard">
+                <div class="calc-image"><i class="fas fa-id-card"></i></div>
+                <div class="calc-name">کارت ویزیت</div>
+                <div class="favorite-icon" data-id="service5"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="yaddasht.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-sticky-note"></i></div>
+                <div class="calc-name">یادداشت‌ها</div>
+                <div class="favorite-icon" data-id="service6"><i class="far fa-heart"></i></div>
+            </a>
+            <div class="banner-container">
+                <a href="content-calendar.html" class="banner-full" style="background-image: url('images/content-calendar.jpg');"></a>
+            </div>
+            <a href="moshtarian.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-users"></i></div>
+                <div class="calc-name">مشتریان</div>
+                <div class="favorite-icon" data-id="service7"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="moshavere-hoghooghi.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-balance-scale"></i></div>
+                <div class="calc-name">مشاوره حقوقی</div>
+                <div class="favorite-icon" data-id="service8"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="entekhab-nam-amlak.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-signature"></i></div>
+                <div class="calc-name">انتخاب نام املاک</div>
+                <div class="favorite-icon" data-id="service9"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="ejare-roozane.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-calendar-day"></i></div>
+                <div class="calc-name">اجاره روزانه</div>
+                <div class="favorite-icon" data-id="service10"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="akharin-moamelat.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-chart-bar"></i></div>
+                <div class="calc-name">آخرین معاملات</div>
+                <div class="favorite-icon" data-id="service11"><i class="far fa-heart"></i></div>
+            </a>
+        </div>
+    </div>
+    <div class="tab-content" id="social-tab">
+        <div class="calc-container">
+            <a href="follower-management.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-users"></i></div>
+                <div class="calc-name">مدیریت فالوورها</div>
+                <div class="favorite-icon" data-id="social1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="following.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-user-check"></i></div>
+                <div class="calc-name">مدیریت فالویینگ‌ها</div>
+                <div class="favorite-icon" data-id="social2"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="direct-marketing.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-paper-plane"></i></div>
+                <div class="calc-name">دایرکت مارکتینگ</div>
+                <div class="favorite-icon" data-id="social3"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="content-calendar.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-calendar-alt"></i></div>
+                <div class="calc-name">تقویم محتوا</div>
+                <div class="favorite-icon" data-id="social4"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="daily-engagement.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-heart"></i></div>
+                <div class="calc-name">تعامل روزانه</div>
+                <div class="favorite-icon" data-id="social5"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="checklist-content.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-tasks"></i></div>
+                <div class="calc-name">چک‌لیست محتوا</div>
+                <div class="favorite-icon" data-id="social6"><i class="far fa-heart"></i></div>
+            </a>
+        </div>
+    </div>
+    <div class="tab-content" id="websites-tab">
+        <div class="calc-container">
+            <a href="KHODNEVIS.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-globe"></i></div>
+                <div class="calc-name">سایت خودنویس</div>
+                <div class="favorite-icon" data-id="website1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="kateb.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-book"></i></div>
+                <div class="calc-name">سامانه کاتب</div>
+                <div class="favorite-icon" data-id="website4"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="sabteman.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-id-card-alt"></i></div>
+                <div class="calc-name">سایت ثبت من</div>
+                <div class="favorite-icon" data-id="website3"><i class="far fa-heart"></i></div>
+            </a>
+            <div class="banner-container">
+                <a href="estelam.html" class="banner-full" style="background-image: url('images/estelam.jpg');"></a>
+            </div>
+        </div>
+    </div>
+    <div class="tab-content" id="education-tab">
+        <div class="calc-container">
+            <a href="amoozesh.matni.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-file-alt"></i></div>
+                <div class="calc-name">آموزش متنی</div>
+                <div class="favorite-icon" data-id="edu1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="amoozesh.soti.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-volume-up"></i></div>
+                <div class="calc-name">آموزش صوتی</div>
+                <div class="favorite-icon" data-id="edu2"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="amoozesh.tasviri.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-video"></i></div>
+                <div class="calc-name">آموزش تصویری</div>
+                <div class="favorite-icon" data-id="edu3"><i class="far fa-heart"></i></div>
+            </a>
+            <div class="banner-container">
+                <a href="education.html" class="banner-full"></a>
+            </div>
+        </div>
+    </div>
+    <div class="tab-content" id="tools-tab">
+        <div class="calc-container">
+            <a href="lightner.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-box-open"></i></div>
+                <div class="calc-name">جعبه لایتنر</div>
+                <div class="favorite-icon" data-id="tool1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="gozaresh-kari.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-chart-pie"></i></div>
+                <div class="calc-name">گزارش کاری</div>
+                <div class="favorite-icon" data-id="tool2"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="sarresid-yadava.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-bell"></i></div>
+                <div class="calc-name">سررسیدها و یادآورها</div>
+                <div class="favorite-icon" data-id="tool3"><i class="far fa-heart"></i></div>
+            </a>
+            <div class="banner-container">
+                <a href="tools.html" class="banner-full"></a>
+            </div>
+            <a href="chat-ai.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-robot"></i></div>
+                <div class="calc-name">چت با هوش مصنوعی</div>
+                <div class="favorite-icon" data-id="tool4"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="num-to-word.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-spell-check"></i></div>
+                <div class="calc-name">تبدیل عدد به حروف</div>
+                <div class="favorite-icon" data-id="tool5"><i class="far fa-heart"></i></div>
+            </a>
+        </div>
+    </div>
+    <div class="tab-content" id="files-tab">
+        <div class="calc-container">
+            <a href="bazdid.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-clipboard-list"></i></div>
+                <div class="calc-name">چک لیست بازدید</div>
+                <div class="favorite-icon" data-id="file1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="band_gharardad.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-file-signature"></i></div>
+                <div class="calc-name">بندهای قراردادی</div>
+                <div class="favorite-icon" data-id="file2"><i class="far fa-heart"></i></div>
+            </a>
+            <div class="banner-container">
+                <a href="files.html" class="banner-full"></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-banner" style="background-image: url('images/sarbarg2.png');"></div>
+
+    <div id="payment-iframe-container" style="display:none;"></div>
+    
+    <div class="bottom-nav">
+        <a href="index.html" class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>خانه</span>
+        </a>
+        <a href="#" class="nav-item" id="showAllToolsBtn">
+            <i class="fas fa-th-large"></i>
+            <span>همه ابزارها</span>
+        </a>
+        <a href="favorites.html" class="nav-item">
+            <i class="fas fa-heart"></i>
+            <span>علاقه‌مندی‌ها</span>
+        </a>
+        <a href="user-account.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>حساب کاربری</span>
+        </a>
+    </div>
+</div>
+
+<script src="quotes.js"></script>
+<script>
+// --- START: اسکریپت‌های اصلی از کد ۱ (احراز هویت و ...) ---
+let currentUserEmail = null; 
+let currentDeviceId = null; 
+let conflictingLoginEmail = null;
+
+function goToRegister() { window.location.href = 'register.html'; }
+function generateDeviceId() { let deviceId = localStorage.getItem('deviceId'); if (!deviceId) { deviceId = 'device-' + Math.random().toString(36).substr(2, 9) + '-' + Date.now(); localStorage.setItem('deviceId', deviceId); } return deviceId; }
+
+async function makeWorkerRequest(endpoint, data = null, method = 'GET') { 
+    const url = `https://weathered-sun-e806.toolbox-moein.workers.dev${endpoint}`; 
+    const options = { method: method, headers: { 'Content-Type': 'application/json' } }; 
+    const sessionToken = localStorage.getItem('sessionToken'); 
+    if (sessionToken) { options.headers['Authorization'] = `Bearer ${sessionToken}`; } 
+    if (data && method !== 'GET') { options.body = JSON.stringify(data); } 
+    try { 
+        const response = await fetch(url, options); 
+        const result = await response.json(); 
+        return { success: response.ok, status: response.status, data: result }; 
+    } catch (error) { 
+        console.error('Request failed:', error); 
+        return { success: false, error: 'خطای شبکه رخ داد' }; 
+    } 
+}
+
+async function checkSession() { 
+    const sessionToken = localStorage.getItem('sessionToken'); 
+    if (!sessionToken) { return null; } 
+    const result = await makeWorkerRequest('/getsession', null, 'POST'); 
+    if (result.success && result.data && result.data.user) { return result.data; } 
+    else { localStorage.removeItem('sessionToken'); return null; } 
+}
+
+async function performLogout() { 
+    try { await makeWorkerRequest('/signout', null, 'POST'); } 
+    catch (error) { console.error("Logout error:", error); } 
+    localStorage.removeItem('sessionToken'); 
+    localStorage.removeItem('deviceId'); 
+    showNoSessionPage(); 
+}
+
+function showNoSessionPage() { 
+    const elementsToHide = ['.header', '#app-container', '#payment-container']; 
+    elementsToHide.forEach(selector => { const el = document.querySelector(selector); if(el) el.style.display = 'none'; }); 
+    const noSessionContainer = document.getElementById('no-session-container'); 
+    if(noSessionContainer) noSessionContainer.style.display = 'flex'; 
+}
+
+async function loadUserProfile() { 
+    const session = await checkSession(); 
+    if (!session || !session.user) { 
+        document.getElementById('userName').textContent = 'مهمان'; 
+        return; 
+    } 
+    const { firstName = '', lastName = '' } = session.user; 
+    const fullName = `${firstName} ${lastName}`.trim(); 
+    document.getElementById('userName').textContent = fullName || session.user.email; 
+}
+
+function handlePaymentResult() { 
+    const urlParams = new URLSearchParams(window.location.search); 
+    const paymentStatus = urlParams.get('payment'); 
+    if (!paymentStatus) return; 
+    const notification = document.getElementById('payment-notification'); 
+    const icon = document.getElementById('notification-icon'); 
+    const title = document.getElementById('notification-title'); 
+    const message = document.getElementById('notification-message'); 
+    const closeBtn = document.getElementById('notification-close'); 
+    let notificationTimeout; 
+    function showNotification(type, titleText, messageText) { 
+        clearTimeout(notificationTimeout); 
+        notification.className = `payment-notification ${type} show`; 
+        icon.className = `notification-icon fas ${type === 'success' ? 'fa-check-circle' : 'fa-times-circle'}`; 
+        title.textContent = titleText; 
+        message.textContent = messageText; 
+        notificationTimeout = setTimeout(() => notification.classList.remove('show'), 5000); 
+    } 
+    closeBtn.onclick = () => { clearTimeout(notificationTimeout); notification.classList.remove('show'); }; 
+    if (paymentStatus === 'success') { showNotification('success', 'پرداخت موفق', 'اشتراک شما با موفقیت فعال گردید.'); } 
+    else if (paymentStatus === 'failed') { showNotification('failed', 'پرداخت ناموفق', 'پرداخت لغو شد یا با خطا مواجه گردید.'); } 
+    history.replaceState(null, '', window.location.pathname); 
+}
+
+function loadPaymentPage() {
+    document.querySelector('.tabs-container').style.display = 'none';
+    document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+    document.querySelector('.motivational-wrapper').style.display = 'none';
+    const container = document.getElementById('payment-iframe-container');
+    if (container) {
+        container.style.display = 'block';
+        const iframe = document.createElement('iframe'); 
+        iframe.style.cssText = 'width: 100%; height: 80vh; border: none; border-radius: var(--border-radius);'; 
+        iframe.src = 'payment.html'; 
+        container.innerHTML = ''; 
+        container.appendChild(iframe);
+    }
+}
+
+async function checkUnreadMessages() {
+    const badge = document.getElementById('unread-badge');
+    if (!badge) return;
+    try {
+        const readMessages = JSON.parse(localStorage.getItem('readMessages')) || [];
+        const WELCOME_MESSAGE = { id: 'static-welcome-message' };
+        const AD_MESSAGE = { id: 'static-ad-message' };
+        const response = await makeWorkerRequest('/messages');
+        let dynamicMessages = [];
+        if (response.success && Array.isArray(response.data.messages)) {
+            dynamicMessages = response.data.messages;
+        }
+        const allMessages = [WELCOME_MESSAGE, AD_MESSAGE, ...dynamicMessages];
+        const unreadCount = allMessages.filter(msg => msg.id && !readMessages.includes(msg.id)).length;
+        if (unreadCount > 0) {
+            badge.textContent = unreadCount;
+            badge.classList.add('show');
+        } else {
+            badge.classList.remove('show');
+        }
+    } catch (error) {
+        console.error("Error checking unread messages:", error);
+        badge.classList.remove('show');
+    }
+}
+
+async function checkAuthStateAndDisplayContent() { 
+    handlePaymentResult(); 
+    currentDeviceId = generateDeviceId(); 
+    const urlParams = new URLSearchParams(window.location.search); 
+    if (urlParams.get('loginConflict') === 'true' && urlParams.get('email')) { 
+        document.getElementById('conflictingEmailDisplay').textContent = decodeURIComponent(urlParams.get('email')); 
+        document.getElementById('multiDeviceModal').classList.add('active'); 
+        document.body.style.overflow = 'hidden'; 
+        history.replaceState(null, '', window.location.pathname); 
+        return; 
+    } 
+    const session = await checkSession(); 
+    if (!session || !session.user) { 
+        showNoSessionPage(); 
+        return; 
+    } 
+    currentUserEmail = session.user.email; 
+    const { subscriptionStatus, createdAt: userCreatedAt } = session.user; 
+    if (!userCreatedAt || !subscriptionStatus) { 
+        alert("خطا در دریافت اطلاعات کاربری."); 
+        showNoSessionPage(); 
+        return; 
+    } 
+    
+    document.querySelector('.header').style.display = 'flex';
+    document.querySelector('#app-container').style.display = 'flex';
+
+    const isSubscriptionActive = subscriptionStatus === 'active'; 
+    const trialEndDate = new Date(new Date(userCreatedAt).getTime() + 7 * 24 * 60 * 60 * 1000); 
+    const isTrialPeriod = new Date() <= trialEndDate; 
+    
+    if (!isSubscriptionActive && !isTrialPeriod && session.user.email !== "toolbox.moein@gmail.com") { 
+        loadPaymentPage();
+    } 
+    
+    await loadUserProfile();
+    await checkUnreadMessages();
+}
+
+function openMenu() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('overlay'); if (sidebar && overlay) { sidebar.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; } }
+function closeMenu() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('overlay'); if (sidebar && overlay) { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow = ''; } }
+
+// --- END: اسکریپت‌های اصلی از کد ۱ ---
+
+
+document.addEventListener('DOMContentLoaded', function() { 
+    // اجرای فانکشن‌های اصلی
+    checkAuthStateAndDisplayContent(); 
+    
+    window.addEventListener('message', (event) => { 
+        if (event.data && event.data.type === 'logoutRequest') { 
+            performLogout(); 
+        } 
+    }); 
+    
+    // --- رویدادهای مربوط به منو و سایدبار (از کد ۱) ---
+    document.getElementById('hamburgerIcon')?.addEventListener('click', (e) => { e.preventDefault(); openMenu(); }); 
+    document.getElementById('sidebarClose')?.addEventListener('click', closeMenu); 
+    document.getElementById('overlay')?.addEventListener('click', closeMenu); 
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeMenu(); } }); 
+    document.querySelectorAll('#logoutButtonSidebar, #logout-button-payment').forEach(btn => { 
+        btn?.addEventListener('click', (e) => { e.preventDefault(); performLogout(); }); 
+    }); 
+    document.getElementById('confirmSwitchDevice')?.addEventListener('click', () => alert('این قابلیت در حال توسعه است')); 
+    document.getElementById('cancelSwitchDevice')?.addEventListener('click', () => { 
+        document.getElementById('multiDeviceModal').classList.remove('active'); 
+        document.body.style.overflow = ''; 
+        goToRegister(); 
+    }); 
+    
+    // --- START: اسکریپت‌های مربوط به محتوا (ادغام شده از کد ۲) ---
+    function showPersianDate() {
+        document.getElementById('persianDateContainer').innerText = new Date().toLocaleDateString('fa-IR-u-nu-latn', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    function displayMotivationalQuote() {
+        if (typeof quotes === 'undefined' || quotes.length === 0) {
+            document.getElementById('daily-quote').textContent = 'خطا در بارگذاری جملات.';
+            return;
+        }
+        const epoch = new Date('2025-01-01T06:00:00');
+        const now = new Date();
+        const diffTime = now - epoch;
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        const quoteIndex = diffDays % quotes.length;
+        const selectedQuote = quotes[quoteIndex];
+        document.getElementById('daily-quote').textContent = selectedQuote;
+    }
+
+    showPersianDate();
+    displayMotivationalQuote();
+
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const tabId = this.getAttribute('data-tab');
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById(`${tabId}-tab`).classList.add('active');
+        });
+    });
+
+    const tabsNav = document.getElementById('tabsNav');
+    const tabScrollLeft = document.getElementById('tabScrollLeft');
+    const tabScrollRight = document.getElementById('tabScrollRight');
+
+    function updateScrollArrows() {
+        if (!tabsNav) return;
+        tabScrollLeft.classList.toggle('hidden', tabsNav.scrollLeft <= 0);
+        tabScrollRight.classList.toggle('hidden', tabsNav.scrollLeft + tabsNav.clientWidth >= tabsNav.scrollWidth - 5);
+    }
+    tabScrollLeft.addEventListener('click', () => tabsNav.scrollBy({ left: -100, behavior: 'smooth' }));
+    tabScrollRight.addEventListener('click', () => tabsNav.scrollBy({ left: 100, behavior: 'smooth' }));
+    tabsNav.addEventListener('scroll', updateScrollArrows);
+    window.addEventListener('resize', updateScrollArrows);
+    updateScrollArrows();
+
+    const searchButton = document.getElementById('searchButton');
+    const searchContainer = document.getElementById('searchContainer');
+    const searchInput = document.getElementById('searchInput');
+    searchButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        searchContainer.classList.toggle('active');
+        if (searchContainer.classList.contains('active')) {
+            searchInput.focus();
+        }
+    });
+
+    const showAllToolsBtn = document.getElementById('showAllToolsBtn');
+    const allToolsModal = document.getElementById('allToolsModal');
+    const closeAllToolsModal = document.getElementById('closeAllToolsModal');
+
+    function openModal(modal) { modal.classList.add('active'); document.body.style.overflow = 'hidden';}
+    function closeModal(modal) { modal.classList.remove('active'); document.body.style.overflow = ''; }
+
+    showAllToolsBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(allToolsModal) });
+    closeAllToolsModal.addEventListener('click', () => closeModal(allToolsModal));
+    document.getElementById('closeLimitModal')?.addEventListener('click', () => closeModal(document.getElementById('limitModal')));
+
+
+    const favoriteIcons = document.querySelectorAll('.favorite-icon');
+    const favoriteToast = document.getElementById('favoriteToast');
+    function showToast(message) {
+        favoriteToast.textContent = message;
+        favoriteToast.classList.add('show');
+        setTimeout(() => { favoriteToast.classList.remove('show'); }, 2000);
+    }
+    favoriteIcons.forEach(icon => {
+        icon.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const isFavorite = this.classList.toggle('active');
+            this.querySelector('i').className = isFavorite ? 'fas fa-heart' : 'far fa-heart';
+            showToast(isFavorite ? 'به علاقه‌مندی‌ها اضافه شد' : 'از علاقه‌مندی‌ها حذف شد');
+        });
+    });
+
+    const disabledItems = document.querySelectorAll('.calc-item.disabled, .modal-item.disabled');
+    const disabledFeatureToast = document.getElementById('disabledFeatureToast');
+    disabledItems.forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            disabledFeatureToast.classList.add('show');
+            setTimeout(() => { disabledFeatureToast.classList.remove('show'); }, 2000);
+        });
+    });
+    // --- END: اسکریپت‌های محتوا ---
+    
+    // --- START: منطق Service Worker ---
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+                console.log('Service Worker registered with scope:', registration.scope);
+                registration.addEventListener('updatefound', () => {
+                    const newWorker = registration.installing;
+                    if (newWorker) {
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed') {
+                                if (navigator.serviceWorker.controller) {
+                                    newWorker.postMessage({ type: 'SKIP_WAITING' });
+                                    console.log('New Service Worker installed, sent SKIP_WAITING message.');
+                                    window.location.reload(); 
+                                } else {
+                                    console.log('Service Worker: Initial install complete.');
+                                }
+                            }
+                        });
+                    }
+                });
+            })
+            .catch(error => { console.error('Service Worker registration failed:', error); });
+
+        navigator.serviceWorker.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'RELOAD_PAGE_AFTER_SW_CLAIM') {
+                console.log('Service Worker requested page reload after claiming control.');
+                window.location.reload();
+            }
+            if (event.data && (event.data.type === 'MESSAGE_READ' || event.data.type === 'UPDATE_UNREAD_COUNT')) {
+                checkUnreadMessages();
+            }
+        });
+    }
+    // --- END: منطق Service Worker ---
+});
+
+window.addEventListener('load', function () {
+    const loader = document.getElementById('loading-overlay');
+    if (loader) {
+        loader.style.opacity = '0';
+        setTimeout(() => { loader.style.display = 'none'; }, 500);
+    }
+});
+</script>
+
+</body>
+</html>

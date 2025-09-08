@@ -1,0 +1,2274 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حسابداری مشاورین املاک</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #00D968;
+            --primary-light: #4DF5A5;
+            --secondary-color: #00B84B;
+            --dark-color: #008E3A;
+            --light-color: #E6F8EE;
+            --shadow: 0 10px 30px rgba(0, 217, 104, 0.1);
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --card-shadow: 0 15px 35px rgba(0, 217, 104, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            --hover-transform: translateY(-5px);
+            --border-radius: 16px;
+            --button-border-radius: 8px;
+            --border-color: #e0e0e0;
+            --grey-color: #6c757d;
+            --success-color: #28a745;
+            --red-color: #e53935;
+            --text-black-color: #333;
+            --yellow-color: #FFC107;
+            --blue-color: #0275d8;
+            --income-color: #00B84B;
+            --expense-color: #e53935;
+            --commission-color: #FFC107;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background-color: #f8f9fa;
+        }
+
+        .header-container {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+
+        .topbar {
+            background-color: #ffffff;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo-container {
+            height: 50px;
+            width: 150px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #ffffff;
+        }
+
+        .logo-image {
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        #menuButton {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 10;
+        }
+
+        #menuButton span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: #333;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 15px;
+            min-height: calc(100vh - 90px);
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: var(--text-black-color);
+            font-weight: 600;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            grid-column: 1 / -1;
+            margin-bottom: 15px;
+            height: 300px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-card.income {
+            border-top: 3px solid var(--income-color);
+        }
+
+        .stat-card.expense {
+            border-top: 3px solid var(--expense-color);
+        }
+
+        .stat-title {
+            font-size: 14px;
+            color: var(--grey-color);
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .income-value {
+            color: var(--income-color);
+        }
+
+        .expense-value {
+            color: var(--expense-color);
+        }
+
+        .stat-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .income-icon {
+            color: var(--income-color);
+        }
+
+        .expense-icon {
+            color: var(--expense-color);
+        }
+
+        .tab-container {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            background-color: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 15px;
+        }
+
+        .tab-button {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 12px 15px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--grey-color);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .tab-button.active {
+            color: var(--primary-color);
+        }
+
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient);
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-black-color);
+            position: relative;
+            padding-right: 15px;
+        }
+
+        .form-label::before {
+            content: '•';
+            position: absolute;
+            right: 0;
+            top: -2px;
+            color: var(--primary-color);
+            font-size: 18px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
+            background-color: #fff;
+            outline: none;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            transition: var(--transition);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236c757d' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 12px center;
+            padding-left: 30px;
+        }
+
+        .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
+            background-color: #fff;
+            outline: none;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            transition: var(--transition);
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
+            background-color: #fff;
+            outline: none;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .form-col {
+            flex: 1;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: var(--button-border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            text-align: center;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 217, 104, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 217, 104, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        .transactions-container {
+            width: 100%;
+            max-width: 800px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .transactions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .transactions-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-black-color);
+        }
+
+        .transactions-filter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 14px;
+            background-color: #f9f9f9;
+        }
+
+        .transaction-card-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .transaction-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .transaction-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .transaction-title {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .transaction-amount {
+            font-weight: 700;
+            text-align: left;
+        }
+
+        .transaction-amount.income {
+            color: var(--income-color);
+        }
+
+        .transaction-amount.expense {
+            color: var(--expense-color);
+        }
+
+        .transaction-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: var(--grey-color);
+        }
+
+        .transaction-date {
+            color: var(--grey-color);
+        }
+
+        .transaction-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .edit-btn {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+
+        .edit-btn:hover {
+            background-color: var(--primary-light);
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #ffebee;
+            color: var(--red-color);
+        }
+
+        .delete-btn:hover {
+            background-color: var(--red-color);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--grey-color);
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: var(--primary-light);
+        }
+
+        .empty-state p {
+            font-size: 16px;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            display: none;
+        }
+
+        .modal {
+            background: white;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .close-button {
+            background: transparent;
+            border: none;
+            color: var(--grey-color);
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-button:hover {
+            color: var(--red-color);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--dark-color);
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--button-border-radius);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            display: none;
+            animation: toastFadeIn 0.3s ease;
+        }
+
+        @keyframes toastFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Date picker styles */
+        .datetime-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 500;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .datetime-popup.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .datetime-popup-content {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .datetime-popup.active .datetime-popup-content {
+            transform: scale(1);
+        }
+
+        .datetime-popup-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .datetime-popup-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .datetime-popup-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #aaa;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .datetime-popup-close:hover {
+            color: var(--red-color);
+        }
+
+        .persian-calendar {
+            text-align: center;
+        }
+
+        .calendar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .calendar-nav {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .calendar-nav:hover {
+            background-color: rgba(0, 217, 104, 0.1);
+        }
+
+        .calendar-month-year {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .calendar-month-year:hover {
+            background-color: rgba(0, 217, 104, 0.1);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .calendar-day-header {
+            padding: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+
+        .calendar-day {
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .calendar-day:hover {
+            background-color: rgba(0, 217, 104, 0.1);
+        }
+
+        .calendar-day.selected {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .calendar-day.other-month {
+            color: #ccc;
+        }
+
+        /* Month year selector */
+        .month-year-selector {
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .month-year-selector.active {
+            display: grid;
+        }
+
+        .month-year-item {
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .month-year-item:hover {
+            background-color: rgba(0, 217, 104, 0.1);
+        }
+
+        .month-year-item.selected {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .datetime-confirm-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .datetime-confirm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 217, 104, 0.3);
+        }
+
+        /* گزارش‌گیری */
+        .report-container {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+
+        .report-filters {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .report-content {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .report-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-black-color);
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .report-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .summary-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .summary-title {
+            font-size: 14px;
+            color: var(--grey-color);
+            margin-bottom: 8px;
+        }
+
+        .summary-value {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .summary-income {
+            color: var(--income-color);
+        }
+
+        .summary-expense {
+            color: var(--expense-color);
+        }
+
+        .summary-profit {
+            color: #7E57C2;
+        }
+
+        .report-chart {
+            height: 300px;
+            margin-bottom: 20px;
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .report-table th,
+        .report-table td {
+            padding: 10px;
+            text-align: right;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .report-table th {
+            font-weight: 600;
+            color: var(--grey-color);
+            background: #f9f9f9;
+        }
+
+        .report-download {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .print-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--blue-color);
+            color: white;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .print-btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .dashboard-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .report-summary {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tab-button {
+                padding: 10px 8px;
+                font-size: 12px;
+            }
+
+            .logo-container {
+                height: 45px;
+                width: 135px;
+            }
+            
+            .report-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .report-actions {
+                width: 100%;
+            }
+            
+            .report-actions .btn {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+            
+            .transaction-card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            
+            .transaction-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            
+            .report-content, .report-content * {
+                visibility: visible;
+            }
+            
+            .report-content {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none;
+            }
+            
+            .report-actions, .report-download {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header-container">
+        <div class="topbar">
+            <button id="menuButton" aria-label="منو">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="logo-container">
+                <img src="images/logo.png" alt="لوگوی برنامه" class="logo-image">
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <h1 class="page-title">سیستم حسابداری مشاورین املاک</h1>
+
+        <!-- نمودار و آمار کلی -->
+        <div class="dashboard-stats">
+            <div class="chart-container">
+                <canvas id="financeChart"></canvas>
+            </div>
+            <div class="stat-card income">
+                <i class="fas fa-coins stat-icon income-icon"></i>
+                <div class="stat-title">کل درآمد و کمیسیون</div>
+                <div class="stat-value income-value" id="totalIncome">۰ تومان</div>
+            </div>
+            <div class="stat-card expense">
+                <i class="fas fa-file-invoice-dollar stat-icon expense-icon"></i>
+                <div class="stat-title">کل هزینه‌ها</div>
+                <div class="stat-value expense-value" id="totalExpense">۰ تومان</div>
+            </div>
+        </div>
+
+        <!-- تب‌های فرم‌ها -->
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-button active" data-tab="income">ثبت درآمد و کمیسیون</button>
+                <button class="tab-button" data-tab="expense">ثبت هزینه</button>
+                <button class="tab-button" data-tab="reports">گزارش‌گیری</button>
+            </div>
+
+            <!-- فرم ثبت درآمد و کمیسیون -->
+            <div class="tab-content active" id="income-tab">
+                <form id="incomeForm">
+                    <div class="form-group">
+                        <label class="form-label" for="incomeType">نوع درآمد</label>
+                        <select id="incomeType" class="form-select" required>
+                            <option value="commission">کمیسیون معامله</option>
+                            <option value="consultation">حق مشاوره</option>
+                            <option value="other">سایر درآمدها</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label" for="incomeAmount">مبلغ (تومان)</label>
+                                <input type="text" id="incomeAmount" class="form-input money-input" placeholder="مثال: ۱۰,۰۰۰,۰۰۰" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label" for="incomeDate">تاریخ</label>
+                                <input type="text" id="incomeDate" class="form-input" placeholder="انتخاب تاریخ" readonly onclick="openDatePicker('incomeDate')">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="commissionFields" style="display: block;">
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label class="form-label" for="propertyValue">ارزش معامله (تومان)</label>
+                                    <input type="text" id="propertyValue" class="form-input money-input" placeholder="مثال: ۱,۰۰۰,۰۰۰,۰۰۰">
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label class="form-label" for="commissionRate">درصد کمیسیون</label>
+                                    <input type="text" id="commissionRate" class="form-input" placeholder="مثال: ۰.۵">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="transactionType">نوع معامله</label>
+                            <select id="transactionType" class="form-select">
+                                <option value="sale">فروش</option>
+                                <option value="rent">اجاره</option>
+                                <option value="mortgage">رهن</option>
+                                <option value="other">سایر</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="clientName">نام مشتری</label>
+                            <input type="text" id="clientName" class="form-input" placeholder="نام و نام خانوادگی مشتری">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="incomeDescription">توضیحات</label>
+                        <textarea id="incomeDescription" class="form-textarea" placeholder="توضیحات تکمیلی..."></textarea>
+                    </div>
+
+                    <button type="button" class="btn btn-primary btn-block" id="saveIncomeBtn">ثبت درآمد</button>
+                </form>
+            </div>
+
+            <!-- فرم ثبت هزینه -->
+            <div class="tab-content" id="expense-tab">
+                <form id="expenseForm">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label" for="expenseAmount">مبلغ هزینه (تومان)</label>
+                                <input type="text" id="expenseAmount" class="form-input money-input" placeholder="مثال: ۵۰۰,۰۰۰" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label" for="expenseDate">تاریخ</label>
+                                <input type="text" id="expenseDate" class="form-input" placeholder="انتخاب تاریخ" readonly onclick="openDatePicker('expenseDate')">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="expenseCategory">دسته‌بندی</label>
+                        <select id="expenseCategory" class="form-select" required>
+                            <option value="">انتخاب کنید</option>
+                            <option value="rent">اجاره دفتر</option>
+                            <option value="salary">حقوق پرسنل</option>
+                            <option value="bills">قبوض</option>
+                            <option value="supplies">ملزومات دفتری</option>
+                            <option value="advertising">تبلیغات</option>
+                            <option value="tax">مالیات</option>
+                            <option value="other">سایر</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="expenseDescription">توضیحات</label>
+                        <textarea id="expenseDescription" class="form-textarea" placeholder="توضیحات تکمیلی..."></textarea>
+                    </div>
+
+                    <button type="button" class="btn btn-primary btn-block" id="saveExpenseBtn">ثبت هزینه</button>
+                </form>
+            </div>
+
+            <!-- بخش گزارش‌گیری -->
+            <div class="tab-content" id="reports-tab">
+                <div class="report-container">
+                    <div class="report-filters">
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label class="form-label" for="reportStartDate">از تاریخ</label>
+                                    <input type="text" id="reportStartDate" class="form-input" placeholder="انتخاب تاریخ" readonly onclick="openDatePicker('reportStartDate')">
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label class="form-label" for="reportEndDate">تا تاریخ</label>
+                                    <input type="text" id="reportEndDate" class="form-input" placeholder="انتخاب تاریخ" readonly onclick="openDatePicker('reportEndDate')">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="reportType">نوع گزارش</label>
+                            <select id="reportType" class="form-select">
+                                <option value="all">همه تراکنش‌ها</option>
+                                <option value="income">فقط درآمدها</option>
+                                <option value="expense">فقط هزینه‌ها</option>
+                            </select>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <button type="button" class="btn btn-primary btn-block" id="generateReportBtn">ایجاد گزارش</button>
+                        </div>
+                    </div>
+
+                    <div class="report-content" id="reportContent" style="display: none;">
+                        <div class="report-header">
+                            <div class="report-title">گزارش مالی</div>
+                            <div class="report-actions">
+                                <button class="btn btn-secondary" id="printReportBtn">
+                                    <i class="fas fa-print"></i> چاپ
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="report-summary" id="reportSummary">
+                            <!-- خلاصه گزارش اینجا نمایش داده می‌شود -->
+                        </div>
+
+                        <div class="report-chart">
+                            <canvas id="reportChart"></canvas>
+                        </div>
+
+                        <div class="report-transactions" id="reportTransactions">
+                            <!-- تراکنش‌های گزارش اینجا نمایش داده می‌شود -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- جدول تراکنش‌ها -->
+        <div class="transactions-container">
+            <div class="transactions-header">
+                <h2 class="transactions-title">تراکنش‌های اخیر</h2>
+                <div class="transactions-filter">
+                    <select id="transactionTypeFilter" class="filter-select">
+                        <option value="all">همه</option>
+                        <option value="income">درآمد</option>
+                        <option value="expense">هزینه</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="transactionList" class="transaction-card-container">
+                <!-- تراکنش‌ها اینجا نمایش داده می‌شوند -->
+                <div class="empty-state">
+                    <i class="fas fa-receipt"></i>
+                    <p>هیچ تراکنشی ثبت نشده است.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- مودال ویرایش تراکنش -->
+    <div class="modal-overlay" id="editModalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">ویرایش تراکنش</h3>
+                <button class="close-button" id="closeEditModalButton">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editTransactionForm">
+                    <input type="hidden" id="editTransactionId">
+                    <input type="hidden" id="editTransactionType">
+
+                    <div class="form-group">
+                        <label class="form-label" for="editAmount">مبلغ (تومان)</label>
+                        <input type="text" id="editAmount" class="form-input money-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="editDate">تاریخ</label>
+                        <input type="text" id="editDate" class="form-input" placeholder="انتخاب تاریخ" readonly onclick="openDatePicker('editDate')">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="editDescription">توضیحات</label>
+                        <textarea id="editDescription" class="form-textarea"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelEditBtn">انصراف</button>
+                <button type="button" class="btn btn-primary" id="updateTransactionBtn">به‌روزرسانی</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- پاپ‌آپ تاریخ -->
+    <div class="datetime-popup" id="datePopup">
+        <div class="datetime-popup-content">
+            <div class="datetime-popup-header">
+                <div class="datetime-popup-title">انتخاب تاریخ</div>
+                <button class="datetime-popup-close" onclick="closeDatePicker()">&times;</button>
+            </div>
+            <div class="persian-calendar">
+                <div class="calendar-header">
+                    <button class="calendar-nav" onclick="previousMonth()">&lt;</button>
+                    <div class="calendar-month-year" id="calendarMonthYear" onclick="toggleMonthYearSelector()">خرداد ۱۴۰۴</div>
+                    <button class="calendar-nav" onclick="nextMonth()">&gt;</button>
+                </div>
+                <div class="month-year-selector" id="monthYearSelector">
+                    <!-- انتخابگر ماه و سال اینجا ایجاد می‌شود -->
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- تقویم اینجا ایجاد می‌شود -->
+                </div>
+            </div>
+            <button class="datetime-confirm-btn" onclick="confirmDate()">انتخاب</button>
+        </div>
+    </div>
+
+    <!-- اعلان (Toast) -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // متغیرهای سراسری
+        let transactions = [];
+        let currentTransactionId = 1;
+        let currentDateField = null;
+        let currentYear = 1404;
+        let currentMonth = 3; // خرداد
+        let selectedDay = null;
+        let showingMonthYearSelector = false;
+        let financeChart = null;
+        let reportChart = null;
+
+        // نام‌های ماه‌های فارسی
+        const persianMonths = [
+            'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
+            'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
+        ];
+
+        // نام‌های روزهای هفته
+        const persianDays = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
+
+        // رنگ‌های نمودار
+        const chartColors = {
+            income: 'rgba(0, 184, 75, 0.7)',
+            expense: 'rgba(229, 57, 53, 0.7)',
+            border: {
+                income: 'rgb(0, 184, 75)',
+                expense: 'rgb(229, 57, 53)'
+            }
+        };
+
+        // تبدیل اعداد انگلیسی به فارسی
+        function toPersianNumbers(str) {
+            if (!str) return '';
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return str.toString().replace(/\d/g, x => persianDigits[x]);
+        }
+
+        // تبدیل اعداد فارسی به انگلیسی
+        function toEnglishNumbers(str) {
+            if (!str) return '';
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            let result = str.toString();
+            for (let i = 0; i < 10; i++) {
+                const regex = new RegExp(persianDigits[i], 'g');
+                result = result.replace(regex, i);
+            }
+            return result;
+        }
+
+        // حذف کاراکترهای غیرعددی و تبدیل به عدد
+        function extractNumber(str) {
+            if (!str) return 0;
+            return parseInt(toEnglishNumbers(str).replace(/[^\d]/g, '')) || 0;
+        }
+
+        // فرمت کردن اعداد به صورت قیمت با جداکننده سه رقمی
+        function formatPrice(price) {
+            if (isNaN(price) || price === null) return toPersianNumbers('0') + ' تومان';
+            return toPersianNumbers(parseInt(price).toLocaleString()) + ' تومان';
+        }
+
+        // فرمت کردن تاریخ به صورت شمسی
+        function formatPersianDate(year, month, day) {
+            return `${toPersianNumbers(year)}/${toPersianNumbers(month)}/${toPersianNumbers(day)}`;
+        }
+
+        // نمایش پیام toast
+        function showToast(message, duration = 3000) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, duration);
+        }
+
+        // تغییر تب‌ها
+        function switchTab(tabId) {
+            // غیرفعال کردن همه تب‌ها
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // فعال کردن تب انتخاب شده
+            document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
+            document.getElementById(`${tabId}-tab`).classList.add('active');
+        }
+
+        // محاسبه و به‌روزرسانی آمار
+        function updateStats() {
+            let totalIncome = 0;
+            let totalExpense = 0;
+            
+            transactions.forEach(transaction => {
+                if (transaction.type === 'income') {
+                    totalIncome += extractNumber(transaction.amount);
+                } else if (transaction.type === 'expense') {
+                    totalExpense += extractNumber(transaction.amount);
+                }
+            });
+            
+            document.getElementById('totalIncome').textContent = formatPrice(totalIncome);
+            document.getElementById('totalExpense').textContent = formatPrice(totalExpense);
+            
+            updateFinanceChart(totalIncome, totalExpense);
+        }
+
+        // به‌روزرسانی نمودار مالی
+        function updateFinanceChart(income, expense) {
+            const ctx = document.getElementById('financeChart').getContext('2d');
+            
+            // اگر نمودار قبلاً ایجاد شده، آن را نابود کن
+            if (financeChart) {
+                financeChart.destroy();
+            }
+            
+            // اگر درآمد و هزینه هر دو صفر باشند، داده‌های پیش‌فرض نشان بده
+            if (income === 0 && expense === 0) {
+                income = 1;
+                expense = 1;
+            }
+            
+            financeChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['درآمد', 'هزینه'],
+                    datasets: [{
+                        data: [income, expense],
+                        backgroundColor: [chartColors.income, chartColors.expense],
+                        borderColor: [chartColors.border.income, chartColors.border.expense],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: 'Vazirmatn'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.raw !== null) {
+                                        label += formatPrice(context.raw);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // نمایش تراکنش‌ها به صورت کارت
+        function renderTransactions(filter = 'all') {
+            const container = document.getElementById('transactionList');
+            container.innerHTML = '';
+            
+            let filteredTransactions = [...transactions];
+            if (filter !== 'all') {
+                filteredTransactions = transactions.filter(t => t.type === filter);
+            }
+            
+            // مرتب‌سازی بر اساس تاریخ (جدیدترین اول)
+            filteredTransactions.sort((a, b) => {
+                return new Date(b.timestamp) - new Date(a.timestamp);
+            });
+            
+            if (filteredTransactions.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-receipt"></i>
+                        <p>هیچ تراکنشی ثبت نشده است.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredTransactions.forEach(transaction => {
+                const card = document.createElement('div');
+                card.className = 'transaction-card';
+                
+                let typeIcon, typeClass;
+                if (transaction.type === 'income') {
+                    typeIcon = 'fa-coins';
+                    typeClass = 'income';
+                } else {
+                    typeIcon = 'fa-file-invoice-dollar';
+                    typeClass = 'expense';
+                }
+                
+                card.innerHTML = `
+                    <div class="transaction-card-header">
+                        <div class="transaction-title">
+                            <i class="fas ${typeIcon}"></i> 
+                            ${transaction.title}
+                        </div>
+                        <div class="transaction-amount ${typeClass}">
+                            ${transaction.type === 'income' ? '+' : '-'} ${formatPrice(transaction.amount)}
+                        </div>
+                    </div>
+                    <div class="transaction-info">
+                        <div class="transaction-category">
+                            ${transaction.category ? getCategoryName(transaction.category) : ''}
+                        </div>
+                        <div class="transaction-date">${transaction.date}</div>
+                    </div>
+                    ${transaction.description ? 
+                        `<div class="transaction-description">${transaction.description}</div>` : ''}
+                    <div class="transaction-actions">
+                        <button class="action-btn edit-btn" data-id="${transaction.id}">
+                            <i class="fas fa-pencil-alt"></i> ویرایش
+                        </button>
+                        <button class="action-btn delete-btn" data-id="${transaction.id}">
+                            <i class="fas fa-trash-alt"></i> حذف
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+            
+            // اضافه کردن رویدادها به دکمه‌های ویرایش و حذف
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = parseInt(btn.dataset.id);
+                    openEditModal(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = parseInt(btn.dataset.id);
+                    deleteTransaction(id);
+                });
+            });
+        }
+
+        // تبدیل کد دسته‌بندی به نام فارسی
+        function getCategoryName(categoryCode) {
+            const categories = {
+                // دسته‌بندی‌های درآمد
+                'commission': 'کمیسیون معامله',
+                'consultation': 'حق مشاوره',
+                'other_income': 'سایر درآمدها',
+                
+                // دسته‌بندی‌های هزینه
+                'rent': 'اجاره دفتر',
+                'salary': 'حقوق پرسنل',
+                'bills': 'قبوض',
+                'supplies': 'ملزومات دفتری',
+                'advertising': 'تبلیغات',
+                'tax': 'مالیات',
+                'other': 'سایر هزینه‌ها'
+            };
+            
+            return categories[categoryCode] || categoryCode;
+        }
+
+        // افزودن تراکنش جدید
+        function addTransaction(type, data) {
+            const transaction = {
+                id: currentTransactionId++,
+                type: type,
+                timestamp: new Date().toISOString(),
+                ...data
+            };
+            
+            transactions.push(transaction);
+            
+            // ذخیره در localStorage
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            
+            updateStats();
+            renderTransactions(document.getElementById('transactionTypeFilter').value);
+            showToast(`${type === 'income' ? 'درآمد' : 'هزینه'} با موفقیت ثبت شد`);
+        }
+
+        // حذف تراکنش
+        function deleteTransaction(id) {
+            if (confirm('آیا از حذف این تراکنش اطمینان دارید؟')) {
+                transactions = transactions.filter(t => t.id !== id);
+                
+                // ذخیره در localStorage
+                localStorage.setItem('transactions', JSON.stringify(transactions));
+                
+                updateStats();
+                renderTransactions(document.getElementById('transactionTypeFilter').value);
+                showToast('تراکنش با موفقیت حذف شد');
+            }
+        }
+
+        // باز کردن مودال ویرایش
+        function openEditModal(id) {
+            const transaction = transactions.find(t => t.id === id);
+            if (!transaction) return;
+            
+            document.getElementById('editTransactionId').value = transaction.id;
+            document.getElementById('editTransactionType').value = transaction.type;
+            document.getElementById('editAmount').value = transaction.amount;
+            document.getElementById('editDate').value = transaction.date;
+            document.getElementById('editDescription').value = transaction.description;
+            
+            formatMoneyInputs();
+            document.getElementById('editModalOverlay').style.display = 'flex';
+        }
+
+        // بستن مودال ویرایش
+        function closeEditModal() {
+            document.getElementById('editModalOverlay').style.display = 'none';
+        }
+
+        // به‌روزرسانی تراکنش
+        function updateTransaction() {
+            const id = parseInt(document.getElementById('editTransactionId').value);
+            const type = document.getElementById('editTransactionType').value;
+            const amount = document.getElementById('editAmount').value;
+            const date = document.getElementById('editDate').value;
+            const description = document.getElementById('editDescription').value;
+            
+            const index = transactions.findIndex(t => t.id === id);
+            if (index === -1) return;
+            
+            transactions[index].amount = amount;
+            transactions[index].date = date;
+            transactions[index].description = description;
+            
+            // ذخیره در localStorage
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            
+            updateStats();
+            renderTransactions(document.getElementById('transactionTypeFilter').value);
+            closeEditModal();
+            showToast('تراکنش با موفقیت به‌روزرسانی شد');
+        }
+
+        // باز کردن انتخابگر تاریخ
+        function openDatePicker(fieldId) {
+            currentDateField = fieldId;
+            document.getElementById('datePopup').classList.add('active');
+            showingMonthYearSelector = false;
+            updateCalendarHeader();
+            generateCalendar();
+        }
+
+        // بستن انتخابگر تاریخ
+        function closeDatePicker() {
+            document.getElementById('datePopup').classList.remove('active');
+        }
+
+        // تولید تقویم
+        function generateCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            
+            // هدر روزهای هفته
+            let html = persianDays.map(day => 
+                `<div class="calendar-day-header">${day}</div>`
+            ).join('');
+            
+            // تعداد روزهای ماه
+            const daysInMonth = currentMonth <= 6 ? 31 : (currentMonth <= 11 ? 30 : 29);
+            
+            // روزهای ماه
+            for (let i = 1; i <= daysInMonth; i++) {
+                const isSelected = selectedDay === i;
+                html += `<div class="calendar-day ${isSelected ? 'selected' : ''}" 
+                              onclick="selectDay(${i})">${toPersianNumbers(i)}</div>`;
+            }
+            
+            grid.innerHTML = html;
+        }
+
+        // انتخاب روز
+        function selectDay(day) {
+            selectedDay = day;
+            document.querySelectorAll('.calendar-day').forEach(el => {
+                if (parseInt(toEnglishNumbers(el.textContent)) === day) {
+                    el.classList.add('selected');
+                } else {
+                    el.classList.remove('selected');
+                }
+            });
+        }
+
+        // تأیید تاریخ
+        function confirmDate() {
+            if (selectedDay) {
+                const formattedDate = formatPersianDate(currentYear, currentMonth, selectedDay);
+                document.getElementById(currentDateField).value = formattedDate;
+                closeDatePicker();
+            } else {
+                showToast('لطفاً یک روز انتخاب کنید');
+            }
+        }
+
+        // ماه قبل
+        function previousMonth() {
+            currentMonth--;
+            if (currentMonth < 1) {
+                currentMonth = 12;
+                currentYear--;
+            }
+            updateCalendarHeader();
+            generateCalendar();
+        }
+
+        // ماه بعد
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 12) {
+                currentMonth = 1;
+                currentYear++;
+            }
+            updateCalendarHeader();
+            generateCalendar();
+        }
+
+        // به‌روزرسانی هدر تقویم
+        function updateCalendarHeader() {
+            const header = document.getElementById('calendarMonthYear');
+            header.textContent = `${persianMonths[currentMonth - 1]} ${toPersianNumbers(currentYear)}`;
+        }
+
+        // تغییر نمایش انتخابگر ماه و سال
+        function toggleMonthYearSelector() {
+            const selector = document.getElementById('monthYearSelector');
+            const grid = document.getElementById('calendarGrid');
+            
+            showingMonthYearSelector = !showingMonthYearSelector;
+            
+            if (showingMonthYearSelector) {
+                selector.classList.add('active');
+                grid.style.display = 'none';
+                generateMonthYearSelector();
+            } else {
+                selector.classList.remove('active');
+                grid.style.display = 'grid';
+            }
+        }
+
+        // تولید انتخابگر ماه و سال
+        function generateMonthYearSelector() {
+            const selector = document.getElementById('monthYearSelector');
+            let html = '';
+            
+            // ماه‌ها
+            persianMonths.forEach((month, index) => {
+                const isSelected = (index + 1) === currentMonth;
+                html += `<div class="month-year-item ${isSelected ? 'selected' : ''}" 
+                              onclick="selectMonth(${index + 1})">${month}</div>`;
+            });
+            
+            // سال‌ها (5 سال قبل تا 5 سال بعد)
+            for (let year = currentYear - 5; year <= currentYear + 5; year++) {
+                const isSelected = year === currentYear;
+                html += `<div class="month-year-item ${isSelected ? 'selected' : ''}" 
+                              onclick="selectYear(${year})">${toPersianNumbers(year)}</div>`;
+            }
+            
+            selector.innerHTML = html;
+        }
+
+        // انتخاب ماه
+        function selectMonth(month) {
+            currentMonth = month;
+            updateCalendarHeader();
+            toggleMonthYearSelector();
+            generateCalendar();
+        }
+
+        // انتخاب سال
+        function selectYear(year) {
+            currentYear = year;
+            updateCalendarHeader();
+            toggleMonthYearSelector();
+            generateCalendar();
+        }
+
+        // فرمت کردن فیلدهای پولی (جداسازی 3 رقمی)
+        function formatMoneyInputs() {
+            document.querySelectorAll('.money-input').forEach(input => {
+                input.addEventListener('input', function(e) {
+                    // حذف همه کاراکترهای غیر عددی
+                    let value = toEnglishNumbers(e.target.value).replace(/[^\d]/g, '');
+                    
+                    // اگر مقدار خالی نبود، فرمت‌دهی کن
+                    if (value) {
+                        // تبدیل به عدد و فرمت‌دهی با جداکننده هزارگان
+                        value = parseInt(value).toLocaleString();
+                    }
+                    
+                    // تبدیل به اعداد فارسی و قرار دادن در فیلد
+                    e.target.value = toPersianNumbers(value);
+                });
+            });
+        }
+
+        // نمایش/مخفی کردن فیلدهای مختص کمیسیون
+        function toggleCommissionFields() {
+            const incomeType = document.getElementById('incomeType').value;
+            const commissionFields = document.getElementById('commissionFields');
+            
+            if (incomeType === 'commission') {
+                commissionFields.style.display = 'block';
+            } else {
+                commissionFields.style.display = 'none';
+            }
+        }
+
+        // تولید گزارش
+        function generateReport() {
+            const startDate = document.getElementById('reportStartDate').value;
+            const endDate = document.getElementById('reportEndDate').value;
+            const reportType = document.getElementById('reportType').value;
+            
+            if (!startDate || !endDate) {
+                showToast('لطفاً بازه زمانی را مشخص کنید');
+                return;
+            }
+            
+            // فیلتر تراکنش‌ها بر اساس تاریخ و نوع
+            let filteredTransactions = transactions.filter(t => {
+                // فعلاً فقط براساس نوع فیلتر می‌کنیم
+                if (reportType !== 'all' && t.type !== reportType) {
+                    return false;
+                }
+                return true;
+            });
+            
+            // محاسبه آمار کلی
+            let totalIncome = 0;
+            let totalExpense = 0;
+            
+            filteredTransactions.forEach(t => {
+                if (t.type === 'income') {
+                    totalIncome += extractNumber(t.amount);
+                } else if (t.type === 'expense') {
+                    totalExpense += extractNumber(t.amount);
+                }
+            });
+            
+            const profit = totalIncome - totalExpense;
+            
+            // نمایش خلاصه گزارش
+            const reportSummary = document.getElementById('reportSummary');
+            reportSummary.innerHTML = `
+                <div class="summary-item">
+                    <div class="summary-title">بازه زمانی</div>
+                    <div class="summary-value">${startDate} تا ${endDate}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-title">کل درآمد</div>
+                    <div class="summary-value summary-income">${formatPrice(totalIncome)}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-title">کل هزینه</div>
+                    <div class="summary-value summary-expense">${formatPrice(totalExpense)}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-title">سود خالص</div>
+                    <div class="summary-value summary-profit">${formatPrice(profit)}</div>
+                </div>
+            `;
+            
+            // نمایش نمودار گزارش
+            generateReportChart(totalIncome, totalExpense);
+            
+            // نمایش تراکنش‌های گزارش
+            const reportTransactions = document.getElementById('reportTransactions');
+            
+            if (filteredTransactions.length === 0) {
+                reportTransactions.innerHTML = `
+                    <div class="empty-state">
+                        <p>هیچ تراکنشی در این بازه زمانی یافت نشد.</p>
+                    </div>
+                `;
+            } else {
+                reportTransactions.innerHTML = `
+                    <table class="report-table">
+                        <thead>
+                            <tr>
+                                <th>عنوان</th>
+                                <th>تاریخ</th>
+                                <th>دسته‌بندی</th>
+                                <th>مبلغ (تومان)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${filteredTransactions.map(t => `
+                                <tr>
+                                    <td>${t.title}</td>
+                                    <td>${t.date}</td>
+                                    <td>${t.category ? getCategoryName(t.category) : '-'}</td>
+                                    <td class="transaction-amount ${t.type === 'income' ? 'income' : 'expense'}">
+                                        ${t.type === 'income' ? '+' : '-'} ${formatPrice(t.amount)}
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
+            
+            // نمایش بخش گزارش
+            document.getElementById('reportContent').style.display = 'block';
+        }
+
+        // تولید نمودار گزارش
+        function generateReportChart(income, expense) {
+            const ctx = document.getElementById('reportChart').getContext('2d');
+            
+            // اگر نمودار قبلاً ایجاد شده، آن را نابود کن
+            if (reportChart) {
+                reportChart.destroy();
+            }
+            
+            reportChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['درآمد', 'هزینه', 'سود خالص'],
+                    datasets: [{
+                        data: [income, expense, income - expense],
+                        backgroundColor: [
+                            chartColors.income,
+                            chartColors.expense,
+                            'rgba(126, 87, 194, 0.7)'
+                        ],
+                        borderColor: [
+                            chartColors.border.income,
+                            chartColors.border.expense,
+                            'rgb(126, 87, 194)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.raw !== null) {
+                                        label += formatPrice(context.raw);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatPrice(value);
+                                },
+                                font: {
+                                    family: 'Vazirmatn'
+                                }
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    family: 'Vazirmatn'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // چاپ گزارش
+        function printReport() {
+            window.print();
+        }
+
+        // تنظیم رویدادها
+        function setupEventListeners() {
+            // رویدادهای تب‌ها
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabId = btn.dataset.tab;
+                    switchTab(tabId);
+                });
+            });
+            
+            // رویداد تغییر نوع درآمد
+            document.getElementById('incomeType').addEventListener('change', toggleCommissionFields);
+            
+            // رویداد ثبت درآمد
+            document.getElementById('saveIncomeBtn').addEventListener('click', () => {
+                const incomeType = document.getElementById('incomeType').value;
+                const amount = document.getElementById('incomeAmount').value;
+                const date = document.getElementById('incomeDate').value;
+                const description = document.getElementById('incomeDescription').value;
+                
+                if (!amount || !date) {
+                    showToast('لطفاً مبلغ و تاریخ را وارد کنید');
+                    return;
+                }
+                
+                let title, category, additionalData = {};
+                
+                if (incomeType === 'commission') {
+                    const clientName = document.getElementById('clientName').value;
+                    const transactionType = document.getElementById('transactionType').value;
+                    const propertyValue = document.getElementById('propertyValue').value;
+                    const commissionRate = document.getElementById('commissionRate').value;
+                    
+                    if (!clientName) {
+                        showToast('لطفاً نام مشتری را وارد کنید');
+                        return;
+                    }
+                    
+                    let transactionTypeText;
+                    switch(transactionType) {
+                        case 'sale': transactionTypeText = 'فروش'; break;
+                        case 'rent': transactionTypeText = 'اجاره'; break;
+                        case 'mortgage': transactionTypeText = 'رهن'; break;
+                        default: transactionTypeText = 'معامله';
+                    }
+                    
+                    title = `کمیسیون ${transactionTypeText} - ${clientName}`;
+                    category = 'commission';
+                    
+                    additionalData = {clientName,
+                        transactionType,
+                        propertyValue,
+                        commissionRate
+                    };
+                } else if (incomeType === 'consultation') {
+                    title = 'حق مشاوره';
+                    category = 'consultation';
+                } else {
+                    title = 'سایر درآمدها';
+                    category = 'other_income';
+                }
+                
+                addTransaction('income', {
+                    title,
+                    amount,
+                    date,
+                    description,
+                    category,
+                    ...additionalData
+                });
+                
+                // پاک کردن فرم
+                document.getElementById('incomeForm').reset();
+                document.getElementById('incomeDate').value = '';
+                toggleCommissionFields();
+            });
+            
+            // رویداد ثبت هزینه
+            document.getElementById('saveExpenseBtn').addEventListener('click', () => {
+                const amount = document.getElementById('expenseAmount').value;
+                const date = document.getElementById('expenseDate').value;
+                const category = document.getElementById('expenseCategory').value;
+                const description = document.getElementById('expenseDescription').value;
+                
+                if (!amount || !date || !category) {
+                    showToast('لطفاً مبلغ، تاریخ و دسته‌بندی را وارد کنید');
+                    return;
+                }
+                
+                const title = getCategoryName(category);
+                
+                addTransaction('expense', {
+                    title,
+                    amount,
+                    date,
+                    description,
+                    category
+                });
+                
+                // پاک کردن فرم
+                document.getElementById('expenseForm').reset();
+                document.getElementById('expenseDate').value = '';
+            });
+            
+            // رویداد فیلتر تراکنش‌ها
+            document.getElementById('transactionTypeFilter').addEventListener('change', (e) => {
+                renderTransactions(e.target.value);
+            });
+            
+            // رویدادهای مودال ویرایش
+            document.getElementById('closeEditModalButton').addEventListener('click', closeEditModal);
+            document.getElementById('cancelEditBtn').addEventListener('click', closeEditModal);
+            document.getElementById('updateTransactionBtn').addEventListener('click', updateTransaction);
+            
+            // بستن مودال با کلیک خارج از آن
+            document.getElementById('editModalOverlay').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) {
+                    closeEditModal();
+                }
+            });
+            
+            // رویدادهای گزارش‌گیری
+            document.getElementById('generateReportBtn').addEventListener('click', generateReport);
+            document.getElementById('printReportBtn').addEventListener('click', printReport);
+        }
+
+        // بارگذاری داده‌ها از localStorage
+        function loadData() {
+            const savedTransactions = localStorage.getItem('transactions');
+            if (savedTransactions) {
+                transactions = JSON.parse(savedTransactions);
+                // پیدا کردن بزرگترین ID برای تراکنش‌های بعدی
+                if (transactions.length > 0) {
+                    currentTransactionId = Math.max(...transactions.map(t => t.id)) + 1;
+                }
+            }
+        }
+
+        // راه‌اندازی اولیه برنامه
+        function initializeApp() {
+            loadData();
+            setupEventListeners();
+            formatMoneyInputs();
+            toggleCommissionFields();
+            updateStats();
+            renderTransactions();
+            
+            // تنظیم تاریخ امروز
+            const today = new Date();
+            const persianToday = formatPersianDate(currentYear, currentMonth, today.getDate());
+            document.getElementById('incomeDate').value = persianToday;
+            document.getElementById('expenseDate').value = persianToday;
+            
+            // تنظیم تاریخ‌های پیش‌فرض گزارش (ماه جاری)
+            const startOfMonth = formatPersianDate(currentYear, currentMonth, 1);
+            const endOfMonth = formatPersianDate(currentYear, currentMonth, currentMonth <= 6 ? 31 : (currentMonth <= 11 ? 30 : 29));
+            document.getElementById('reportStartDate').value = startOfMonth;
+            document.getElementById('reportEndDate').value = endOfMonth;
+        }
+
+        // راه‌اندازی برنامه پس از بارگذاری صفحه
+        document.addEventListener('DOMContentLoaded', initializeApp);
+
+        // رویداد کلیک خارج از پاپ‌آپ تاریخ
+        document.getElementById('datePopup').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                closeDatePicker();
+            }
+        });
+
+        // جلوگیری از بستن پاپ‌آپ هنگام کلیک روی محتوای آن
+        document.querySelector('.datetime-popup-content').addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // رویداد کلید ESC برای بستن پاپ‌آپ‌ها
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (document.getElementById('datePopup').classList.contains('active')) {
+                    closeDatePicker();
+                }
+                if (document.getElementById('editModalOverlay').style.display === 'flex') {
+                    closeEditModal();
+                }
+            }
+        });
+
+        // اضافه کردن قابلیت محاسبه خودکار کمیسیون
+        document.getElementById('propertyValue').addEventListener('input', calculateCommission);
+        document.getElementById('commissionRate').addEventListener('input', calculateCommission);
+
+        function calculateCommission() {
+            const propertyValue = extractNumber(document.getElementById('propertyValue').value);
+            const commissionRate = parseFloat(toEnglishNumbers(document.getElementById('commissionRate').value));
+            
+            if (propertyValue && commissionRate) {
+                const commission = Math.round(propertyValue * (commissionRate / 100));
+                document.getElementById('incomeAmount').value = toPersianNumbers(commission.toLocaleString());
+            }
+        }
+
+        // اضافه کردن قابلیت خروجی Excel برای گزارش‌ها
+        function exportToExcel() {
+            const startDate = document.getElementById('reportStartDate').value;
+            const endDate = document.getElementById('reportEndDate').value;
+            const reportType = document.getElementById('reportType').value;
+            
+            // فیلتر تراکنش‌ها
+            let filteredTransactions = transactions.filter(t => {
+                if (reportType !== 'all' && t.type !== reportType) {
+                    return false;
+                }
+                return true;
+            });
+            
+            // ایجاد داده‌های CSV
+            let csvContent = 'عنوان,تاریخ,دسته‌بندی,مبلغ,نوع\n';
+            
+            filteredTransactions.forEach(t => {
+                const amount = extractNumber(t.amount);
+                csvContent += `"${t.title}","${t.date}","${t.category ? getCategoryName(t.category) : '-'}","${amount}","${t.type === 'income' ? 'درآمد' : 'هزینه'}"\n`;
+            });
+            
+            // دانلود فایل
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `گزارش_مالی_${startDate}_تا_${endDate}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // اضافه کردن دکمه Excel به گزارش‌ها
+        document.addEventListener('DOMContentLoaded', function() {
+            const reportActions = document.querySelector('.report-actions');
+            if (reportActions) {
+                const excelBtn = document.createElement('button');
+                excelBtn.className = 'btn btn-secondary';
+                excelBtn.innerHTML = '<i class="fas fa-file-excel"></i> Excel';
+                excelBtn.onclick = exportToExcel;
+                reportActions.appendChild(excelBtn);
+            }
+        });
+    </script>
+</body>
+</html>

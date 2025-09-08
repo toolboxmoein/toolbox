@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اخبار اقتصادی و سیاسی | دستیار املاک</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0bff00;
+            --primary-light: #4DF5A5;
+            --secondary-color: #00B84B;
+            --dark-color: #008E3A;
+            --light-color: #E6F8EE;
+            --shadow: 0 10px 30px rgba(11, 255, 0, 0.1);
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --card-shadow: 0 15px 35px rgba(11, 255, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            --hover-transform: translateY(-5px);
+            --border-radius: 16px;
+            --button-border-radius: 8px;
+            --border-color: #e0e0e0;
+            --grey-color: #6c757d;
+            --success-color: #28a745;
+            --red-color: #e53935;
+            --text-black-color: #333;
+            --politics-color: #0bff00;
+            --economy-color: #0bff00;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background-color: #ffffff;
+        }
+
+        .header-container {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+
+        .topbar {
+            background-color: #ffffff;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+            padding: 8px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .logo-container {
+            height: 50px;
+            width: 150px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #ffffff;
+        }
+
+        .logo-image {
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 15px;
+            min-height: calc(100vh - 70px);
+        }
+
+        .guide-text {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 35px;
+            font-size: 1.15rem;
+            color: #555;
+            max-width: 680px;
+            line-height: 1.7;
+            position: relative;
+        }
+
+        .guide-text::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background: var(--gradient);
+            border-radius: 3px;
+        }
+
+        .guide-text .highlight {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 1000px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .search-box {
+            position: relative;
+            width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 8px 35px 8px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            font-size: 13px;
+            transition: var(--transition);
+            background: white;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(11, 255, 0, 0.1);
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--grey-color);
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .news-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(11, 255, 0, 0.1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .news-card:hover {
+            transform: var(--hover-transform);
+            box-shadow: 0 20px 40px rgba(11, 255, 0, 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .news-category-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--economy-color);
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 500;
+            z-index: 5;
+            border: 1px solid var(--economy-color);
+        }
+
+        .news-category-badge.politics {
+            color: var(--politics-color);
+            border-color: var(--politics-color);
+        }
+
+        .news-image-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .news-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .news-card:hover .news-image {
+            transform: scale(1.05);
+        }
+
+        .news-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+            color: #adb5bd;
+        }
+
+        .news-placeholder i {
+            font-size: 32px;
+        }
+
+        .news-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 12px;
+            color: var(--grey-color);
+        }
+
+        .news-date {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .news-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-black-color);
+            margin-bottom: 10px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-clamp: 2;
+            min-height: 45px;
+        }
+
+        .news-summary {
+            font-size: 14px;
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-clamp: 3;
+            flex-grow: 1;
+            min-height: 70px;
+        }
+
+        .news-actions {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .read-more-btn {
+            background: var(--gradient);
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--button-border-radius);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: var(--transition);
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            box-shadow: 0 4px 12px rgba(11, 255, 0, 0.3);
+        }
+
+        .read-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(11, 255, 0, 0.4);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--primary-color);
+            font-size: 18px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin: 20px 0;
+        }
+
+        .loading i {
+            font-size: 24px;
+            margin-bottom: 10px;
+            animation: spin 1s linear infinite;
+        }
+
+        .error {
+            text-align: center;
+            padding: 40px;
+            color: var(--red-color);
+            background: white;
+            border-radius: var(--border-radius);
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(229, 57, 53, 0.2);
+        }
+
+        .load-more {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .load-more-btn {
+            background: white;
+            color: var(--text-black-color);
+            padding: 12px 30px;
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .load-more-btn:hover {
+            background: var(--light-color);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .no-news {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--grey-color);
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin: 20px 0;
+        }
+
+        .no-news i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            opacity: 0.7;
+            color: var(--primary-color);
+        }
+
+        .no-news h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--text-black-color);
+        }
+
+        .no-news p {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-container {
+                height: 40px;
+                width: 120px;
+            }
+
+            .search-box {
+                width: 200px;
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .guide-text {
+                font-size: 1rem;
+                margin-bottom: 30px;
+            }
+
+            .guide-text::after {
+                width: 120px;
+                bottom: -10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header-container">
+        <div class="topbar">
+            <div class="logo-container">
+                <img src="images/logo.png" alt="لوگوی برنامه" class="logo-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNTAiIGhlaWdodD0iNTAiPjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iNTAiIGZpbGw9IiMwYmZmMDAiIGZpbGwtb3BhY2l0eT0iMC4yIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgZmlsbD0iIzAwOGUzYSI+دستیار املاک</dGV4dD48L3N2Zz4='">
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <p class="guide-text">
+            آخرین اخبار <span class="highlight">اقتصادی</span> و <span class="highlight">سیاسی</span> را اینجا بخوانید
+        </p>
+
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="جستجو در اخبار...">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+
+        <div id="loading" class="loading">
+            <i class="fas fa-spinner"></i>
+            <div>در حال بارگذاری اخبار...</div>
+        </div>
+
+        <div id="error" class="error" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>خطا در بارگذاری اخبار</h3>
+            <p>لطفاً اتصال اینترنت خود را بررسی کرده و دوباره تلاش کنید.</p>
+        </div>
+
+        <div id="newsContainer" class="news-grid"></div>
+
+        <div id="noNews" class="no-news" style="display: none;">
+            <i class="fas fa-newspaper"></i>
+            <h3>خبری یافت نشد</h3>
+            <p>متأسفانه خبری با این جستجو پیدا نشد. لطفاً کلمات دیگری امتحان کنید.</p>
+        </div>
+
+        <div class="load-more">
+            <button id="loadMoreBtn" class="load-more-btn" style="display: none;">
+                <i class="fas fa-plus"></i>
+                نمایش اخبار بیشتر
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // متغیرهای سراسری
+        let allNews = [];
+        let displayedNews = [];
+        let currentPage = 0;
+        const newsPerPage = 12;
+        let isLoading = false;
+        let searchTimeout = null;
+        let updateTimer = null;
+        let imageProxyServices = [
+            'https://images1-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&refresh=2592000&url=',
+            'https://api.codetabs.com/v1/proxy?quest=',
+            'https://cors-anywhere.herokuapp.com/',
+            'https://api.allorigins.win/raw?url='
+        ];
+        
+        // کلمات کلیدی برای فیلتر دقیق اخبار - کلمات کلیدی مثبت
+        const keywordFilters = {
+            economy: [
+                'اقتصاد', 'اقتصادی', 'بازار', 'بورس', 'سهام', 'دلار', 'یورو', 'ارز', 'طلا', 'سکه',
+                'مسکن', 'خانه', 'املاک', 'اجاره', 'قیمت', 'تورم', 'بانک', 'وام', 'تسهیلات',
+                'بدهی', 'بودجه', 'مالیات', 'درآمد', 'هزینه', 'تجارت', 'صادرات', 'واردات',
+                'نفت', 'پتروشیمی', 'گاز', 'بنزین', 'یارانه', 'معیشت', 'حقوق', 'دستمزد',
+                'کارگر', 'کارفرما', 'بیمه', 'بازنشستگی', 'خصوصی‌سازی', 'سرمایه‌گذاری', 
+                'رکود', 'رونق', 'رشد اقتصادی', 'تولید', 'صنعت', 'کشاورزی', 'خدمات',
+                'بازار سرمایه', 'بازار ارز', 'بازار طلا', 'بازار مسکن', 'نرخ تورم', 'نرخ بیکاری',
+                'بانک مرکزی', 'بورس اوراق', 'شاخص بورس', 'قیمت نفت', 'قیمت دلار', 'قیمت سکه',
+                'قیمت مسکن', 'وزارت اقتصاد', 'وزیر اقتصاد', 'صندوق بین‌المللی پول'
+            ],
+            politics: [
+                'سیاست', 'سیاسی', 'دولت', 'مجلس', 'رهبر', 'رئیس جمهور', 'وزیر', 'نماینده', 'انتخابات',
+                'حزب', 'جناح', 'اصولگرا', 'اصلاح‌طلب', 'قوه قضاییه', 'قوه مقننه', 'قوه مجریه',
+                'شورای نگهبان', 'مجمع تشخیص', 'دیپلماسی', 'سیاست خارجی', 'روابط بین‌الملل',
+                'برجام', 'تحریم', 'مذاکره', 'اروپا', 'آمریکا', 'روسیه', 'چین', 'خاورمیانه',
+                'سازمان ملل', 'سپاه', 'ارتش', 'امنیت ملی', 'دفاع', 'موشکی', 'هسته‌ای',
+                'رئیس مجلس', 'نمایندگان مجلس', 'کمیسیون', 'فراکسیون', 'رأی اعتماد', 'استیضاح',
+                'قانون اساسی', 'سخنگوی دولت', 'وزارت خارجه', 'سخنگوی وزارت خارجه', 'رهبری',
+                'سیاست داخلی', 'شورای امنیت', 'شورای عالی امنیت ملی', 'مجمع تشخیص مصلحت'
+            ]
+        };
+
+        // کلمات کلیدی منفی - اخباری که این کلمات را داشته باشند حذف می‌شوند
+        const negativeKeywords = [
+            'فوتبال', 'والیبال', 'بسکتبال', 'کشتی', 'استقلال', 'پرسپولیس', 'ورزشی', 'ورزش',
+            'لیگ برتر', 'جام جهانی', 'المپیک', 'فیلم', 'سینما', 'بازیگر', 'کارگردان',
+            'هنرمند', 'موسیقی', 'کنسرت', 'آلبوم', 'ترانه', 'خواننده', 'سریال', 'تئاتر',
+            'فوتبالیست', 'مربی', 'باشگاه', 'جام', 'مسابقات', 'قهرمانی', 'مدال', 'مسابقه',
+            'فدراسیون فوتبال', 'کمیته ملی المپیک', 'فصل نقل و انتقالات', 'دربی',
+            'لژیونر', 'حاشیه', 'اکران', 'جشنواره فیلم', 'اسکار', 'تهیه‌کننده'
+        ];
+
+        // لیست دسته‌بندی‌های خبری که نباید نمایش داده شوند
+        const blockedCategories = ['sports', 'entertainment', 'health', 'technology', 'science', 'arts'];
+        
+        // منابعی که اخبار اقتصادی و سیاسی دارند
+        const preferredSources = [
+            'eghtesadonline', 'donya-e-eqtesad', 'tejaratnews', 'tahlilbazaar', 'boursenews',
+            'irna', 'isna', 'tasnim', 'mehr', 'farsnews', 'ilna', 'shana', 'snn'
+        ];
+
+        // تلاش برای بهبود لینک تصاویر
+        async function tryFixImageUrl(url) {
+            if (!url || url === '') return '';
+            
+            // اگر URL نسبی باشد
+            if (url.startsWith('/')) {
+                // سعی می‌کنیم دامنه را از رفرر یا محتوای خبر استخراج کنیم
+                try {
+                    const domain = new URL(document.referrer).origin;
+                    return `${domain}${url}`;
+                } catch (e) {
+                    return url;
+                }
+            }
+            
+            // اگر URL نیاز به اصلاح دارد
+            if (!url.startsWith('http')) {
+                return `https://${url}`;
+            }
+            
+            // استفاده از سرویس‌های پروکسی تصویر برای دور زدن CORS
+            for (const proxyService of imageProxyServices) {
+                try {
+                    const response = await fetch(proxyService + encodeURIComponent(url), { method: 'HEAD', mode: 'no-cors' });
+                    if (response) {
+                        return proxyService + encodeURIComponent(url);
+                    }
+                } catch (e) {
+                    console.log(`پروکسی تصویر ${proxyService} برای ${url} کار نکرد`);
+                    continue;
+                }
+            }
+            
+            // برگشت URL اصلی اگر هیچ پروکسی کار نکرد
+            return url;
+        }
+
+        // تشخیص دسته‌بندی خبر بر اساس کلمات کلیدی
+        function detectNewsCategory(title, description, source) {
+            const combinedText = (title + ' ' + description).toLowerCase();
+            let sourceText = '';
+            
+            // بررسی نام منبع
+            if (source && source.name) {
+                sourceText = source.name.toLowerCase();
+            }
+            
+            // بررسی کلمات کلیدی منفی - اگر هر کدام وجود داشته باشد، خبر حذف می‌شود
+            for (const keyword of negativeKeywords) {
+                if (combinedText.includes(keyword.toLowerCase())) {
+                    console.log(`خبر با کلمه کلیدی منفی رد شد: ${keyword} در "${title}"`);
+                    return 'other';
+                }
+            }
+            
+            // بررسی کلمات کلیدی سیاسی
+            let politicsScore = 0;
+            for (const keyword of keywordFilters.politics) {
+                if (combinedText.includes(keyword.toLowerCase())) {
+                    politicsScore++;
+                }
+            }
+            
+            // بررسی کلمات کلیدی اقتصادی
+            let economyScore = 0;
+            for (const keyword of keywordFilters.economy) {
+                if (combinedText.includes(keyword.toLowerCase())) {
+                    economyScore++;
+                }
+            }
+            
+            // بررسی دامنه منبع برای منابع ترجیحی
+            if (sourceText) {
+                for (const source of preferredSources) {
+                    if (sourceText.includes(source)) {
+                        // افزایش امتیاز برای منابع ترجیحی
+                        economyScore++;
+                        politicsScore++;
+                    }
+                }
+            }
+            
+            // تصمیم‌گیری بر اساس امتیازها
+            if (economyScore > 0 && economyScore >= politicsScore) {
+                return 'economy';
+            } else if (politicsScore > 0) {
+                return 'politics';
+            } else {
+                // اگر هیچ کلمه کلیدی تطبیق نکرد، بررسی بیشتر
+                if (combinedText.includes('اقتصاد') || combinedText.includes('بازار') || 
+                    combinedText.includes('قیمت') || combinedText.includes('دلار') ||
+                    combinedText.includes('تورم')) {
+                    return 'economy';
+                }
+                
+                if (combinedText.includes('سیاست') || combinedText.includes('دولت') || 
+                    combinedText.includes('مجلس') || combinedText.includes('رئیس جمهور') ||
+                    combinedText.includes('وزیر')) {
+                    return 'politics';
+                }
+            }
+            
+            // اگر هیچ دسته‌بندی مشخص نشد، رد می‌کنیم
+            return 'other';
+        }
+
+        // بررسی لینک خبر
+        async function checkNewsLink(url) {
+            try {
+                const response = await fetch(url, { method: 'HEAD', mode: 'no-cors' });
+                return true;
+            } catch (error) {
+                console.warn(`لینک خبر معتبر نیست: ${url}`);
+                return false;
+            }
+        }
+
+        // دریافت اخبار از API
+        async function fetchNews() {
+            if (isLoading) return;
+            
+            isLoading = true;
+            showLoading();
+            hideError();
+            
+            try {
+                console.log('شروع دریافت اخبار واقعی...');
+                
+                // API NewsAPI
+                const apiKey = 'c09e42c6c1194e76a5e69c90b9294237';
+                const apiUrl = 'https://newsapi.org/v2/top-headlines';
+                
+                // ساخت پارامترهای API برای اخبار اقتصادی
+                let paramsEconomy = new URLSearchParams({
+                    apiKey: apiKey,
+                    country: 'ir',
+                    category: 'business',
+                    pageSize: 50
+                });
+                
+                // ساخت پارامترهای API برای اخبار سیاسی
+                let paramsPolitics = new URLSearchParams({
+                    apiKey: apiKey,
+                    country: 'ir',
+                    category: 'politics',
+                    pageSize: 50
+                });
+                
+                const [responseEconomy, responsePolitics] = await Promise.all([
+                    fetch(`${apiUrl}?${paramsEconomy}`),
+                    fetch(`${apiUrl}?${paramsPolitics}`)
+                ]);
+                
+                if (!responseEconomy.ok || !responsePolitics.ok) {
+                    throw new Error(`خطا در دریافت اخبار: ${responseEconomy.status} / ${responsePolitics.status}`);
+                }
+                
+                const [dataEconomy, dataPolitics] = await Promise.all([
+                    responseEconomy.json(),
+                    responsePolitics.json()
+                ]);
+                
+                let newsItems = [];
+                
+                if (dataEconomy.status === 'ok' && dataEconomy.articles && dataEconomy.articles.length > 0) {
+                    console.log(`${dataEconomy.articles.length} خبر اقتصادی دریافت شد`);
+                    
+                    const economyNews = await Promise.all(dataEconomy.articles.map(async (article, index) => {
+                        // بررسی دسته‌بندی خبر
+                        const category = detectNewsCategory(article.title || '', article.description || '', article.source);
+                        
+                        // اگر خبر اقتصادی یا سیاسی نیست، رد می‌کنیم
+                        if (category === 'other') {
+                            return null;
+                        }
+                        
+                        // تلاش برای بهبود لینک تصویر
+                        let fixedImageUrl = '';
+                        if (article.urlToImage) {
+                            fixedImageUrl = await tryFixImageUrl(article.urlToImage);
+                        }
+                        
+                        return {
+                            id: `economy-${Date.now()}-${index}`,
+                            title: article.title || 'بدون عنوان',
+                            description: article.description || 'بدون توضیحات',
+                            url: article.url || '#',
+                            urlToImage: fixedImageUrl,
+                            publishedAt: article.publishedAt || new Date().toISOString(),
+                            source: { 
+                                id: article.source.id || 'unknown',
+                                name: article.source.name || 'منبع ناشناخته' 
+                            },
+                            category: category
+                        };
+                    }));
+                    
+                    // حذف موارد null
+                    const validEconomyNews = economyNews.filter(item => item !== null);
+                    newsItems = [...newsItems, ...validEconomyNews];
+                }
+                
+                if (dataPolitics.status === 'ok' && dataPolitics.articles && dataPolitics.articles.length > 0) {
+                    console.log(`${dataPolitics.articles.length} خبر سیاسی دریافت شد`);
+                    
+                    const politicsNews = await Promise.all(dataPolitics.articles.map(async (article, index) => {
+                        // بررسی دسته‌بندی خبر
+                        const category = detectNewsCategory(article.title || '', article.description || '', article.source);
+                        
+                        // اگر خبر اقتصادی یا سیاسی نیست، رد می‌کنیم
+                        if (category === 'other') {
+                            return null;
+                        }
+                        
+                        // تلاش برای بهبود لینک تصویر
+                        let fixedImageUrl = '';
+                        if (article.urlToImage) {
+                            fixedImageUrl = await tryFixImageUrl(article.urlToImage);
+                        }
+                        
+                        return {
+                            id: `politics-${Date.now()}-${index}`,
+                            title: article.title || 'بدون عنوان',
+                            description: article.description || 'بدون توضیحات',
+                            url: article.url || '#',
+                            urlToImage: fixedImageUrl,
+                            publishedAt: article.publishedAt || new Date().toISOString(),
+                            source: { 
+                                id: article.source.id || 'unknown',
+                                name: article.source.name || 'منبع ناشناخته' 
+                            },
+                            category: category
+                        };
+                    }));
+                    
+                    // حذف موارد null
+                    const validPoliticsNews = politicsNews.filter(item => item !== null);
+                    newsItems = [...newsItems, ...validPoliticsNews];
+                }
+                
+                if (newsItems.length > 0) {
+                    console.log(`مجموعاً ${newsItems.length} خبر دریافت شد`);
+                    
+                    // حذف اخبار با لینک‌های خراب
+                    newsItems = await filterValidNews(newsItems);
+                    
+                    // مرتب‌سازی بر اساس تاریخ (جدیدترین اول)
+                    newsItems.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+                    
+                    allNews = newsItems;
+                    currentPage = 0;
+                    displayedNews = [];
+                    applyFilters();
+                } else {
+                    console.log('هیچ خبری یافت نشد، استفاده از API جایگزین...');
+                    await fetchAlternativeNews();
+                }
+                
+                hideLoading();
+                isLoading = false;
+                
+            } catch (error) {
+                console.error('خطا در دریافت اخبار:', error);
+                await fetchAlternativeNews();
+            }
+        }
+
+        // فیلتر کردن اخبار معتبر
+        async function filterValidNews(newsItems) {
+            // حذف اخبار تکراری
+            let uniqueNews = [];
+            const urls = new Set();
+            
+            for (const news of newsItems) {
+                // اگر خبر null است یا عنوان یا محتوا خالی است، رد می‌کنیم
+                if (!news || !news.title || !news.description || 
+                    news.title.trim() === '' || news.description.trim() === '') {
+                    continue;
+                }
+                
+                // بررسی اگر خبر فقط سیاسی یا اقتصادی باشد
+                if (news.category !== 'politics' && news.category !== 'economy') {
+                    continue;
+                }
+                
+                // بررسی مجدد با الگوریتم دقیق‌تر
+                const category = detectNewsCategory(news.title, news.description, news.source);
+                if (category === 'other') {
+                    continue;
+                }
+                
+                // حذف اخبار تکراری بر اساس URL
+                if (news.url && !urls.has(news.url)) {
+                    urls.add(news.url);
+                    
+                    // بررسی محتوا برای حذف اخبار فیک
+                    const isFakeNews = checkFakeNews(news.title, news.description);
+                    if (!isFakeNews) {
+                        // تنظیم دسته‌بندی براساس محتوا
+                        news.category = category;
+                        uniqueNews.push(news);
+                    }
+                }
+            }
+            
+            // بررسی نهایی دسته‌بندی‌ها
+            return uniqueNews.filter(news => news.category === 'politics' || news.category === 'economy');
+        }
+
+        // بررسی خبر فیک
+        function checkFakeNews(title, description) {
+            const blacklistWords = [
+                'فیک', 'جعلی', 'دروغ', 'ساختگی', 'شایعه', 'کذب', 'غیرواقعی', 
+                'تکذیب', 'بی‌اساس', 'گمانه‌زنی', 'fake', 'hoax', 'rumor'
+            ];
+            
+            const combinedText = (title + ' ' + description).toLowerCase();
+            
+            // بررسی کلمات کلیدی مربوط به خبر فیک
+            for (const word of blacklistWords) {
+                if (combinedText.includes(word.toLowerCase())) {
+                    console.log(`خبر فیک تشخیص داده شد: ${title}`);
+                    return true;
+                }
+            }
+            
+            // بررسی الگوهای مشکوک در محتوا
+            if (title.length < 10 || description.length < 20) {
+                console.log(`خبر با محتوای کم تشخیص داده شد: ${title}`);
+                return true;
+            }
+            
+            return false;
+        }
+
+        // استفاده از API جایگزین در صورت مشکل
+        async function fetchAlternativeNews() {
+            try {
+                console.log('استفاده از API جایگزین...');
+                
+                // API جایگزین از Gnews
+                const alternativeApiKey = '3fce0f3a4ed45a088b4430c09ba113c4';
+                const alternativeApiUrl = 'https://gnews.io/api/v4/search';
+                
+                // جستجوی اخبار اقتصادی
+                const paramsEconomy = new URLSearchParams({
+                    q: 'اقتصاد OR بازار OR مسکن OR دلار OR طلا OR بورس',
+                    lang: 'fa',
+                    country: 'ir',
+                    max: 30,
+                    apikey: alternativeApiKey
+                });
+                
+                // جستجوی اخبار سیاسی
+                const paramsPolitics = new URLSearchParams({
+                    q: 'سیاست OR دولت OR مجلس OR انتخابات OR دیپلماسی',
+                    lang: 'fa',
+                    country: 'ir',
+                    max: 30,
+                    apikey: alternativeApiKey
+                });
+                
+                const [responseEconomy, responsePolitics] = await Promise.all([
+                    fetch(`${alternativeApiUrl}?${paramsEconomy}`),
+                    fetch(`${alternativeApiUrl}?${paramsPolitics}`)
+                ]);
+                
+                if (!responseEconomy.ok || !responsePolitics.ok) {
+                    throw new Error(`خطا در API جایگزین: ${responseEconomy.status} / ${responsePolitics.status}`);
+                }
+                
+                const [dataEconomy, dataPolitics] = await Promise.all([
+                    responseEconomy.json(),
+                    responsePolitics.json()
+                ]);
+                
+                let newsItems = [];
+                
+                if (dataEconomy.articles && dataEconomy.articles.length > 0) {
+                    console.log(`${dataEconomy.articles.length} خبر اقتصادی از API جایگزین دریافت شد`);
+                    
+                    const economyNews = await Promise.all(dataEconomy.articles.map(async (article, index) => {
+                        // بررسی دسته‌بندی خبر
+                        const category = detectNewsCategory(article.title || '', article.description || '', article.source);
+                        
+                        // اگر خبر اقتصادی یا سیاسی نیست، رد می‌کنیم
+                        if (category === 'other') {
+                            return null;
+                        }
+                        
+                        // تلاش برای بهبود لینک تصویر
+                        let fixedImageUrl = '';
+                        if (article.image) {
+                            fixedImageUrl = await tryFixImageUrl(article.image);
+                        }
+                        
+                        return {
+                            id: `alt-economy-${Date.now()}-${index}`,
+                            title: article.title || 'بدون عنوان',
+                            description: article.description || 'بدون توضیحات',
+                            url: article.url || '#',
+                            urlToImage: fixedImageUrl,
+                            publishedAt: article.publishedAt || new Date().toISOString(),
+                            source: { 
+                                id: 'gnews',
+                                name: article.source?.name || 'منبع اقتصادی' 
+                            },
+                            category: category
+                        };
+                    }));
+                    
+                    // حذف موارد null
+                    const validEconomyNews = economyNews.filter(item => item !== null);
+                    newsItems = [...newsItems, ...validEconomyNews];
+                }
+                
+                if (dataPolitics.articles && dataPolitics.articles.length > 0) {
+                    console.log(`${dataPolitics.articles.length} خبر سیاسی از API جایگزین دریافت شد`);
+                    
+                    const politicsNews = await Promise.all(dataPolitics.articles.map(async (article, index) => {
+                        // بررسی دسته‌بندی خبر
+                        const category = detectNewsCategory(article.title || '', article.description || '', article.source);
+                        
+                        // اگر خبر اقتصادی یا سیاسی نیست، رد می‌کنیم
+                        if (category === 'other') {
+                            return null;
+                        }
+                        
+                        // تلاش برای بهبود لینک تصویر
+                        let fixedImageUrl = '';
+                        if (article.image) {
+                            fixedImageUrl = await tryFixImageUrl(article.image);
+                        }
+                        
+                        return {
+                            id: `alt-politics-${Date.now()}-${index}`,
+                            title: article.title || 'بدون عنوان',
+                            description: article.description || 'بدون توضیحات',
+                            url: article.url || '#',
+                            urlToImage: fixedImageUrl,
+                            publishedAt: article.publishedAt || new Date().toISOString(),
+                            source: { 
+                                id: 'gnews',
+                                name: article.source?.name || 'منبع سیاسی' 
+                            },
+                            category: category
+                        };
+                    }));
+                    
+                    // حذف موارد null
+                    const validPoliticsNews = politicsNews.filter(item => item !== null);
+                    newsItems = [...newsItems, ...validPoliticsNews];
+                }
+                
+                if (newsItems.length > 0) {
+                    // حذف اخبار با لینک‌های خراب
+                    newsItems = await filterValidNews(newsItems);
+                    
+                    // مرتب‌سازی بر اساس تاریخ (جدیدترین اول)
+                    newsItems.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+                    
+                    allNews = newsItems;
+                    currentPage = 0;
+                    displayedNews = [];
+                    applyFilters();
+                } else {
+                    console.log('هیچ خبری از API جایگزین یافت نشد، استفاده از RSS فیدها...');
+                    await fetchRSSNews();
+                }
+                
+                hideLoading();
+                isLoading = false;
+                
+            } catch (error) {
+                console.error('خطا در API جایگزین:', error);
+                await fetchRSSNews();
+            }
+        }
+
+        // استفاده از RSS فیدها به عنوان منبع سوم
+        async function fetchRSSNews() {
+            try {
+                console.log('استفاده از RSS فیدها...');
+                
+                // استفاده از RSS2JSON API
+                const rssSourcesEconomy = [
+                    'https://www.eghtesadonline.com/fa/rss/1',
+                    'https://www.tahlilbazaar.com/rss',
+                    'https://www.donya-e-eqtesad.com/fa/tiny/feed',
+                    'https://www.boursenews.ir/fa/rss/1',
+                    'https://www.shana.ir/rss'
+                ];
+                
+                const rssSourcesPolitics = [
+                    'https://www.irna.ir/rss/tp/30',
+                    'https://www.isna.ir/rss/tp/11',
+                    'https://www.tasnimnews.com/fa/rss/feed/0/7/0',
+                    'https://www.mehrnews.com/rss/tp/8',
+                    'https://www.ilna.ir/fa/rss/30'
+                ];
+                
+                const rss2jsonBaseUrl = 'https://api.rss2json.com/v1/api.json?rss_url=';
+                
+                let newsItems = [];
+                
+                // دریافت اخبار اقتصادی از RSS
+                for (const rssUrl of rssSourcesEconomy) {
+                    try {
+                        const response = await fetch(`${rss2jsonBaseUrl}${encodeURIComponent(rssUrl)}`);
+                        
+                        if (!response.ok) continue;
+                        
+                        const data = await response.json();
+                        
+                        if (data.items && data.items.length > 0) {
+                            console.log(`${data.items.length} خبر اقتصادی از RSS فید دریافت شد`);
+                            
+                            const economyNews = await Promise.all(data.items.map(async (item, index) => {
+                                // پیش‌فرض دسته‌بندی اقتصادی
+                                const rawTitle = item.title || '';
+                                const rawDescription = item.description?.replace(/<[^>]*>?/gm, '') || '';
+                                
+                                // بررسی دسته‌بندی خبر
+                                const category = detectNewsCategory(rawTitle, rawDescription, { name: data.feed?.title || '' });
+                                
+                                // اگر خبر اقتصادی یا سیاسی نیست، رد می‌کنیم
+                                if (category === 'other') {
+                                    return null;
+                                }
+                                
+                                // تلاش برای یافتن تصویر در محتوا
+                                let imageUrl = item.enclosure?.link || item.thumbnail || '';
+                                
+                                if (!imageUrl && item.description) {
+                                    const imgMatch = item.description.match(/<img[^>]+src="([^">]+)"/);
+                                    if (imgMatch && imgMatch[1]) {
+                                        imageUrl = imgMatch[1];
+                                    }
+                                }
+                                
+                                // تلاش برای بهبود لینک تصویر
+                                let fixedImageUrl = '';
+                                if (imageUrl) {
+                                    fixedImageUrl = await tryFixImageUrl(imageUrl);
+                                }
+                                
+                                return {
+                                    id: `rss-economy-${Date.now()}-${index}`,
+                                    title: rawTitle,
+                                    description: rawDescription,
+                                    url: item.link || '#',
+                                    urlToImage: fixedImageUrl,
+                                    publishedAt: item.pubDate || new Date().toISOString(),
+                                    source: { 
+                                        id: 'rss',
+                                        name: data.feed?.title || 'خبرگزاری اقتصادی' 
+                                    },
+                                    category: category
+                                };
+                            }));
+                            
+                            // حذف موارد null
+                            const validEconomyNews = economyNews.filter(item => item !== null);
+                            newsItems = [...newsItems, ...validEconomyNews];
+                        }
+                    } catch (e) {
+                        console.error(`خطا در دریافت RSS فید اقتصادی:`, e);
+                        continue;
+                    }
+                }
+                
+                // دریافت اخبار سیاسی از RSS
+                for (const rssUrl of rssSourcesPolitics) {
+                    try {
+                        const response = await fetch(`${rss2jsonBaseUrl}${encodeURIComponent(rssUrl)}`);
+                        
+                        if (!response.ok) continue;
+                        
+                        const data = await response.json();
+                        
+                        if (data.items && data.items.length > 0) {
+                            console.log(`${data.items.length} خبر سیاسی از RSS فید دریافت شد`);
+                            
+                            const politicsNews = await Promise.all(data.items.map(async (item, index) => {
+                                // پیش‌فرض دسته‌بندی سیاسی
+                                const rawTitle = item.title || '';
+                                const rawDescription = item.description?.replace(/<[^>]*>?/gm, '') || '';
+                                
+                                // بررسی دسته‌بندی خبر
+                                const category = detectNewsCategory(rawTitle, rawDescription, { name: data.feed?.title || '' });
+                                
+                                // اگر خبر اقتصادی یا سیاسی نیست، رد می‌کنیم
+                                if (category === 'other') {
+                                    return null;
+                                }
+                                
+                                // تلاش برای یافتن تصویر در محتوا
+                                let imageUrl = item.enclosure?.link || item.thumbnail || '';
+                                
+                                if (!imageUrl && item.description) {
+                                    const imgMatch = item.description.match(/<img[^>]+src="([^">]+)"/);
+                                    if (imgMatch && imgMatch[1]) {
+                                        imageUrl = imgMatch[1];
+                                    }
+                                }
+                                
+                                // تلاش برای بهبود لینک تصویر
+                                let fixedImageUrl = '';
+                                if (imageUrl) {
+                                    fixedImageUrl = await tryFixImageUrl(imageUrl);
+                                }
+                                
+                                return {
+                                    id: `rss-politics-${Date.now()}-${index}`,
+                                    title: rawTitle,
+                                    description: rawDescription,
+                                    url: item.link || '#',
+                                    urlToImage: fixedImageUrl,
+                                    publishedAt: item.pubDate || new Date().toISOString(),
+                                    source: { 
+                                        id: 'rss',
+                                        name: data.feed?.title || 'خبرگزاری سیاسی' 
+                                    },
+                                    category: category
+                                };
+                            }));
+                            
+                            // حذف موارد null
+                            const validPoliticsNews = politicsNews.filter(item => item !== null);
+                            newsItems = [...newsItems, ...validPoliticsNews];
+                        }
+                    } catch (e) {
+                        console.error(`خطا در دریافت RSS فید سیاسی:`, e);
+                        continue;
+                    }
+                }
+                
+                if (newsItems.length > 0) {
+                    console.log(`مجموعاً ${newsItems.length} خبر از RSS فیدها دریافت شد`);
+                    
+                    // حذف اخبار با لینک‌های خراب
+                    newsItems = await filterValidNews(newsItems);
+                    
+                    // مرتب‌سازی بر اساس تاریخ (جدیدترین اول)
+                    newsItems.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+                    
+                    allNews = newsItems;
+                    currentPage = 0;
+                    displayedNews = [];
+                    applyFilters();
+                    
+                    hideLoading();
+                    isLoading = false;
+                    return;
+                }
+                
+                // اگر همه RSS فیدها شکست خوردند
+                console.log('هیچ خبری از RSS فیدها دریافت نشد، استفاده از فیدهای وب...');
+                await fetchWebFeeds();
+                
+            } catch (error) {
+                console.error('خطا در دریافت RSS فیدها:', error);
+                await fetchWebFeeds();
+            }
+        }
+
+        // استفاده از فیدهای وب به عنوان منبع چهارم
+        async function fetchWebFeeds() {
+            try {
+                console.log('استفاده از فیدهای وب...');
+                
+                // استفاده از سرویس AllOrigins برای دور زدن CORS
+                const allOriginsUrl = 'https://api.allorigins.win/get?url=';
+                
+                const webFeedsEconomy = [
+                    'https://www.eghtesadonline.com',
+                    'https://tejaratnews.com',
+                    'https://www.donya-e-eqtesad.com',
+                    'https://www.boursenews.ir',
+                    'https://www.tgju.org'
+                ];
+                
+                const webFeedsPolitics = [
+                    'https://www.irna.ir/service/politics',
+                    'https://www.isna.ir/service/Politics',
+                    'https://www.mehrnews.com/service/Politics',
+                    'https://www.tasnimnews.com/fa/service/7/سیاسی',
+                    'https://www.farsnews.ir/politics'
+                ];
+                
+                let newsItems = [];
+                
+                // استخراج اخبار اقتصادی
+                for (const feedUrl of webFeedsEconomy) {
+                    try {
+                        const response = await fetch(`${allOriginsUrl}${encodeURIComponent(feedUrl)}`);
+                        
+                        if (!response.ok) continue;
+                        
+                        const data = await response.json();
+                        
+                        if (data.contents) {
+                            // استخراج اخبار از HTML با استفاده از DOMParser
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(data.contents, 'text/html');
+                            
+                            // استخراج لینک‌های اخبار (این الگوریتم بسته به ساختار سایت متفاوت است)
+                            const newsLinks = Array.from(doc.querySelectorAll('a[href*="/news/"], a[href*="/article/"]'));
+                            
+                            if (newsLinks.length > 0) {
+                                console.log(`${newsLinks.length} لینک خبر اقتصادی از ${feedUrl} استخراج شد`);
+                                
+                                const economyNews = await Promise.all(newsLinks.slice(0, 15).map(async (link, index) => {
+                                    // استخراج عنوان و توضیحات
+                                    const title = link.textContent.trim() || 'خبر اقتصادی';
+                                    let description = link.getAttribute('title') || link.getAttribute('data-title') || '';
+                                    
+                                    // اگر توضیحات خالی است، سعی می‌کنیم از عناصر داخل لینک استخراج کنیم
+                                    if (!description) {
+                                        const descElement = link.querySelector('.summary, .description, .lead, p');
+                                        if (descElement) {
+                                            description = descElement.textContent.trim();
+                                        } else {
+                                            description = 'خبر اقتصادی مرتبط با بازارهای مالی، مسکن، طلا و ارز';
+                                        }
+                                    }
+                                    
+                                    // بررسی دسته‌بندی خبر
+                                    const category = detectNewsCategory(title, description, { name: new URL(feedUrl).hostname.replace('www.', '') });
+                                    
+                                    // اگر خبر اقتصادی یا سیاسی نیست، رد می‌کنیم
+                                    if (category === 'other') {
+                                        return null;
+                                    }
+                                    
+                                    // استخراج تصویر (اگر در تگ a موجود باشد)
+                                    const img = link.querySelector('img');
+                                    let imageUrl = '';
+                                    
+                                    if (img && img.getAttribute('src')) {
+                                        imageUrl = img.getAttribute('src');
+                                        // اگر URL نسبی باشد
+                                        if (imageUrl.startsWith('/')) {
+                                            imageUrl = new URL(imageUrl, feedUrl).href;
+                                        }
+                                    }
+                                    
+                                    // تلاش برای بهبود لینک تصویر
+                                    let fixedImageUrl = '';
+                                    if (imageUrl) {
+                                        fixedImageUrl = await tryFixImageUrl(imageUrl);
+                                    }
+                                    
+                                    let newsUrl = '';
+                                    try {
+                                        newsUrl = new URL(link.getAttribute('href'), feedUrl).href;
+                                    } catch (e) {
+                                        newsUrl = '#';
+                                    }
+                                    
+                                    return {
+                                        id: `web-economy-${Date.now()}-${index}`,
+                                        title: title,
+                                        description: description,
+                                        url: newsUrl,
+                                        urlToImage: fixedImageUrl,
+                                        publishedAt: new Date().toISOString(),
+                                        source: { 
+                                            id: 'web',
+                                            name: new URL(feedUrl).hostname.replace('www.', '') 
+                                        },
+                                        category: category
+                                    };
+                                }));
+                                
+                                // حذف موارد null
+                                const validEconomyNews = economyNews.filter(item => item !== null);
+                                newsItems = [...newsItems, ...validEconomyNews];
+                            }
+                        }
+                    } catch (e) {
+                        console.error(`خطا در استخراج اخبار اقتصادی از ${feedUrl}:`, e);
+                        continue;
+                    }
+                }
+                
+                // استخراج اخبار سیاسی
+                for (const feedUrl of webFeedsPolitics) {
+                    try {
+                        const response = await fetch(`${allOriginsUrl}${encodeURIComponent(feedUrl)}`);
+                        
+                        if (!response.ok) continue;
+                        
+                        const data = await response.json();
+                        
+                        if (data.contents) {
+                            // استخراج اخبار از HTML با استفاده از DOMParser
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(data.contents, 'text/html');
+                            
+                            // استخراج لینک‌های اخبار (این الگوریتم بسته به ساختار سایت متفاوت است)
+                            const newsLinks = Array.from(doc.querySelectorAll('a[href*="/news/"], a[href*="/article/"]'));
+                            
+                            if (newsLinks.length > 0) {
+                                console.log(`${newsLinks.length} لینک خبر سیاسی از ${feedUrl} استخراج شد`);
+                                
+                                const politicsNews = await Promise.all(newsLinks.slice(0, 15).map(async (link, index) => {
+                                    // استخراج عنوان و توضیحات
+                                    const title = link.textContent.trim() || 'خبر سیاسی';
+                                    let description = link.getAttribute('title') || link.getAttribute('data-title') || '';
+                                    
+                                    // اگر توضیحات خالی است، سعی می‌کنیم از عناصر داخل لینک استخراج کنیم
+                                    if (!description) {
+                                        const descElement = link.querySelector('.summary, .description, .lead, p');
+                                        if (descElement) {
+                                            description = descElement.textContent.trim();
+                                        } else {
+                                            description = 'خبر سیاسی مرتبط با دولت، مجلس و روابط بین‌الملل';
+                                        }
+                                    }
+                                    
+                                    // بررسی دسته‌بندی خبر
+                                    const category = detectNewsCategory(title, description, { name: new URL(feedUrl).hostname.replace('www.', '') });
+                                    
+                                    // اگر خبر اقتصادی یا سیاسی نیست، رد می‌کنیم
+                                    if (category === 'other') {
+                                        return null;
+                                    }
+                                    
+                                    // استخراج تصویر (اگر در تگ a موجود باشد)
+                                    const img = link.querySelector('img');
+                                    let imageUrl = '';
+                                    
+                                    if (img && img.getAttribute('src')) {
+                                        imageUrl = img.getAttribute('src');
+                                        // اگر URL نسبی باشد
+                                        if (imageUrl.startsWith('/')) {
+                                            imageUrl = new URL(imageUrl, feedUrl).href;
+                                        }
+                                    }
+                                    
+                                    // تلاش برای بهبود لینک تصویر
+                                    let fixedImageUrl = '';
+                                    if (imageUrl) {
+                                        fixedImageUrl = await tryFixImageUrl(imageUrl);
+                                    }
+                                    
+                                    let newsUrl = '';
+                                    try {
+                                        newsUrl = new URL(link.getAttribute('href'), feedUrl).href;
+                                    } catch (e) {
+                                        newsUrl = '#';
+                                    }
+                                    
+                                    return {
+                                        id: `web-politics-${Date.now()}-${index}`,
+                                        title: title,
+                                        description: description,
+                                        url: newsUrl,
+                                        urlToImage: fixedImageUrl,
+                                        publishedAt: new Date().toISOString(),
+                                        source: { 
+                                            id: 'web',
+                                            name: new URL(feedUrl).hostname.replace('www.', '') 
+                                        },
+                                        category: category
+                                    };
+                                }));
+                                
+                                // حذف موارد null
+                                const validPoliticsNews = politicsNews.filter(item => item !== null);
+                                newsItems = [...newsItems, ...validPoliticsNews];
+                            }
+                        }
+                    } catch (e) {
+                        console.error(`خطا در استخراج اخبار سیاسی از ${feedUrl}:`, e);
+                        continue;
+                    }
+                }
+                
+                if (newsItems.length > 0) {
+                    console.log(`مجموعاً ${newsItems.length} خبر از فیدهای وب استخراج شد`);
+                    
+                    // حذف اخبار با لینک‌های خراب
+                    newsItems = await filterValidNews(newsItems);
+                    
+                    // مرتب‌سازی بر اساس تاریخ (جدیدترین اول)
+                    newsItems.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+                    
+                    allNews = newsItems;
+                    currentPage = 0;
+                    displayedNews = [];
+                    applyFilters();
+                    
+                    hideLoading();
+                    isLoading = false;
+                } else {
+                    // اگر هیچ خبری استخراج نشد
+                    showError();
+                    hideLoading();
+                    isLoading = false;
+                }
+                
+            } catch (error) {
+                console.error('خطا در دریافت فیدهای وب:', error);
+                showError();
+                hideLoading();
+                isLoading = false;
+            }
+        }
+
+        // اعمال فیلترها
+        function applyFilters() {
+            // ابتدا فیلتر فقط اخبار اقتصادی و سیاسی
+            let filteredNews = allNews.filter(news => 
+                news.category === 'economy' || news.category === 'politics'
+            );
+            
+            // فیلتر بر اساس جستجو
+            const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+            if (searchQuery) {
+                filteredNews = filteredNews.filter(news => 
+                    news.title.toLowerCase().includes(searchQuery) || 
+                    news.description.toLowerCase().includes(searchQuery)
+                );
+            }
+            
+            // نمایش نتایج
+            currentPage = 0;
+            displayedNews = [];
+            
+            if (filteredNews.length === 0) {
+                showNoNews();
+                return;
+            }
+            
+            hideNoNews();
+            displayNews(filteredNews.slice(0, newsPerPage));
+            
+            // بررسی دکمه "نمایش بیشتر"
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            if (filteredNews.length > newsPerPage) {
+                loadMoreBtn.style.display = 'block';
+            } else {
+                loadMoreBtn.style.display = 'none';
+            }
+            
+            console.log(`${filteredNews.length} خبر پس از فیلترینگ باقی ماند`);
+        }
+
+        // نمایش اخبار
+        function displayNews(newsArray) {
+            const container = document.getElementById('newsContainer');
+            
+            if (currentPage === 0) {
+                container.innerHTML = '';
+            }
+            
+            newsArray.forEach(news => {
+                if (!displayedNews.some(item => item.id === news.id)) {
+                    // بررسی نهایی دسته‌بندی قبل از نمایش
+                    if (news.category === 'politics' || news.category === 'economy') {
+                        const newsCard = createNewsCard(news);
+                        container.appendChild(newsCard);
+                        displayedNews.push(news);
+                    } else {
+                        console.log(`خبر با دسته‌بندی ${news.category} نمایش داده نمی‌شود: ${news.title}`);
+                    }
+                }
+            });
+        }
+
+        // ایجاد کارت خبر
+        function createNewsCard(news) {
+            const card = document.createElement('div');
+            card.className = `news-card ${news.category || ''}`;
+            card.setAttribute('data-id', news.id);
+            card.setAttribute('data-category', news.category || 'economy');
+            
+            const publishDate = new Date(news.publishedAt);
+            const timeAgo = getTimeAgo(publishDate);
+            
+            const categoryName = news.category === 'politics' ? 'سیاسی' : 'اقتصادی';
+            const categoryClass = news.category === 'politics' ? 'politics' : 'economy';
+            
+            // تصویر خبر - حتی اگر تصویر نداشته باشد، کارت خبر را نمایش می‌دهیم
+            let imageSection = '';
+            if (news.urlToImage && news.urlToImage.trim() !== '') {
+                imageSection = `
+                <div class="news-image-container">
+                    <img class="news-image" src="${news.urlToImage}" alt="${news.title}" 
+                        onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'news-placeholder\\'><i class=\\'fas fa-newspaper\\'></i></div>'" 
+                        loading="lazy">
+                </div>`;
+            } else {
+                imageSection = `
+                <div class="news-image-container">
+                    <div class="news-placeholder">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                </div>`;
+            }
+            
+            card.innerHTML = `
+                <span class="news-category-badge ${categoryClass}">${categoryName}</span>
+                ${imageSection}
+                <div class="news-content">
+                    <div class="news-meta">
+                        <span class="news-date">
+                            <i class="fas fa-clock"></i>
+                            ${timeAgo}
+                        </span>
+                    </div>
+                    <h3 class="news-title">${news.title}</h3>
+                    <p class="news-summary">${news.description}</p>
+                    <div class="news-actions">
+                        <button class="read-more-btn" onclick="window.open('${news.url}', '_blank')">
+                            <i class="fas fa-external-link-alt"></i>
+                            ادامه مطلب
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // محاسبه زمان نسبی
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffInSeconds = Math.floor((now - date) / 1000);
+            
+            if (diffInSeconds < 60) return 'همین الان';
+            if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} دقیقه پیش`;
+            if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} ساعت پیش`;
+            if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} روز پیش`;
+            
+            // تبدیل تاریخ میلادی به شمسی (ساده)
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('fa-IR', options);
+        }
+
+        // جستجو در اخبار
+        function searchNews(query) {
+            if (searchTimeout) {
+                clearTimeout(searchTimeout);
+            }
+            
+            searchTimeout = setTimeout(() => {
+                applyFilters();
+            }, 300);
+        }
+
+        // بارگذاری اخبار بیشتر
+        function loadMoreNews() {
+            if (isLoading) return;
+            
+            currentPage++;
+            const startIndex = currentPage * newsPerPage;
+            const endIndex = startIndex + newsPerPage;
+            
+            // ابتدا فیلتر فقط اخبار اقتصادی و سیاسی
+            let filteredNews = allNews.filter(news => 
+                news.category === 'economy' || news.category === 'politics'
+            );
+            
+            // فیلتر بر اساس جستجو
+            const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+            if (searchQuery) {
+                filteredNews = filteredNews.filter(news => 
+                    news.title.toLowerCase().includes(searchQuery) || 
+                    news.description.toLowerCase().includes(searchQuery)
+                );
+            }
+            
+            const moreNews = filteredNews.slice(startIndex, endIndex);
+            
+            if (moreNews.length > 0) {
+                displayNews(moreNews);
+                
+                // بررسی آیا اخبار بیشتری برای نمایش وجود دارد
+                if (endIndex >= filteredNews.length) {
+                    document.getElementById('loadMoreBtn').style.display = 'none';
+                }
+            } else {
+                document.getElementById('loadMoreBtn').style.display = 'none';
+            }
+        }
+
+        // نمایش وضعیت بارگذاری
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+
+        // مخفی کردن وضعیت بارگذاری
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        // نمایش خطا
+        function showError() {
+            document.getElementById('error').style.display = 'block';
+        }
+
+        // مخفی کردن خطا
+        function hideError() {
+            document.getElementById('error').style.display = 'none';
+        }
+
+        // نمایش پیام "خبری یافت نشد"
+        function showNoNews() {
+            document.getElementById('noNews').style.display = 'block';
+            document.getElementById('newsContainer').innerHTML = '';
+            document.getElementById('loadMoreBtn').style.display = 'none';
+        }
+
+        // مخفی کردن پیام "خب// مخفی کردن پیام "خبری یافت نشد"
+        function hideNoNews() {
+            document.getElementById('noNews').style.display = 'none';
+        }
+
+        // به‌روزرسانی خودکار اخبار
+        function setupAutoRefresh() {
+            // هر 15 دقیقه اخبار به‌روزرسانی شوند
+            updateTimer = setInterval(() => {
+                console.log('به‌روزرسانی خودکار اخبار...');
+                fetchNews();
+            }, 15 * 60 * 1000);
+        }
+
+        // رویدادهای صفحه
+        document.addEventListener('DOMContentLoaded', () => {
+            // دریافت اولیه اخبار
+            fetchNews();
+
+            // رویداد جستجو
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                searchNews(e.target.value);
+            });
+
+            // رویداد دکمه بارگذاری بیشتر
+            document.getElementById('loadMoreBtn').addEventListener('click', () => {
+                loadMoreNews();
+            });
+
+            // تنظیم به‌روزرسانی خودکار
+            setupAutoRefresh();
+        });
+
+        // وقتی صفحه بسته می‌شود، تایمر را پاک می‌کنیم
+        window.addEventListener('beforeunload', () => {
+            if (updateTimer) {
+                clearInterval(updateTimer);
+            }
+        });
+
+        // کد دکمه بازگشت به بالای صفحه
+        window.addEventListener('scroll', function() {
+            const backToTopBtn = document.getElementById('backToTopBtn');
+            if (window.scrollY > 300) {
+                if (!backToTopBtn) {
+                    const btn = document.createElement('button');
+                    btn.id = 'backToTopBtn';
+                    btn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+                    btn.style.position = 'fixed';
+                    btn.style.bottom = '20px';
+                    btn.style.left = '20px';
+                    btn.style.zIndex = '99';
+                    btn.style.width = '40px';
+                    btn.style.height = '40px';
+                    btn.style.borderRadius = '50%';
+                    btn.style.background = 'var(--gradient)';
+                    btn.style.color = 'white';
+                    btn.style.border = 'none';
+                    btn.style.boxShadow = '0 2px 10px rgba(11, 255, 0, 0.3)';
+                    btn.style.cursor = 'pointer';
+                    btn.style.display = 'flex';
+                    btn.style.justifyContent = 'center';
+                    btn.style.alignItems = 'center';
+                    btn.style.transition = 'all 0.3s ease';
+                    btn.onclick = function() {
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    };
+                    document.body.appendChild(btn);
+                }
+            } else {
+                if (backToTopBtn) {
+                    backToTopBtn.remove();
+                }
+            }
+        });
+
+        // مدیریت اتصال آفلاین/آنلاین
+        window.addEventListener('online', () => {
+            console.log('اتصال اینترنت برقرار شد. بارگذاری مجدد اخبار...');
+            hideError();
+            fetchNews();
+        });
+
+        window.addEventListener('offline', () => {
+            console.log('اتصال اینترنت قطع شد.');
+            showError();
+        });
+
+        // تلاش برای استفاده از Web Share API در صورت پشتیبانی
+        function shareNews(title, url) {
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    url: url
+                }).catch(err => {
+                    console.error('خطا در اشتراک‌گذاری:', err);
+                });
+            } else {
+                // اگر Web Share API پشتیبانی نمی‌شود، لینک را در کلیپ‌بورد کپی می‌کنیم
+                const tempInput = document.createElement('input');
+                document.body.appendChild(tempInput);
+                tempInput.value = url;
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                alert('لینک خبر در کلیپ‌بورد کپی شد.');
+            }
+        }
+
+        // در صورت خطا در بارگذاری تصاویر، یک تصویر پیش‌فرض نمایش می‌دهیم
+        function handleImageError(img) {
+            img.onerror = null;
+            img.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNTAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMzUwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2Y4ZjlmYSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiIGZpbGw9IiNhZGI1YmQiPtio2K/ZiNmGINiq2LXZiNuM2LE8L3RleHQ+PC9zdmc+';
+        }
+    </script>
+</body>
+
+</html>

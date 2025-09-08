@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آزمون چهار گزینه‌ای - جعبه لایتنر</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">    <style>
+        :root {
+            --primary-color: #00D968;
+            --primary-light: #E6F8EE;
+            --secondary-color: #00B84B;
+            --dark-color: #333;
+            --light-color: #f8f9fa;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.06);
+            --subtle-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --border-radius: 16px;
+            --button-border-radius: 8px;
+            --border-color: #e0e0e0;
+            --grey-color: #6c757d;
+            --grey-light: #f8f9fa;
+            --grey-medium: #dee2e6;
+            --grey-darker: #495057;
+            --alert-error-text: #c62828;
+            --close-red: #ef5350;
+            --correct-green: #4CAF50;
+            --incorrect-red: #ef5350;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        body {
+            background-color: var(--grey-light);
+            color: var(--dark-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .quiz-container {
+            width: 100%;
+            max-width: 600px;
+            animation: fadeIn 1s forwards;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary-color);
+        }        .quiz-header h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            display: flex;            align-items: center;
+            gap: 10px;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .back-button:hover {
+            color: var(--secondary-color);
+        }
+
+        .section-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 12px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        #quiz-question-display {
+            min-height: 150px;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            padding: 20px;
+            background-color: var(--primary-light);
+            color: var(--dark-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--subtle-shadow);
+            border: 1px solid var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #quiz-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-option-btn {
+            background-color: white;
+            border: 1px solid var(--grey-medium);
+            padding: 15px 20px;
+            border-radius: var(--button-border-radius);
+            font-size: 1rem;
+            text-align: right;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .quiz-option-btn:hover:not(.disabled) {
+            background-color: var(--primary-light);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--subtle-shadow);
+        }
+
+        .quiz-option-btn.correct {
+            background-color: var(--correct-green);
+            color: white;
+            border-color: var(--correct-green);
+        }
+
+        .quiz-option-btn.incorrect {
+            background-color: var(--incorrect-red);
+            color: white;
+            border-color: var(--incorrect-red);
+        }
+        .quiz-option-btn.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        #quiz-feedback-message {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            min-height: 30px; /* Reserve space */
+        }
+
+        #quiz-navigation-btn {
+            width: 100%;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: var(--button-border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        #quiz-navigation-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 217, 104, 0.4);
+        }
+
+        #quiz-summary {
+            text-align: center;
+            margin-top: 30px;
+        }
+        #quiz-summary h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        #quiz-summary p {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        #quiz-summary-list {
+            list-style: none;
+            padding: 0;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--button-border-radius);
+        }
+        #quiz-summary-list li {
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--grey-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #quiz-summary-list li:last-child {
+            border-bottom: none;
+        }
+        #quiz-summary-list li.correct {
+            background-color: var(--correct-green);
+            color: white;
+        }
+        #quiz-summary-list li.incorrect {
+            background-color: var(--incorrect-red);
+            color: white;
+        }
+        #no-cards-for-quiz {
+            text-align: center;
+            color: var(--grey-color);
+            font-size: 1.1rem;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1><i class="fas fa-list-check"></i> آزمون چهار گزینه‌ای</h1>
+            <button class="back-button" onclick="window.location.href='lightner.html'"><i class="fas fa-arrow-right"></i></button>
+        </div>
+
+        <div id="no-cards-for-quiz" style="display: none;">
+            <p>کارتی برای برگزاری آزمون یافت نشد. حداقل ۴ کارت با پاسخ‌های متفاوت برای شروع آزمون نیاز است.</p>
+            <p>لطفاً کارت‌های جدید اضافه کنید.</p>
+        </div>
+        <div id="quiz-area">            <div id="quiz-question-display" class="section-card">
+                <p id="question-text">سوال آزمون اینجا نمایش داده می‌شود.</p>
+            </div>
+
+            <div id="quiz-options">
+                <!-- Options will be dynamically loaded here -->
+            </div>
+
+            <div id="quiz-feedback-message"></div>
+
+            <button id="quiz-navigation-btn" style="display: none;">سوال بعدی</button>
+        </div>
+
+        <div id="quiz-summary" style="display: none;">
+            <h2>نتایج آزمون</h2>
+            <p>تعداد سوالات: <span id="total-questions">0</span></p>
+            <p>پاسخ‌های صحیح: <span id="correct-answers">0</span></p>
+            <p>پاسخ‌های غلط: <span id="incorrect-answers">0</span></p>
+            <h3>جزئیات:</h3>
+            <ul id="quiz-summary-list"></ul>
+            <button id="retake-quiz-btn" class="section-card" style="width: 100%; background: var(--gradient); color: white; border: none; padding: 12px 25px; border-radius: var(--button-border-radius); cursor: pointer; font-weight: 600; font-size: 1.1rem; margin-top: 20px;">
+                <i class="fas fa-redo"></i> شروع مجدد آزمون
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const LEITNER_CARDS_KEY = 'leitnerCardsData';
+            let cards = []; // All available cards
+            let quizCards = []; // Cards selected for the current quiz
+            let currentQuizCardIndex = 0;
+            let quizResults = []; // [{cardId, question, selectedAnswer, correctAnswer, isCorrect}]
+
+            const quizQuestionDisplay = document.getElementById('quiz-question-display');
+            const questionText = document.getElementById('question-text');
+            const quizOptionsContainer = document.getElementById('quiz-options');
+            const quizFeedbackMessage = document.getElementById('quiz-feedback-message');
+            const quizNavigationBtn = document.getElementById('quiz-navigation-btn');
+            const quizArea = document.getElementById('quiz-area');
+            const quizSummary = document.getElementById('quiz-summary');
+            const totalQuestionsSpan = document.getElementById('total-questions');
+            const correctAnswersSpan = document.getElementById('correct-answers');
+            const incorrectAnswersSpan = document.getElementById('incorrect-answers');
+            const quizSummaryList = document.getElementById('quiz-summary-list');
+            const retakeQuizBtn = document.getElementById('retake-quiz-btn');            const noCardsForQuizMessage = document.getElementById('no-cards-for-quiz');
+
+            // Leitner intervals in days (duplicated from lightner.review.html for self-containment)
+            const leitnerIntervals = {
+                1: 0,   // Again (immediately, or next day if reviewing today's cards)
+                2: 1,   // Hard
+                3: 3,   // Medium
+                4: 7,   // Easy
+                5: 30   // Very Easy / Mastered
+            };
+
+            function toPersianDigits(num) {
+                return num.toString().replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+            }
+
+            function loadCards() {
+                const storedCards = localStorage.getItem(LEITNER_CARDS_KEY);
+                cards = storedCards ? JSON.parse(storedCards) : [];
+
+                // Ensure cards have Leitner properties (similar to review page)
+                cards.forEach(card => {
+                    if (typeof card.box === 'undefined' || card.box === null) {
+                        card.box = 1;
+                    }
+                    if (typeof card.lastReviewed === 'undefined' || card.lastReviewed === null) {
+                        card.lastReviewed = new Date(card.id).toISOString().split('T')[0];
+                    }
+                    if (typeof card.nextReviewDate === 'undefined' || card.nextReviewDate === null) {
+                        card.nextReviewDate = new Date(card.id).toISOString().split('T')[0];
+                    }
+                });
+                saveCards(); // Save updated cards to localStorage
+            }
+
+            function saveCards() {
+                localStorage.setItem(LEITNER_CARDS_KEY, JSON.stringify(cards));
+            }
+
+            // Function to update Leitner box based on quiz result
+            function updateCardLeitner(cardId, isCorrect) {
+                const card = cards.find(c => c.id === cardId);
+                if (!card) return;
+
+                let currentBox = card.box;
+                let newBox;
+                let intervalDays;
+
+                if (isCorrect) {
+                    newBox = Math.min(5, currentBox + 1); // Move forward one box on correct answer
+                } else {
+                    newBox = 1; // Move back to Box 1 on incorrect answer
+                }
+                
+                intervalDays = leitnerIntervals[newBox];
+
+                card.box = newBox;
+                card.lastReviewed = new Date().toISOString().split('T')[0];
+
+                const nextDate = new Date();
+                nextDate.setDate(nextDate.getDate() + intervalDays);
+                card.nextReviewDate = nextDate.toISOString().split('T')[0];                saveCards();
+            }
+
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            function startQuiz() {
+                loadCards();
+                quizResults = [];
+                currentQuizCardIndex = 0;
+                quizArea.style.display = 'block';
+                quizSummary.style.display = 'none';
+                noCardsForQuizMessage.style.display = 'none';
+                quizFeedbackMessage.textContent = '';
+                quizNavigationBtn.style.display = 'none'; // Hide next button initially
+
+                // Filter out cards without answers or with very short answers (unsuitable for quiz)
+                const eligibleCards = cards.filter(card => card.answer && card.answer.trim().length > 5); // At least 5 chars for answer
+
+                if (eligibleCards.length < 4) { // Need at least 4 cards to generate 4 unique options
+                    quizArea.style.display = 'none';
+                    noCardsForQuizMessage.style.display = 'block';
+                    return;
+                }
+                
+                // Select up to 10 random cards for the quiz (or all if less than 10)
+                quizCards = shuffleArray([...eligibleCards]).slice(0, Math.min(10, eligibleCards.length));
+
+                if (quizCards.length === 0) { // Edge case if filtering removed all
+                    quizArea.style.display = 'none';
+                    noCardsForQuizMessage.style.display = 'block';
+                    return;
+                }
+
+                showNextQuizQuestion();
+            }
+
+            function showNextQuizQuestion() {
+                quizFeedbackMessage.textContent = '';
+                quizOptionsContainer.innerHTML = '';
+                quizNavigationBtn.style.display = 'none'; // Hide next button
+
+                if (currentQuizCardIndex >= quizCards.length) {
+                    displayQuizSummary();                    return;
+                }
+
+                const currentCard = quizCards[currentQuizCardIndex];
+                questionText.innerHTML = currentCard.question;
+
+                const allOtherAnswers = cards
+                    .filter(card => card.id !== currentCard.id && card.answer && card.answer.trim().length > 0)
+                    .map(card => card.answer);
+                                // Ensure unique incorrect options and enough options
+                let incorrectOptions = [];
+                const shuffledOtherAnswers = shuffleArray(Array.from(new Set(allOtherAnswers))); // Get unique answers and shuffle
+                
+                for(let i = 0; i < shuffledOtherAnswers.length && incorrectOptions.length < 3; i++) {
+                    if (shuffledOtherAnswers[i].trim() !== currentCard.answer.trim()) {
+                        incorrectOptions.push(shuffledOtherAnswers[i]);
+                    }
+                }
+
+                // Fallback if not enough unique incorrect options, use dummy or repeat if absolutely necessary
+                while (incorrectOptions.length < 3) {
+                    incorrectOptions.push(`گزینه نامربوط ${incorrectOptions.length + 1}`);
+                }
+
+
+                let options = [
+                    { text: currentCard.answer, isCorrect: true },
+                    { text: incorrectOptions[0], isCorrect: false },
+                    { text: incorrectOptions[1], isCorrect: false },
+                    { text: incorrectOptions[2], isCorrect: false }
+                ];
+
+                options = shuffleArray(options);
+
+                options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.className = 'quiz-option-btn';
+                    button.innerHTML = option.text;
+                    button.dataset.isCorrect = option.isCorrect;
+                    button.addEventListener('click', () => selectAnswer(button, option.isCorrect));
+                    quizOptionsContainer.appendChild(button);
+                });
+            }
+
+            function selectAnswer(selectedButton, isCorrect) {
+                // Disable all options after selection
+                Array.from(quizOptionsContainer.children).forEach(btn => {
+                    btn.classList.add('disabled');
+                    btn.removeEventListener('click', () => {}); // Remove event listeners
+                });
+
+                // Highlight correct/incorrect
+                if (isCorrect) {
+                    selectedButton.classList.add('correct');
+                    quizFeedbackMessage.textContent = 'پاسخ صحیح!';
+                    quizFeedbackMessage.style.color = 'var(--correct-green)';
+                } else {
+                    selectedButton.classList.add('incorrect');
+                    quizFeedbackMessage.textContent = 'پاسخ غلط!';                    quizFeedbackMessage.style.color = 'var(--incorrect-red)';
+                    // Also highlight the correct answer if incorrect was chosen
+                    Array.from(quizOptionsContainer.children).forEach(btn => {
+                        if (btn.dataset.isCorrect === 'true') {
+                            btn.classList.add('correct');
+                        }
+                    });
+                }
+
+                // Record result
+                const currentCard = quizCards[currentQuizCardIndex];
+                quizResults.push({
+                    cardId: currentCard.id,
+                    question: currentCard.question,
+                    selectedAnswer: selectedButton.innerHTML,
+                    correctAnswer: currentCard.answer,
+                    isCorrect: isCorrect
+                });
+
+                // Update Leitner box
+                updateCardLeitner(currentCard.id, isCorrect);
+
+                quizNavigationBtn.style.display = 'block';
+                quizNavigationBtn.textContent = (currentQuizCardIndex < quizCards.length - 1) ? 'سوال بعدی' : 'مشاهده نتایج';
+            }
+
+            function displayQuizSummary() {
+                quizArea.style.display = 'none';
+                quizSummary.style.display = 'block';
+
+                const total = quizResults.length;
+                const correct = quizResults.filter(r => r.isCorrect).length;
+                const incorrect = total - correct;
+
+                totalQuestionsSpan.textContent = toPersianDigits(total);
+                correctAnswersSpan.textContent = toPersianDigits(correct);
+                incorrectAnswersSpan.textContent = toPersianDigits(incorrect);
+
+                quizSummaryList.innerHTML = '';
+                quizResults.forEach(result => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add(result.isCorrect ? 'correct' : 'incorrect');
+                    listItem.innerHTML = `<span>${result.question}</span> <span>${result.isCorrect ? '✅' : '❌'}</span>`;
+                    quizSummaryList.appendChild(listItem);
+                });
+            }
+
+            // Event listener for "Next Question" / "View Results" button
+            quizNavigationBtn.addEventListener('click', function() {
+                currentQuizCardIndex++;
+                showNextQuizQuestion();
+            });
+
+            // Event listener for "Retake Quiz" button
+            retakeQuizBtn.addEventListener('click', startQuiz);
+
+            // Initial load
+            startQuiz(); // Automatically start quiz on page load
+        });
+    </script>
+</body>
+</html>

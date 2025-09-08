@@ -1,0 +1,2194 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>برنامه ریزی | دستیار شخصی املاک</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #00D968;
+            --primary-light: #4DF5A5;
+            --secondary-color: #00B84B;
+            --dark-color: #008E3A;
+            --light-color: #E6F8EE;
+            --shadow: 0 10px 30px rgba(0, 217, 104, 0.1);
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --card-shadow: 0 15px 35px rgba(0, 217, 104, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            --hover-transform: translateY(-5px);
+            --border-radius: 25px; /* تغییر به 25px */
+            --button-border-radius: 25px; /* تغییر به 25px */
+            --border-color: #e0e0e0;
+            --grey-color: #6c757d;
+            --success-color: #28a745;
+            --red-color: #e53935;
+            --text-black-color: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background-color: #ffffff;
+        }
+
+        .header-container {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+
+        .topbar {
+            background-color: #ffffff;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between; /* تغییر به space-between */
+            align-items: center;
+            position: relative;
+        }
+
+        .logo-container {
+            height: 55px;
+            width: 170px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #ffffff;
+            margin-left: auto; /* اضافه شده برای قرار دادن لوگو سمت چپ */
+        }
+
+        .logo-image {
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* منوی همبرگری */
+        .menu-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 20px;
+            width: 25px;
+            padding: 0;
+        }
+
+        .menu-button span {
+            display: block;
+            height: 3px;
+            width: 100%;
+            background-color: var(--primary-color); /* خط‌های سبز */
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+
+        /* منوی کناری */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: 0; /* منو از راست باز می‌شود */
+            width: 80%;
+            max-width: 300px;
+            height: 100%;
+            background-color: white;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 200;
+            transform: translateX(100%); /* شروع از خارج صفحه */
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .sidebar-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--red-color); /* دکمه ضربدر قرمز */
+            cursor: pointer;
+        }
+
+        .sidebar-menu {
+            padding: 15px;
+        }
+
+        .sidebar-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .sidebar-menu-item:hover {
+            background-color: var(--light-color);
+        }
+
+        .sidebar-menu-item i {
+            margin-left: 10px;
+            color: var(--primary-color);
+            font-size: 18px;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 199;
+            display: none;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 15px;
+            min-height: calc(100vh - 90px);
+        }
+
+        /* دکمه‌های بالا */
+        .top-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 650px;
+            margin-bottom: 30px;
+        }
+
+        .top-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 10px;
+            background: linear-gradient(135deg, rgba(0, 217, 104, 0.05), rgba(0, 184, 75, 0.1));
+            border: 1px solid rgba(0, 217, 104, 0.2);
+            border-radius: var(--border-radius); /* گوشه‌های گرد 25px */
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            min-height: 80px;
+        }
+
+        .top-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 217, 104, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .top-button.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .top-button i {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .top-button.active i {
+            color: white;
+        }
+
+        .top-button span {
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        /* دکمه ثبت وظیفه */
+        .add-task-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 217, 104, 0.4);
+            transition: all 0.3s ease;
+            z-index: 50;
+        }
+
+        .add-task-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 217, 104, 0.5);
+        }
+
+        /* صفحه ثبت وظیفه */
+        .task-form-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 200;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .task-form-page.active {
+            transform: translateX(0);
+        }
+
+        .task-form-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .task-form-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .task-form-content {
+            padding: 20px;
+        }
+
+        /* فرم یادداشت جدید */
+        .form-container {
+            width: 100%;
+            max-width: 650px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+            color: #333;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius); /* گوشه‌های گرد 25px */
+            outline: none;
+            font-size: 14px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            transition: var(--transition);
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
+            background-color: #fff;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+            text-align: right;
+        }
+
+        /* تاریخ و زمان */
+        .datetime-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 650px;
+        }
+
+        .datetime-button {
+            flex: 1;
+            padding: 12px 15px;
+            background: linear-gradient(135deg, #1976D2, #1565C0);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius); /* گوشه‌های گرد 25px */
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .datetime-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+        }
+
+        /* انتخاب رنگ */
+        .color-selection {
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 650px;
+        }
+
+        .color-palette {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .color-option {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.selected {
+            border-color: #333;
+            transform: scale(1.15);
+        }
+
+        .color-option.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            text-shadow: 0 0 3px rgba(0,0,0,0.5);
+        }
+
+        /* رنگ‌های محبوب */
+        .color-red { background-color: #ff6b6b; }
+        .color-orange { background-color: #ffa726; }
+        .color-yellow { background-color: #ffee58; }
+        .color-green { background-color: #66bb6a; }
+        .color-blue { background-color: #42a5f5; }
+        .color-purple { background-color: #ab47bc; }
+
+        /* دکمه ثبت */
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: var(--button-border-radius); /* گوشه‌های گرد 25px */
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            text-align: center;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+            width: 100%;
+            max-width: 650px;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 217, 104, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 217, 104, 0.4);
+        }
+
+        /* پیام موفقیت */
+        .success-message {
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.1), rgba(40, 167, 69, 0.05));
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            color: #155724;
+            padding: 15px;
+            border-radius: var(--border-radius); /* گوشه‌های گرد 25px */
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+            width: 100%;
+            max-width: 650px;
+        }
+
+        /* لیست وظایف */
+        .tasks-list {
+            width: 100%;
+            max-width: 650px;
+            margin-top: 20px;
+        }
+
+        .task-item {
+            background: white;
+            border-radius: var(--border-radius); /* گوشه‌های گرد 25px */
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border-left: 8px solid #66bb6a;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .task-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .task-title {
+            font-weight: 600;
+            font-size: 16px;
+            color: #333;
+            flex: 1;
+        }
+
+        .task-datetime {
+            font-size: 12px;
+            color: #666;
+            text-align: left;
+            direction: ltr;
+        }
+
+        .task-content {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+            max-height: 40px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            margin-bottom: 8px;
+        }
+
+        .task-content.expanded {
+            max-height: none;
+            -webkit-line-clamp: unset;
+        }
+
+        .task-category {
+            background: linear-gradient(135deg, rgba(0, 217, 104, 0.15), rgba(0, 184, 75, 0.1));
+            color: var(--primary-color);
+            padding: 4px 10px;
+            border-radius: var(--border-radius); /* گوشه‌های گرد 25px */
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 5px;
+            display: inline-block;
+            border: 1px solid rgba(0, 217, 104, 0.3);
+        }
+
+        /* مودال نمایش کامل وظیفه */
+        .task-detail-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 300;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .task-detail-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .task-detail-content {
+            background: white;
+            padding: 25px;
+            border-radius: var(--border-radius); /* گوشه‌های گرد 25px */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .task-detail-modal.active .task-detail-content {
+            transform: scale(1);
+        }
+
+        .task-detail-close {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--red-color); /* دکمه ضربدر قرمز */
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .task-detail-close:hover {
+            color: var(--red-color);
+        }
+
+        /* منوی کنتکستی */
+        .context-menu {
+            position: fixed;
+            background: white;
+            border-radius: var(--border-radius); /* گوشه‌های گرد 25px */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            padding: 10px 0;
+            z-index: 400;
+            display: none;
+            min-width: 150px;
+        }
+
+        .context-menu-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .context-menu-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .context-menu-item.delete:hover {
+            background-color: #ffe6e6;
+            color: var(--red-color);
+        }
+
+        /* پاپ‌آپ تاریخ و زمان */
+        .datetime-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 500;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .datetime-popup.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .datetime-popup-content {
+            background: white;
+            padding: 25px;
+            border-radius: var(--border-radius); /* گوشه‌های گرد 25px */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .datetime-popup.active .datetime-popup-content {
+            transform: scale(1);
+        }
+
+        .datetime-popup-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .datetime-popup-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .datetime-popup-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--red-color); /* دکمه ضربدر قرمز */
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .datetime-popup-close:hover {
+            color: var(--red-color);
+        }
+
+        .persian-calendar {
+            text-align: center;
+        }
+
+        .calendar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .calendar-nav {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .calendar-nav:hover {
+            background-color: rgba(0, 217, 104, 0.1);
+        }
+
+        .calendar-month-year {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .calendar-month-year:hover {
+            background-color: rgba(0, 217, 104, 0.1);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .calendar-day-header {
+            padding: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+
+        .calendar-day {
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .calendar-day:hover {
+            background-color: rgba(0, 217, 104, 0.1);
+        }
+
+        .calendar-day.selected {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .calendar-day.other-month {
+            color: #ccc;
+        }
+
+        /* انتخابگر ماه و سال */
+        .month-year-selector {
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .month-year-selector.active {
+            display: grid;
+        }
+
+        .month-year-item {
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .month-year-item:hover {
+            background-color: rgba(0, 217, 104, 0.1);
+        }
+
+        .month-year-item.selected {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* انتخابگر ساعت دایره‌ای */
+        .circular-time-picker {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .time-circle {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(0, 217, 104, 0.05), rgba(0, 184, 75, 0.1));
+            cursor: pointer;
+        }
+
+        .time-numbers {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .time-number {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .time-number:hover {
+            background-color: rgba(0, 217, 104, 0.2);
+        }
+
+        .time-number.selected {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .time-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+        }
+
+        .time-hand {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 70px;
+            background-color: var(--primary-color);
+            transform-origin: bottom center;
+            transform: translate(-50%, -100%) rotate(0deg);
+            transition: transform 0.3s ease;
+        }
+
+        .time-mode-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .time-mode-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--primary-color);
+            background: white;
+            color: var(--primary-color);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .time-mode-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .time-display {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .datetime-confirm-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius); /* گوشه‌های گرد 25px */
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .datetime-confirm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 217, 104, 0.3);
+        }
+
+        /* فیلتر وظایف */
+        .filter-info {
+            background: linear-gradient(135deg, rgba(0, 217, 104, 0.1), rgba(0, 184, 75, 0.05));
+            border: 1px solid rgba(0, 217, 104, 0.3);
+            color: var(--primary-color);
+            padding: 10px 15px;
+            border-radius: var(--border-radius); /* گوشه‌های گرد 25px */
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+            width: 100%;
+            max-width: 650px;
+        }
+
+        .filter-info.active {
+            display: block;
+        }
+
+        .clear-filter-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            margin-right: 10px;
+            text-decoration: underline;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* پاپ‌آپ حذف سفارشی */
+        .custom-confirm-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 600;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .custom-confirm-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .custom-confirm-content {
+            background: white;
+            padding: 30px;
+            border-radius: var(--border-radius); /* گوشه‌های گرد 25px */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease-in-out;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .custom-confirm-modal.active .custom-confirm-content {
+            transform: scale(1);
+        }
+
+        .custom-confirm-icon {
+            font-size: 48px;
+            color: var(--red-color);
+            margin-bottom: 20px;
+        }
+
+        .custom-confirm-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .custom-confirm-message {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .custom-confirm-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .custom-confirm-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: var(--border-radius); /* گوشه‌های گرد 25px */
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .custom-confirm-btn.confirm {
+            background: linear-gradient(135deg, var(--red-color), #d32f2f);
+            color: white;
+        }
+
+        .custom-confirm-btn.confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+        }
+
+        .custom-confirm-btn.cancel {
+            background: #f5f5f5;
+            color: #666;
+            border: 1px solid #ddd;
+        }
+
+        .custom-confirm-btn.cancel:hover {
+            background: #e0e0e0;
+        }
+
+        @media (max-width: 480px) {
+            .form-container,
+            .datetime-container,
+            .color-selection,
+            .btn,
+            .success-message,
+            .tasks-list,
+            .top-buttons {
+                max-width: 100%;
+            }
+
+            .top-buttons {
+                gap: 8px;
+            }
+
+            .top-button {
+                padding: 12px 8px;
+                min-height: 70px;
+            }
+
+            .top-button i {
+                font-size: 20px;
+                margin-bottom: 6px;
+            }
+
+            .top-button span {
+                font-size: 11px;
+            }
+
+            .datetime-button {
+                font-size: 13px;
+                padding: 10px 12px;
+            }
+
+            .color-option {
+                width: 40px;
+                height: 40px;
+            }
+
+            .logo-container {
+                height: 50px;
+                width: 150px;
+            }
+
+            .add-task-btn {
+                width: 55px;
+                height: 55px;
+                font-size: 22px;
+                bottom: 15px;
+                right: 15px;
+            }
+
+            .task-item {
+                padding: 12px;
+            }
+
+            .task-title {
+                font-size: 15px;
+            }
+
+            .task-content {
+                font-size: 13px;
+            }
+
+            .task-datetime {
+                font-size: 11px;
+            }
+
+            .time-circle {
+                width: 180px;
+                height: 180px;
+            }
+
+            .time-number {
+                width: 25px;
+                height: 25px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 350px) {
+            .top-button {
+                padding: 10px 6px;
+                min-height: 65px;
+            }
+
+            .top-button i {
+                font-size: 18px;
+                margin-bottom: 5px;
+            }
+
+            .top-button span {
+                font-size: 10px;
+            }
+
+            .color-option {
+                width: 35px;
+                height: 35px;
+            }
+
+            .add-task-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+
+            .time-circle {
+                width: 160px;
+                height: 160px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header-container">
+        <div class="topbar">
+            <button class="menu-button" id="menuButton" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="logo-container">
+                <img src="images/logo.png" alt="لوگوی برنامه" class="logo-image">
+            </div>
+        </div>
+    </header>
+
+    <!-- منوی کناری -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title">منوی برنامه</div>
+            <button class="sidebar-close" onclick="toggleSidebar()">&times;</button>
+        </div>
+        <div class="sidebar-menu">
+            <div class="sidebar-menu-item">
+                <i class="fas fa-home"></i>
+                <span>صفحه اصلی</span>
+            </div>
+            <div class="sidebar-menu-item">
+                <i class="fas fa-tasks"></i>
+                <span>وظایف من</span>
+            </div>
+            <div class="sidebar-menu-item">
+                <i class="fas fa-calendar"></i>
+                <span>تقویم</span>
+            </div>
+            <div class="sidebar-menu-item">
+                <i class="fas fa-chart-line"></i>
+                <span>گزارش‌ها</span>
+            </div>
+            <div class="sidebar-menu-item">
+                <i class="fas fa-cog"></i>
+                <span>تنظیمات</span>
+            </div>
+        </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- صفحه اصلی -->
+    <main id="mainPage">
+        <!-- دکمه‌های بالا -->
+        <div class="top-buttons">
+            <div class="top-button" data-category="قرار بازدید" onclick="filterTasks('قرار بازدید')">
+                <i class="fas fa-redo"></i>
+                <span>قرار بازدید</span>
+            </div>
+            <div class="top-button" data-category="تنظیم قرارداد" onclick="filterTasks('تنظیم قرارداد')">
+                <i class="fas fa-file-contract"></i>
+                <span>تنظیم قرارداد</span>
+            </div>
+            <div class="top-button" data-category="کارشناسی" onclick="filterTasks('کارشناسی')">
+                <i class="fas fa-handshake"></i>
+                <span>کارشناسی</span>
+            </div>
+            <div class="top-button" data-category="تماس مهم" onclick="filterTasks('تماس مهم')">
+                <i class="fas fa-phone"></i>
+                <span>تماس مهم</span>
+            </div>
+            <div class="top-button" data-category="پیگیری" onclick="filterTasks('پیگیری')">
+                <i class="fas fa-user-tie"></i>
+                <span>پیگیری</span>
+            </div>
+            <div class="top-button" data-category="خیلی مهم" onclick="filterTasks('خیلی مهم')">
+                <i class="fas fa-star"></i>
+                <span>خیلی مهم</span>
+            </div>
+        </div>
+
+        <!-- اطلاعات فیلتر -->
+        <div class="filter-info" id="filterInfo">
+            <span id="filterText"></span>
+            <button class="clear-filter-btn" onclick="clearFilter()">نمایش همه</button>
+        </div>
+
+        <!-- لیست وظایف -->
+        <div class="tasks-list" id="tasksList">
+            <!-- وظایف اینجا نمایش داده می‌شوند -->
+        </div>
+    </main>
+
+    <!-- دکمه ثبت وظیفه -->
+    <button class="add-task-btn" onclick="openTaskForm()" title="ثبت وظیفه جدید">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- صفحه ثبت وظیفه -->
+    <div class="task-form-page" id="taskFormPage">
+        <div class="task-form-header">
+            <button class="back-btn" onclick="closeTaskForm()">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <div class="task-form-title">وظیفه جدید</div>
+            <div></div>
+        </div>
+
+        <div class="task-form-content">
+            <!-- پیام موفقیت -->
+            <div class="success-message" id="successMessage">
+                یادداشت با موفقیت ذخیره شد!
+            </div>
+
+            <!-- دکمه‌های دسته‌بندی در صفحه ثبت -->
+            <div class="top-buttons">
+                <div class="top-button" data-category="قرار بازدید" onclick="selectCategory('قرار بازدید')">
+                    <i class="fas fa-redo"></i>
+                    <span>قرار بازدید</span>
+                </div>
+                <div class="top-button" data-category="تنظیم قرارداد" onclick="selectCategory('تنظیم قرارداد')">
+                    <i class="fas fa-file-contract"></i>
+                    <span>تنظیم قرارداد</span>
+                </div>
+                <div class="top-button" data-category="کارشناسی" onclick="selectCategory('کارشناسی')">
+                    <i class="fas fa-handshake"></i>
+                    <span>کارشناسی</span>
+                </div>
+                <div class="top-button" data-category="تماس مهم" onclick="selectCategory('تماس مهم')">
+                    <i class="fas fa-phone"></i>
+                    <span>تماس مهم</span>
+                </div>
+                <div class="top-button" data-category="پیگیری" onclick="selectCategory('پیگیری')">
+                    <i class="fas fa-user-tie"></i>
+                    <span>پیگیری</span>
+                </div>
+                <div class="top-button" data-category="خیلی مهم" onclick="selectCategory('خیلی مهم')">
+                    <i class="fas fa-star"></i>
+                    <span>خیلی مهم</span>
+                </div>
+            </div>
+
+            <!-- انتخاب رنگ -->
+            <div class="color-selection">
+                <div class="color-palette">
+                    <div class="color-option color-red" data-color="red"></div>
+                    <div class="color-option color-orange" data-color="orange"></div>
+                    <div class="color-option color-yellow" data-color="yellow"></div>
+                    <div class="color-option color-green selected" data-color="green"></div>
+                    <div class="color-option color-blue" data-color="blue"></div>
+                    <div class="color-option color-purple" data-color="purple"></div>
+                </div>
+            </div>
+
+            <!-- فرم یادداشت جدید -->
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="note-title">عنوان وظیفه</label>
+                    <input type="text" id="note-title" placeholder="عنوان وظیفه را وارد کنید">
+                </div>
+
+                <div class="form-group">
+                    <label for="note-content">متن وظیفه</label>
+                    <textarea id="note-content" placeholder="متن وظیفه را وارد کنید"></textarea>
+                </div>
+            </div>
+
+            <!-- تاریخ و زمان -->
+            <div class="datetime-container">
+                <button type="button" class="datetime-button" id="date-button" onclick="openDatePicker()">
+                    انتخاب تاریخ
+                </button>
+                <button type="button" class="datetime-button" id="time-button" onclick="openTimePicker()">
+                    انتخاب زمان
+                </button>
+            </div>
+
+            <!-- دکمه ثبت -->
+            <button class="btn btn-primary" onclick="saveNote()">
+                <i class="fas fa-save"></i> ثبت
+            </button>
+        </div>
+    </div>
+
+    <!-- مودال نمایش کامل وظیفه -->
+    <div class="task-detail-modal" id="taskDetailModal">
+        <div class="task-detail-content">
+            <button class="task-detail-close" onclick="closeTaskDetail()">&times;</button>
+            <div id="taskDetailContent">
+                <!-- محتوای کامل وظیفه اینجا نمایش داده می‌شود -->
+            </div>
+        </div>
+    </div>
+
+    <!-- منوی کنتکستی -->
+    <div class="context-menu" id="contextMenu">
+        <div class="context-menu-item" onclick="editTask()">
+            <i class="fas fa-edit"></i>
+            ویرایش
+        </div>
+        <div class="context-menu-item delete" onclick="deleteTask()">
+            <i class="fas fa-trash"></i>
+            حذف
+        </div>
+    </div>
+
+    <!-- پاپ‌آپ تاریخ -->
+    <div class="datetime-popup" id="datePopup">
+        <div class="datetime-popup-content">
+            <div class="datetime-popup-header">
+                <div class="datetime-popup-title">انتخاب تاریخ</div>
+                <button class="datetime-popup-close" onclick="closeDatePicker()">&times;</button>
+            </div>
+            <div class="persian-calendar">
+                <div class="calendar-header">
+                    <button class="calendar-nav" onclick="previousMonth()">&lt;</button>
+                    <div class="calendar-month-year" id="calendarMonthYear" onclick="toggleMonthYearSelector()">خرداد ۱۴۰۴</div>
+                    <button class="calendar-nav" onclick="nextMonth()">&gt;</button>
+                </div>
+                <div class="month-year-selector" id="monthYearSelector">
+                    <!-- انتخابگر ماه و سال اینجا ایجاد می‌شود -->
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- تقویم اینجا ایجاد می‌شود -->
+                </div>
+            </div>
+            <button class="datetime-confirm-btn" onclick="confirmDate()">انتخاب</button>
+        </div>
+    </div>
+
+    <!-- پاپ‌آپ زمان -->
+    <div class="datetime-popup" id="timePopup">
+        <div class="datetime-popup-content">
+            <div class="datetime-popup-header">
+                <div class="datetime-popup-title">انتخاب زمان</div>
+                <button class="datetime-popup-close" onclick="closeTimePicker()">&times;</button>
+            </div>
+            <div class="circular-time-picker">
+                <div class="time-mode-toggle">
+                    <button class="time-mode-btn active" id="hourModeBtn" onclick="setTimeMode('hour')">ساعت</button>
+                    <button class="time-mode-btn" id="minuteModeBtn" onclick="setTimeMode('minute')">دقیقه</button>
+                </div>
+                <div class="time-display" id="timeDisplay">۱۲:۰۰</div>
+                <div class="time-circle" onclick="handleTimeCircleClick(event)">
+                    <div class="time-numbers" id="timeNumbers">
+                        <!-- اعداد ساعت اینجا ایجاد می‌شوند -->
+                    </div>
+                    <div class="time-center"></div>
+                    <div class="time-hand" id="timeHand"></div>
+                </div>
+            </div>
+            <button class="datetime-confirm-btn" onclick="confirmTime()">انتخاب</button>
+        </div>
+    </div>
+
+    <!-- پاپ‌آپ حذف سفارشی -->
+    <div class="custom-confirm-modal" id="customConfirmModal">
+        <div class="custom-confirm-content">
+            <div class="custom-confirm-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="custom-confirm-title">تأیید حذف</div>
+            <div class="custom-confirm-message">آیا مطمئن هستید که می‌خواهید این وظیفه را حذف کنید؟</div>
+            <div class="custom-confirm-buttons">
+                <button class="custom-confirm-btn cancel" onclick="closeCustomConfirm()">انصراف</button>
+                <button class="custom-confirm-btn confirm" onclick="confirmDelete()">حذف</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // متغیرهای سراسری
+        let selectedColor = 'green';
+        let selectedDate = null;
+        let selectedTime = null;
+        let selectedCategory = null;
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        let currentTaskId = null;
+        let contextMenuTaskId = null;
+        let currentFilter = null;
+        let timeMode = 'hour';
+        let selectedHour = 12;
+        let selectedMinute = 0;
+        let currentYear = 1404;
+        let currentMonth = 3; // خرداد
+        let showingMonthYearSelector = false;
+
+        // تبدیل اعداد انگلیسی به فارسی
+        function toPersianNumbers(str) {
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return str.toString().replace(/\d/g, x => persianDigits[x]);
+        }
+
+        // تبدیل اعداد فارسی به انگلیسی
+        function toEnglishNumbers(str) {
+            const englishDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return str.toString().replace(/[۰-۹]/g, x => englishDigits[persianDigits.indexOf(x)]);
+        }
+
+        // نام‌های ماه‌های فارسی
+        const persianMonths = [
+            'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
+            'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
+        ];
+
+        // نام‌های روزهای هفته
+        const persianDays = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
+
+        // تبدیل تاریخ میلادی به شمسی (ساده)
+        function getCurrentPersianDate() {
+            const now = new Date();
+            const year = 1404; // سال جاری
+            const month = 3; // خرداد
+            const day = 3;
+            return { year, month, day };
+        }
+
+        // باز و بسته کردن منوی کناری
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // درخواست مجوز نوتیفیکیشن
+        function requestNotificationPermission() {
+            if ('Notification' in window && 'serviceWorker' in navigator) {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        console.log('مجوز نوتیفیکیشن داده شد');
+                    }
+                });
+            }
+        }
+
+        // ارسال نوتیفیکیشن
+        function sendNotification(title, body) {
+            if (Notification.permission === 'granted') {
+                new Notification(title, {
+                    body: body,
+                    icon: 'images/logo.png',
+                    badge: 'images/logo.png'
+                });
+            }
+        }
+
+        // بررسی زمان وظایف برای آلارم
+        function checkTaskAlarms() {
+            const now = new Date();
+            tasks.forEach(task => {
+                if (task.datetime && !task.notified) {
+                    const taskTime = new Date(task.datetime);
+                    if (taskTime <= now) {
+                        sendNotification('یادآوری وظیفه', task.title);
+                        task.notified = true;
+                        saveTasks();
+                    }
+                }
+            });
+        }
+
+        // ذخیره وظایف در localStorage
+        function saveTasks() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        // انتخاب رنگ بر اساس نوع وظیفه
+        function getColorForType(category) {
+            const colorMap = {
+                'قرار بازدید': 'blue',
+                'تنظیم قرارداد': 'green',
+                'کارشناسی': 'orange',
+                'تماس مهم': 'red',
+                'پیگیری': 'purple',
+                'خیلی مهم': 'red'
+            };
+            return colorMap[category] || 'green';
+        }
+
+        // نمایش پیام موفقیت
+        function showSuccessMessage(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message';
+            successDiv.style.display = 'block';
+            successDiv.style.position = 'fixed';
+            successDiv.style.top = '20px';
+            successDiv.style.left = '50%';
+            successDiv.style.transform = 'translateX(-50%)';
+            successDiv.style.zIndex = '1000';
+            successDiv.textContent = message;
+            
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                successDiv.remove();
+            }, 3000);
+        }
+
+        // باز کردن فرم وظیفه
+        function openTaskForm() {
+            document.getElementById('taskFormPage').classList.add('active');
+            // پاک کردن فرم
+            document.getElementById('note-title').value = '';
+            document.getElementById('note-content').value = '';
+            selectedDate = null;
+            selectedTime = null;
+            selectedCategory = null;
+            updateDateTimeButtons();
+            clearCategorySelection();
+        }
+
+        // بستن فرم وظیفه
+        function closeTaskForm() {
+            document.getElementById('taskFormPage').classList.remove('active');
+        }
+
+        // انتخاب رنگ
+        function selectColor(color) {
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelector(`[data-color="${color}"]`).classList.add('selected');
+            selectedColor = color;
+        }
+
+        // انتخاب دسته‌بندی در صفحه ثبت
+        function selectCategory(category) {
+            // پاک کردن انتخاب قبلی
+            document.querySelectorAll('#taskFormPage .top-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // انتخاب دسته جدید
+            document.querySelector(`#taskFormPage .top-button[data-category="${category}"]`).classList.add('active');
+            selectedCategory = category;
+            
+            // تنظیم رنگ مناسب
+            const categoryColor = getColorForType(category);
+            selectColor(categoryColor);
+        }
+
+        // پاک کردن انتخاب دسته‌بندی
+        function clearCategorySelection() {
+            document.querySelectorAll('#taskFormPage .top-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+        }
+
+        // ذخیره یادداشت
+        function saveNote() {
+            const title = document.getElementById('note-title').value.trim();
+            const content = document.getElementById('note-content').value.trim();
+            
+            if (!title && !content) {
+                alert('لطفاً حداقل عنوان یا متن وظیفه را وارد کنید.');
+                return;
+            }
+
+            const task = {
+                id: Date.now(),
+                title: title || 'بدون عنوان',
+                content: content || '',
+                category: selectedCategory || 'عمومی',
+                color: selectedColor,
+                datetime: selectedDate && selectedTime ? 
+                    new Date(`${selectedDate}T${selectedTime}`).toISOString() : null,
+                created: new Date().toISOString(),
+                notified: false
+            };
+
+            tasks.unshift(task);
+            saveTasks();
+            displayTasks();
+            
+            // نمایش پیام موفقیت
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            
+            // پاک کردن فرم
+            document.getElementById('note-title').value = '';
+            document.getElementById('note-content').value = '';
+            selectedDate = null;
+            selectedTime = null;
+            selectedCategory = null;
+            updateDateTimeButtons();
+            clearCategorySelection();
+            
+            // مخفی کردن پیام بعد از 2 ثانیه
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+                closeTaskForm();
+            }, 2000);
+        }
+
+        // فیلتر وظایف
+        function filterTasks(category) {
+            // بروزرسانی دکمه‌های فیلتر
+            document.querySelectorAll('#mainPage .top-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            if (currentFilter === category) {
+                // اگر همان دسته انتخاب شده، فیلتر را حذف کن
+                clearFilter();
+            } else {
+                // فیلتر جدید اعمال کن
+                document.querySelector(`#mainPage .top-button[data-category="${category}"]`).classList.add('active');
+                currentFilter = category;
+                
+                // نمایش اطلاعات فیلتر
+                const filterInfo = document.getElementById('filterInfo');
+                const filterText = document.getElementById('filterText');
+                filterText.textContent = `نمایش وظایف: ${category}`;
+                filterInfo.classList.add('active');
+                
+                displayTasks(category);
+            }
+        }
+
+        // پاک کردن فیلتر
+        function clearFilter() {
+            currentFilter = null;
+            document.querySelectorAll('#mainPage .top-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('filterInfo').classList.remove('active');
+            displayTasks();
+        }
+
+        // نمایش وظایف
+        function displayTasks(filter = null) {
+            const tasksList = document.getElementById('tasksList');
+            let filteredTasks = tasks;
+            
+            if (filter) {
+                filteredTasks = tasks.filter(task => task.category === filter);
+            }
+            
+            if (filteredTasks.length === 0) {
+                tasksList.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #666;">
+                        <i class="fas fa-clipboard-list" style="font-size: 48px; margin-bottom: 15px; color: #ddd;"></i>
+                        <p>${filter ? `هیچ وظیفه‌ای یافت نشد. دکمه + را انتخاب کنید.` : 'هنوز وظیفه‌ای ثبت نشده است'}</p>
+                        ${!filter ? '<p style="font-size: 14px; margin-top: 10px;">از دکمه + برای افزودن وظیفه جدید استفاده کنید</p>' : ''}
+                    </div>
+                `;
+                return;
+            }
+
+            tasksList.innerHTML = filteredTasks.map(task => {
+                const colorClass = `color-${task.color}`;
+                const borderColor = getComputedStyle(document.querySelector(`.${colorClass}`)).backgroundColor;
+                
+                return `
+                    <div class="task-item" data-task-id="${task.id}" 
+                         style="border-left-color: ${borderColor}"
+                         onclick="showTaskDetail(${task.id})"
+                         oncontextmenu="showContextMenu(event, ${task.id})">
+                        <div class="task-header">
+                            <div class="task-title">${task.title}</div>
+                            <div class="task-datetime">
+                                ${task.datetime ? formatDateTime(task.datetime) : ''}
+                            </div>
+                        </div>
+                        <div class="task-content" id="content-${task.id}">
+                            ${task.content}
+                        </div>
+                        <div class="task-category">${task.category}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // فرمت کردن تاریخ و زمان
+        function formatDateTime(datetime) {
+            const date = new Date(datetime);
+            const persianDate = getCurrentPersianDate(); // در اینجا باید تبدیل واقعی انجام شود
+            const timeStr = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+            return `${toPersianNumbers(persianDate.year)}/${toPersianNumbers(persianDate.month)}/${toPersianNumbers(persianDate.day)} - ${toPersianNumbers(timeStr)}`;
+        }
+
+        // نمایش جزئیات کامل وظیفه
+        function showTaskDetail(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+
+            const modal = document.getElementById('taskDetailModal');
+            const content = document.getElementById('taskDetailContent');
+            
+            content.innerHTML = `
+                <div style="border-left: 4px solid ${getComputedStyle(document.querySelector(`.color-${task.color}`)).backgroundColor}; padding-left: 15px;">
+                    <h3 style="margin-bottom: 15px; color: #333;">${task.title}</h3>
+                    <div style="background: linear-gradient(135deg, rgba(0, 217, 104, 0.1), rgba(0, 184, 75, 0.05)); color: var(--primary-color); padding: 5px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; margin-bottom: 10px; display: inline-block;">
+                        ${task.category}
+                    </div>
+                    ${task.datetime ? `<p style="color: #666; margin-bottom: 10px; font-size: 14px;">
+                        <i class="fas fa-clock"></i> ${formatDateTime(task.datetime)}
+                    </p>` : ''}
+                    <p style="line-height: 1.6; color: #555; white-space: pre-wrap;">${task.content}</p>
+                    <p style="color: #999; font-size: 12px; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+                        ایجاد شده: ${new Date(task.created).toLocaleDateString('fa-IR')}
+                    </p>
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        // بستن جزئیات وظیفه
+        function closeTaskDetail() {
+            document.getElementById('taskDetailModal').classList.remove('active');
+        }
+
+        // نمایش منوی کنتکستی
+        function showContextMenu(event, taskId) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            const contextMenu = document.getElementById('contextMenu');
+            contextMenuTaskId = taskId;
+            
+            contextMenu.style.display = 'block';
+            contextMenu.style.left = event.pageX + 'px';
+            contextMenu.style.top = event.pageY + 'px';
+            
+            // بستن منو با کلیک در جای دیگر
+            setTimeout(() => {
+                document.addEventListener('click', hideContextMenu);
+            }, 100);
+        }
+
+        // مخفی کردن منوی کنتکستی
+        function hideContextMenu() {
+            document.getElementById('contextMenu').style.display = 'none';
+            document.removeEventListener('click', hideContextMenu);
+        }
+
+        // ویرایش وظیفه
+        function editTask() {
+            const task = tasks.find(t => t.id === contextMenuTaskId);
+            if (!task) return;
+            
+            // پر کردن فرم با اطلاعات وظیفه
+            document.getElementById('note-title').value = task.title;
+            document.getElementById('note-content').value = task.content;
+            selectColor(task.color);
+            
+            if (task.category) {
+                selectCategory(task.category);
+            }
+            
+            if (task.datetime) {
+                const date = new Date(task.datetime);
+                selectedDate = date.toISOString().split('T')[0];
+                selectedTime = date.toTimeString().slice(0, 5);
+                updateDateTimeButtons();
+            }
+            
+            // حذف وظیفه قدیمی
+            tasks = tasks.filter(t => t.id !== contextMenuTaskId);
+            saveTasks();
+            displayTasks();
+            
+            // باز کردن فرم
+            openTaskForm();
+            hideContextMenu();
+        }
+
+        // حذف وظیفه
+        function deleteTask() {
+            showCustomConfirm();
+            hideContextMenu();
+        }
+
+        // نمایش پاپ‌آپ تأیید حذف سفارشی
+        function showCustomConfirm() {
+            document.getElementById('customConfirmModal').classList.add('active');
+        }
+
+        // بستن پاپ‌آپ تأیید حذف
+        function closeCustomConfirm() {
+            document.getElementById('customConfirmModal').classList.remove('active');
+        }
+
+        // تأیید حذف
+        function confirmDelete() {
+            tasks = tasks.filter(t => t.id !== contextMenuTaskId);
+            saveTasks();
+            displayTasks();
+            closeCustomConfirm();
+        }
+
+        // باز کردن انتخابگر تاریخ
+        function openDatePicker() {
+            document.getElementById('datePopup').classList.add('active');
+            showingMonthYearSelector = false;
+            updateCalendarHeader();
+            generateCalendar();
+        }
+
+        // بستن انتخابگر تاریخ
+        function closeDatePicker() {
+            document.getElementById('datePopup').classList.remove('active');
+        }
+
+        // تولید تقویم
+        function generateCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            
+            // هدر روزهای هفته
+            let html = persianDays.map(day => 
+                `<div class="calendar-day-header">${day}</div>`
+            ).join('');
+            
+            // تعداد روزهای ماه
+            const daysInMonth = currentMonth <= 6 ? 31 : (currentMonth <= 11 ? 30 : 29);
+            
+            // روزهای ماه
+            for (let i = 1; i <= daysInMonth; i++) {
+                const isSelected = selectedDate === `${currentYear}-${currentMonth.toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
+                html += `<div class="calendar-day ${isSelected ? 'selected' : ''}" 
+                              onclick="selectDate(${i})">${toPersianNumbers(i)}</div>`;
+            }
+            
+            grid.innerHTML = html;
+        }
+
+        // انتخاب تاریخ
+        function selectDate(day) {
+            document.querySelectorAll('.calendar-day').forEach(el => el.classList.remove('selected'));
+            event.target.classList.add('selected');
+            selectedDate = `${currentYear}-${currentMonth.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+        }
+
+        // تأیید تاریخ
+        function confirmDate() {
+            if (selectedDate) {
+                updateDateTimeButtons();
+                closeDatePicker();
+            }
+        }
+
+        // ماه قبل
+        function previousMonth() {
+            currentMonth--;
+            if (currentMonth < 1) {
+                currentMonth = 12;
+                currentYear--;
+            }
+            updateCalendarHeader();
+            generateCalendar();
+        }
+
+        // ماه بعد
+        function nextMonth() {
+            currentMonth++;
+            if (currentMonth > 12) {
+                currentMonth = 1;
+                currentYear++;
+            }
+            updateCalendarHeader();
+            generateCalendar();
+        }
+
+        // به‌روزرسانی هدر تقویم
+        function updateCalendarHeader() {
+            const header = document.getElementById('calendarMonthYear');
+            header.textContent = `${persianMonths[currentMonth - 1]} ${toPersianNumbers(currentYear)}`;
+        }
+
+        // تغییر نمایش انتخابگر ماه و سال
+        function toggleMonthYearSelector() {
+            const selector = document.getElementById('monthYearSelector');
+            const grid = document.getElementById('calendarGrid');
+            
+            showingMonthYearSelector = !showingMonthYearSelector;
+            
+            if (showingMonthYearSelector) {
+                selector.classList.add('active');
+                grid.style.display = 'none';
+                generateMonthYearSelector();
+            } else {
+                selector.classList.remove('active');
+                grid.style.display = 'grid';
+            }
+        }
+
+        // تولید انتخابگر ماه و سال
+        function generateMonthYearSelector() {
+            const selector = document.getElementById('monthYearSelector');
+            let html = '';
+            
+            // ماه‌ها
+            persianMonths.forEach((month, index) => {
+                const isSelected = (index + 1) === currentMonth;
+                html += `<div class="month-year-item ${isSelected ? 'selected' : ''}" 
+                              onclick="selectMonth(${index + 1})">${month}</div>`;
+            });
+            
+            // سال‌ها (5 سال قبل تا 5 سال بعد)
+            for (let year = currentYear - 5; year <= currentYear + 5; year++) {
+                const isSelected = year === currentYear;
+                html += `<div class="month-year-item ${isSelected ? 'selected' : ''}" 
+                              onclick="selectYear(${year})">${toPersianNumbers(year)}</div>`;
+            }
+            
+            selector.innerHTML = html;
+        }
+
+        // انتخاب ماه
+        function selectMonth(month) {
+            currentMonth = month;
+            updateCalendarHeader();
+            toggleMonthYearSelector();
+            generateCalendar();
+        }
+
+        // انتخاب سال
+        function selectYear(year) {
+            currentYear = year;
+            updateCalendarHeader();
+            toggleMonthYearSelector();
+            generateCalendar();
+        }
+
+        // باز کردن انتخابگر زمان
+        function openTimePicker() {
+            document.getElementById('timePopup').classList.add('active');
+            generateTimeCircle();
+            updateTimeDisplay();
+        }
+
+        // بستن انتخابگر زمان
+        function closeTimePicker() {
+            document.getElementById('timePopup').classList.remove('active');
+        }
+
+        // تنظیم حالت زمان (ساعت یا دقیقه)
+        function setTimeMode(mode) {
+            timeMode = mode;
+            document.querySelectorAll('.time-mode-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(mode + 'ModeBtn').classList.add('active');
+            generateTimeCircle();
+            updateTimeHand();
+        }
+
+        // تولید دایره زمان
+        function generateTimeCircle() {
+            const numbersContainer = document.getElementById('timeNumbers');
+            numbersContainer.innerHTML = '';
+            
+            const timeNumbers = timeMode === 'hour' ? 
+                Array.from({length: 12}, (_, i) => i === 0 ? 12 : i) :
+                Array.from({length: 12}, (_, i) => i * 5);
+            
+            timeNumbers.forEach((num, index) => {
+                const angle = (index * 30) - 90; // شروع از بالا
+                const radian = (angle * Math.PI) / 180;
+                const radius = 70;
+                
+                const x = 50 + radius * Math.cos(radian);
+                const y = 50 + radius * Math.sin(radian);
+                
+                const numberDiv = document.createElement('div');
+                numberDiv.className = 'time-number';
+                numberDiv.style.left = x + '%';
+                numberDiv.style.top = y + '%';
+                numberDiv.textContent = toPersianNumbers(num);numberDiv.textContent = toPersianNumbers(num);
+                
+                if ((timeMode === 'hour' && num === selectedHour) || 
+                    (timeMode === 'minute' && num === selectedMinute)) {
+                    numberDiv.classList.add('selected');
+                }
+                
+                numberDiv.addEventListener('click', () => {
+                    if (timeMode === 'hour') {
+                        selectedHour = num;
+                        setTimeMode('minute');
+                    } else {
+                        selectedMinute = num;
+                    }
+                    updateTimeDisplay();
+                    updateTimeHand();
+                });
+                
+                numbersContainer.appendChild(numberDiv);
+            });
+            
+            updateTimeHand();
+        }
+
+        // به‌روزرسانی نمایش زمان
+        function updateTimeDisplay() {
+            const display = document.getElementById('timeDisplay');
+            display.textContent = `${toPersianNumbers(selectedHour.toString().padStart(2, '0'))}:${toPersianNumbers(selectedMinute.toString().padStart(2, '0'))}`;
+        }
+
+        // به‌روزرسانی عقربه ساعت
+        function updateTimeHand() {
+            const hand = document.getElementById('timeHand');
+            const angle = timeMode === 'hour' ? 
+                (selectedHour % 12) * 30 : 
+                selectedMinute * 6;
+            
+            hand.style.transform = `translate(-50%, -100%) rotate(${angle}deg)`;
+        }
+
+        // کلیک روی دایره زمان
+        function handleTimeCircleClick(event) {
+            const circle = event.currentTarget;
+            const rect = circle.getBoundingClientRect();
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const x = event.clientX - rect.left - centerX;
+            const y = event.clientY - rect.top - centerY;
+            
+            // محاسبه زاویه کلیک
+            let angle = Math.atan2(y, x) * (180 / Math.PI) + 90;
+            if (angle < 0) angle += 360;
+            
+            // تبدیل زاویه به عدد
+            const value = Math.round(angle / 30) % 12;
+            
+            if (timeMode === 'hour') {
+                selectedHour = value === 0 ? 12 : value;
+                setTimeMode('minute');
+            } else {
+                selectedMinute = value * 5;
+            }
+            
+            updateTimeDisplay();
+            updateTimeHand();
+            
+            // انتخاب عدد متناظر
+            document.querySelectorAll('.time-number').forEach(num => {
+                num.classList.remove('selected');
+            });
+            
+            const numbers = document.querySelectorAll('.time-number');
+            if (numbers[value]) {
+                numbers[value].classList.add('selected');
+            }
+        }
+
+        // تأیید زمان
+        function confirmTime() {
+            selectedTime = `${selectedHour.toString().padStart(2, '0')}:${selectedMinute.toString().padStart(2, '0')}`;
+            updateDateTimeButtons();
+            closeTimePicker();
+        }
+
+        // به‌روزرسانی دکمه‌های تاریخ و زمان
+        function updateDateTimeButtons() {
+            const dateButton = document.getElementById('date-button');
+            const timeButton = document.getElementById('time-button');
+            
+            if (selectedDate) {
+                const dateParts = selectedDate.split('-');
+                dateButton.textContent = `تاریخ: ${toPersianNumbers(dateParts[0])}/${toPersianNumbers(dateParts[1])}/${toPersianNumbers(dateParts[2])}`;
+                dateButton.style.background = 'linear-gradient(135deg, #43A047, #2E7D32)';
+            } else {
+                dateButton.textContent = 'انتخاب تاریخ';
+                dateButton.style.background = 'linear-gradient(135deg, #1976D2, #1565C0)';
+            }
+            
+            if (selectedTime) {
+                timeButton.textContent = `زمان: ${toPersianNumbers(selectedTime)}`;
+                timeButton.style.background = 'linear-gradient(135deg, #43A047, #2E7D32)';
+            } else {
+                timeButton.textContent = 'انتخاب زمان';
+                timeButton.style.background = 'linear-gradient(135deg, #1976D2, #1565C0)';
+            }
+        }
+
+        // کلیک روی گزینه‌های رنگ
+        document.querySelectorAll('.color-option').forEach(option => {
+            option.addEventListener('click', () => {
+                selectColor(option.getAttribute('data-color'));
+            });
+        });
+
+        // راه‌اندازی برنامه
+        function initApp() {
+            // نمایش وظایف
+            displayTasks();
+            
+            // درخواست مجوز نوتیفیکیشن
+            requestNotificationPermission();
+            
+            // بررسی دوره‌ای آلارم‌ها
+            setInterval(checkTaskAlarms, 60000);
+            
+            // تنظیم تاریخ و زمان پیش‌فرض
+            const now = new Date();
+            selectedHour = now.getHours();
+            selectedMinute = Math.floor(now.getMinutes() / 5) * 5; // گرد کردن به نزدیکترین 5 دقیقه
+        }
+
+        // اجرای برنامه در زمان بارگذاری صفحه
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+
+</html>

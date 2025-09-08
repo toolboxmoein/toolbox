@@ -1,0 +1,2464 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جعبه لایتنر</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --primary-color: #00D968;
+            --primary-light: #E6F8EE;
+            --secondary-color: #00B84B;
+            --dark-color: #333;            --light-color: #f8f9fa;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.06);            --subtle-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --border-radius: 16px;
+            --button-border-radius: 8px;
+            --border-color: #e0e0e0;
+            --grey-color: #6c757d;
+            --grey-light: #f8f9fa;
+            --grey-medium: #dee2e6;
+            --grey-darker: #495057;
+            --alert-error-text: #c62828;
+            --close-red: #ef5350;
+            --calendar-bg: #f7f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            color: var(--dark-color);
+            line-height: 1.6;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;            align-items: center;
+            padding: 0 20px 20px;
+            min-height: 100vh;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 900px;
+            animation: fadeIn 1s forwards;
+            flex-grow: 1;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: 100%;
+            margin: 0 auto 12px auto;
+            padding-top: 10px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .main-logo {
+            max-height: 35px;
+            width: auto;
+            cursor: pointer;
+        }        .hamburger-menu {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-60%);
+            z-index: 1050;
+        }
+
+        .hamburger-icon {
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px;
+        }
+
+        .hamburger-icon span {
+            display: block;
+            width: 24px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 3px 0;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .banner-content {
+            width: 100%;
+            height: 120px;
+            background-image: url('images/lightner.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--border-color);
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            padding: 10px;
+        }
+        .banner-text {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 4px 10px;
+            border-radius: var(--button-border-radius);
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 12px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            transition: opacity 0.3s ease;
+            position: relative;
+        }
+
+        .section-card h2 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-card h2 i {
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;            font-size: 1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--grey-medium);
+            border-radius: var(--button-border-radius);
+            outline: none;
+            font-size: 1rem;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            transition: all 0.3s ease;
+            resize: vertical;
+            background-color: #fff;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.2);
+        }        .action-btn {
+            width: 100%;
+            background: var(--gradient);            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: var(--button-border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover:not(:disabled) {            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 217, 104, 0.4);
+        }
+        .action-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;        }
+
+        #leitner-boxes-status {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .box-status {
+            background-color: var(--primary-light);
+            color: var(--secondary-color);
+            padding: 10px 15px;
+            border-radius: var(--button-border-radius);
+            font-weight: 500;
+            border: 1px dashed var(--primary-color);
+            flex-grow: 1;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .box-status:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--subtle-shadow);
+        }
+
+        .search-input-container {
+            position: relative;
+            flex-grow: 1;
+        }
+
+        .search-input-container i {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            color: var(--grey-color);
+        }
+        #category-search-input {
+            padding-right: 40px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1002;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 400px;
+            height: auto;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin: auto;
+            background: white;
+            position: relative;
+            box-shadow: var(--card-shadow);
+            animation: modal-pop 0.3s ease-out;
+        }
+
+        @keyframes modal-pop {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        .close-button-circle {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            z-index: 10;
+        }
+        .close-button-circle:hover {
+            transform: scale(1.1) rotate(90deg);
+            background-color: var(--close-red);
+            color: white;
+        }
+
+        #fab-action-modal .close-button-circle,
+        #add-category-modal .close-button-circle,
+        #category-action-modal .close-button-circle {
+            background-color: var(--close-red);            color: white;
+        }
+
+        .modal-title {
+            margin-bottom: 25px;
+            font-size: 1.7rem;
+            text-align: center;
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+
+        #alert-modal .modal-content {
+            padding: 30px;
+            text-align: center;
+        }
+        #alert-modal-icon {
+            font-size: 3rem;
+            color: var(--alert-error-text);
+            margin-bottom: 15px;        }
+
+        #alert-modal-message {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+
+        #alert-modal-close-btn {
+            width: auto;
+            padding: 10px 40px;
+            background: var(--gradient);
+        }
+        .custom-select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        .custom-select-trigger {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .custom-select-trigger .fa-chevron-down {
+            transition: transform 0.3s ease;
+        }
+        .custom-select-wrapper.active .custom-select-trigger .fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
+        .custom-options {
+            position: absolute;
+            top: 105%;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border: 1px solid var(--grey-medium);
+            border-radius: var(--button-border-radius);
+            box-shadow: var(--subtle-shadow);
+            z-index: 1005;
+            max-height: 150px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .custom-options.active {
+            display: block;
+        }
+        .custom-option {
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .custom-option:hover {
+            background-color: var(--primary-light);
+        }
+
+        .custom-option.selected {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+        }
+
+        .fab-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1001;
+        }
+
+        .fab-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 217, 104, 0.4);
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .fab-button i {
+            transition: transform 0.3s ease;
+        }
+        .fab-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 217, 104, 0.6);
+        }        #fab-action-modal .modal-content,
+        #category-action-modal .modal-content {
+            max-width: 320px;
+        }
+
+        #fab-action-modal .modal-title,
+        #category-action-modal .modal-title {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .fab-modal-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .category-color-picker {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            margin-bottom: 10px;        }
+
+        .category-color-picker .color-swatch {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: pointer;            border: 3px solid transparent;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .category-color-picker .color-swatch:hover {
+            transform: scale(1.1);
+        }
+        .category-color-picker .color-swatch.selected {
+            border-color: var(--dark-color);
+            transform: scale(1.1);
+        }
+
+        .action-btn.delete-btn-style {
+            background: var(--close-red);
+        }
+
+        .action-btn.delete-btn-style:hover:not(:disabled) {
+            box-shadow: 0 5px 15px rgba(239, 83, 80, 0.4);
+        }
+
+        /* --- START: New styles for full-screen category page --- */
+        #category-view-section {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff; /* Solid white background for page feel */
+            z-index: 2000; /* Above everything else */
+            overflow-y: auto; /* Allow scrolling within the page */
+            flex-direction: column;
+            /* Override section-card styles for full-page mode */
+            border-radius: 0;
+            margin-bottom: 0;
+            box-shadow: none;
+            padding: 25px; /* Add padding back */
+        }
+
+        #category-view-section.visible {
+            display: flex; /* Use flex to manage layout */
+            animation: slideInFromRight 0.4s ease-out forwards;
+        }
+
+        #category-view-section.closing {
+            animation: slideOutToRight 0.4s ease-in forwards;
+        }
+
+        @keyframes slideInFromRight {
+            from { transform: translateX(100%); opacity: 0.8; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOutToRight {
+            from { transform: translateX(0); opacity: 1;}
+            to { transform: translateX(100%); opacity: 0.8; }
+        }
+        /* --- END: New styles for full-screen category page --- */
+
+        .category-controls {
+            display: flex;
+            flex-direction: column;            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .controls-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .controls-group.options-group {
+            justify-content: space-between;
+        }
+
+        #view-layout-controls {
+            display: flex;
+            gap: 5px;            border: 1px solid var(--grey-medium);
+            border-radius: var(--button-border-radius);
+            padding: 4px;
+        }
+
+        .layout-btn {
+            background-color: transparent;
+            border: none;
+            color: var(--grey-color);
+            width: 36px;
+            height: 36px;
+            font-size: 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .layout-btn:hover {
+            background-color: var(--grey-light);
+            color: var(--dark-color);
+        }
+
+        .layout-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .view-toggle-container {
+            display: flex;
+            align-items: center;            gap: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;        }
+        .switch input {
+            display: none;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 28px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--primary-color);
+        }        input:checked+.slider:before {
+            transform: translateX(22px);
+        }
+
+
+        #category-card-list {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+            transition: grid-template-columns 0.4s ease;
+        }
+
+        #category-card-list.layout-grid {
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        }
+        #category-card-list.layout-list {
+            grid-template-columns: 1fr;
+        }        .flip-card {
+            background-color: transparent;
+            perspective: 1000px;
+            cursor: pointer;
+            position: relative;
+        }
+        .layout-grid .flip-card {
+            height: 140px;
+        }
+
+        .layout-list .flip-card {
+            height: 120px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.7s;
+            transform-style: preserve-3d;
+            box-shadow: var(--subtle-shadow);
+            border-radius: var(--button-border-radius);
+        }
+
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border-radius: var(--button-border-radius);            border: 1px solid var(--border-color);
+            word-wrap: break-word;            overflow-wrap: break-word;
+            overflow-y: auto;
+        }
+
+        .layout-grid .flip-card-front,
+        .layout-grid .flip-card-back {
+            font-size: 0.9rem;
+        }
+
+        .layout-list .flip-card-front,
+        .layout-list .flip-card-back {
+            justify-content: flex-start;
+            text-align: right;
+            padding: 15px 20px;
+            font-size: 1rem;
+        }
+        .flip-card-front {
+            background-color: var(--grey-light);
+            color: var(--dark-color);
+        }
+
+        .flip-card-back {
+            background: var(--primary-light);
+            color: var(--dark-color);
+            transform: rotateY(180deg);
+        }
+
+        .card-action-menu {            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(40, 40, 40, 0.85);
+            border-radius: var(--button-border-radius);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            z-index: 5;
+            opacity: 0;
+            animation: fadeIn 0.3s forwards;
+        }
+
+        .card-action-btn {
+            background: white;
+            color: var(--dark-color);
+            border: none;
+            padding: 10px 25px;
+            border-radius: var(--button-border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 120px;
+        }
+
+        .card-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-action-btn.edit-btn:hover {
+            background: #e0f2f1;
+        }
+
+        .card-action-btn.delete-btn:hover {
+            background: #ffcdd2;
+        }
+
+        #confirmation-modal .modal-content {
+            text-align: center;
+        }
+
+        #confirmation-message {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+        .confirmation-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .confirmation-buttons .action-btn {
+            width: 45%;
+        }
+
+        .confirmation-buttons .action-btn.secondary {
+            background: var(--grey-color);
+        }
+        .confirmation-buttons .action-btn.secondary:hover {
+            background: var(--grey-darker);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .editor-toolbar {
+            display: flex;
+            flex-wrap: nowrap;
+            /* Ensure single row */
+            overflow-x: auto;            /* Allow horizontal scrolling on small screens */
+            gap: 8px;
+            padding: 8px;
+            background: #fff;
+            border: 1px solid var(--grey-medium);
+            border-bottom: none;
+            border-radius: var(--button-border-radius) var(--button-border-radius) 0 0;
+            -webkit-overflow-scrolling: touch;
+            /* Smooth scrolling on iOS */
+        }
+
+        /* Simple scrollbar styling */
+        .editor-toolbar::-webkit-scrollbar {
+            height: 4px;
+        }
+        .editor-toolbar::-webkit-scrollbar-thumb {
+            background: var(--grey-medium);
+            border-radius: 2px;
+        }
+
+        .toolbar-btn {
+            background: #fff;
+            border: 1px solid var(--grey-medium);
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+            /* Prevent buttons from shrinking */
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rich-text-editor {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px 15px;
+            border: 1px solid var(--grey-medium);
+            border-radius: 0 0 var(--button-border-radius) var(--button-border-radius);
+            outline: none;
+            font-size: 1rem;
+            line-height: 1.6;
+            background-color: #fff;
+        }
+        .rich-text-editor:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.2);
+        }
+        #long-text-viewer-modal .modal-content {
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        #long-text-viewer-content {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            word-wrap: break-word;
+        }
+        /* --- Calendar Styles --- */        #calendar-section,
+        #box-status-section {
+            background-color: #ffffff;
+            /* Explicitly set to white */
+        }
+
+        .calendar-header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        #calendar-month-year {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .calendar-nav-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--grey-darker);
+            cursor: pointer;
+        }
+        .calendar-container {
+            display: flex;
+            flex-direction: column;
+            /* Stacks grid and legend vertically */
+            gap: 10px;
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-bottom: 5px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--grey-color);
+        }
+
+        .calendar-days {            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-day {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background-color: #ebedf0;            /* Default color for empty days */
+            border-radius: var(--button-border-radius);
+            cursor: default;
+            transition: all 0.2s ease;
+            display: flex;
+            /* Added for centering day number */
+            align-items: center;
+            /* Added for centering day number */
+            justify-content: center;
+            /* Added for centering day number */
+            font-size: 0.9rem;
+            /* Added for day number size */
+            font-weight: 500;
+            /* Added for day number weight */
+        }
+        .calendar-day.has-cards {
+            cursor: pointer;
+        }
+
+        .calendar-day.has-cards:hover {
+            transform: scale(1.1);            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .calendar-day.level-0 {
+            background-color: #ebedf0;
+        }
+
+        .calendar-day.level-1 {
+            background-color: #9be9a8;
+        }
+        .calendar-day.level-2 {
+            background-color: #40c463;
+        }
+
+        .calendar-day.level-3 {
+            background-color: #30a14e;
+        }
+
+        .calendar-day.level-4 {
+            background-color: #216e39;
+        }        .calendar-legend {
+            display: flex;
+            justify-content: flex-end;
+            /* Aligns to the right */
+            align-items: center;
+            gap: 5px;            padding-top: 10px;
+            font-size: 0.8rem;
+            color: var(--grey-color);
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+
+        /* --- End of Calendar Style Changes --- */
+
+        /* --- Recent Cards Slider Styles --- */
+        #recent-cards-section {
+            background-color: #ffffff;
+            /* Explicitly set to white */
+            padding-top: 20px;
+            /* Reduced padding for compact view */
+            padding-bottom: 15px;
+            /* Reduced padding for compact view */
+        }
+        #recent-cards-section .recent-cards-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .recent-cards-nav {
+            background: var(--grey-light);
+            border: 1px solid var(--grey-medium);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .recent-cards-nav:hover:not([disabled]) {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        .recent-cards-nav[disabled] {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        #recent-cards-viewport {
+            flex-grow: 1;
+            overflow: hidden;
+            scroll-behavior: smooth;
+        }        #recent-cards-list {
+            display: flex;
+            gap: 10px;            /* Reduced from 15px */
+            padding: 10px 2px;
+        }
+
+        .recent-card-item {
+            flex: 0 0 140px;
+            /* Reduced from 150px */
+            height: 100px;
+            /* Reduced from 110px */
+            background-color: var(--grey-light);
+            border-radius: var(--button-border-radius);
+            box-shadow: var(--subtle-shadow);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .recent-card-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow);
+        }
+
+        /* --- End of Recent Cards Style Changes --- */
+        /* Day Summary Modal Styles */
+        #day-summary-modal .modal-content {
+            max-width: 500px;
+            padding-bottom: 30px;
+        }
+
+        #day-summary-list {
+            list-style: none;
+            padding: 0;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        #day-summary-list li {
+            background: var(--grey-light);
+            padding: 12px;
+            border-radius: var(--button-border-radius);
+            margin-bottom: 10px;
+            border-right: 4px solid var(--primary-color);
+        }        /* --- Styles for Full-Screen Add/Edit Card Modals --- */
+        #add-card-modal,
+        #edit-card-modal {
+            background: transparent;
+            padding: 0;            justify-content: flex-start;
+            align-items: stretch;
+            animation: fadeIn 0.3s forwards;
+        }
+
+        #add-card-modal .modal-content,
+        #edit-card-modal .modal-content {
+            width: 100%;
+            max-width: none;
+            height: 100%;
+            max-height: none;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            background-color: var(--grey-light);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: none;
+        }
+
+        /* --- New Header for Add/Edit Card Modals --- */
+        .add-edit-modal-header {
+            background-color: var(--primary-color);
+            /* Green theme color */
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;            /* Center the title */
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .header-title {
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-direction: row-reverse;
+            /* Puts icon on the right */
+        }
+
+        /* --- Form layout inside modal --- */
+        #add-card-modal .modal-content form,
+        #edit-card-modal .modal-content form {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .form-body-wrapper {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding-bottom: 80px;
+            /* Space for fixed footer buttons */
+        }        .form-group-category {
+            padding: 15px 20px 0 20px;
+        }
+
+        .form-group-category .form-control {
+            border: 1px solid var(--grey-medium);
+            box-shadow: var(--subtle-shadow);
+        }
+        .form-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--grey-light);
+            padding: 15px 20px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 15px;
+            z-index: 5;
+        }
+
+        .footer-btn {            flex-grow: 1;
+        }
+
+        .footer-btn.back {
+            background: var(--grey-color);
+        }
+        .footer-btn.back:hover {
+            background: var(--grey-darker);
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* --- Input Field Styling (روی کارت / پشت کارت) --- */
+        .form-group.card-input-wrapper {
+            position: relative;
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            margin: 15px 20px;
+            padding: 15px;
+            box-shadow: var(--subtle-shadow);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .form-group.card-input-wrapper label.card-label-tag {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background-color: var(--grey-light);
+            color: var(--grey-darker);
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;            font-weight: 500;
+            z-index: 2;
+        }
+
+        .form-group.card-input-wrapper textarea.form-control,
+        .form-group.card-input-wrapper .rich-text-editor {
+            width: 100%;
+            border: none;            padding: 30px 10px 10px 10px;
+            margin-top: 10px;
+            flex-grow: 1;
+            min-height: unset;
+            resize: none;
+            outline: none;
+            box-shadow: none;
+            background-color: transparent;
+        }
+        .form-group.card-input-wrapper textarea.form-control:focus,
+        .form-group.card-input-wrapper .rich-text-editor:focus {
+            border-color: transparent;
+            box-shadow: none;
+        }
+
+        #add-card-modal .editor-toolbar,
+        #edit-card-modal .editor-toolbar {
+            margin: 15px 20px 0;
+            flex-shrink: 0;
+        }
+        #add-card-modal .rich-text-editor-wrapper,
+        #edit-card-modal .rich-text-editor-wrapper {
+            margin: 0 20px 15px;            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+        #add-card-modal .rich-text-editor,
+        #edit-card-modal .rich-text-editor {
+            margin: 0;
+            border-top: none;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        /* --- High Quality Color Picker Styles --- */
+        .color-picker-overlay {
+            position: fixed;
+            background-color: white;
+            border: 1px solid var(--grey-medium);
+            border-radius: var(--button-border-radius);
+            box-shadow: var(--card-shadow);
+            padding: 10px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            z-index: 2000;
+            display: none;
+        }
+
+        .color-picker-overlay.active {
+            display: grid;
+        }
+        .color-swatch {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;            cursor: pointer;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+            /* High quality border effect */
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+        .color-swatch:hover {
+            transform: scale(1.15);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);        }
+
+        /* Styles for Review Cards Banner */
+        #review-cards-banner {
+            padding: 0;
+            /* Adjust padding as content has its own */
+            background: var(--gradient);
+            /* Green theme */
+            color: white;
+            border: none;
+            /* No border for a cleaner look */            box-shadow: 0 5px 15px rgba(0, 217, 104, 0.4);
+            /* Green shadow */
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+            /* Ensure inner elements are contained */
+            margin-bottom: 12px; /* Ensure spacing below it */
+        }
+
+        #review-cards-banner:hover {
+            transform: translateY(-3px);            box-shadow: 0 8px 20px rgba(0, 217, 104, 0.6);
+        }
+
+        .review-banner-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            /* Internal padding */
+            width: 100%;
+            height: 100%;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .review-banner-count {
+            background-color: white; /* Changed to white */
+            color: var(--primary-color); /* Changed to green */
+            padding: 8px 15px;
+            border-radius: var(--button-border-radius);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            min-width: 80px;
+            /* Ensure a consistent size */
+            justify-content: center;
+        }
+
+        .review-banner-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem; /* Smaller font size */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <header class="main-header">
+            <img src="images/logo.png" alt="لوگوی برنامه" class="main-logo" id="main-logo">
+            <div class="hamburger-menu">
+                <button class="hamburger-icon" id="hamburger-icon">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </header>
+        <div class="banner-content" id="main-banner">
+            <div class="banner-text">نام بنر: lightner.png</div>
+        </div>
+        <main id="main-view">
+            <div id="calendar-section" class="section-card">
+                <div class="calendar-header-controls">
+                    <button id="prev-month-btn" class="calendar-nav-btn"><i class="fas fa-chevron-right"></i></button>
+                    <h2 id="calendar-month-year" style="margin-bottom:0;"></h2>
+                    <button id="next-month-btn" class="calendar-nav-btn"><i class="fas fa-chevron-left"></i></button>
+                </div>
+                <div class="calendar-container">
+                    <div class="calendar-grid-wrapper">
+                        <div class="calendar-weekdays">                            <span>ج</span><span>پ</span><span>چ</span><span>س</span><span>د</span><span>ی</span><span>ش</span>
+                        </div>
+                        <div class="calendar-days" id="calendar-days-grid"></div>
+                    </div>                    <div class="calendar-legend">
+                        <span>کم</span>
+                        <div class="legend-color" style="background-color: #ebedf0;" title="0 کارت"></div>
+                        <div class="legend-color" style="background-color: #9be9a8;" title="1-9 کارت"></div>
+                        <div class="legend-color" style="background-color: #40c463;" title="10-14 کارت"></div>
+                        <div class="legend-color" style="background-color: #30a14e;" title="15-19 کارت"></div>
+                        <div class="legend-color" style="background-color: #216e39;" title="بیش از 20 کارت"></div>
+                        <span>زیاد</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Existing Review Cards Banner (single placement) -->
+            <div id="review-cards-banner" class="section-card">
+                <div class="review-banner-content">
+                    <div class="review-banner-count">
+                        <span id="review-cards-count">0</span>
+                        <span>کارت</span>
+                    </div>
+                    <div class="review-banner-text">
+                        <span>کارت‌های آماده برای مرور</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="box-status-section" class="section-card">
+                <h2><i class="fas fa-boxes-stacked"></i> تمام دسته‌ها</h2>
+                <div id="leitner-boxes-status"></div>
+            </div>
+            <div id="recent-cards-section" class="section-card">
+                <h2><i class="fas fa-history"></i> کارت‌های اخیر</h2>
+                <div class="recent-cards-wrapper">
+                    <button class="recent-cards-nav" id="recent-cards-prev"><i class="fas fa-chevron-right"></i></button>
+                    <div id="recent-cards-viewport">
+                        <div id="recent-cards-list"></div>
+                    </div>
+                    <button class="recent-cards-nav" id="recent-cards-next"><i class="fas fa-chevron-left"></i></button>
+                </div>
+            </div>
+        </main>
+
+        <div id="category-view-section">
+            <button class="close-button-circle" id="close-category-view-btn"><i class="fas fa-xmark"></i></button>
+            <h2 id="category-view-title"></h2>
+            <div class="category-controls">
+                <div class="controls-group">                    <div class="search-input-container">
+                        <i class="fas fa-search"></i>                        <input type="search" id="category-search-input" class="form-control"
+                            placeholder="جستجو در کارت‌ها...">
+                    </div>
+                </div>
+                <div class="controls-group options-group">                    <div id="view-layout-controls">
+                        <button class="layout-btn active" data-layout="grid" title="نمای شبکه‌ای (بند انگشتی)"><i
+                                class="fas fa-grip"></i></button>
+                        <button class="layout-btn" data-layout="list" title="نمای لیستی"><i
+                                class="fas fa-list"></i></button>
+                    </div>
+                    <div class="view-toggle-container">
+                        <span>نمایش رو</span>
+                        <label class="switch">                            <input type="checkbox" id="view-toggle-switch">
+                            <span class="slider"></span>
+                        </label>
+                        <span>نمایش پشت</span>
+                    </div>
+                </div>
+            </div>
+            <div id="category-card-list"></div>
+        </div>
+    </div>
+
+    <div class="fab-container" id="fab-container">
+        <button id="fab-button" class="fab-button"><i class="fas fa-plus"></i></button>
+    </div>
+
+    <!-- Modals -->
+    <div id="fab-action-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-button-circle" id="fab-action-modal-close"><i class="fas fa-xmark"></i></button>
+            <h3 class="modal-title">افزودن آیتم جدید</h3>
+            <div class="fab-modal-options">
+                <button id="fab-modal-new-category" class="action-btn"><i class="fas fa-folder-plus"></i> دسته
+                    جدید</button>
+                <button id="fab-modal-new-card" class="action-btn"><i class="fas fa-plus"></i> کارت جدید</button>
+            </div>
+        </div>    </div>
+    <!-- Added: Category Action Modal -->
+    <div id="category-action-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-button-circle" id="category-action-modal-close"><i class="fas fa-xmark"></i></button>
+            <h3 class="modal-title" id="category-action-title"></h3>
+            <div class="fab-modal-options">
+                <button id="category-modal-edit" class="action-btn"><i class="fas fa-pencil-alt"></i> ویرایش دسته</button>
+                <button id="category-modal-delete" class="action-btn delete-btn-style"><i class="fas fa-trash-alt"></i> حذف دسته</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="add-card-modal" class="modal">
+        <div class="modal-content">
+            <div class="add-edit-modal-header">
+                <h3 class="header-title"><span>افزودن کارت جدید</span> <i class="fas fa-plus"></i></h3>
+            </div>
+            <form id="add-card-form-modal">
+                <div class="form-body-wrapper">
+                    <div class="form-group-category">
+                        <div class="custom-select-wrapper" id="custom-select-modal">
+                            <div class="custom-select-trigger form-control">
+                                <span>یک دسته انتخاب کنید...</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="custom-options"></div>
+                        </div>
+                    </div>
+                    <div class="form-group card-input-wrapper">
+                        <label for="question-modal" class="card-label-tag">روی کارت</label>
+                        <textarea id="question-modal" class="form-control" rows="3" required
+                            placeholder="متن روی کارت را اینجا بنویسید..."></textarea>
+                    </div>
+                    <div class="editor-toolbar" id="toolbar-modal">
+                        <button type="button" class="toolbar-btn" data-command="bold"><i class="fas fa-bold"></i></button>
+                        <button type="button" class="toolbar-btn" data-command="justifyRight"><i
+                                class="fas fa-align-right"></i></button>
+                        <button type="button" class="toolbar-btn" data-command="justifyCenter"><i
+                                class="fas fa-align-center"></i></button>
+                        <button type="button" class="toolbar-btn" data-command="justifyLeft"><i
+                                class="fas fa-align-left"></i></button>
+                        <button type="button" class="toolbar-btn color-picker-trigger" data-command="hiliteColor"
+                            title="هایلایت"><i class="fas fa-highlighter"></i></button>
+                        <button type="button" class="toolbar-btn color-picker-trigger" data-command="foreColor"
+                            title="رنگ متن"><i class="fas fa-palette"></i></button>
+                    </div>
+                    <div class="rich-text-editor-wrapper">
+                        <div id="answer-editor-modal" class="rich-text-editor" contenteditable="true"
+                            placeholder="متن پشت کارت را اینجا بنویسید..."></div>
+                    </div>
+                </div>
+                <div class="form-footer">
+                    <button type="button" id="add-card-modal-back-btn" class="action-btn footer-btn back">بازگشت</button>
+                    <button type="submit" class="action-btn footer-btn">ذخیره کارت</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="edit-card-modal" class="modal">
+        <div class="modal-content">
+            <div class="add-edit-modal-header">
+                <h3 class="header-title"><span>ویرایش کارت</span></h3>
+            </div>
+            <form id="edit-card-form">
+                <div class="form-body-wrapper">
+                    <input type="hidden" id="edit-card-id">
+                    <div class="form-group card-input-wrapper">
+                        <label for="question-edit" class="card-label-tag">روی کارت</label>
+                        <textarea id="question-edit" class="form-control" rows="3" required
+                            placeholder="متن روی کارت را اینجا بنویسید..."></textarea>
+                    </div>
+                    <div class="editor-toolbar" id="toolbar-edit">
+                        <button type="button" class="toolbar-btn" data-command="bold"><i class="fas fa-bold"></i></button>
+                        <button type="button" class="toolbar-btn" data-command="justifyRight"><i
+                                class="fas fa-align-right"></i></button>
+                        <button type="button" class="toolbar-btn" data-command="justifyCenter"><i
+                                class="fas fa-align-center"></i></button>
+                        <button type="button" class="toolbar-btn" data-command="justifyLeft"><i
+                                class="fas fa-align-left"></i></button>
+                        <button type="button" class="toolbar-btn color-picker-trigger" data-command="hiliteColor"
+                            title="هایلایت"><i class="fas fa-highlighter"></i></button>
+                        <button type="button" class="toolbar-btn color-picker-trigger" data-command="foreColor"
+                            title="رنگ متن"><i class="fas fa-palette"></i></button>
+                    </div>
+                    <div class="rich-text-editor-wrapper">
+                        <div id="answer-editor-edit" class="rich-text-editor" contenteditable="true"
+                            placeholder="متن پشت کارت را اینجا بنویسید..."></div>
+                    </div>
+                </div>
+                <div class="form-footer">
+                    <button type="button" id="edit-card-modal-back-btn" class="action-btn footer-btn back">بازگشت</button>
+                    <button type="submit" class="action-btn footer-btn">ذخیره تغییرات</button>                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Changed: Add Category Modal HTML -->    <div id="add-category-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-button-circle" id="add-category-modal-close"><i class="fas fa-xmark"></i></button>
+            <h3 class="modal-title">ثبت دسته جدید</h3>
+            <form id="add-category-form">
+                <div class="form-group">
+                    <label for="category-name-input">نام دسته</label>
+                    <input type="text" id="category-name-input" class="form-control" required
+                        placeholder="املاک معین رامسر">
+                </div>
+                <div class="form-group">
+                    <label>انتخاب رنگ</label>
+                    <div id="category-color-selector" class="category-color-picker">
+                        <!-- Color swatches will be generated by JavaScript -->
+                    </div>
+                </div>
+                <button type="submit" class="action-btn"><i class="fas fa-check"></i> ثبت دسته</button>
+            </form>
+        </div>
+    </div>
+    <div id="alert-modal" class="modal">
+        <div class="modal-content">
+            <div id="alert-modal-icon"><i class="fas fa-triangle-exclamation"></i></div>
+            <h3 class="modal-title">توجه</h3>
+            <p id="alert-modal-message"></p><button id="alert-modal-close-btn" class="action-btn">متوجه شدم</button>
+        </div>
+    </div>
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="confirmation-title" class="modal-title">تایید عملیات</h3>
+            <p id="confirmation-message"></p>
+            <div class="confirmation-buttons">
+                <button id="confirm-btn" class="action-btn">تایید</button>
+                <button id="cancel-btn" class="action-btn secondary">لغو</button>
+            </div>
+        </div>
+    </div>
+    <div id="long-text-viewer-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-button-circle" id="long-text-viewer-close"><i class="fas fa-xmark"></i></button>
+            <div id="long-text-viewer-content"></div>
+        </div>
+    </div>
+    <div id="day-summary-modal" class="modal">
+        <div class="modal-content" id="day-summary-modal-content">
+            <h3 id="day-summary-title" class="modal-title">خلاصه روز</h3>
+            <ul id="day-summary-list"></ul>
+        </div>    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const LEITNER_CARDS_KEY = 'leitnerCardsData';
+            const CATEGORIES_KEY = 'leitnerCategoryNames';
+            let cards = [];
+            let leitnerCategoryNames = [];
+
+            const categoryColors = [
+                { main: '#4CAF50', light: '#E8F5E9' }, // Green (Default for all initial categories)
+                { main: '#2196F3', light: '#E3F2FD' }, // Blue
+                { main: '#FFC107', light: '#FFF8E1' }, // Amber
+                { main: '#E91E63', light: '#FCE4EC' }, // Pink
+                { main: '#9C27B0', light: '#F3E5F5' }, // Purple
+                { main: '#FF5722', light: '#FBE9E7' }  // Deep Orange
+            ];
+
+            let currentCategoryCards = [];
+            let initialCardFace = 'front';
+            let calendarDate = new Date();
+            let activeColorPicker = null;            let savedSelection = null;
+
+            // --- CORRECTED: Variable declaration block ---
+            const $ = (selector) => document.querySelector(selector);
+            const $$ = (selector) => document.querySelectorAll(selector);
+            const mainLogo = $('#main-logo');
+            const mainBanner = $('#main-banner');
+            const mainView = $('#main-view');
+            const boxesStatusContainer = $('#leitner-boxes-status');
+            const fabContainer = $('#fab-container');
+            const fabButton = $('#fab-button');
+            const hamburgerIcon = $('#hamburger-icon');
+            const addCardModal = $('#add-card-modal');            const addCardFormModal = $('#add-card-form-modal');
+            const questionInputModal = $('#question-modal');
+            const answerEditorModal = $('#answer-editor-modal');
+            const customSelectModal = $('#custom-select-modal');
+            const editCardModal = $('#edit-card-modal');
+            const editCardForm = $('#edit-card-form');
+            const editCardIdInput = $('#edit-card-id');
+            const questionEditInput = $('#question-edit');
+            const answerEditorEdit = $('#answer-editor-edit');
+            const addCategoryModal = $('#add-category-modal');
+            const addCategoryModalCloseBtn = $('#add-category-modal-close');
+            const addCategoryForm = $('#add-category-form');
+            const categoryNameInput = $('#category-name-input');
+            const alertModal = $('#alert-modal');
+            const alertModalMessage = $('#alert-modal-message');
+            const alertModalCloseBtn = $('#alert-modal-close-btn');
+            const confirmationModal = $('#confirmation-modal');
+            const confirmBtn = $('#confirm-btn');
+            const cancelBtn = $('#cancel-btn');
+            const longTextViewerModal = $('#long-text-viewer-modal');
+            const longTextViewerContent = $('#long-text-viewer-content');
+            const longTextViewerCloseBtn = $('#long-text-viewer-close');
+            const daySummaryModal = $('#day-summary-modal');
+            const daySummaryTitle = $('#day-summary-title');
+            const daySummaryList = $('#day-summary-list');
+            const categoryViewSection = $('#category-view-section');
+            const categoryViewTitle = $('#category-view-title');
+            const categoryCardList = $('#category-card-list');
+            const categorySearchInput = $('#category-search-input');
+            const closeCategoryViewBtn = $('#close-category-view-btn');
+            const viewToggleSwitch = $('#view-toggle-switch');
+            const viewLayoutControls = $('#view-layout-controls');            const recentCardsList = $('#recent-cards-list');
+            const calendarDaysGrid = $('#calendar-days-grid');
+            const calendarMonthYear = $('#calendar-month-year');
+            const prevMonthBtn = $('#prev-month-btn');
+            const nextMonthBtn = $('#next-month-btn');
+            const recentCardsViewport = $('#recent-cards-viewport');
+            const recentCardsPrev = $('#recent-cards-prev');
+            const recentCardsNext = $('#recent-cards-next');
+            const addCardModalBackBtn = $('#add-card-modal-back-btn');
+            const editCardModalBackBtn = $('#edit-card-modal-back-btn');
+            const fabActionModal = $('#fab-action-modal');
+            const fabActionModalClose = $('#fab-action-modal-close');
+            const fabModalNewCategoryBtn = $('#fab-modal-new-category');
+            const fabModalNewCardBtn = $('#fab-modal-new-card');
+            const categoryActionModal = $('#category-action-modal');
+            const categoryActionTitle = $('#category-action-title');
+            const categoryModalEditBtn = $('#category-modal-edit');
+            const categoryModalDeleteBtn = $('#category-modal-delete');
+            const categoryActionModalClose = $('#category-action-modal-close');
+            const reviewCardsBanner = $('#review-cards-banner');
+            const reviewCardsCount = $('#review-cards-count');
+            // --- END: Variable declaration block ---
+
+            let longPressTimer, isLongPress = false, confirmCallback = null;
+            let categoryLongPressTimer, isCategoryLongPress = false, currentCategoryIndexForAction = -1;
+            let editingCategoryIndex = -1;
+
+            const textColors = [
+                '#00D968', '#00B84B', '#2ECC71', '#27AE60',
+                '#3498DB', '#2980B9', '#8E44AD', '#9B59B6',
+                '#E74C3C', '#C0392B', '#E67E22', '#D35400',
+                '#F1C40F', '#F39C12', '#95A5A6', '#7F8C8D',
+                '#1ABC9C', '#16A085', '#34495E', '#2C3E50'
+            ];
+
+            function toPersianDigits(num) {
+                return num.toString().replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+            }
+
+            function saveData() {
+                localStorage.setItem(LEITNER_CARDS_KEY, JSON.stringify(cards));
+                localStorage.setItem(CATEGORIES_KEY, JSON.stringify(leitnerCategoryNames));
+                updateReviewCardsCount();
+            }
+
+            function loadData() {
+                const storedCategories = localStorage.getItem(CATEGORIES_KEY);
+                const defaultGreenColor = categoryColors[0];
+
+                const defaultCategories = [
+                    { name: 'نکات آموزشی', ...defaultGreenColor },
+                    { name: 'ویلا', ...defaultGreenColor },
+                    { name: 'زمین', ...defaultGreenColor },
+                    { name: 'آپارتمان', ...defaultGreenColor }
+                ];                let loadedCategories = [];
+                if (storedCategories) {
+                    try {
+                        const parsedCategories = JSON.parse(storedCategories);
+                        loadedCategories = parsedCategories.map(cat => {
+                            if (typeof cat === 'string') {
+                                return { name: cat, ...defaultGreenColor };
+                            } else if (cat && typeof cat === 'object' && (!cat.main || !cat.light)) {
+                                return { name: cat.name, ...defaultGreenColor };
+                            }
+                            return cat;
+                        });
+                    } catch (e) {
+                        console.error("Error parsing stored categories, resetting to default.", e);
+                        loadedCategories = defaultCategories;
+                    }
+                } else {
+                    loadedCategories = defaultCategories;
+                }
+                leitnerCategoryNames = loadedCategories;
+
+                const storedCards = localStorage.getItem(LEITNER_CARDS_KEY);
+                cards = storedCards ? JSON.parse(storedCards) : [];
+
+                const educationalCategoryIndex = leitnerCategoryNames.findIndex(cat => cat.name === 'نکات آموزشی');
+                if (educationalCategoryIndex !== -1) {
+                    const educationalBoxNumber = educationalCategoryIndex + 1;
+                    const educationalCardsToAdd = [
+                        { q: 'فسخ', a: 'پایان دادن به قرارداد توسط یکی از طرفین به صورت قانونی.' },
+                        { q: 'منفسخ', a: 'قراردادی که به صورت خودکار و بدون دخالت طرفین پایان می‌یابد.' },
+                        { q: 'اقاله', a: 'توافق طرفین برای خاتمه دادن به قرارداد.' },
+                        { q: 'انفساخ', a: 'از بین رفتن قرارداد به دلایلی خارج از اراده طرفین.' }
+                    ];
+                    let hasChanges = false;
+                    educationalCardsToAdd.forEach(eduCard => {
+                        const cardExists = cards.some(card => card.question === eduCard.q && card.box === educationalBoxNumber);
+                        if (!cardExists) {
+                            cards.push({ id: Date.now() + Math.random(), question: eduCard.q, answer: eduCard.a, box: educationalBoxNumber });
+                            hasChanges = true;
+                        }
+                    });
+                    if (hasChanges) {
+                        saveData();
+                    }
+                }
+            }
+
+            function saveSelection() {                if (window.getSelection) {
+                    const sel = window.getSelection();
+                    if (sel.getRangeAt && sel.rangeCount) {
+                        return sel.getRangeAt(0);
+                    }
+                } else if (document.selection && document.selection.createRange) {
+                    return document.selection.createRange();
+                }
+                return null;
+            }
+
+            function restoreSelection(range) {
+                if (range) {
+                    if (window.getSelection) {
+                        const sel = window.getSelection();
+                        sel.removeAllRanges();
+                        sel.addRange(range);
+                    } else if (document.selection && range.select) {
+                        range.select();
+                    }
+                }            }
+
+            function getJalaliDate(date) { return new Intl.DateTimeFormat('fa-IR-u-nu-latn', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(date); }
+            function getJalaliMonthName(date) { return new Intl.DateTimeFormat('fa-IR', { month: 'long' }).format(date); }
+            function getJalaliYear(date) { return new Intl.DateTimeFormat('fa-IR-u-nu-latn', { year: 'numeric' }).format(date); }
+
+            function getColorLevel(count) {
+                if (count > 20) return 'level-4';
+                if (count > 15) return 'level-3';
+                if (count > 10) return 'level-2';
+                if (count > 0) return 'level-1';
+                return 'level-0';            }
+
+            function showMainView() {
+                mainView.style.display = 'block';
+                mainBanner.style.display = 'flex';
+                fabContainer.style.display = 'flex';
+                updateStatus();
+                renderRecentCards();
+                renderCalendar();
+                updateReviewCardsCount();
+            }
+
+            function closeCategoryView() {
+                categoryViewSection.classList.add('closing');
+                document.body.classList.remove('modal-open');
+                setTimeout(() => {
+                    categoryViewSection.style.display = 'none';
+                    categoryViewSection.classList.remove('closing', 'visible');
+                    fabContainer.style.display = 'flex';
+                }, 400);
+            }
+
+            function renderRecentCards() {
+                recentCardsList.innerHTML = '';
+                const sortedCards = [...cards].sort((a, b) => b.id - a.id).slice(0, 15);
+                if (sortedCards.length === 0) {
+                    recentCardsList.innerHTML = '<p style="text-align:center; color: var(--grey-color); width: 100%;">کارتی برای نمایش وجود ندارد.</p>';
+                } else {
+                    sortedCards.forEach(card => {
+                        const cardEl = document.createElement('div');
+                        cardEl.className = 'recent-card-item';
+                        cardEl.textContent = card.question;
+                        cardEl.dataset.cardId = card.id;
+                        recentCardsList.appendChild(cardEl);
+                    });
+                }
+                setTimeout(updateRecentCardsSlider, 50);
+            }
+
+            function updateRecentCardsSlider() {
+                if (!recentCardsViewport) return;
+                const { scrollWidth, clientWidth } = recentCardsViewport;
+                const hasOverflow = scrollWidth > clientWidth;
+                recentCardsPrev.style.display = hasOverflow ? 'flex' : 'none';
+                recentCardsNext.style.display = hasOverflow ? 'flex' : 'none';
+                if (hasOverflow) {
+                    updateArrowVisibility();
+                }
+            }
+
+            function updateArrowVisibility() {
+                if (!recentCardsViewport) return;
+                const { scrollLeft, scrollWidth, clientWidth } = recentCardsViewport;
+                recentCardsPrev.disabled = scrollLeft < 10;
+                recentCardsNext.disabled = scrollLeft + clientWidth >= scrollWidth - 10;
+            }
+
+            function renderCalendar() {
+                calendarDaysGrid.innerHTML = '';
+                const cardCountsByDay = cards.reduce((acc, card) => {
+                    const cardDate = new Date(card.id);
+                    const dateKey = getJalaliDate(cardDate);
+                    acc[dateKey] = (acc[dateKey] || 0) + 1;
+                    return acc;
+                }, {});
+                const year = calendarDate.getFullYear(), month = calendarDate.getMonth();
+                calendarMonthYear.textContent = `${getJalaliMonthName(calendarDate)} ${getJalaliYear(calendarDate)}`;
+                const firstDayOfMonth = new Date(year, month, 1);
+                const numDays = new Date(year, month + 1, 0).getDate();
+                let offset = (5 - firstDayOfMonth.getDay() + 7) % 7;
+                for (let i = 0; i < offset; i++) {
+                    calendarDaysGrid.insertAdjacentHTML('beforeend', '<div class="calendar-day"></div>');
+                }
+                for (let day = 1; day <= numDays; day++) {
+                    const date = new Date(year, month, day);
+                    const dateKey = getJalaliDate(date);
+                    const count = cardCountsByDay[dateKey] || 0;
+                    const dayEl = document.createElement('div');
+                    dayEl.className = `calendar-day ${getColorLevel(count)} ${count > 0 ? 'has-cards' : ''}`;
+                    dayEl.dataset.date = date.toISOString().split('T')[0];
+                    dayEl.textContent = toPersianDigits(day);
+                    calendarDaysGrid.appendChild(dayEl);
+                }
+            }
+
+            function updateReviewCardsCount() {
+                const count = cards.filter(card => card.box === 1).length;
+                reviewCardsCount.textContent = toPersianDigits(count);
+            }
+
+            function updateStatus() {                boxesStatusContainer.innerHTML = "";
+                if (leitnerCategoryNames.length === 0) {                    boxesStatusContainer.innerHTML = '<p style="text-align:center; color: var(--grey-color);">هنوز دسته‌ای ساخته نشده است.</p>';
+                    return;
+                }
+                leitnerCategoryNames.forEach((category, index) => {
+                    const boxNumber = index + 1;
+                    const count = cards.filter(card => card.box === boxNumber).length;
+                    const boxEl = document.createElement('div');                    boxEl.className = 'box-status';
+                    const mainColor = category.main || categoryColors[0].main;
+                    const lightColor = category.light || categoryColors[0].light;
+                    boxEl.style.backgroundColor = lightColor;
+                    boxEl.style.color = mainColor;
+                    boxEl.style.borderColor = mainColor;
+                    boxEl.innerHTML = `${category.name}: <strong>${toPersianDigits(count)}</strong> کارت`;
+                    boxEl.dataset.boxIndex = boxNumber;
+                    boxEl.dataset.boxName = category.name;
+                    boxesStatusContainer.appendChild(boxEl);
+                });
+            }
+
+            function showCategoryView(boxIndex, boxName) {
+                fabContainer.style.display = 'none';
+                document.body.classList.add('modal-open');
+                categoryViewSection.classList.remove('closing');
+                categoryViewSection.classList.add('visible');
+                categoryViewTitle.innerHTML = `<i class="fas fa-folder-open"></i> ${boxName}`;
+                currentCategoryCards = cards.filter(card => card.box == boxIndex).sort((a, b) => b.id - a.id);
+                categorySearchInput.value = '';
+                viewToggleSwitch.checked = false;
+                initialCardFace = 'front';
+                const activeLayout = viewLayoutControls.querySelector('.layout-btn.active')?.dataset.layout || 'grid';
+                categoryCardList.className = `layout-${activeLayout}`;
+                renderCategoryCards();
+            }
+
+            function renderCategoryCards() {
+                removeActionMenu();
+                let filteredCards = [...currentCategoryCards];
+                const searchTerm = categorySearchInput.value.trim().toLowerCase();
+                if (searchTerm) {
+                    filteredCards = filteredCards.filter(card => card.question.toLowerCase().includes(searchTerm) || (card.answer && card.answer.toLowerCase().includes(searchTerm)));
+                }
+                categoryCardList.innerHTML = '';
+                if (filteredCards.length === 0) {
+                    categoryCardList.innerHTML = '<p style="text-align:center; color: var(--grey-color); grid-column: 1 / -1;">کارتی یافت نشد.</p>';
+                    return;
+                }
+                filteredCards.forEach(card => {
+                    const cardElement = document.createElement('div');
+                    cardElement.className = 'flip-card';
+                    cardElement.dataset.id = card.id;
+                    if (initialCardFace === 'back') cardElement.classList.add('flipped');
+                    cardElement.innerHTML = `<div class="flip-card-inner"><div class="flip-card-front"><p>${card.question}</p></div><div class="flip-card-back">${card.answer || ''}</div></div>`;
+                    categoryCardList.appendChild(cardElement);
+                });
+            }
+
+            function updateCustomDropdown(selectWrapper, preselectFirst = false) {
+                const optionsContainer = selectWrapper.querySelector('.custom-options');
+                const triggerSpan = selectWrapper.querySelector('.custom-select-trigger span');
+                const trigger = selectWrapper.querySelector('.custom-select-trigger');
+                optionsContainer.innerHTML = "";
+                if (leitnerCategoryNames.length === 0) {                    triggerSpan.textContent = "ابتدا یک دسته بسازید";
+                    delete trigger.dataset.value;
+                    return;
+                }
+                leitnerCategoryNames.forEach((category, index) => {
+                    const optionEl = document.createElement('div');
+                    optionEl.className = 'custom-option';
+                    optionEl.textContent = category.name;
+                    optionEl.dataset.value = index + 1;
+                    optionsContainer.appendChild(optionEl);
+                });
+                if (preselectFirst && leitnerCategoryNames.length > 0) {
+                    triggerSpan.textContent = leitnerCategoryNames[0].name;
+                    trigger.dataset.value = 1;
+                }
+            }
+
+            function showCustomAlert(message, title = "خطا") {
+                $('#alert-modal .modal-title').textContent = title;
+                alertModalMessage.textContent = message;
+                alertModal.style.display = 'flex';
+            }
+
+            function closeColorPicker() {
+                if (activeColorPicker) {
+                    activeColorPicker.remove();
+                    activeColorPicker = null;
+                    document.removeEventListener('click', closeColorPickerOnClickOutside);
+                }
+            }
+
+            function closeColorPickerOnClickOutside(event) {
+                if (activeColorPicker && !activeColorPicker.contains(event.target) && !event.target.closest('.color-picker-trigger')) {
+                    closeColorPicker();
+                }
+            }
+
+            function showColorPicker(buttonElement, command) {
+                if (activeColorPicker) {
+                    closeColorPicker();
+                    return;
+                }
+                const picker = document.createElement('div');
+                picker.className = 'color-picker-overlay';
+                textColors.forEach(color => {
+                    const swatch = document.createElement('div');
+                    swatch.className = 'color-swatch';
+                    swatch.style.backgroundColor = color;
+                    swatch.dataset.color = color;
+                    picker.appendChild(swatch);
+                });
+                picker.addEventListener('mousedown', e => e.preventDefault());
+                picker.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('color-swatch')) {
+                        const color = e.target.dataset.color;
+                        restoreSelection(savedSelection);
+                        const finalCommand = command === 'hiliteColor' ? 'backColor' : command;
+                        document.execCommand(finalCommand, false, color);
+                        closeColorPicker();
+                    }
+                });
+                document.body.appendChild(picker);
+                activeColorPicker = picker;
+                picker.classList.add('active');
+                const rect = buttonElement.getBoundingClientRect();
+                const pickerRect = picker.getBoundingClientRect();
+                let top = rect.bottom + 8;
+                let left = rect.left + (rect.width / 2) - (pickerRect.width / 2);                if (left < 10) left = 10;
+                if (left + pickerRect.width > window.innerWidth - 10) {
+                    left = window.innerWidth - pickerRect.width - 10;
+                }
+                if (top + pickerRect.height > window.innerHeight - 10) {
+                    top = rect.top - pickerRect.height - 8;
+                }
+                picker.style.top = `${top}px`;
+                picker.style.left = `${left}px`;
+                setTimeout(() => {
+                    document.addEventListener('click', closeColorPickerOnClickOutside);
+                }, 0);
+            }
+
+            function setupEditor(toolbarId, editorId) {
+                const toolbar = document.querySelector(`#${toolbarId}`);
+                const editor = document.querySelector(`#${editorId}`);
+                const save = () => {                    if (document.activeElement === editor) {
+                        savedSelection = saveSelection();
+                    }
+                };
+                editor.addEventListener('keyup', save);
+                editor.addEventListener('mouseup', save);
+                editor.addEventListener('focus', save);
+                editor.addEventListener('touchend', save);
+                const buttons = toolbar.querySelectorAll('button');
+                for (const button of buttons) {
+                    button.addEventListener('mousedown', (e) => {
+                        e.preventDefault();
+                    });
+                    if (button.classList.contains('color-picker-trigger')) {
+                        button.addEventListener('click', function () {
+                            const command = this.dataset.command;
+                            showColorPicker(this, command);
+                        });
+                    } else if (button.dataset.command) {
+                        button.addEventListener('click', () => {
+                            restoreSelection(savedSelection);
+                            document.execCommand(button.dataset.command, false, null);
+                            editor.focus();
+                            savedSelection = saveSelection();
+                        });
+                    }
+                }
+            }
+
+            function removeActionMenu() {
+                const menu = $('.card-action-menu');
+                if (menu) menu.remove();
+            }
+
+            function showActionMenu(cardElement) {
+                removeActionMenu();
+                isLongPress = true;
+                const cardId = cardElement.dataset.id;
+                const menu = document.createElement('div');
+                menu.className = 'card-action-menu';
+                menu.innerHTML = `<button class="card-action-btn edit-btn"><i class="fas fa-pencil-alt"></i> ویرایش</button><button class="card-action-btn delete-btn"><i class="fas fa-trash-alt"></i> حذف</button>`;
+                cardElement.appendChild(menu);
+                menu.querySelector('.edit-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    handleEditCard(cardId);
+                });                menu.querySelector('.delete-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    handleDeleteCard(cardId);
+                });
+            }
+
+            function showConfirmation(message, onConfirm) {
+                $('#confirmation-message').textContent = message;
+                confirmCallback = onConfirm;
+                confirmationModal.style.display = 'flex';
+            }
+
+            function handleCRUD(action, data) {
+                let cardIndex;
+                switch (action) {
+                    case 'delete':
+                        showConfirmation('آیا از حذف این کارت اطمینان دارید؟', () => {
+                            cardIndex = cards.findIndex(c => c.id == data.id);
+                            if (cardIndex > -1) {
+                                cards.splice(cardIndex, 1);
+                                saveData();
+                                renderCategoryCards();
+                                updateStatus();
+                                updateReviewCardsCount();
+                            }
+                            confirmationModal.style.display = 'none';
+                        });
+                        break;
+                    case 'edit':
+                        cardIndex = cards.findIndex(c => c.id == data.id);
+                        if (cardIndex > -1) {
+                            Object.assign(cards[cardIndex], data.updates);
+                            saveData();
+                            const categoryBox = cards[cardIndex].box;                            const categoryName = leitnerCategoryNames[categoryBox - 1].name;
+                            showCategoryView(categoryBox, categoryName);
+                            updateStatus();
+                            updateReviewCardsCount();
+                        }
+                        break;
+                    case 'add_card':
+                        if (!data.question.trim() || (data.answerHTML.trim() === '' || data.answerHTML.trim() === '<br>')) {
+                            showCustomAlert('کارت نباید خالی باشد.');
+                            return false;
+                        }
+                        if (!data.box) {                            showCustomAlert('لطفاً یک دسته را انتخاب کنید.');
+                            return false;
+                        }
+                        cards.push({ id: Date.now(), question: data.question, answer: data.answerHTML, box: parseInt(data.box, 10) });
+                        saveData();
+                        showMainView();
+                        updateReviewCardsCount();
+                        return true;
+                }
+            }
+
+            const handleEditCard = (id) => {
+                removeActionMenu();
+                const card = cards.find(c => c.id == id);
+                if (card) {
+                    editCardIdInput.value = card.id;
+                    questionEditInput.value = card.question;
+                    answerEditorEdit.innerHTML = card.answer || '';
+                    document.body.classList.add('modal-open');
+                    editCardModal.style.display = 'flex';
+                }
+            };
+
+            const handleDeleteCard = (id) => {
+                removeActionMenu();
+                handleCRUD('delete', { id });
+            };
+
+            function handleEditCategory(index) {
+                editingCategoryIndex = index;
+                const category = leitnerCategoryNames[index];
+                $('#add-category-modal .modal-title').textContent = 'ویرایش دسته';
+                $('#add-category-form .action-btn').innerHTML = '<i class="fas fa-save"></i> ذخیره تغییرات';
+                categoryNameInput.value = category.name;
+                renderColorPicker();
+                const currentSwatch = $(`#category-color-selector .color-swatch[style*="${category.main}"]`);
+                if (currentSwatch) {
+                    $$('#category-color-selector .color-swatch').forEach(sw => sw.classList.remove('selected'));
+                    currentSwatch.classList.add('selected');
+                }
+                addCategoryModal.style.display = 'flex';            }
+
+            function handleDeleteCategory(index) {
+                const categoryToDelete = leitnerCategoryNames[index];
+                const cardsInCategory = cards.filter(card => card.box === (index + 1));
+                if (cardsInCategory.length > 0) {
+                    showCustomAlert(`این دسته حاوی ${toPersianDigits(cardsInCategory.length)} کارت است. برای حذف دسته، ابتدا تمام کارت‌های آن را حذف یا منتقل کنید.`, 'خطا در حذف');
+                    return;
+                }
+                showConfirmation(`آیا از حذف دسته "${categoryToDelete.name}" اطمینان دارید؟`, () => {
+                    leitnerCategoryNames.splice(index, 1);                    cards.forEach(card => {
+                        if (card.box > (index + 1)) {                            card.box--;
+                        }
+                    });
+                    saveData();
+                    updateStatus();
+                    updateCustomDropdown(customSelectModal, true);
+                    updateReviewCardsCount();
+                    confirmationModal.style.display = 'none';
+                });
+            }
+
+            function showCategoryActionModal(categoryName, categoryIndex) {
+                currentCategoryIndexForAction = categoryIndex;
+                categoryActionTitle.textContent = `عملیات برای "${categoryName}"`;
+                categoryActionModal.style.display = 'flex';
+            }
+
+            function renderColorPicker() {
+                const colorContainer = $('#category-color-selector');
+                colorContainer.innerHTML = '';
+                categoryColors.forEach((color, index) => {
+                    const swatch = document.createElement('div');
+                    swatch.className = 'color-swatch';
+                    swatch.style.backgroundColor = color.main;
+                    swatch.dataset.colorMain = color.main;
+                    swatch.dataset.colorLight = color.light;
+                    if (index === 0) {
+                        swatch.classList.add('selected');
+                    }
+                    colorContainer.appendChild(swatch);
+                });
+            }
+
+            mainLogo.addEventListener('click', () => {
+                if (categoryViewSection.classList.contains('visible')) {
+                    closeCategoryView();
+                }
+            });
+
+            closeCategoryViewBtn.addEventListener('click', closeCategoryView);
+
+            hamburgerIcon.addEventListener('click', () => window.location.href = 'lightner.menu.html');
+
+            boxesStatusContainer.addEventListener('mousedown', (e) => {                const box = e.target.closest('.box-status');
+                if (box) {
+                    isCategoryLongPress = false;
+                    categoryLongPressTimer = setTimeout(() => {
+                        isCategoryLongPress = true;                        showCategoryActionModal(box.dataset.boxName, parseInt(box.dataset.boxIndex) - 1);
+                    }, 700);
+                }
+            });
+            boxesStatusContainer.addEventListener('mouseup', (e) => {
+                clearTimeout(categoryLongPressTimer);
+                const box = e.target.closest('.box-status');
+                if (box && !isCategoryLongPress) {
+                    showCategoryView(box.dataset.boxIndex, box.dataset.boxName);
+                }
+                isCategoryLongPress = false;
+            });
+            boxesStatusContainer.addEventListener('touchstart', (e) => {                const box = e.target.closest('.box-status');
+                if (box) {
+                    isCategoryLongPress = false;
+                    categoryLongPressTimer = setTimeout(() => {
+                        isCategoryLongPress = true;
+                        e.preventDefault();
+                        showCategoryActionModal(box.dataset.boxName, parseInt(box.dataset.boxIndex) - 1);
+                    }, 700);
+                }
+            }, { passive: false });
+            boxesStatusContainer.addEventListener('touchend', () => clearTimeout(categoryLongPressTimer));
+            boxesStatusContainer.addEventListener('mouseleave', () => clearTimeout(categoryLongPressTimer));
+            boxesStatusContainer.addEventListener('touchmove', () => clearTimeout(categoryLongPressTimer));
+
+            recentCardsList.addEventListener('click', (e) => {
+                const item = e.target.closest('.recent-card-item');                if (!item) return;
+                const card = cards.find(c => c.id == item.dataset.cardId);
+                if (card) {
+                    const categoryName = leitnerCategoryNames[card.box - 1].name;
+                    showCategoryView(card.box, categoryName);
+                }
+            });
+
+            recentCardsPrev.addEventListener('click', () => { recentCardsViewport.scrollLeft -= 200; });
+            recentCardsNext.addEventListener('click', () => { recentCardsViewport.scrollLeft += 200; });
+            recentCardsViewport.addEventListener('scroll', updateArrowVisibility);
+
+            calendarDaysGrid.addEventListener('click', (e) => {
+                const dayEl = e.target.closest('.calendar-day.has-cards');
+                if (!dayEl) return;
+                const dateStr = dayEl.dataset.date;                const dateObj = new Date(dateStr + 'T00:00:00');
+                const cardsForDay = cards.filter(c => getJalaliDate(new Date(c.id)) === getJalaliDate(dateObj));
+                daySummaryTitle.textContent = `خلاصه روز ${getJalaliDate(dateObj)}`;
+                daySummaryList.innerHTML = cardsForDay.map(c => `<li>${c.question}</li>`).join('') || '<li>کارتی ثبت نشده.</li>';
+                daySummaryModal.style.display = 'flex';
+            });
+
+            prevMonthBtn.addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() - 1); renderCalendar(); });
+            nextMonthBtn.addEventListener('click', () => { calendarDate.setMonth(calendarDate.getMonth() + 1); renderCalendar(); });
+
+            viewToggleSwitch.addEventListener('change', (e) => {
+                initialCardFace = e.target.checked ? 'back' : 'front';
+                renderCategoryCards();
+            });
+            viewLayoutControls.addEventListener('click', (e) => {
+                const btn = e.target.closest('.layout-btn');
+                if (btn && !btn.classList.contains('active')) {
+                    $$('#view-layout-controls .layout-btn').forEach(b => b.classList.remove('active'));                    btn.classList.add('active');
+                    categoryCardList.className = `layout-${btn.dataset.layout}`;
+                }
+            });
+            categorySearchInput.addEventListener('input', renderCategoryCards);
+
+            const cardInteractionEvents = {
+                start: (e) => {
+                    const c = e.target.closest('.flip-card');
+                    if (c && !c.querySelector('.card-action-menu')) {
+                        isLongPress = false;
+                        longPressTimer = setTimeout(() => showActionMenu(c), 700);
+                    }
+                },
+                end: (e) => {
+                    clearTimeout(longPressTimer);
+                    setTimeout(() => {
+                        if (!isLongPress) {
+                            const card = e.target.closest('.flip-card');
+                            if (!card) return;
+                            const isBack = e.target.closest('.flip-card-back');
+                            const isGrid = categoryCardList.classList.contains('layout-grid');
+                            if (isBack && isGrid) {
+                                const cardData = currentCategoryCards.find(c => c.id == card.dataset.id);
+                                if (cardData) {
+                                    longTextViewerContent.innerHTML = cardData.answer || '';
+                                    longTextViewerModal.style.display = 'flex';
+                                }
+                            } else if (!e.target.closest('.card-action-menu')) {
+                                card.classList.toggle('flipped');
+                            }
+                        }
+                        isLongPress = false;
+                    }, 50);
+                },
+                cancel: () => clearTimeout(longPressTimer)
+            };            categoryCardList.addEventListener('mousedown', cardInteractionEvents.start);
+            categoryCardList.addEventListener('mouseup', cardInteractionEvents.end);
+            categoryCardList.addEventListener('mouseleave', cardInteractionEvents.cancel);            categoryCardList.addEventListener('touchstart', cardInteractionEvents.start, { passive: true });
+            categoryCardList.addEventListener('touchend', cardInteractionEvents.end);
+            categoryCardList.addEventListener('touchmove', cardInteractionEvents.cancel);
+
+            addCategoryForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const categoryName = categoryNameInput.value.trim();
+                const selectedSwatch = $('#category-color-selector .color-swatch.selected');
+                const colorData = {
+                    main: selectedSwatch.dataset.colorMain,
+                    light: selectedSwatch.dataset.colorLight
+                };
+                if (!categoryName) {
+                    showCustomAlert('نام دسته نمی‌تواند خالی باشد.');
+                    return;
+                }
+                if (editingCategoryIndex === -1) {
+                    if (leitnerCategoryNames.some(cat => cat.name === categoryName)) {
+                        showCustomAlert('این دسته از قبل وجود دارد.');
+                        return;
+                    }
+                    leitnerCategoryNames.push({ name: categoryName, ...colorData });
+                } else {
+                    if (leitnerCategoryNames.some((cat, idx) => idx !== editingCategoryIndex && cat.name === categoryName)) {
+                        showCustomAlert('این نام دسته از قبل وجود دارد. لطفاً نام دیگری انتخاب کنید.');
+                        return;
+                    }
+                    leitnerCategoryNames[editingCategoryIndex] = { name: categoryName, ...colorData };
+                    editingCategoryIndex = -1;
+                }
+                saveData();
+                updateStatus();
+                updateCustomDropdown(customSelectModal, true);
+                addCategoryForm.reset();
+                addCategoryModal.style.display = 'none';
+                $('#add-category-modal .modal-title').textContent = 'ثبت دسته جدید';
+                $('#add-category-form .action-btn').innerHTML = '<i class="fas fa-check"></i> ثبت دسته';            });
+
+            [addCardModal, editCardModal, addCategoryModal, longTextViewerModal, daySummaryModal, alertModal, confirmationModal, fabActionModal, categoryActionModal].forEach(modal => {
+                const closeBtn = modal.querySelector('.close-button-circle, .back');
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                        document.body.classList.remove('modal-open');
+                        if (modal === addCategoryModal) {
+                            editingCategoryIndex = -1;
+                            $('#add-category-modal .modal-title').textContent = 'ثبت دسته جدید';
+                            $('#add-category-form .action-btn').innerHTML = '<i class="fas fa-check"></i> ثبت دسته';
+                        }
+                        if (modal === categoryActionModal) {
+                            currentCategoryIndexForAction = -1;
+                        }
+                    }
+                });
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', () => {
+                        modal.style.display = 'none';
+                        document.body.classList.remove('modal-open');
+                        if (modal === addCategoryModal) {
+                            editingCategoryIndex = -1;
+                            $('#add-category-modal .modal-title').textContent = 'ثبت دسته جدید';
+                            $('#add-category-form .action-btn').innerHTML = '<i class="fas fa-check"></i> ثبت دسته';
+                        }
+                        if (modal === categoryActionModal) {
+                            currentCategoryIndexForAction = -1;
+                        }
+                    });                }
+            });
+
+            alertModalCloseBtn.addEventListener('click', () => alertModal.style.display = 'none');
+            cancelBtn.addEventListener('click', () => confirmationModal.style.display = 'none');
+            confirmBtn.addEventListener('click', () => { if (confirmCallback) confirmCallback(); });
+
+            categoryModalEditBtn.addEventListener('click', () => {
+                categoryActionModal.style.display = 'none';
+                if (currentCategoryIndexForAction !== -1) {
+                    handleEditCategory(currentCategoryIndexForAction);
+                }
+            });
+
+            categoryModalDeleteBtn.addEventListener('click', () => {
+                categoryActionModal.style.display = 'none';
+                if (currentCategoryIndexForAction !== -1) {
+                    handleDeleteCategory(currentCategoryIndexForAction);
+                }
+            });
+
+            fabButton.addEventListener('click', () => {
+                const icon = fabButton.querySelector('i');
+                icon.style.transform = 'rotate(135deg)';
+                fabActionModal.style.display = 'flex';
+                const closeFab = () => icon.style.transform = 'rotate(0deg)';
+                fabActionModal.addEventListener('click', closeFab, { once: true });
+                fabActionModalClose.addEventListener('click', closeFab, { once: true });
+            });
+
+            fabModalNewCardBtn.addEventListener('click', () => {
+                fabActionModal.style.display = 'none';
+                document.body.classList.add('modal-open');
+                addCardModal.style.display = 'flex';
+                updateCustomDropdown(customSelectModal, true);
+            });
+
+            fabModalNewCategoryBtn.addEventListener('click', () => {
+                fabActionModal.style.display = 'none';
+                addCategoryModal.style.display = 'flex';
+                renderColorPicker();
+            });
+
+            $('#category-color-selector').addEventListener('click', (e) => {
+                if (e.target.classList.contains('color-swatch')) {
+                    $$('#category-color-selector .color-swatch').forEach(sw => sw.classList.remove('selected'));
+                    e.target.classList.add('selected');
+                }
+            });
+
+            addCardModalBackBtn.addEventListener('click', () => {
+                addCardModal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+            });
+
+            editCardModalBackBtn.addEventListener('click', () => {
+                editCardModal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+            });
+
+            addCardFormModal.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const trigger = customSelectModal.querySelector('.custom-select-trigger');                if (handleCRUD('add_card', {
+                        question: questionInputModal.value,
+                        answerHTML: answerEditorModal.innerHTML,
+                        box: trigger.dataset.value
+                    })) {
+                    addCardModal.style.display = 'none';
+                    document.body.classList.remove('modal-open');
+                    addCardFormModal.reset();
+                    answerEditorModal.innerHTML = '';
+                }
+            });
+
+            editCardForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const cardIndex = cards.findIndex(c => c.id == editCardIdInput.value);
+                if (cardIndex > -1) {
+                    cards[cardIndex].question = questionEditInput.value.trim();
+                    cards[cardIndex].answer = answerEditorEdit.innerHTML;
+                    saveData();
+                    renderCategoryCards();
+                }
+                editCardModal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+            });
+
+            customSelectModal.querySelector('.custom-select-trigger').addEventListener('click', (e) => {
+                e.stopPropagation();
+                customSelectModal.classList.toggle('active');
+            });
+
+            customSelectModal.querySelector('.custom-options').addEventListener('click', (e) => {
+                if (e.target.classList.contains('custom-option')) {
+                    const trigger = customSelectModal.querySelector('.custom-select-trigger');
+                    trigger.querySelector('span').textContent = e.target.textContent;
+                    trigger.dataset.value = e.target.dataset.value;
+                    customSelectModal.classList.remove('active');
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.custom-select-wrapper')) {
+                    customSelectModal.classList.remove('active');
+                }
+                if (!e.target.closest('.fab-container') && !e.target.closest('#fab-action-modal')) {
+                    fabButton.querySelector('i').style.transform = 'rotate(0deg)';
+                }
+                if (!e.target.closest('.flip-card')) removeActionMenu();
+            });
+
+            reviewCardsBanner.addEventListener('click', () => {
+                const cardsForReviewToday = cards.filter(card => {
+                    if (!card.nextReviewDate) return card.box === 1;
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    const nextReview = new Date(card.nextReviewDate);
+                    nextReview.setHours(0, 0, 0, 0);
+                    return nextReview <= today;
+                });
+                daySummaryTitle.textContent = `کارت‌های آماده برای مرور`;
+                daySummaryList.innerHTML = cardsForReviewToday.map(c => `<li>${c.question}</li>`).join('') || '<li>هیچ کارتی برای مرور امروز آماده نیست.</li>';
+                daySummaryModal.style.display = 'flex';
+            });
+
+            setupEditor('toolbar-modal', 'answer-editor-modal');
+            setupEditor('toolbar-edit', 'answer-editor-edit');
+
+            // Initial load and render calls
+            loadData();
+            updateCustomDropdown(customSelectModal, true);
+            showMainView();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,2199 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تقویم تولید محتوا</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- استایل‌های پایه --- */
+        :root {
+            --primary-color: #00D968;
+            --primary-light: #E6F8EE;
+            --secondary-color: #00B84B;
+            --dark-color: #333;
+            --light-color: #f8f9fa;
+            --shadow: 0 10px 30px rgba(0, 217, 104, 0.1);
+            --transition: all 0.3s ease;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --card-shadow: 0 15px 35px rgba(0, 217, 104, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            --subtle-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --hover-transform: translateY(-5px);
+            --border-radius: 16px;
+            --button-border-radius: 8px;
+            --border-color: #e0e0e0;            
+            --grey-color: #6c757d;
+            --grey-light: #f8f9fa;
+            --grey-medium: #dee2e6;
+            --grey-darker: #495057;
+
+            /* Specific to Content Calendar */
+            --instagram-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            /* Content Type Colors */
+            --color-post: #2196F3;
+            --color-story: #E91E63;
+            --color-reels: #8a3ab9;
+
+            /* Status Colors */
+            --status-ideation: #ffc107;
+            --status-producing: #ff9800;
+            --status-review: #03a9f4;
+            --status-approved: #4caf50;
+            --status-scheduled: #9c27b0;
+            --status-published: #607d8b;
+
+            /* Alert Colors - Harmonized */
+            --alert-success-bg: #d4edda;
+            --alert-success-text: #28a745;
+            --alert-success-border: #a3e9a4;
+            --alert-info-bg: #E6F8EE;
+            --alert-info-text: #00D968;
+            --alert-info-border: #e0e0e0;
+            --alert-error-bg: #f8d7da;
+            --alert-error-text: #e53935;
+            --alert-error-border: #f5c6cb;            
+            /* New specific colors for date picker button */
+            --datetime-btn-bg: linear-gradient(135deg, #1976D2, #1565C0);
+            --datetime-btn-active-bg: linear-gradient(135deg, #43A047, #2E7D32);
+            /* Content indicator colors */
+            --content-indicator-color: #e53935;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            color: var(--dark-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background-color: #ffffff;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            margin-top: 10px;
+            width: 100%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .app-content {
+            width: 100%;
+            padding: 40px;
+            position: relative;
+            animation: fadeIn 1s forwards;
+            margin-bottom: 20px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: var(--dark-color);
+            margin-bottom: 30px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            position: relative;            
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+        }        
+
+        /* کنترل‌های تقویم */
+        .calendar-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .month-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .month-selector h2 {
+            font-size: 1.5rem;
+            color: var(--dark-color);
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            flex-shrink: 1;
+            text-align: center;
+        }
+
+        .month-nav {
+            background: white;
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;            
+            border-radius: 50%;
+            display: flex;
+            align-items: center;            
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--dark-color);
+            flex-shrink: 0;
+        }
+
+        .month-nav:hover {
+            background: var(--primary-light);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .view-selector {
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .view-btn {
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            color: var(--dark-color);
+        }
+
+        .view-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .view-btn:hover:not(.active) {
+            background: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        /* راهنمای وضعیت‌ها */
+        .status-guide {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: var(--light-color);
+            border-radius: var(--button-border-radius);
+        }
+
+        .status-item {            
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+        }
+        
+        .status-box {
+            width: 12px;            
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .status-box.ideation { background-color: var(--status-ideation); }
+        .status-box.producing { background-color: var(--status-producing); }
+        .status-box.review { background-color: var(--status-review); }
+        .status-box.approved { background-color: var(--status-approved); }
+        .status-box.scheduled { background-color: var(--status-scheduled); }
+        .status-box.published { background-color: var(--status-published); }        
+
+        /* --- استایل‌های تقویم (مشترک) --- */
+        .calendar-grid {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 30px;
+        }
+
+        /* --- تقویم ماهانه (3 روز در هر ردیف) --- */
+        .calendar-monthly {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;            
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .calendar-day-cell {
+            background: white;
+            border: 1px solid var(--grey-medium);
+            border-radius: var(--button-border-radius);
+            padding: 15px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            min-height: 120px;
+        }
+
+        .calendar-day-cell:hover {
+            background: var(--primary-light);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .calendar-day-cell.today {            
+            background: var(--primary-color);
+            color: white;
+            font-weight: bold;
+        }
+
+        .calendar-day-cell.other-month {
+            color: #ccc;
+            background: #f9f9f9;
+        }
+
+        .calendar-day-cell.last-day {
+            grid-column: 1 / -1;
+            max-width: none;
+        }        
+
+        .calendar-day-cell .day-number {
+            font-weight: 600;
+            margin-bottom: 6px;                        
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+
+        .calendar-day-cell.today .day-number {
+            color: white;
+        }
+
+        .calendar-day-cell .content-indicator {
+            position: absolute;
+            top: 10px;            
+            right: 10px;
+            width: 10px;
+            height: 10px;
+            background: var(--content-indicator-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-day-cell .content-count {
+            font-size: 0.75rem;
+            color: var(--grey-color);
+            margin-top: auto;
+            text-align: center;
+        }
+
+        /* --- تقویم هفتگی (3 ردیف) --- */
+        .calendar-weekly {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, auto);
+            gap: 12px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .weekly-day-cell {
+            background: white;            
+            border: 1px solid var(--grey-medium);
+            border-radius: var(--button-border-radius);            
+            padding: 15px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;            
+            min-height: 140px;
+        }
+
+        .weekly-day-cell:hover {
+            background: var(--primary-light);
+            border-color: var(--primary-color);            
+            transform: translateY(-3px);
+            box-shadow: var(--subtle-shadow);
+        }
+
+        .weekly-day-cell.today {
+            border-color: var(--primary-color);            
+            border-width: 2px;
+            background: var(--primary-light);
+        }
+
+        /* جمعه - تمام عرض */
+        .weekly-day-cell.friday {
+            grid-column: 1 / -1;
+            max-width: none;
+        }
+
+        .weekly-day-header {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--grey-darker);
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .weekly-day-date {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .weekly-day-cell .content-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 10px;
+            height: 10px;
+            background: var(--content-indicator-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }        
+
+        .weekly-content-preview {
+            font-size: 0.75rem;
+            color: var(--grey-color);
+            text-align: center;
+            margin-top: auto;        
+        }
+        
+        /* دکمه‌های عملیات */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }        
+        
+        .action-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: var(--button-border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 217, 104, 0.3);
+            color: var(--primary-color);
+        }
+
+        .action-btn i {
+            margin-right: 5px;
+            margin-left: 0;
+        }
+
+        /* --- مودال افزودن/ویرایش محتوا --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            animation: fadeInModal 0.3s ease forwards;
+            overflow-y: auto;
+        }
+
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }        
+        
+        .modal-content {
+            background: white;
+            border-radius: 0;
+            padding: 30px 40px;
+            width: 100%;
+            max-width: 100%;
+            height: 100vh;
+            position: relative;
+            box-shadow: var(--card-shadow);
+            animation: zoomInModal 0.3s ease forwards;
+            margin: 0;
+            overflow-y: auto;
+        }
+
+        @keyframes zoomInModal {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* دکمه ضربدر در دایره قرمز */
+        .close-button-circle {
+            position: absolute;
+            top: 30px;
+            left: 40px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #e53935;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            z-index: 10;
+        }
+
+        .close-button-circle:hover {
+            transform: scale(1.1);
+            background-color: #c62828;
+        }
+
+        .modal-title {
+            margin-bottom: 25px;
+            font-size: 1.7rem;
+            text-align: center;
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;        
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: right;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;            
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-align: right;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--grey-medium);
+            border-radius: var(--button-border-radius);
+            outline: none;
+            font-size: 0.95rem;            
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            transition: var(--transition);
+            background-color: #fff;
+            color: var(--dark-color);
+            text-align: right;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);            
+            box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
+        }        
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        select.form-control {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='%2300D968' stroke='%2300D968' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 0.75rem center;
+            background-size: 12px;
+            padding-left: 2.5rem;
+            padding-right: 15px;
+            cursor: pointer;
+        }
+
+        .datetime-picker-button {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--grey-medium);
+            border-radius: var(--button-border-radius);
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            transition: var(--transition);
+            background: var(--datetime-btn-bg);
+            color: white;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;            
+            gap: 8px;
+        }
+
+        .datetime-picker-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+        }
+
+        .datetime-picker-button.active-selection {
+            background: var(--datetime-btn-active-bg);            
+            box-shadow: 0 4px 12px rgba(67, 160, 71, 0.3);
+        }        
+
+        /* KPI Suggestions */
+        .kpi-suggestions {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: var(--primary-light);
+            border-radius: var(--button-border-radius);            
+            border: 1px dashed var(--primary-color);
+            font-size: 0.8rem;
+            color: var(--dark-color);
+        }
+
+        .kpi-suggestion {
+            display: inline-block;            
+            background-color: var(--primary-light);
+            padding: 3px 8px;
+            border-radius: 10px;
+            margin: 3px;
+            cursor: pointer;            
+            transition: background-color 0.2s;
+            color: var(--primary-color);
+        }
+
+        .kpi-suggestion:hover {
+            background-color: var(--primary-color);            
+            color: white;
+        }
+
+        .modal-buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: flex-start;
+            gap: 15px;
+            grid-column: 1 / -1;
+            flex-direction: row-reverse;
+        }
+
+        .modal-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: var(--button-border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Vazirmatn', Arial, sans-serif;
+            font-weight: 500;
+        }
+
+        .modal-btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .modal-btn-primary:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }        
+
+        .modal-btn-secondary {
+            background: var(--grey-medium);
+            color: var(--dark-color);
+            border: 1px solid var(--grey-color);
+        }
+
+        .modal-btn-secondary:hover {
+            background: var(--grey-color);
+            color: white;
+        }
+
+        .modal-btn-delete {
+            background-color: var(--alert-error-text);
+            color: white;
+            margin-right: auto;
+            margin-left: 0;
+        }
+
+        .modal-btn-delete:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        /* پیام‌های خطا (Alerts) */
+        .app-alert {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 15px 20px;
+            background: #fff;
+            border-right: 4px solid;
+            border-radius: 4px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 1100;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            max-width: 400px;
+            animation: slideIn 0.3s forwards;
+            direction: rtl;        
+        }
+
+        .app-alert.success {
+            background-color: var(--alert-success-bg);
+            color: var(--alert-success-text);
+            border-color: var(--alert-success-border);
+        }
+
+        .app-alert.info {
+            background-color: var(--alert-info-bg);
+            color: var(--alert-info-text);
+            border-color: var(--alert-info-border);
+        }
+
+        .app-alert.error {
+            background-color: var(--alert-error-bg);
+            color: var(--alert-error-text);
+            border-color: var(--alert-error-border);
+        }
+
+        .app-alert i {
+            font-size: 1.5rem;
+            margin-right: 10px;
+            margin-left: 0;
+        }
+
+        .app-alert.success i { color: var(--alert-success-text); }
+        .app-alert.info i { color: var(--alert-info-text); }
+        .app-alert.error i { color: var(--alert-error-text); }
+
+        .app-alert .message-content {
+            flex-grow: 1;
+        }
+
+        .app-alert .close-alert {
+            cursor: pointer;
+            font-size: 1.2rem;            
+            color: #aaa;
+        }
+
+        .app-alert .close-alert:hover {
+            color: #777;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }        
+        }
+
+        /* --- پاپ‌آپ تاریخ --- */
+        .datetime-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .datetime-popup.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .datetime-popup-content {
+            background: white;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            width: 90%;
+            max-width: 450px;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease-in-out;
+            text-align: center;
+        }
+
+        .datetime-popup.active .datetime-popup-content {
+            transform: scale(1);
+        }
+
+        .datetime-popup-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;            
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--grey-medium);
+        }
+
+        .datetime-popup-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .datetime-popup-close {
+            background: none;
+            border: none;            
+            font-size: 1.5rem;
+            color: var(--grey-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .datetime-popup-close:hover {
+            color: var(--alert-error-text);
+        }
+
+        /* Persian Calendar Specific Styles */
+        .persian-calendar {
+            text-align: center;
+        }
+
+        .calendar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .calendar-nav {
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: var(--button-border-radius);
+            transition: var(--transition);
+        }        
+        
+        .calendar-nav:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+        
+        .calendar-month-year {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: var(--button-border-radius);
+            transition: var(--transition);
+        }
+
+        .calendar-month-year:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .calendar-grid-popup {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .calendar-day-header-popup {
+            padding: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--grey-color);
+            background-color: var(--grey-light);
+            border-radius: var(--button-border-radius);
+        }
+
+        .calendar-day {
+            padding: 10px;
+            cursor: pointer;
+            border-radius: var(--button-border-radius);
+            transition: var(--transition);
+            font-size: 0.95rem;
+            color: var(--dark-color);
+        }
+
+        .calendar-day:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .calendar-day.selected {            
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .calendar-day.current-day {
+            font-weight: bold;
+            border: 1px solid var(--primary-color);
+        }
+        
+        .calendar-day.other-month {            
+            color: #ccc;
+            pointer-events: none;
+        }
+
+        /* Month/Year Selector */
+        .month-year-selector {
+            display: none;            
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }        
+
+        .month-year-selector.active {
+            display: grid;
+        }
+
+        .month-year-item {
+            padding: 10px;
+            background: var(--grey-light);            
+            border-radius: var(--button-border-radius);
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+            font-size: 0.95rem;
+            color: var(--dark-color);
+        }
+
+        .month-year-item:hover {
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .month-year-item.selected {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .datetime-confirm-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: var(--button-border-radius);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Vazirmatn', Arial, sans-serif;
+        }
+
+        .datetime-confirm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 217, 104, 0.3);
+        }
+        
+        /* استایل منوی همبرگری - اصلاح شده */
+        .hamburger-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        .hamburger-icon {
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;            
+            transition: var(--transition);
+            padding: 8px;
+        }
+
+        .hamburger-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .hamburger-icon span {
+            display: block;
+            width: 24px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 2px 0;
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        .hamburger-icon:hover span {
+            background: var(--secondary-color);
+        }
+
+        .menu-items {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: white;
+            border-radius: var(--border-radius);
+            width: 200px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease-in-out;
+            opacity: 0;
+            visibility: hidden;        
+        }
+
+        .menu-items.active {
+            max-height: 300px;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .menu-item {
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: var(--transition);            
+            color: var(--dark-color);
+            text-decoration: none;
+        }
+
+        .menu-item:hover {
+            background: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .menu-item i {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        /* --- استایل‌های ریسپانسیو --- */
+        @media (max-width: 991px) {
+            .app-content { 
+                padding: 30px; 
+            }
+            
+            .calendar-monthly { 
+                grid-template-columns: repeat(3, 1fr); 
+            }
+            
+            .calendar-weekly { 
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+            
+            .weekly-day-cell {
+                min-height: 120px;
+                padding: 12px 10px;
+            }        
+        }
+
+        @media (max-width: 767px) {
+            .app-content { 
+                padding: 20px; 
+            }
+            h1 {                 
+                font-size: 1.4rem; 
+            }
+            
+            .calendar-controls { 
+                flex-direction: column; 
+                align-items: stretch;                 
+                gap: 10px;
+            }
+            
+            .month-selector { 
+                justify-content: space-between; 
+                width: 100%; 
+                order: 1;
+            }
+            
+            .month-selector h2 { 
+                font-size: 1.3rem; 
+                max-width: 100%;
+                text-align: center;
+                padding: 0 10px;
+            }
+            
+            .view-selector { 
+                justify-content: center;                 
+                width: 100%; 
+                order: 2;
+            }
+            
+            .calendar-monthly { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 8px; 
+            }
+            
+            .calendar-weekly { 
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }            
+            
+            .calendar-day-cell { 
+                min-height: 100px; 
+                padding: 10px 8px; 
+            }
+            
+            .weekly-day-cell { 
+                min-height: 100px;                 
+                padding: 10px 8px; 
+            }
+            
+            .weekly-day-header {
+                font-size: 0.8rem;
+            }
+            
+            .weekly-day-date {
+                font-size: 1.1rem;
+            }
+            
+            .weekly-content-preview {
+                font-size: 0.7rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .app-content { 
+                padding: 15px; 
+            }
+            
+            .form-grid { 
+                grid-template-columns: 1fr; 
+            }
+            
+            .modal-content { 
+                padding: 15px; 
+            }
+            
+            .modal-title { 
+                font-size: 1.4rem; 
+            }
+            
+            .close-button-circle { 
+                top: 15px; 
+                left: 15px; 
+                width: 30px; 
+                height: 30px; 
+                font-size: 16px; 
+            }
+            
+            .action-buttons { 
+                flex-direction: column; 
+            }
+            
+            .action-btn { 
+                width: 100%;                 
+                justify-content: center; 
+            }
+            
+            .datetime-popup-content { 
+                padding: 15px; 
+            }
+            
+            .month-selector h2 { 
+                font-size: 1.1rem; 
+                max-width: 100%;
+            }
+            
+            .calendar-day-cell { 
+                min-height: 90px; 
+                padding: 8px 6px; 
+            }
+            
+            .calendar-monthly { 
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+            
+            .calendar-weekly {                 
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;            
+            }
+            
+            .weekly-day-cell { 
+                min-height: 90px;
+                padding: 8px 6px;
+            }
+            
+            .weekly-day-cell.friday {
+                grid-column: 1 / -1;
+            }
+            
+            .weekly-day-header {
+                font-size: 0.75rem;
+            }
+            
+            .weekly-day-date {
+                font-size: 1rem;
+            }
+            
+            .hamburger-menu {
+                top: 10px;
+                right: 10px;
+            }
+
+            .hamburger-icon {
+                width: 35px;
+                height: 35px;
+            }
+
+            .menu-items {
+                width: 180px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="app-content">
+            <!-- منوی همبرگری -->
+            <div class="hamburger-menu">
+                <button class="hamburger-icon" id="hamburger-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div class="menu-items" id="menu-items">
+                    <a href="#" class="menu-item" id="menu-monthly-view"><i class="fas fa-calendar-alt"></i> تقویم ماهانه</a>
+                    <a href="#" class="menu-item" id="menu-weekly-view"><i class="fas fa-calendar-week"></i> تقویم هفتگی</a>
+                    <a href="#" class="menu-item" id="menu-settings"><i class="fas fa-cog"></i> تنظیمات</a>
+                    <a href="#" class="menu-item" id="menu-exit"><i class="fas fa-sign-out-alt"></i> خروج</a>
+                </div>
+            </div>
+
+            <h1><i class="fab fa-instagram"></i> تقویم تولید محتوای اینستاگرام</h1>
+            
+            <div class="calendar-controls">
+                <div class="month-selector">
+                    <button id="prev-month" class="month-nav"><i class="fas fa-chevron-right"></i></button>
+                    <h2 id="current-month-year"></h2>                    
+                    <button id="next-month" class="month-nav"><i class="fas fa-chevron-left"></i></button>
+                </div>
+                <div class="view-selector">
+                    <button id="view-monthly" class="view-btn active">نمای ماهانه</button>
+                    <button id="view-weekly" class="view-btn">نمای هفتگی</button>
+                </div>
+            </div>            
+
+            <!-- راهنمای وضعیت‌ها -->
+            <div class="status-guide">
+                <div class="status-item"><span class="status-box ideation"></span> ایده پردازی</div>
+                <div class="status-item"><span class="status-box producing"></span> در حال تولید</div>
+                <div class="status-item"><span class="status-box review"></span> بازبینی</div>
+                <div class="status-item"><span class="status-box approved"></span> تایید شده</div>
+                <div class="status-item"><span class="status-box scheduled"></span> زمان‌بندی شده</div>
+                <div class="status-item"><span class="status-box published"></span> منتشر شده</div>
+            </div>
+
+            <!-- گرید تقویم (محتوا توسط جاوا اسکریپت پر می‌شود) -->
+            <div id="calendar-grid" class="calendar-grid calendar-monthly">
+                <!-- Cells/Columns will be generated by JS -->
+            </div>
+
+            <div class="action-buttons">
+                <button id="add-content-btn" class="action-btn"><i class="fas fa-plus"></i> افزودن محتوای جدید</button>
+                <button id="clear-all-btn" class="action-btn" style="background-color: var(--alert-error-text);"><i class="fas fa-trash-alt"></i> پاک کردن همه</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- مودال افزودن/ویرایش محتوا -->
+    <div id="content-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-button-circle" id="modal-close-circle"><i class="fas fa-times"></i></button>
+            <h2 id="modal-title" class="modal-title">افزودن محتوای جدید</h2>
+            <form id="content-form">
+                <input type="hidden" id="content-id">
+                <input type="hidden" id="content-modal-selected-date">
+
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="content-title-input">عنوان / موضوع اصلی</label>
+                        <input type="text" id="content-title-input" class="form-control" placeholder="پست آموزشی پیج املاک معین رامسر" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="content-type">نوع محتوا</label>
+                        <select id="content-type" class="form-control" required>
+                            <option value="" disabled selected>یک نوع را انتخاب کنید...</option>
+                            <option value="post">پست (عکس/ویدیو)</option>
+                            <option value="story">استوری</option>
+                            <option value="reels">ریلز</option>
+                            <option value="other">سایر</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="content-status">وضعیت</label>
+                        <select id="content-status" class="form-control" required>
+                            <option value="" disabled selected>وضعیت فعلی...</option>
+                            <option value="ideation">ایده پردازی</option>
+                            <option value="producing">در حال تولید</option>
+                            <option value="review">بازبینی</option>
+                            <option value="approved">تایید شده</option>
+                            <option value="scheduled">زمان‌بندی شده</option>
+                            <option value="published">منتشر شده</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>تاریخ انتشار</label>
+                        <button type="button" class="datetime-picker-button" id="date-picker-trigger">
+                            <i class="fas fa-calendar-alt"></i> تاریخ را انتخاب کنید
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="content-responsible">مسئول</label>
+                        <input type="text" id="content-responsible" class="form-control" placeholder="نام شخص یا تیم">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="content-caption">کپشن / متن اصلی</label>
+                        <textarea id="content-caption" class="form-control" rows="4" placeholder="متن پست یا توضیحات استوری/ریلز..."></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="content-hashtags">هشتگ‌ها</label>
+                        <input type="text" id="content-hashtags" class="form-control" placeholder="هشتگ‌ها را وارد کنید؛ برای مثال: #املاک، #ویلا، #آپارتمان">
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="content-notes">یادداشت‌های اضافی</label>
+                        <textarea id="content-notes" class="form-control" rows="2" placeholder="هرگونه نکته، لینک منبع، یا اطلاعات دیگر..."></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="content-kpis">هدف از انتشار این پست</label>
+                        <input type="text" id="content-kpis" class="form-control" placeholder="موارد زیر را انتخاب کنید">
+                        <div class="kpi-suggestions">
+                            <span class="kpi-suggestion">لایک</span>
+                            <span class="kpi-suggestion">کامنت</span>
+                            <span class="kpi-suggestion">ذخیره (Save)</span>
+                            <span class="kpi-suggestion">اشتراک گذاری (Share)</span>
+                            <span class="kpi-suggestion">بازدید پروفایل</span>
+                            <span class="kpi-suggestion">Reach</span>
+                            <span class="kpi-suggestion">Impression</span>
+                            <span class="kpi-suggestion">فروش</span>
+                        </div>
+                    </div>
+
+                    <div class="modal-buttons">
+                        <button type="button" id="delete-content-btn" class="modal-btn modal-btn-delete" style="display: none;"><i class="fas fa-trash-alt"></i> حذف</button>
+                        <button type="submit" class="modal-btn modal-btn-primary"><i class="fas fa-save"></i> ذخیره</button>
+                        <button type="button" id="modal-cancel-btn" class="modal-btn modal-btn-secondary"><i class="fas fa-times"></i> انصراف</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- پاپ‌آپ تاریخ -->
+    <div class="datetime-popup" id="datePopup">
+        <div class="datetime-popup-content">
+            <div class="datetime-popup-header">
+                <div class="datetime-popup-title">انتخاب تاریخ</div>
+                <button class="datetime-popup-close" onclick="closeDatePicker()">&times;</button>
+            </div>
+            <div class="persian-calendar">
+                <div class="calendar-header">
+                    <button class="calendar-nav" onclick="previousMonth()"><i class="fas fa-chevron-right"></i></button>
+                    <div class="calendar-month-year" id="calendarMonthYear" onclick="toggleMonthYearSelector()"></div>
+                    <button class="calendar-nav" onclick="nextMonth()"><i class="fas fa-chevron-left"></i></button>
+                </div>
+                <div class="month-year-selector" id="monthYearSelector">
+                    <!-- انتخابگر ماه و سال اینجا ایجاد می‌شود -->
+                </div>
+                <div class="calendar-grid-popup" id="calendarGrid">
+                    <!-- تقویم اینجا ایجاد می‌شود -->
+                </div>
+            </div>
+            <button class="datetime-confirm-btn" onclick="confirmDate()">انتخاب</button>
+        </div>
+    </div>
+
+    <!-- اتصال به فایل منوی همبرگری -->
+    <script src="customers.menu.html"></script>
+    
+    <script>
+        // --- توابع کمکی تبدیل اعداد فارسی/انگلیسی ---
+        function toPersianNumbers(str) {
+            if (!str) return '';
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            str = str.toString();
+            let result = '';
+            for (let i = 0; i < str.length; i++) {
+                const char = str[i];
+                if (char >= '0' && char <= '9') {
+                    result += persianDigits[parseInt(char)];
+                } else {
+                    result += char;
+                }
+            }
+            return result;
+        }
+
+        function toEnglishNumbers(str) {
+            if (!str) return '';
+            const englishDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            str = str.toString();
+            let result = '';
+            for (let i = 0; i < str.length; i++) {
+                const char = str[i];
+                const persianIndex = persianDigits.indexOf(char);
+                if (persianIndex !== -1) {
+                    result += englishDigits[persianIndex];
+                } else {
+                    result += char;
+                }
+            }
+            return result;
+        }
+
+        // --- نام‌های ماه‌ها و روزها ---
+        const persianMonths = [
+            'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
+            'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
+        ];
+        const persianDays = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'];
+        const persianWeekdaysShort = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
+        const persianMonthDays = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
+
+        // --- توابع تبدیل تاریخ شمسی و میلادی ---
+        function gregorian_to_jalali(gy, gm, gd) {
+            var g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+            var jy, jm, jd;            
+            var gy2 = (gm > 2) ? (gy + 1) : gy;
+            var days = 355666 + (365 * gy) + parseInt((gy2 + 3) / 4) - parseInt((gy2 + 99) / 100) + parseInt((gy2 + 399) / 400) + gd + g_d_m[gm - 1];
+            var jalali_year_calc = -1595 + (33 * parseInt(days / 12053));
+            days %= 12053;            
+            jalali_year_calc += (33 * parseInt(days / 401));
+            days %= 401;
+            jalali_year_calc += parseInt(days / 33);            
+            days %= 33;
+            jy = jalali_year_calc;
+            if (days >= 29) {
+                days++;
+            }
+            jm = parseInt(days / 31) + 1;
+            jd = (days % 31) + 1;
+            return { year: jy, month: jm, day: jd };
+        }
+
+        function jalali_to_gregorian(jy, jm, jd) {
+            var sal_a = [0, 31, 62, 93, 124, 155, 186, 216, 246, 276, 306, 336];
+            var j_days = jd + sal_a[jm - 1];
+            var year_calc = (jy - 979);
+            var g_days = 365 * year_calc + parseInt(year_calc / 33) * 8 + parseInt((year_calc % 33 + 3) / 4) + j_days;
+            var gy = 400 * parseInt(g_days / 146097);
+            g_days %= 146097;
+            if (g_days > 36524) {
+                gy += 100 * parseInt(--g_days / 36524);
+                g_days %= 36524;
+                if (g_days >= 365) {
+                    g_days++;
+                }
+            }
+            gy += 4 * parseInt(g_days / 1461);
+            g_days %= 1461;
+            if (g_days > 365) {
+                gy += parseInt((g_days - 1) / 365);
+                g_days = (g_days - 1) % 365;
+            }
+            var gm, gd;
+            var i = 0;
+            while (i < 11 && g_days >= [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365][i]) {
+                i++;
+            }
+            gm = i;
+            gd = g_days - [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365][i - 1] + 1;
+            return new Date(gy, gm - 1, gd);
+        }
+
+        function toJalali(gregorianDate) {
+            const d = new Date(gregorianDate);
+            const { year, month, day } = gregorian_to_jalali(d.getFullYear(), d.getMonth() + 1, d.getDate());            
+            return { year, month, day, monthName: persianMonths[month - 1] };
+        }
+
+        function toGregorian(jalaliYear, jalaliMonth, jalaliDay) {
+            return jalali_to_gregorian(jalaliYear, jalaliMonth, jalaliDay);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- تنظیم تاریخ جاری (به‌روزرسانی خودکار) ---
+            function getCurrentJalaliDate() {
+                // تاریخ ثابت: یکشنبه ۲۵ خرداد ۱۴۰۴
+                return { year: 1404, month: 3, day: 25, monthName: 'خرداد' };
+            }
+
+            // تنظیم تاریخ ثابت: یکشنبه ۲۵ خرداد ۱۴۰۴
+            const todayJalali = getCurrentJalaliDate();            
+            const today = toGregorian(todayJalali.year, todayJalali.month, todayJalali.day);
+
+            // --- متغیرهای حالت تقویم اصلی ---
+            let currentJalaliYear = todayJalali.year;
+            let currentJalaliMonth = todayJalali.month;
+            
+            // تنظیم هفته به گونه‌ای که ۲۵ خرداد ۱۴۰۴ (یکشنبه) در آن باشد
+            // شنبه ۲۴ خرداد ۱۴۰۴ باید شروع هفته باشد
+            let currentWeekStart = toGregorian(1404, 3, 24); // شنبه ۲۴ خرداد
+
+            let calendarView = 'monthly';
+            let contentData = [];
+
+            // متغیرهای شمارنده برای نمایش متنی
+            let weekNavigationCount = 0;
+            
+            // --- متغیرهای حالت برای Date Picker ---
+            let selectedDate = null; // تاریخ انتخاب شده در فرم (ممکن است null باشد)
+            let lastSelectedDate = null; // برای حفظ آخرین تاریخ انتخاب شده در مودال افزودن/ویرایش
+            // این سه متغیر برای حالت داخلی پاپ آپ تقویم هستند و هنگام باز شدن پاپ آپ تنظیم می شوند.
+            let currentPickerJalaliYear;
+            let currentPickerJalaliMonth;
+            let selectedPickerJalaliDay;
+            let showingMonthYearSelector = false;
+
+            // --- عناصر DOM ---
+            const currentMonthYearEl = document.getElementById('current-month-year');
+            const calendarGridEl = document.getElementById('calendar-grid');
+            const prevMonthBtn = document.getElementById('prev-month');
+            const nextMonthBtn = document.getElementById('next-month');
+            const viewMonthlyBtn = document.getElementById('view-monthly');
+            const viewWeeklyBtn = document.getElementById('view-weekly');
+            const addContentBtn = document.getElementById('add-content-btn');
+            const clearAllBtn = document.getElementById('clear-all-btn');
+            const modal = document.getElementById('content-modal');
+            const modalCloseBtn = document.getElementById('modal-close-circle');
+            const modalCancelBtn = document.getElementById('modal-cancel-btn');
+            const modalTitle = document.getElementById('modal-title');
+            const contentForm = document.getElementById('content-form');
+            const contentIdInput = document.getElementById('content-id');
+            const contentModalSelectedDate = document.getElementById('content-modal-selected-date');
+            const datePickerTrigger = document.getElementById('date-picker-trigger');
+            const kpiSuggestionsContainer = document.querySelector('.kpi-suggestions');
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+            const menuItems = document.getElementById('menu-items');
+            const menuMonthlyView = document.getElementById('menu-monthly-view');
+            const menuWeeklyView = document.getElementById('menu-weekly-view');
+            const menuSettings = document.getElementById('menu-settings');
+            const menuExit = document.getElementById('menu-exit');
+            const contentTitleInput = document.getElementById('content-title-input');
+            const contentTypeInput = document.getElementById('content-type');
+            const contentStatusInput = document.getElementById('content-status');
+            const contentResponsibleInput = document.getElementById('content-responsible');
+            const contentCaptionInput = document.getElementById('content-caption');
+            const contentHashtagsInput = document.getElementById('content-hashtags'); 
+            const contentNotesInput = document.getElementById('content-notes');
+            const contentKpisInput = document.getElementById('content-kpis');
+            const deleteContentBtn = document.getElementById('delete-content-btn');
+
+            // --- فرمت تاریخ میلادی ---
+            function formatDate(date) {
+                const d = new Date(date);
+                const year = d.getFullYear();
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            // --- نمایش پیام‌های Alert ---
+            function showAlert(message, type = "info") {
+                const existingAlerts = document.querySelectorAll('.app-alert');
+                existingAlerts.forEach(el => el.remove());
+
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `app-alert ${type}`;
+                let iconClass = '';
+                if (type === 'success') { iconClass = 'fas fa-check-circle'; }
+                else if (type === 'error') { iconClass = 'fas fa-times-circle'; }
+                else { iconClass = 'fas fa-info-circle'; }
+                alertDiv.innerHTML = `
+                    <i class="${iconClass}"></i>
+                    <div class="message-content">${message}</div>
+                    <span class="close-alert">&times;</span>
+                `;
+                document.body.appendChild(alertDiv);
+
+                const closeBtn = alertDiv.querySelector('.close-alert');
+                closeBtn.addEventListener('click', function () { alertDiv.remove(); });
+
+                setTimeout(() => { if (alertDiv.parentNode) { alertDiv.remove(); } }, 5000);
+            }
+
+            // --- ذخیره و بازیابی اطلاعات ---
+            function saveData() {
+                try {
+                    localStorage.setItem('calendarContentData', JSON.stringify(contentData));
+                } catch (error) {
+                    console.error("Error saving data to localStorage:", error);
+                    showAlert('خطا در ذخیره اطلاعات!', "error");
+                }
+            }
+
+            function loadData() {
+                const storedData = localStorage.getItem('calendarContentData');
+                if (storedData) {
+                    try {
+                        contentData = JSON.parse(storedData);
+                    } catch (error) {
+                        console.error("Error parsing data from localStorage:", error);
+                        contentData = [];
+                    }
+                } else {
+                    contentData = [];
+                }
+                renderCalendar();
+            }
+            
+            // --- تولید متن نمایش برای تقویم ---
+            function getDisplayTitle() {
+                if (calendarView === 'monthly') {
+                    const isCurrentMonth = currentJalaliYear === todayJalali.year && currentJalaliMonth === todayJalali.month;
+                    if (isCurrentMonth) {
+                        return 'این ماه';
+                    }
+                    return `${persianMonths[currentJalaliMonth - 1]} ${toPersianNumbers(currentJalaliYear)}`;
+                } else {
+                    if (weekNavigationCount === 0) return 'این هفته';
+                    if (weekNavigationCount === 1) return 'هفته بعد';
+                    if (weekNavigationCount === -1) return 'هفته قبل';
+                    if (weekNavigationCount > 1) return 'هفته‌های بعد';
+                    return 'هفته‌های قبل';
+                }
+            }
+            
+            // --- رندر کردن تقویم اصلی ---
+            function renderCalendar() {
+                calendarGridEl.innerHTML = '';
+                currentMonthYearEl.textContent = getDisplayTitle();
+
+                if (calendarView === 'monthly') {
+                    renderMonthlyView();
+                    calendarGridEl.className = 'calendar-grid calendar-monthly';
+                } else {
+                    renderWeeklyView();
+                    calendarGridEl.className = 'calendar-grid calendar-weekly';
+                }
+            }
+
+            // --- رندر نمای ماهانه ---
+            function renderMonthlyView() {
+                if (currentJalaliYear < 1404) { currentJalaliYear = 1404; currentJalaliMonth = 1; }
+                if (currentJalaliYear > 1430) { currentJalaliYear = 1430; currentJalaliMonth = 12; }
+
+                const isLeap = (currentJalaliYear % 33) % 4 === 1;
+                let daysInMonth = persianMonthDays[currentJalaliMonth - 1] || 30;
+                if (currentJalaliMonth === 12 && !isLeap) daysInMonth = 29;
+
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const cellDate = toGregorian(currentJalaliYear, currentJalaliMonth, day);
+                    const dateStr = formatDate(cellDate);
+                    const dayContent = contentData.filter(item => formatDate(new Date(item.dateTime)) === dateStr);
+
+                    const dayCell = document.createElement('div');
+                    dayCell.className = 'calendar-day-cell';
+                    dayCell.dataset.date = dateStr;
+
+                    if (todayJalali.year === currentJalaliYear && todayJalali.month === currentJalaliMonth && todayJalali.day === day) {
+                        dayCell.classList.add('today');
+                    }
+
+                    if (day === daysInMonth && daysInMonth === 31) {
+                        dayCell.classList.add('last-day');
+                    }
+
+                    let cellHTML = `<div class="day-number">${toPersianNumbers(day)}</div>`;
+                    if (dayContent.length > 0) {
+                        cellHTML += `<div class="content-indicator"></div><div class="content-count">${toPersianNumbers(dayContent.length)} محتوا</div>`;
+                    } else {
+                        cellHTML += `<div class="content-count">بدون محتوا</div>`;
+                    }
+
+                    dayCell.innerHTML = cellHTML;
+                    dayCell.addEventListener('click', () => openModal(dateStr));
+                    calendarGridEl.appendChild(dayCell);
+                }
+            }
+
+            // --- رندر نمای هفتگی ---
+            function renderWeeklyView() {
+                for (let i = 0; i < 7; i++) {
+                    const dayDate = new Date(currentWeekStart);
+                    dayDate.setDate(currentWeekStart.getDate() + i);
+
+                    const dateStr = formatDate(dayDate);
+                    const isToday = (dateStr === formatDate(today));
+
+                    const dayCell = document.createElement('div');
+                    dayCell.className = 'weekly-day-cell';
+                    dayCell.dataset.date = dateStr;                    
+                    if (isToday) dayCell.classList.add('today');
+                    if (i === 6) dayCell.classList.add('friday');
+
+                    const jalali = toJalali(dayDate);                    
+                    const dayContent = contentData.filter(item => formatDate(new Date(item.dateTime)) === dateStr);
+
+                    let cellHTML = `
+                        <div class="weekly-day-header">${persianDays[i]}</div>
+                        <div class="weekly-day-date">${toPersianNumbers(jalali.day)} ${jalali.monthName}</div>
+                    `;
+                    if (dayContent.length > 0) {
+                        cellHTML += `<div class="content-indicator"></div><div class="weekly-content-preview">${toPersianNumbers(dayContent.length)} محتوا</div>`;
+                    } else {
+                        cellHTML += `<div class="weekly-content-preview">بدون محتوا</div>`;
+                    }
+
+                    dayCell.innerHTML = cellHTML;
+                    dayCell.addEventListener('click', () => openModal(dateStr));                    
+                    calendarGridEl.appendChild(dayCell);
+                }
+            }
+
+            // --- Event Listeners ---
+            prevMonthBtn.addEventListener('click', () => {
+                if (calendarView === 'monthly') {
+                    currentJalaliMonth--;
+                    if (currentJalaliMonth < 1) { currentJalaliMonth = 12; currentJalaliYear--; }
+
+                    // اطمینان از اینکه سال کمتر از 1404 نشود
+                    if (currentJalaliYear < 1404) {
+                        currentJalaliYear = 1404;
+                        currentJalaliMonth = 1;
+                    }
+                } else {
+                    weekNavigationCount--;
+                    currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+                }
+                renderCalendar();
+            });
+
+            nextMonthBtn.addEventListener('click', () => {
+                if (calendarView === 'monthly') {
+                    currentJalaliMonth++;
+                    if (currentJalaliMonth > 12) { currentJalaliMonth = 1; currentJalaliYear++; }
+
+                    // اطمینان از اینکه سال بیشتر از 1430 نشود
+                    if (currentJalaliYear > 1430) {
+                        currentJalaliYear = 1430;
+                        currentJalaliMonth = 12;
+                    }
+                } else {
+                    weekNavigationCount++;
+                    currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+                }
+                renderCalendar();
+            });
+
+            const setView = (view) => {
+                calendarView = view;
+                viewMonthlyBtn.classList.toggle('active', view === 'monthly');
+                viewWeeklyBtn.classList.toggle('active', view === 'weekly');
+                menuItems.classList.remove('active');
+                renderCalendar();
+            };
+
+            viewMonthlyBtn.addEventListener('click', () => setView('monthly'));
+            viewWeeklyBtn.addEventListener('click', () => setView('weekly'));
+
+            addContentBtn.addEventListener('click', () => openModal());
+            clearAllBtn.addEventListener('click', () => {
+                if (confirm('آیا مطمئن هستید که می‌خواهید همه محتواها را پاک کنید؟')) {
+                    contentData = [];
+                    saveData();                    
+                    renderCalendar();
+                    showAlert('تمام محتواها با موفقیت پاک شدند.', 'success');
+                }
+            });
+
+            modalCloseBtn.addEventListener('click', () => closeModal());
+            modalCancelBtn.addEventListener('click', () => closeModal());
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+            datePickerTrigger.addEventListener('click', () => openDatePicker());
+
+            kpiSuggestionsContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('kpi-suggestion')) {
+                    const kpisInput = document.getElementById('content-kpis');
+                    const currentValue = kpisInput.value;
+                    const newValue = e.target.textContent;
+                    kpisInput.value = currentValue ? `${currentValue}، ${newValue}` : newValue;
+                }
+            });
+
+            contentForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                saveContent();
+            });
+
+            document.getElementById('delete-content-btn').addEventListener('click', () => {
+                if (confirm('آیا مطمئن هستید که می‌خواهید این محتوا را حذف کنید؟')) {
+                    deleteContent();
+                }
+            });
+
+            // --- منوی همبرگری ---
+            hamburgerIcon.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // فعلاً هیچ عملی انجام نمی‌شود
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.hamburger-menu') && menuItems.classList.contains('active')) {
+                    menuItems.classList.remove('active');
+                }
+            });
+
+            menuMonthlyView.addEventListener('click', (e) => {
+                e.preventDefault();
+                setView('monthly');
+            });
+
+            menuWeeklyView.addEventListener('click', (e) => {
+                e.preventDefault();
+                setView('weekly');
+            });
+
+            menuSettings.addEventListener('click', (e) => {
+                e.preventDefault();
+                showAlert('بخش تنظیمات در حال توسعه است.', 'info');
+                menuItems.classList.remove('active');
+            });
+
+            menuExit.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (confirm('آیا مطمئن هستید؟')) {
+                    window.close();
+                }
+                menuItems.classList.remove('active');
+            });
+
+            // --- توابع مودال ---
+            function openModal(dateStr = null) {
+                modalTitle.textContent = 'افزودن محتوای جدید';
+                contentForm.reset();
+                contentIdInput.value = '';
+                deleteContentBtn.style.display = 'none';
+
+                // تنظیم selectedDate برای فرم
+                if (dateStr) { // اگر از طریق کلیک روی روز تقویم باز شده (برای افزودن محتوا به یک روز خاص)
+                    selectedDate = dateStr;
+                } else if (lastSelectedDate) { // اگر قبلاً تاریخی در همین سشن انتخاب شده بود
+                    selectedDate = lastSelectedDate;
+                } else { // برای اولین بار باز شدن مودال یا زمانی که تاریخ قبلی نداریم
+                    selectedDate = null; // برای نمایش "تاریخ را انتخاب کنید"
+                }
+
+                // مقداردهی به فیلد پنهان تاریخ
+                contentModalSelectedDate.value = selectedDate || '';
+
+                // به‌روزرسانی متن دکمه انتخاب تاریخ                
+                updateDatePickerButton(selectedDate);
+
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+
+            function editContent(contentId) {
+                const content = contentData.find(item => item.id === parseInt(contentId));
+                if (!content) return;
+
+                modalTitle.textContent = 'ویرایش محتوا';
+                contentIdInput.value = content.id;
+                contentTitleInput.value = content.title;
+                contentTypeInput.value = content.type;
+                contentStatusInput.value = content.status;
+                contentResponsibleInput.value = content.responsible;
+                contentCaptionInput.value = content.caption;                
+                contentHashtagsInput.value = content.hashtags;
+                contentNotesInput.value = content.notes;
+                contentKpisInput.value = content.kpis;
+
+                const contentDate = new Date(content.dateTime);
+                selectedDate = formatDate(contentDate);
+                contentModalSelectedDate.value = selectedDate;
+                updateDatePickerButton(selectedDate);
+
+                deleteContentBtn.style.display = 'block';
+            }
+
+            function getContentTypeLabel(type) {
+                switch (type) {
+                    case 'post': return 'پست';
+                    case 'story': return 'استوری';
+                    case 'reels': return 'ریلز';
+                    default: return 'سایر';
+                }
+            }
+
+            function getStatusLabel(status) {
+                switch (status) {
+                    case 'ideation': return 'ایده پردازی';
+                    case 'producing': return 'در حال تولید';
+                    case 'review': return 'بازبینی';
+                    case 'approved': return 'تایید شده';
+                    case 'scheduled': return 'زمان‌بندی شده';
+                    case 'published': return 'منتشر شده';
+                    default: returndefault: return 'نامشخص';
+                }
+            }
+
+            function saveContent() {
+                if (!contentTitleInput.value.trim()) {
+                    showAlert('لطفاً عنوان محتوا را وارد کنید.', 'error');
+                    return;
+                }
+
+                if (!contentTypeInput.value) {
+                    showAlert('لطفاً نوع محتوا را انتخاب کنید.', 'error');
+                    return;
+                }
+
+                if (!contentStatusInput.value) {
+                    showAlert('لطفاً وضعیت محتوا را انتخاب کنید.', 'error');
+                    return;
+                }
+
+                if (!contentModalSelectedDate.value) {
+                    showAlert('لطفاً تاریخ انتشار را انتخاب کنید.', 'error');
+                    return;
+                }
+
+                const dateTime = new Date(contentModalSelectedDate.value);
+                
+                const contentObj = {
+                    title: contentTitleInput.value.trim(),
+                    type: contentTypeInput.value,
+                    status: contentStatusInput.value,
+                    responsible: contentResponsibleInput.value.trim(),
+                    caption: contentCaptionInput.value.trim(),
+                    hashtags: contentHashtagsInput.value.trim(),
+                    notes: contentNotesInput.value.trim(),
+                    kpis: contentKpisInput.value.trim(),
+                    dateTime: dateTime.toISOString()
+                };
+
+                const contentId = contentIdInput.value;
+                if (contentId) {
+                    // ویرایش محتوای موجود
+                    const index = contentData.findIndex(item => item.id === parseInt(contentId));
+                    if (index !== -1) {
+                        contentObj.id = parseInt(contentId);
+                        contentData[index] = contentObj;
+                        showAlert('محتوا با موفقیت به‌روزرسانی شد.', 'success');
+                    }
+                } else {
+                    // افزودن محتوای جدید
+                    contentObj.id = Date.now();
+                    contentData.push(contentObj);
+                    showAlert('محتوای جدید با موفقیت اضافه شد.', 'success');
+                }
+
+                // ذخیره آخرین تاریخ انتخاب شده برای استفاده بعدی
+                lastSelectedDate = contentModalSelectedDate.value;
+
+                saveData();
+                renderCalendar();
+                closeModal();
+            }
+
+            function deleteContent() {
+                const contentId = contentIdInput.value;
+                if (!contentId) return;
+
+                const index = contentData.findIndex(item => item.id === parseInt(contentId));
+                if (index !== -1) {
+                    contentData.splice(index, 1);
+                    saveData();
+                    renderCalendar();
+                    closeModal();
+                    showAlert('محتوا با موفقیت حذف شد.', 'success');
+                }
+            }
+
+            // --- توابع مربوط به انتخاب تاریخ ---
+            function updateDatePickerButton(dateStr = null) {
+                if (!dateStr) {
+                    datePickerTrigger.innerHTML = '<i class="fas fa-calendar-alt"></i> تاریخ را انتخاب کنید';
+                    datePickerTrigger.classList.remove('active-selection');
+                    return;
+                }
+
+                const d = new Date(dateStr);
+                const jalaliDate = toJalali(d);
+                const dayName = persianDays[(d.getDay() + 1) % 7]; // تبدیل شاخص روز هفته میلادی به شمسی
+                const formattedDate = `${dayName} ${toPersianNumbers(jalaliDate.day)} ${jalaliDate.monthName} ${toPersianNumbers(jalaliDate.year)}`;
+
+                datePickerTrigger.innerHTML = `<i class="fas fa-calendar-check"></i> ${formattedDate}`;
+                datePickerTrigger.classList.add('active-selection');
+            }
+
+            // --- توابع پاپ‌آپ تاریخ ---
+            function openDatePicker() {
+                const datePopup = document.getElementById('datePopup');
+                datePopup.classList.add('active');
+
+                // تنظیم پیش‌فرض تاریخ روی خرداد ۱۴۰۴ و روز یکشنبه ۲۵ خرداد
+                currentPickerJalaliYear = 1404;
+                currentPickerJalaliMonth = 3; // خرداد
+                selectedPickerJalaliDay = 25; // روز ۲۵ خرداد
+
+                // اگر قبلاً تاریخی انتخاب شده بود، آن را استفاده کن
+                if (selectedDate) {
+                    const d = new Date(selectedDate);
+                    const jalali = toJalali(d);
+                    currentPickerJalaliYear = jalali.year;
+                    currentPickerJalaliMonth = jalali.month;
+                    selectedPickerJalaliDay = jalali.day;
+                }
+
+                renderDatePicker();
+            }
+
+            function closeDatePicker() {
+                document.getElementById('datePopup').classList.remove('active');
+            }
+
+            function renderDatePicker() {
+                // نمایش ماه و سال فعلی
+                document.getElementById('calendarMonthYear').textContent = `${persianMonths[currentPickerJalaliMonth - 1]} ${toPersianNumbers(currentPickerJalaliYear)}`;
+
+                // ایجاد گرید روزهای هفته
+                const calendarGrid = document.getElementById('calendarGrid');
+                calendarGrid.innerHTML = '';
+
+                // اضافه کردن سربرگ روزهای هفته
+                persianWeekdaysShort.forEach(day => {
+                    const dayHeader = document.createElement('div');
+                    dayHeader.className = 'calendar-day-header-popup';
+                    dayHeader.textContent = day;
+                    calendarGrid.appendChild(dayHeader);
+                });
+
+                // محاسبه روز اول ماه
+                const firstDayOfMonth = toGregorian(currentPickerJalaliYear, currentPickerJalaliMonth, 1);
+                let dayOfWeek = (firstDayOfMonth.getDay() + 1) % 7; // تبدیل شاخص روز هفته میلادی به شمسی
+
+                // اضافه کردن سلول‌های خالی برای روزهای قبل از شروع ماه
+                for (let i = 0; i < dayOfWeek; i++) {
+                    const emptyDay = document.createElement('div');
+                    emptyDay.className = 'calendar-day other-month';
+                    calendarGrid.appendChild(emptyDay);
+                }
+
+                // محاسبه تعداد روزهای ماه
+                const isLeap = (currentPickerJalaliYear % 33) % 4 === 1;
+                let daysInMonth = persianMonthDays[currentPickerJalaliMonth - 1];
+                if (currentPickerJalaliMonth === 12 && !isLeap) daysInMonth = 29;
+
+                // ایجاد سلول‌ها برای روزهای ماه
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayCell = document.createElement('div');
+                    dayCell.className = 'calendar-day';
+                    dayCell.textContent = toPersianNumbers(day);
+
+                    // بررسی روز جاری و روز انتخاب شده
+                    if (day === selectedPickerJalaliDay && 
+                        currentPickerJalaliMonth === currentPickerJalaliMonth &&
+                        currentPickerJalaliYear === currentPickerJalaliYear) {
+                        dayCell.classList.add('selected');
+                    }
+
+                    // اضافه کردن رویداد کلیک
+                    dayCell.addEventListener('click', function() {
+                        document.querySelectorAll('.calendar-day.selected').forEach(el => {
+                            el.classList.remove('selected');
+                        });
+                        dayCell.classList.add('selected');
+                        selectedPickerJalaliDay = day;
+                    });
+
+                    calendarGrid.appendChild(dayCell);
+                }
+
+                // رندر انتخابگر ماه/سال
+                renderMonthYearSelector();
+            }
+
+            function renderMonthYearSelector() {
+                const monthYearSelector = document.getElementById('monthYearSelector');
+                monthYearSelector.innerHTML = '';
+                monthYearSelector.classList.toggle('active', showingMonthYearSelector);
+
+                if (showingMonthYearSelector) {
+                    // نمایش انتخابگر ماه
+                    for (let i = 0; i < persianMonths.length; i++) {
+                        const monthItem = document.createElement('div');
+                        monthItem.className = 'month-year-item';
+                        if (i + 1 === currentPickerJalaliMonth) monthItem.classList.add('selected');
+                        monthItem.textContent = persianMonths[i];
+                        monthItem.addEventListener('click', function() {
+                            currentPickerJalaliMonth = i + 1;
+                            showingMonthYearSelector = false;
+                            renderDatePicker();
+                        });
+                        monthYearSelector.appendChild(monthItem);
+                    }
+                }
+            }
+
+            function toggleMonthYearSelector() {
+                showingMonthYearSelector = !showingMonthYearSelector;
+                renderDatePicker();
+            }
+
+            function previousMonth() {
+                currentPickerJalaliMonth--;
+                if (currentPickerJalaliMonth < 1) {
+                    currentPickerJalaliMonth = 12;
+                    currentPickerJalaliYear--;
+                }
+                // اطمینان از اینکه سال کمتر از 1404 نشود
+                if (currentPickerJalaliYear < 1404) {
+                    currentPickerJalaliYear = 1404;
+                    currentPickerJalaliMonth = 1;
+                }
+                renderDatePicker();
+            }
+
+            function nextMonth() {
+                currentPickerJalaliMonth++;
+                if (currentPickerJalaliMonth > 12) {
+                    currentPickerJalaliMonth = 1;
+                    currentPickerJalaliYear++;
+                }
+                // اطمینان از اینکه سال بیشتر از 1430 نشود
+                if (currentPickerJalaliYear > 1430) {
+                    currentPickerJalaliYear = 1430;
+                    currentPickerJalaliMonth = 12;
+                }
+                renderDatePicker();
+            }
+
+            function confirmDate() {
+                if (!selectedPickerJalaliDay) {
+                    showAlert('لطفاً یک روز را انتخاب کنید.', 'error');
+                    return;
+                }
+
+                const selectedGregorianDate = toGregorian(currentPickerJalaliYear, currentPickerJalaliMonth, selectedPickerJalaliDay);
+                const dateStr = formatDate(selectedGregorianDate);
+                
+                // به‌روزرسانی متغیرهای مربوط به تاریخ انتخاب شده
+                selectedDate = dateStr;
+                contentModalSelectedDate.value = dateStr;
+                updateDatePickerButton(dateStr);
+                
+                closeDatePicker();
+            }
+
+            // --- Event Listeners برای پاپ‌آپ تاریخ ---
+            window.addEventListener('previousMonth', previousMonth);
+            window.addEventListener('nextMonth', nextMonth);
+            window.addEventListener('toggleMonthYearSelector', toggleMonthYearSelector);
+            window.addEventListener('confirmDate', confirmDate);
+
+            // راه‌اندازی اولیه
+            loadData();
+            renderCalendar();
+        });
+
+        // --- فانکشن‌های مورد نیاز برای پاپ‌آپ تاریخ که در خارج از DOMContentLoaded تعریف می‌شوند ---
+        function closeDatePicker() {
+            document.getElementById('datePopup').classList.remove('active');
+        }
+
+        function previousMonth() {
+            window.dispatchEvent(new CustomEvent('previousMonth'));
+        }
+
+        function nextMonth() {
+            window.dispatchEvent(new CustomEvent('nextMonth'));
+        }
+
+        function toggleMonthYearSelector() {
+            window.dispatchEvent(new CustomEvent('toggleMonthYearSelector'));
+        }
+
+        function confirmDate() {
+            window.dispatchEvent(new CustomEvent('confirmDate'));
+        }
+    </script>
+</body>
+</html>

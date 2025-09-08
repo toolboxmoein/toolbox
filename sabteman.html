@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سایت ثبت من</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0bff00;
+            --secondary-color: #00cc00;
+            --light-color: #e6ffe6;
+            --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --font-family: 'Vazirmatn', Arial, sans-serif;
+            --dark-mode-bg: #121212;
+            --dark-mode-text: #ffffff;
+            --dark-mode-card: #1e1e1e;
+            --dark-mode-border: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: #ffffff;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        body.dark-mode {
+            background-color: var(--dark-mode-bg);
+            color: var(--dark-mode-text);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        body.dark-mode .header {
+            background-color: var(--dark-mode-card);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-button {
+            color: #333;
+            font-size: 20px;
+            text-decoration: none;
+            padding: 5px;
+        }
+
+        body.dark-mode .back-button {
+            color: var(--dark-mode-text);
+        }
+
+        .page-title {
+            margin: 0 auto;
+            transform: translateX(-15px);
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .content-wrapper {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        body.dark-mode .container {
+            background-color: var(--dark-mode-card);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        body.dark-mode h1 {
+            color: var(--dark-mode-text);
+        }
+
+        .description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        body.dark-mode .description {
+            color: #aaa;
+        }
+
+        .btn {
+            background: var(--gradient);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(11, 255, 0, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(11, 255, 0, 0.4);
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+                box-shadow: none;
+                border-radius: 0;
+                background: transparent;
+            }
+
+            body.dark-mode .container {
+                 background: transparent;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                font-size: 14px;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <a href="index.html" class="back-button">
+            <i class="fas fa-arrow-right"></i>
+        </a>
+        <h2 class="page-title">سایت ثبت من</h2>
+    </header>
+
+    <div class="content-wrapper">
+        <div class="container">
+            <h1>سایت رسمی ثبت من</h1>
+            <p class="description">
+                برای ورود به سایت رسمی ثبت من و دسترسی به خدمات ثبتی روی دکمه زیر کلیک کنید.
+            </p>
+            
+            <a href="https://my.ssaa.ir" target="_blank" class="btn">
+                <i class="fas fa-external-link-alt"></i>
+                ورود به سایت
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Check for dark mode from localStorage and apply it
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
+</body>
+</html>
