@@ -10,7 +10,7 @@
  <meta http-equiv="Expires" content="0" />
  <!-- END: کد ضد کش اضافه شده -->
 
- <title>ورود به جعبه ابزار املاک</title>
+ <title>جعبه ابزار املاک</title> <!-- عنوان صفحه به "جعبه ابزار املاک" تغییر یافت -->
  
  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -41,6 +41,10 @@
  align-items: center; 
  min-height: 100vh; 
  padding: 20px; 
+ /* Added to prevent text selection */
+ -webkit-user-select: none; /* Safari */
+ -ms-user-select: none; /* IE 10+ and Edge */
+ user-select: none; /* Standard syntax */
  }
  
  .auth-container { 
@@ -55,6 +59,7 @@
  .logo-placeholder { 
  width: 200px;
  height: 60px;
+ /* آدرس تصویر لوگو: مطمئن شوید که فایل logo.png در پوشه 'images' کنار فایل HTML شما قرار دارد */
  background-image: url('images/logo.png'); 
  background-size: contain; 
  background-repeat: no-repeat; 
