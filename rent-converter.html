@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محاسبه تبدیل رهن و اجاره</title>
+    <title>جعبه ابزار املاک</title>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -45,6 +45,10 @@
             flex-direction: column;
             position: relative;
             background-color: #ffffff;
+            /* Added to prevent text selection */
+            -webkit-user-select: none; /* Safari */
+            -ms-user-select: none; /* IE 10+ and Edge */
+            user-select: none; /* Standard syntax */
         }
 
         .header-container {
@@ -59,14 +63,14 @@
             box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
             padding: 8px 15px;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             position: relative;
         }
 
         .logo-container {
-            height: 70px;
-            width: 210px;
+            height: 50px;
+            width: 150px;
             border-radius: 8px;
             overflow: hidden;
             background-color: #ffffff;
@@ -79,26 +83,25 @@
             display: block;
         }
 
-        #menuButton {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 30px;
-            height: 21px;
-            background: transparent;
+        .header-icon-btn {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
             border: none;
+            font-size: 20px;
+            color: var(--grey-color);
             cursor: pointer;
-            padding: 0;
-            z-index: 10;
+            padding: 10px;
+            border-radius: 50%;
+            transition: var(--transition);
         }
-
-        #menuButton span {
-            display: block;
-            height: 3px;
-            width: 100%;
-            background-color: var(--primary-color);
-            border-radius: 3px;
-            transition: all 0.3s ease;
+        
+        .header-icon-btn:hover {
+            color: var(--primary-color);
+            background-color: #f0f0f0;
+            transform: translateY(-50%) rotate(90deg);
         }
 
         main {
@@ -106,36 +109,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px 15px;
+            padding: 30px 15px 20px;
             min-height: calc(100vh - 90px);
-        }
-
-        .guide-text {
-            text-align: center;
-            margin-top: 20px;
-            margin-bottom: 25px;
-            font-size: 1.1rem;
-            color: #555;
-            max-width: 680px;
-            line-height: 1.7;
-            position: relative;
-        }
-
-        .guide-text::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 2px;
-            background: var(--gradient);
-            border-radius: 2px;
-        }
-
-        .guide-text .highlight {
-            color: var(--primary-color);
-            font-weight: 600;
         }
 
         .form-container {
@@ -380,38 +355,7 @@
             font-size: 1.2rem;
             font-weight: 700;
             color: var(--secondary-color);
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            border-radius: var(--button-border-radius);
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            font-family: 'Vazirmatn', Arial, sans-serif;
-            text-align: center;
-            transition: var(--transition);
-            border: none;
-            outline: none;
-        }
-
-        .btn-primary {
-            background: var(--gradient);
-            color: white;
-            box-shadow: 0 4px 12px rgba(0, 217, 104, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 217, 104, 0.4);
-        }
-
-        .navigation-buttons {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
+            line-height: 1.5; /* Added for better spacing between lines */
         }
 
         @media (max-width: 480px) {
@@ -450,11 +394,6 @@
                 font-size: 14px;
             }
 
-            .guide-text {
-                font-size: 1rem;
-                margin-bottom: 20px;
-            }
-
             .calculator-input-group {
                 padding: 15px;
             }
@@ -465,23 +404,16 @@
 <body>
     <header class="header-container">
         <div class="topbar">
-            <button id="menuButton" aria-label="منو">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-
             <div class="logo-container">
                 <img src="images/logo.png" alt="لوگوی برنامه" class="logo-image">
             </div>
+            <button id="resetButtonHeader" class="header-icon-btn" aria-label="محاسبه مجدد">
+                <i class="fas fa-sync-alt"></i>
+            </button>
         </div>
     </header>
 
     <main>
-        <p class="guide-text">
-            مبلغ <span class="highlight">رهن و اجاره فعلی</span> ملک را وارد کنید تا پیشنهادات مختلف را مشاهده کنید
-        </p>
-
         <!-- فیلدهای ورودی اصلی -->
         <div class="form-container">
             <div class="form-row">
@@ -546,12 +478,6 @@
                 <div class="result-value" id="customResultText">محاسبه‌ای انجام نشده</div>
             </div>
         </div>
-
-        <div class="navigation-buttons">
-            <button class="btn btn-primary" onclick="clearAllFields()">
-                <i class="fas fa-eraser"></i> پاک کردن همه
-            </button>
-        </div>
     </main>
 
     <script>
@@ -594,10 +520,8 @@
             let value = input.value.replace(/[^\d۰-۹,]/g, '');
             value = toEnglishNumber(value);
             
-            // حذف کاما برای پردازش
             let numericValue = value.replace(/,/g, '');
             
-            // اضافه کردن کاما برای نمایش
             if (numericValue) {
                 numericValue = formatNumberWithCommas(numericValue);
             }
@@ -618,26 +542,20 @@
             if (depositValue > 0 || rentValue > 0) {
                 suggestionsSection.classList.add('show');
 
-                // محاسبه صحیح بر اساس فرمول شما
                 let totalRentEquivalent = 0;
                 let totalDepositEquivalent = 0;
 
                 if (depositValue > 0 && rentValue > 0) {
-                    // اگر کلاً اجاره باشد: رهن÷30 + اجاره فعلی
                     totalRentEquivalent = (depositValue / 30) + rentValue;
-                    // اگر کلاً رهن باشد: رهن فعلی + (اجاره×30)
                     totalDepositEquivalent = depositValue + (rentValue * 30);
                 } else if (depositValue > 0) {
-                    // فقط رهن داریم
                     totalRentEquivalent = depositValue / 30;
                     totalDepositEquivalent = depositValue;
                 } else if (rentValue > 0) {
-                    // فقط اجاره داریم
                     totalRentEquivalent = rentValue;
                     totalDepositEquivalent = rentValue * 30;
                 }
 
-                // محاسبات اصلی - ردیف اول
                 let mainCalcHTML = `
                     <div class="main-calculation">
                         <div class="title">اگر کلاً اجاره باشد:</div>
@@ -651,39 +569,32 @@
 
                 mainCalculations.innerHTML = mainCalcHTML;
 
-                // تولید پیشنهادات مختلف بر اساس چهارک‌ها
                 const suggestions = [];
-
                 if (depositValue > 0 || rentValue > 0) {
-                    const baseDeposit = depositValue || (rentValue * 30);
-                    const baseRent = rentValue || (depositValue / 30);
+                    const baseDeposit = totalDepositEquivalent;
+                    const baseRent = totalRentEquivalent;
                     
-                    // پیشنهاد 1: کاهش 1/4 رهن
                     const quarterDeposit = baseDeposit / 4;
                     const newDeposit1 = smartRound(Math.max(0, baseDeposit - quarterDeposit));
-                    const newRent1 = smartRound(baseRent + (quarterDeposit / 30));
+                    const newRent1 = smartRound(baseRent - (baseDeposit - newDeposit1)/30);
                     suggestions.push({ deposit: newDeposit1, rent: newRent1 });
 
-                    // پیشنهاد 2: کاهش 2/4 رهن
                     const halfDeposit = baseDeposit / 2;
                     const newDeposit2 = smartRound(Math.max(0, baseDeposit - halfDeposit));
-                    const newRent2 = smartRound(baseRent + (halfDeposit / 30));
+                    const newRent2 = smartRound(baseRent - (baseDeposit - newDeposit2)/30);
                     suggestions.push({ deposit: newDeposit2, rent: newRent2 });
 
-                    // پیشنهاد 3: کاهش 3/4 رهن
                     const threeQuarterDeposit = (baseDeposit * 3) / 4;
                     const newDeposit3 = smartRound(Math.max(0, baseDeposit - threeQuarterDeposit));
-                    const newRent3 = smartRound(baseRent + (threeQuarterDeposit / 30));
+                    const newRent3 = smartRound(baseRent - (baseDeposit - newDeposit3)/30);
                     suggestions.push({ deposit: newDeposit3, rent: newRent3 });
 
-                    // پیشنهاد 4: افزایش رهن، کاهش اجاره
                     const extraDeposit = quarterDeposit;
                     const newDeposit4 = smartRound(baseDeposit + extraDeposit);
-                    const newRent4 = smartRound(Math.max(0, baseRent - (extraDeposit / 30)));
+                    const newRent4 = smartRound(Math.max(0, baseRent - (newDeposit4 - baseDeposit) / 30));
                     suggestions.push({ deposit: newDeposit4, rent: newRent4 });
                 }
 
-                // نمایش پیشنهادات در grid دو ستونه (هر ردیف دو کارت)
                 suggestionsGrid.innerHTML = suggestions.map(item => `
                     <div class="suggestion-item">
                         <div class="deposit">${toFarsiNumber(formatNumberWithCommas(item.deposit))} میلیون رهن</div>
@@ -704,78 +615,37 @@
             const customResult = document.getElementById('customResult');
             const customResultText = document.getElementById('customResultText');
 
-            // گرفتن مقادیر اصلی از فیلدهای بالا
             const mainDepositValue = parseFloat(toEnglishNumber(document.getElementById('main-deposit').value).replace(/,/g, '')) || 0;
             const mainRentValue = parseFloat(toEnglishNumber(document.getElementById('main-rent').value).replace(/,/g, '')) || 0;
 
             const newDepositValue = parseFloat(toEnglishNumber(customDeposit.value).replace(/,/g, '')) || 0;
             const newRentValue = parseFloat(toEnglishNumber(customRent.value).replace(/,/g, '')) || 0;
+            
+            const totalDepositEquivalent = mainDepositValue + (mainRentValue * 30);
 
             if (newDepositValue > 0 && (mainDepositValue > 0 || mainRentValue > 0)) {
-                // محاسبه تفاوت رهن
-                const depositDifference = newDepositValue - mainDepositValue;
-                let finalRent = mainRentValue;
+                const remainingDeposit = totalDepositEquivalent - newDepositValue;
+                const finalRent = remainingDeposit / 30;
 
-                if (depositDifference > 0) {
-                    // رهن افزایش یافته، اجاره کم می‌شود
-                    finalRent = Math.max(0, mainRentValue - (depositDifference / 30));
-                    depositResult.innerHTML = `
-                        رهن ${toFarsiNumber(formatNumberWithCommas(Math.abs(depositDifference)))} میلیون افزایش یافت<br>
-                        اجاره نهایی: ${toFarsiNumber(formatNumberWithCommas(Math.floor(finalRent)))} میلیون
-                    `;
-                } else if (depositDifference < 0) {
-                    // رهن کاهش یافته، اجاره زیاد می‌شود
-                    finalRent = mainRentValue + (Math.abs(depositDifference) / 30);
-                    depositResult.innerHTML = `
-                        رهن ${toFarsiNumber(formatNumberWithCommas(Math.abs(depositDifference)))} میلیون کاهش یافت<br>
-                        اجاره نهایی: ${toFarsiNumber(formatNumberWithCommas(Math.floor(finalRent)))} میلیون
-                    `;
-                } else {
-                    depositResult.innerHTML = `
-                        تغییری در رهن نداشته‌اید<br>
-                        اجاره همان ${toFarsiNumber(formatNumberWithCommas(Math.floor(finalRent)))} میلیون باقی می‌ماند
-                    `;
-                }
-
+                depositResult.innerHTML = `اجاره نهایی: ${toFarsiNumber(formatNumberWithCommas(smartRound(finalRent)))} میلیون`;
                 depositResult.style.display = 'block';
-                customRent.value = '';
+                customRent.value = '۰';
                 rentResult.style.display = 'none';
 
                 customResult.style.display = 'block';
-                customResultText.textContent = `رهن: ${toFarsiNumber(formatNumberWithCommas(newDepositValue))} میلیون - اجاره: ${toFarsiNumber(formatNumberWithCommas(Math.floor(finalRent)))} میلیون`;
+                customResultText.innerHTML = `رهن: ${toFarsiNumber(formatNumberWithCommas(newDepositValue))} م<br>اجاره: ${toFarsiNumber(formatNumberWithCommas(smartRound(finalRent)))} م`;
 
             } else if (newRentValue > 0 && (mainDepositValue > 0 || mainRentValue > 0)) {
-                // محاسبه تفاوت اجاره
-                const rentDifference = newRentValue - mainRentValue;
-                let finalDeposit = mainDepositValue;
+                const requiredDepositForRent = newRentValue * 30;
+                const finalDeposit = totalDepositEquivalent - requiredDepositForRent;
 
-                if (rentDifference > 0) {
-                    // اجاره افزایش یافته، رهن کم می‌شود
-                    finalDeposit = Math.max(0, mainDepositValue - (rentDifference * 30));
-                    rentResult.innerHTML = `
-                        اجاره ${toFarsiNumber(formatNumberWithCommas(Math.abs(rentDifference)))} میلیون افزایش یافت<br>
-                        رهن نهایی: ${toFarsiNumber(formatNumberWithCommas(Math.floor(finalDeposit)))} میلیون
-                    `;
-                } else if (rentDifference < 0) {
-                    // اجاره کاهش یافته، رهن زیاد می‌شود
-                    finalDeposit = mainDepositValue + (Math.abs(rentDifference) * 30);
-                    rentResult.innerHTML = `
-                        اجاره ${toFarsiNumber(formatNumberWithCommas(Math.abs(rentDifference)))} میلیون کاهش یافت<br>
-                        رهن نهایی: ${toFarsiNumber(formatNumberWithCommas(Math.floor(finalDeposit)))} میلیون
-                    `;
-                } else {
-                    rentResult.innerHTML = `
-                        تغییری در اجاره نداشته‌اید<br>
-                        رهن همان ${toFarsiNumber(formatNumberWithCommas(Math.floor(finalDeposit)))} میلیون باقی می‌ماند
-                    `;
-                }
-
+                rentResult.innerHTML = `رهن نهایی: ${toFarsiNumber(formatNumberWithCommas(smartRound(finalDeposit)))} میلیون`;
                 rentResult.style.display = 'block';
-                customDeposit.value = '';
+                customDeposit.value = '۰';
                 depositResult.style.display = 'none';
 
                 customResult.style.display = 'block';
-                customResultText.textContent = `رهن: ${toFarsiNumber(formatNumberWithCommas(Math.floor(finalDeposit)))} میلیون - اجاره: ${toFarsiNumber(formatNumberWithCommas(newRentValue))} میلیون`;
+                customResultText.innerHTML = `رهن: ${toFarsiNumber(formatNumberWithCommas(smartRound(finalDeposit)))} م<br>اجاره: ${toFarsiNumber(formatNumberWithCommas(newRentValue))} م`;
 
             } else {
                 depositResult.style.display = 'none';
@@ -787,17 +657,21 @@
         function clearAllFields() {
             document.getElementById('main-deposit').value = '';
             document.getElementById('main-rent').value = '';
-            document.getElementById('custom-deposit').value = '';
-            document.getElementById('custom-rent').value = '';
+            document.getElementById('custom-deposit').value = '۰';
+            document.getElementById('custom-rent').value = '۰';
             document.getElementById('deposit-calculation-result').style.display = 'none';
             document.getElementById('rent-calculation-result').style.display = 'none';
             document.getElementById('suggestionsSection').classList.remove('show');
             document.getElementById('customResult').style.display = 'none';
+            document.getElementById('main-deposit').focus();
         }
-
-        // Event listeners
+        
         document.addEventListener('DOMContentLoaded', function() {
-            // تنظیم placeholder برای فیلدهای dotted
+            const resetButtonHeader = document.getElementById('resetButtonHeader');
+            if (resetButtonHeader) {
+                resetButtonHeader.addEventListener('click', clearAllFields);
+            }
+            
             const dottedInputs = document.querySelectorAll('.dotted-input');
             dottedInputs.forEach(input => {
                 input.addEventListener('focus', function() {
