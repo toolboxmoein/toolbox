@@ -143,6 +143,9 @@
  transition: var(--transition); 
  background: var(--gradient); 
  color: white;
+ display: flex; /* برای تراز کردن آیکون و متن */
+ justify-content: center;
+ align-items: center;
  }
  
  .auth-button:hover:not(:disabled) { 
@@ -153,6 +156,15 @@
  opacity: 0.6; 
  cursor: not-allowed; 
  transform: none; 
+ }
+
+ /* استایل برای عکس آیکون درون دکمه */
+ .auth-button .button-icon-img {
+    width: 20px; /* اندازه آیکون */
+    height: 20px; /* اندازه آیکون */
+    vertical-align: middle; /* تراز عمودی */
+    margin-left: 8px; /* فاصله از متن در حالت RTL */
+    object-fit: contain; /* اطمینان از نمایش کامل تصویر */
  }
  
  .mode-switch { 
@@ -374,7 +386,8 @@
  </div>
  
  <button type="submit" class="auth-button" id="primary-action">
- <i class="fas fa-sign-in-alt"></i> ورود به جعبه ابزار املاک
+    <img src="images/icon-bazar1.jpg" alt="ورود" class="button-icon-img"> <!-- عکس جایگزین شد -->
+    ورود به جعبه ابزار املاک
  </button>
  </form>
  
@@ -663,7 +676,7 @@
         
         if (currentMode === 'signup') {
             mainIntroText.innerHTML = 'برای ایجاد حساب کاربری جدید در <span class="app-name">جعبه ابزار املاک</span> اطلاعات خود را وارد نمایید';
-            primaryActionBtn.innerHTML = '<i class="fas fa-user-plus"></i> ثبت‌نام در جعبه ابزار املاک';
+            primaryActionBtn.innerHTML = '<img src="images/icon-bazar1.jpg" alt="ثبت‌نام" class="button-icon-img"> ثبت‌نام در جعبه ابزار املاک'; // آیکون و متن برای ثبت‌نام
             switchText.textContent = 'قبلاً ثبت‌نام کرده‌اید؟';
             modeSwitchBtn.textContent = 'وارد شوید';
             nameFields.style.display = 'block';
@@ -671,7 +684,7 @@
             forgotPasswordLink.style.display = 'none';
         } else {
             mainIntroText.innerHTML = 'برای ورود و یا ثبت نام در <span class="app-name">جعبه ابزار املاک</span> ایمیل خود را وارد نمایید';
-            primaryActionBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> ورود به جعبه ابزار املاک';
+            primaryActionBtn.innerHTML = '<img src="images/icon-bazar1.jpg" alt="ورود" class="button-icon-img"> ورود به جعبه ابزار املاک'; // آیکون و متن برای ورود
             switchText.textContent = 'حساب کاربری ندارید؟';
             modeSwitchBtn.textContent = 'ثبت‌نام کنید';
             nameFields.style.display = 'none';
@@ -841,9 +854,10 @@
                 showMessage('خطای غیرمنتظره رخ داد', 'error');
             } finally {
                 primaryActionBtn.disabled = false;
+                // اطمینان از نمایش آیکون و متن صحیح پس از پردازش
                 primaryActionBtn.innerHTML = currentMode === 'login' 
-                    ? '<i class="fas fa-sign-in-alt"></i> ورود به جعبه ابزار املاک'
-                    : '<i class="fas fa-user-plus"></i> ثبت‌نام در جعبه ابزار املاک';
+                    ? '<img src="images/icon-bazar1.jpg" alt="ورود" class="button-icon-img"> ورود به جعبه ابزار املاک'
+                    : '<img src="images/icon-bazar1.jpg" alt="ثبت‌نام" class="button-icon-img"> ثبت‌نام در جعبه ابزار املاک';
             }
         });
         
