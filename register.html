@@ -10,7 +10,7 @@
  <meta http-equiv="Expires" content="0" />
  <!-- END: کد ضد کش اضافه شده -->
 
- <title>ورود به رادار اینستاگرام</title>
+ <title>ورود به جعبه ابزار املاک</title>
  
  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -340,7 +340,7 @@
  <div class="logo-placeholder"></div>
  
  <p class="intro-text" id="main-intro-text">
- برای ورود و یا ثبت نام در <span class="app-name">رادار اینستاگرام</span> پست الکترونیک خود را وارد نمایید
+ برای ورود و یا ثبت نام در <span class="app-name">جعبه ابزار املاک</span> ایمیل خود را وارد نمایید
  </p>
 
  <form id="authForm">
@@ -369,7 +369,7 @@
  </div>
  
  <button type="submit" class="auth-button" id="primary-action">
- <i class="fas fa-sign-in-alt"></i> ورود به رادار اینستاگرام
+ <i class="fas fa-sign-in-alt"></i> ورود به جعبه ابزار املاک
  </button>
  </form>
  
@@ -407,10 +407,10 @@
     let currentMode = 'login';
     let currentDeviceId = null;
     
-    // آدرس Worker کلودفلر شما - آدرس صحیح (اینجا داخلی به register.html تعریف شده است)
+    // آدرس Worker کلودفلر شما
     const WORKER_URL = 'https://weathered-sun-e806.toolbox-moein.workers.dev';
     
-    // تابع کمکی برای ترجمه خطاهای Worker به فارسی (اینجا داخلی به register.html تعریف شده است)
+    // تابع کمکی برای ترجمه خطاهای Worker به فارسی
     function translateWorkerError(message) {
         if (message.includes("لطفاً تمام فیلدها را پر کنید.")) {
             return "لطفاً تمام فیلدهای نام، نام خانوادگی، ایمیل و رمز عبور را پر کنید.";
@@ -479,7 +479,7 @@
         messageDiv.style.display = 'block';
     }
     
-    // درخواست به Worker (این تابع داخلی register.html است)
+    // درخواست به Worker
     async function makeWorkerRequest(endpoint, data = null, method = 'GET') {
         const url = `${WORKER_URL}${endpoint}`;
         
@@ -489,12 +489,6 @@
                 'Content-Type': 'application/json',
             },
         };
-        
-        // در register.html نیازی به sessionToken در هدر نیست مگر برای getSession یا عملیات خاص
-        // const sessionToken = localStorage.getItem('sessionToken');
-        // if (sessionToken) {
-        //     options.headers['Authorization'] = `Bearer ${sessionToken}`;
-        // }
         
         if (data && method !== 'GET') {
             options.body = JSON.stringify(data);
@@ -523,7 +517,7 @@
         }
     }
     
-    // بررسی نشست فعال (این تابع داخلی register.html است)
+    // بررسی نشست فعال
     async function checkExistingSession() {
         const sessionToken = localStorage.getItem('sessionToken');
         if (!sessionToken) {
@@ -534,7 +528,6 @@
         console.log("Found sessionToken, checking validity...");
         
         try {
-            // برای getSession باید sessionToken در هدر ارسال شود
             const response = await fetch(`${WORKER_URL}/getsession`, {
                 method: 'POST',
                 headers: {
@@ -563,7 +556,7 @@
         return false;
     }
     
-    // ورود (این تابع داخلی register.html است)
+    // ورود
     async function performSignIn(email, password) {
         console.log("🔄 Attempting signin for:", email);
         
@@ -598,7 +591,7 @@
         }
     }
     
-    // ثبت نام (این تابع داخلی register.html است)
+    // ثبت نام
     async function performSignUp(email, password, firstName, lastName) {
         console.log("🔄 Attempting signup for:", email);
         
@@ -628,7 +621,7 @@
         }
     }
     
-    // بازیابی رمز عبور (این تابع داخلی register.html است)
+    // بازیابی رمز عبور
     async function requestPasswordResetInternal(email) {
         console.log("🔄 Requesting password reset for:", email);
         
@@ -664,16 +657,16 @@
         currentMode = (currentMode === 'login') ? 'signup' : 'login';
         
         if (currentMode === 'signup') {
-            mainIntroText.innerHTML = 'برای ایجاد حساب کاربری جدید در <span class="app-name">رادار اینستاگرام</span> اطلاعات خود را وارد نمایید';
-            primaryActionBtn.innerHTML = '<i class="fas fa-user-plus"></i> ثبت‌نام در رادار اینستاگرام';
+            mainIntroText.innerHTML = 'برای ایجاد حساب کاربری جدید در <span class="app-name">جعبه ابزار املاک</span> اطلاعات خود را وارد نمایید';
+            primaryActionBtn.innerHTML = '<i class="fas fa-user-plus"></i> ثبت‌نام در جعبه ابزار املاک';
             switchText.textContent = 'قبلاً ثبت‌نام کرده‌اید؟';
             modeSwitchBtn.textContent = 'وارد شوید';
             nameFields.style.display = 'block';
             confirmPasswordField.style.display = 'block';
             forgotPasswordLink.style.display = 'none';
         } else {
-            mainIntroText.innerHTML = 'برای ورود و یا ثبت نام در <span class="app-name">رادار اینستاگرام</span> پست الکترونیک خود را وارد نمایید';
-            primaryActionBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> ورود به رادار اینستاگرام';
+            mainIntroText.innerHTML = 'برای ورود و یا ثبت نام در <span class="app-name">جعبه ابزار املاک</span> ایمیل خود را وارد نمایید';
+            primaryActionBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> ورود به جعبه ابزار املاک';
             switchText.textContent = 'حساب کاربری ندارید؟';
             modeSwitchBtn.textContent = 'ثبت‌نام کنید';
             nameFields.style.display = 'none';
@@ -844,8 +837,8 @@
             } finally {
                 primaryActionBtn.disabled = false;
                 primaryActionBtn.innerHTML = currentMode === 'login' 
-                    ? '<i class="fas fa-sign-in-alt"></i> ورود به رادار اینستاگرام'
-                    : '<i class="fas fa-user-plus"></i> ثبت‌نام در رادار اینستاگرام';
+                    ? '<i class="fas fa-sign-in-alt"></i> ورود به جعبه ابزار املاک'
+                    : '<i class="fas fa-user-plus"></i> ثبت‌نام در جعبه ابزار املاک';
             }
         });
         
