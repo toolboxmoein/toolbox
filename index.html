@@ -144,9 +144,9 @@
         background-position: center;
     }
     .header-icons-wrapper {
-        flex: 0 0 auto; /* تغییر برای جا دادن آیکون جدید */
+        flex: 0 0 auto;
         display: flex; align-items: center; justify-content: flex-end;
-        gap: 10px; padding-left: 10px; /* کاهش پدینگ برای فضای بیشتر */
+        gap: 10px; padding-left: 10px;
     }
     .header-icon-button {
         background: none; border: none; font-size: 24px; cursor: pointer;
@@ -155,7 +155,7 @@
         text-decoration: none; position: relative;
     }
     .header-icon-button:hover { background-color: var(--primary-light); }
-    #adsIcon, #messagesIcon, #searchButton { color: var(--primary-color); } /* آیکون سرچ اضافه شد */
+    #adsIcon, #messagesIcon { color: var(--primary-color); }
     
     .unread-badge {
         position: absolute; top: 4px; left: 4px; background-color: var(--danger-color);
@@ -190,7 +190,7 @@
     .sidebar-footer { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-color); text-align: center; }
     .sidebar-version { font-size: 12px; color: var(--grey-color); }
     
-    /* --- استایل‌های محتوای اصلی (ادغام شده از کد ۲) --- */
+    /* --- استایل‌های محتوای اصلی --- */
     #app-container {
         width: 100%;
         min-height: 100vh;
@@ -202,34 +202,10 @@
     }
     body.dark-mode #app-container { background-color: var(--dark-mode-bg); }
 
-    .header-banner {
-        width: calc(100% - 30px);
-        margin: 15px auto;
-        height: 80px;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        border-radius: 12px;
-        box-shadow: var(--subtle-shadow);
-        overflow: hidden;
-    }
-    
-    .main-banner {
-        width: calc(100% - 30px);
-        margin: 15px auto;
-        height: 3cm; 
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        border-radius: var(--border-radius);
-        box-shadow: var(--subtle-shadow);
-        overflow: hidden;
-    }
-
     .date-banner {
         width: calc(100% - 30px); height: 1cm; background: white; display: flex; justify-content: center;
         align-items: center; color: black; font-weight: 600; font-size: 16px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        margin: 0 auto 15px auto; border-radius: 12px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        margin: 15px auto; border-radius: 12px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         position: relative; overflow: visible; z-index: 20;
     }
 
@@ -323,7 +299,6 @@
     body.dark-mode .bottom-nav { background-color: var(--dark-mode-card); box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2); }
     .nav-item { display: flex; flex-direction: column; align-items: center; color: #333; text-decoration: none; font-size: 11px; background-color: white; border-radius: 8px; padding: 5px 10px; transition: all 0.3s ease; }
     body.dark-mode .nav-item { background-color: var(--dark-mode-card); color: #aaa; }
-    .nav-item i { font-size: 20px; margin-bottom: 3px; }
     .nav-item:first-child i { color: var(--primary-color); }
     .nav-item:nth-child(2) i { color: var(--complementary-color); }
     .nav-item:nth-child(3) i { color: var(--primary-color); }
@@ -469,12 +444,12 @@
 </head>
 <body>
 
-<!-- صفحه لودینگ از کد ۲ -->
+<!-- صفحه لودینگ -->
 <div id="loading-overlay">
     <div class="spinner"></div>
 </div>
 
-<!-- ساختار اصلی بدنه از کد ۱ (پیغام‌ها، مودال‌ها و...) -->
+<!-- ساختارهای مودال و پیام‌ها -->
 <div id="no-session-container" class="no-session-container" style="display: none;">
  <div class="no-session-content">
  <i class="fas fa-sign-in-alt" style="font-size: 60px; color: var(--primary-color); margin-bottom: 20px;"></i>
@@ -504,7 +479,6 @@
  </div>
 </div>
 
-<!-- مودال‌های جدید از کد ۲ -->
 <div class="modal" id="allToolsModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -694,7 +668,7 @@
  </div>
 </div>
 
-<!-- هدر و سایدبار از کد ۱ (با تغییرات) -->
+<!-- هدر و سایدبار -->
 <header class="header">
  <div class="hamburger-menu">
     <button class="menu-tab-button" id="hamburgerIcon">منو</button>
@@ -703,7 +677,6 @@
     <div class="logo-placeholder"></div> 
  </div>
  <div class="header-icons-wrapper">
-    <a href="#" class="header-icon-button" id="searchButton" title="جستجو"><i class="fas fa-search"></i></a>
     <a href="tablighat.html" class="header-icon-button" id="adsIcon" title="تبلیغات"><i class="fas fa-bullhorn"></i></a>
     <a href="message.html" class="header-icon-button" id="messagesIcon" title="پیام‌ها">
         <i class="fas fa-envelope"></i>
@@ -738,7 +711,6 @@
 
 <!-- محتوای اصلی صفحه -->
 <div id="app-container">
-    <div class="main-banner" style="background-image: url('images/sarbarg1.png');"></div>
     <div class="date-banner" id="persianDateContainer"></div>
     <div class="search-container" id="searchContainer">
         <div class="search-box">
@@ -775,7 +747,7 @@
     
     <div class="tab-content active" id="calculations-tab">
         <div class="calc-container">
-            <!-- Row 1: Apartment, Villa, Rent Converter -->
+            <!-- Row 1 -->
             <a href="apartment-calculator.html" class="calc-item limited-feature" data-feature="apartment-calculator">
                 <div class="calc-image"><i class="fas fa-building"></i></div>
                 <div class="calc-name">قیمت آپارتمان</div>
@@ -791,13 +763,13 @@
                 <div class="calc-name">تبدیل رهن و اجاره</div>
                 <div class="favorite-icon" data-id="calc4"><i class="far fa-heart"></i></div>
             </a>
-    
+
             <!-- Row 2: Banner -->
             <div class="banner-container">
-                <a href="calculator.html" class="banner-full" style="background-image: url('images/banner-calculations.jpg');"></a>
+                <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg2.png');"></a>
             </div>
-    
-            <!-- Row 3 and onwards: Other Calculation buttons -->
+
+            <!-- Row 3 -->
             <a href="apartment-share-calculator.html" class="calc-item limited-feature" data-feature="apartment-share-calculator">
                 <div class="calc-image"><i class="fas fa-calculator"></i></div>
                 <div class="calc-name">قدرالسهم آپارتمان</div>
@@ -813,6 +785,8 @@
                 <div class="calc-name">محاسبه کمیسیون</div>
                 <div class="favorite-icon" data-id="calc5"><i class="far fa-heart"></i></div>
             </a>
+
+            <!-- Row 4 -->
             <a href="kharjkard-sakhteman.html" class="calc-item">
                 <div class="calc-image"><i class="fas fa-hammer"></i></div>
                 <div class="calc-name">خرجکرد ساختمان</div>
@@ -822,6 +796,11 @@
                 <div class="calc-image"><i class="fas fa-file-invoice-dollar"></i></div>
                 <div class="calc-name">شارژ ساختمان</div>
                 <div class="favorite-icon" data-id="calc8"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="mohasebeejareh.html" class="calc-item">
+                <div class="calc-image"><i class="fas fa-key"></i></div>
+                <div class="calc-name">محاسبه اجاره</div>
+                <div class="favorite-icon" data-id="calc12"><i class="far fa-heart"></i></div>
             </a>
         </div>
     </div>
@@ -842,8 +821,9 @@
                 <div class="calc-name">استعلام چک</div>
                 <div class="favorite-icon" data-id="inquiry3"><i class="far fa-heart"></i></div>
             </a>
+            <!-- Banner -->
             <div class="banner-container">
-                <a href="inquiry.html" class="banner-full" style="background-image: url('images/banner_estelamat.jpg');"></a>
+                <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg2.png');"></a>
             </div>
             <a href="taidiye-codeposti.html" class="calc-item">
                 <div class="calc-image"><i class="fas fa-map-pin"></i></div>
@@ -854,6 +834,7 @@
     </div>
     <div class="tab-content" id="services-tab">
         <div class="calc-container">
+            <!-- Row 1 -->
             <a href="sabtemelk.html" class="calc-item">
                 <div class="calc-image"><i class="fas fa-handshake"></i></div>
                 <div class="calc-name">سپردن ملک</div>
@@ -869,6 +850,7 @@
                 <div class="calc-name">اخبار ملکی</div>
                 <div class="favorite-icon" data-id="service3"><i class="far fa-heart"></i></div>
             </a>
+            <!-- Row 2 -->
             <a href="hamkari.html" class="calc-item">
                 <div class="calc-image"><i class="fas fa-handshake"></i></div>
                 <div class="calc-name">همکاری با ما</div>
@@ -884,9 +866,11 @@
                 <div class="calc-name">یادداشت‌ها</div>
                 <div class="favorite-icon" data-id="service6"><i class="far fa-heart"></i></div>
             </a>
+            <!-- Row 3: Banner -->
             <div class="banner-container">
-                <a href="content-calendar.html" class="banner-full" style="background-image: url('images/content-calendar.jpg');"></a>
+                <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg1.png');"></a>
             </div>
+            <!-- Row 4 -->
             <a href="moshtarian.html" class="calc-item">
                 <div class="calc-image"><i class="fas fa-users"></i></div>
                 <div class="calc-name">مشتریان</div>
@@ -902,6 +886,7 @@
                 <div class="calc-name">انتخاب نام املاک</div>
                 <div class="favorite-icon" data-id="service9"><i class="far fa-heart"></i></div>
             </a>
+            <!-- Row 5 -->
             <a href="ejare-roozane.html" class="calc-item">
                 <div class="calc-image"><i class="fas fa-calendar-day"></i></div>
                 <div class="calc-name">اجاره روزانه</div>
@@ -931,6 +916,10 @@
                 <div class="calc-name">دایرکت مارکتینگ</div>
                 <div class="favorite-icon" data-id="social3"><i class="far fa-heart"></i></div>
             </a>
+            <!-- Banner -->
+            <div class="banner-container">
+                <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg1.png');"></a>
+            </div>
             <a href="content-calendar.html" class="calc-item">
                 <div class="calc-image"><i class="fas fa-calendar-alt"></i></div>
                 <div class="calc-name">تقویم محتوا</div>
@@ -965,8 +954,9 @@
                 <div class="calc-name">سایت ثبت من</div>
                 <div class="favorite-icon" data-id="website3"><i class="far fa-heart"></i></div>
             </a>
+            <!-- Banner -->
             <div class="banner-container">
-                <a href="estelam.html" class="banner-full" style="background-image: url('images/estelam.jpg');"></a>
+                <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg2.png');"></a>
             </div>
         </div>
     </div>
@@ -987,8 +977,9 @@
                 <div class="calc-name">آموزش تصویری</div>
                 <div class="favorite-icon" data-id="edu3"><i class="far fa-heart"></i></div>
             </a>
+            <!-- Banner -->
             <div class="banner-container">
-                <a href="education.html" class="banner-full"></a>
+                <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg1.png');"></a>
             </div>
         </div>
     </div>
@@ -1009,8 +1000,9 @@
                 <div class="calc-name">سررسیدها و یادآورها</div>
                 <div class="favorite-icon" data-id="tool3"><i class="far fa-heart"></i></div>
             </a>
+            <!-- Banner -->
             <div class="banner-container">
-                <a href="tools.html" class="banner-full"></a>
+                <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg2.png');"></a>
             </div>
             <a href="chat-ai.html" class="calc-item">
                 <div class="calc-image"><i class="fas fa-robot"></i></div>
@@ -1036,32 +1028,31 @@
                 <div class="calc-name">بندهای قراردادی</div>
                 <div class="favorite-icon" data-id="file2"><i class="far fa-heart"></i></div>
             </a>
+            <!-- Banner -->
             <div class="banner-container">
-                <a href="files.html" class="banner-full"></a>
+                <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg1.png');"></a>
             </div>
         </div>
     </div>
 
-    <div class="main-banner" style="background-image: url('images/sarbarg2.png');"></div>
-
     <div id="payment-iframe-container" style="display:none;"></div>
     
     <div class="bottom-nav">
-        <a href="index.html" class="nav-item active">
-            <i class="fas fa-home"></i>
-            <span>خانه</span>
+        <a href="karbari.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>حساب کاربری</span>
         </a>
-        <a href="#" class="nav-item" id="showAllToolsBtn">
-            <i class="fas fa-th-large"></i>
-            <span>همه ابزارها</span>
+        <a href="#" class="nav-item" id="searchButtonBottomNav">
+            <i class="fas fa-search"></i>
+            <span>جستجو</span>
         </a>
         <a href="favorites.html" class="nav-item">
             <i class="fas fa-heart"></i>
             <span>علاقه‌مندی‌ها</span>
         </a>
-        <a href="user-account.html" class="nav-item">
-            <i class="fas fa-user"></i>
-            <span>حساب کاربری</span>
+        <a href="#" class="nav-item" id="showAllToolsBtn">
+            <i class="fas fa-th-large"></i>
+            <span>همه ابزارها</span>
         </a>
     </div>
 </div>
@@ -1233,11 +1224,7 @@ async function checkAuthStateAndDisplayContent() {
 function openMenu() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('overlay'); if (sidebar && overlay) { sidebar.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; } }
 function closeMenu() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('overlay'); if (sidebar && overlay) { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow = ''; } }
 
-// --- END: اسکریپت‌های اصلی از کد ۱ ---
-
-
 document.addEventListener('DOMContentLoaded', function() { 
-    // اجرای فانکشن‌های اصلی
     checkAuthStateAndDisplayContent(); 
     
     window.addEventListener('message', (event) => { 
@@ -1246,7 +1233,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } 
     }); 
     
-    // --- رویدادهای مربوط به منو و سایدبار (از کد ۱) ---
     document.getElementById('hamburgerIcon')?.addEventListener('click', (e) => { e.preventDefault(); openMenu(); }); 
     document.getElementById('sidebarClose')?.addEventListener('click', closeMenu); 
     document.getElementById('overlay')?.addEventListener('click', closeMenu); 
@@ -1261,7 +1247,6 @@ document.addEventListener('DOMContentLoaded', function() {
         goToRegister(); 
     }); 
     
-    // --- START: اسکریپت‌های مربوط به محتوا (ادغام شده از کد ۲) ---
     function showPersianDate() {
         document.getElementById('persianDateContainer').innerText = new Date().toLocaleDateString('fa-IR-u-nu-latn', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     }
@@ -1301,16 +1286,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateScrollArrows() {
         if (!tabsNav) return;
-        tabScrollLeft.classList.toggle('hidden', tabsNav.scrollLeft <= 0);
-        tabScrollRight.classList.toggle('hidden', tabsNav.scrollLeft + tabsNav.clientWidth >= tabsNav.scrollWidth - 5);
+        const isRTL = getComputedStyle(tabsNav).direction === 'rtl';
+        if (isRTL) {
+            tabScrollRight.classList.toggle('hidden', tabsNav.scrollLeft >= 0);
+            tabScrollLeft.classList.toggle('hidden', Math.abs(tabsNav.scrollLeft) + tabsNav.clientWidth >= tabsNav.scrollWidth - 5);
+        } else {
+            tabScrollLeft.classList.toggle('hidden', tabsNav.scrollLeft <= 0);
+            tabScrollRight.classList.toggle('hidden', tabsNav.scrollLeft + tabsNav.clientWidth >= tabsNav.scrollWidth - 5);
+        }
     }
-    tabScrollLeft.addEventListener('click', () => tabsNav.scrollBy({ left: -100, behavior: 'smooth' }));
-    tabScrollRight.addEventListener('click', () => tabsNav.scrollBy({ left: 100, behavior: 'smooth' }));
+    tabScrollLeft.addEventListener('click', () => tabsNav.scrollBy({ left: 100, behavior: 'smooth' }));
+    tabScrollRight.addEventListener('click', () => tabsNav.scrollBy({ left: -100, behavior: 'smooth' }));
     tabsNav.addEventListener('scroll', updateScrollArrows);
     window.addEventListener('resize', updateScrollArrows);
     updateScrollArrows();
 
-    const searchButton = document.getElementById('searchButton');
+    const searchButton = document.getElementById('searchButtonBottomNav');
     const searchContainer = document.getElementById('searchContainer');
     const searchInput = document.getElementById('searchInput');
     searchButton.addEventListener('click', function (e) {
@@ -1359,9 +1350,7 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => { disabledFeatureToast.classList.remove('show'); }, 2000);
         });
     });
-    // --- END: اسکریپت‌های محتوا ---
     
-    // --- START: منطق Service Worker ---
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js')
             .then(registration => {
@@ -1395,7 +1384,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    // --- END: منطق Service Worker ---
 });
 
 window.addEventListener('load', function () {
