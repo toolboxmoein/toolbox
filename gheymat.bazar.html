@@ -7,20 +7,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
+    <!-- اضافه کردن لینک فاوآیکون (برای رفع خطای 404 favicon) -->
+    <!-- مطمئن شوید که فایل favicon.ico در پوشه images قرار دارد. -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon"> 
+
     <style>
+        body {
+            background: transparent; /* این بخش را شفاف نگه می‌داریم تا در صورت استفاده در صفحات دیگر، پس‌زمینه صفحه اصلی نمایش داده شود */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
+            font-family: 'Vazirmatn', sans-serif; /* فونت را برای کل بدنه تنظیم می‌کنیم */
+            color: #333; /* رنگ پیش‌فرض متن */
+            overflow: hidden; /* برای جلوگیری از اسکرول احتمالی ناشی از هاله‌ها */
+        }
+
         .glass-price-card {
             width: 100%;
             max-width: 400px;
             height: 120px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.9); /* پس‌زمینه سفید با شفافیت بالا */
+            backdrop-filter: blur(15px); /* افکت شیشه‌ای حفظ شد */
+            -webkit-backdrop-filter: blur(15px); /* افکت شیشه‌ای حفظ شد */
             border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(0, 0, 0, 0.1); /* حاشیه ملایم */
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            color: #333;
             padding: 16px;
-            font-family: 'Vazirmatn', sans-serif;
             position: relative;
             overflow: hidden;
             display: flex;
@@ -30,91 +45,51 @@
             transition: all 0.3s ease;
         }
 
-        /* هاله نورانی متحرک */
-        .glass-price-card::before {
-            content: '';
-            position: absolute;
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 40%, transparent 70%);
-            border-radius: 50%;
-            top: -75px;
-            right: -75px;
-            animation: moveLight 15s infinite;
-            pointer-events: none;
-            filter: blur(20px);
-        }
-
-        /* هاله نورانی دوم */
+        /* هاله‌های نورانی متحرک */
+        .glass-price-card::before,
         .glass-price-card::after {
             content: '';
             position: absolute;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 40%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(20px);
+            opacity: 0; /* شروع با شفافیت صفر */
+            will-change: transform, opacity; /* بهینه‌سازی برای انیمیشن */
+        }
+
+        .glass-price-card::before {
+            width: 150px;
+            height: 150px;
+            top: -75px;
+            right: -75px;
+            animation: moveLight 15s infinite;
+        }
+
+        .glass-price-card::after {
             width: 100px;
             height: 100px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 40%, transparent 70%);
-            border-radius: 50%;
             bottom: -50px;
             left: -50px;
             animation: moveLight2 20s infinite;
-            pointer-events: none;
-            filter: blur(15px);
             animation-delay: 5s;
         }
 
-        /* انیمیشن حرکت هاله اول */
         @keyframes moveLight {
-            0% {
-                top: -75px;
-                right: -75px;
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            50% {
-                top: 50%;
-                right: 50%;
-                transform: translate(50%, -50%);
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                top: 120%;
-                right: 120%;
-                opacity: 0;
-            }
+            0% { top: -75px; right: -75px; opacity: 0; }
+            10% { opacity: 1; }
+            50% { top: 50%; right: 50%; transform: translate(50%, -50%); opacity: 0.8; }
+            90% { opacity: 1; }
+            100% { top: 120%; right: 120%; opacity: 0; }
         }
 
-        /* انیمیشن حرکت هاله دوم */
         @keyframes moveLight2 {
-            0% {
-                bottom: -50px;
-                left: -50px;
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            40% {
-                bottom: 30%;
-                left: 20%;
-                opacity: 0.7;
-            }
-            70% {
-                bottom: 60%;
-                left: 80%;
-                opacity: 0.9;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                bottom: 120%;
-                left: 120%;
-                opacity: 0;
-            }
+            0% { bottom: -50px; left: -50px; opacity: 0; }
+            10% { opacity: 1; }
+            40% { bottom: 30%; left: 20%; opacity: 0.7; }
+            70% { bottom: 60%; left: 80%; opacity: 0.9; }
+            90% { opacity: 1; }
+            100% { bottom: 120%; left: 120%; opacity: 0; }
         }
 
         /* لایه اضافی برای هاله‌های رندوم */
@@ -127,22 +102,12 @@
             pointer-events: none;
             filter: blur(10px);
             opacity: 0;
+            will-change: transform, opacity; /* بهینه‌سازی برای انیمیشن */
         }
 
-        .random-light-1 {
-            animation: randomMove1 18s infinite;
-            animation-delay: 3s;
-        }
-
-        .random-light-2 {
-            animation: randomMove2 22s infinite;
-            animation-delay: 8s;
-        }
-
-        .random-light-3 {
-            animation: randomMove3 25s infinite;
-            animation-delay: 12s;
-        }
+        .random-light-1 { animation: randomMove1 18s infinite; animation-delay: 3s; }
+        .random-light-2 { animation: randomMove2 22s infinite; animation-delay: 8s; }
+        .random-light-3 { animation: randomMove3 25s infinite; animation-delay: 12s; }
 
         @keyframes randomMove1 {
             0% { top: 10%; left: -40px; opacity: 0; }
@@ -191,6 +156,7 @@
             font-size: 0.7em;
             color: #3498db;
             animation: pulse 2s infinite;
+            will-change: transform, opacity; /* بهینه‌سازی برای انیمیشن */
         }
 
         @keyframes pulse {
@@ -202,25 +168,33 @@
             font-size: 0.6em;
             color: #7f8c8d;
             font-weight: 500;
+            display: flex; /* برای ثابت نگه داشتن محتوا */
+            align-items: center;
         }
+        
+        /* برای بخش زمان بروزرسانی */
+        .last-update #updateTime {
+            display: inline-block;
+            min-width: 45px; /* حداقل عرض برای "00:00" */
+            text-align: center;
+            /* مهم برای جلوگیری از لرزش اعداد */
+            font-variant-numeric: tabular-nums;
+            font-feature-settings: "tnum";
+            will-change: contents; /* بهینه‌سازی برای تغییر محتوا */
+        }
+
 
         .prices-row {
             display: flex;
             gap: 12px;
             flex: 1;
-            opacity: 1;
-            transition: opacity 0.4s ease;
             position: relative;
             z-index: 2;
         }
-
-        .prices-row.changing {
-            opacity: 0;
-        }
-
+        
         .price-item {
             flex: 1;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.8); /* پس‌زمینه آیتم‌ها سفید و کمی شفاف‌تر */
             border-radius: 10px;
             padding: 12px;
             display: flex;
@@ -228,7 +202,7 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(0, 0, 0, 0.05); /* حاشیه ملایم برای آیتم‌ها */
             transition: all 0.3s ease;
         }
 
@@ -241,17 +215,22 @@
             align-items: center;
             gap: 4px;
             justify-content: center;
+            min-height: 1.2em; /* برای جلوگیری از پرش نام‌ها */
         }
 
         .price-item .currency-name i {
             font-size: 0.9em;
+            /* اگر آیکون‌ها هم گاهی لود نمی‌شوند، می‌توان به آنها min-width داد */
+            display: inline-block; 
+            min-width: 1em; /* اطمینان از فضای ثابت برای آیکون */
         }
 
-        .fa-dollar-sign { color: #27ae60; }
-        .fa-euro-sign { color: #3498db; }
-        .fa-coins { color: #f39c12; }
-        .fa-chart-line { color: #e74c3c; }
-        .fa-sterling-sign { color: #9b59b6; }
+        /* رنگ آیکون‌ها */
+        .fa-dollar-sign { color: #27ae60; } /* سبز برای دلار */
+        .fa-euro-sign { color: #3498db; }   /* آبی برای یورو */
+        .fa-coins { color: #f39c12; }       /* نارنجی برای سکه */
+        .fa-gem { color: #e74c3c; }         /* قرمز برای طلا */
+        .fa-sterling-sign { color: #9b59b6; } /* پوند (اگر اضافه شود) */
 
         .price-value {
             font-size: 0.75em;
@@ -260,6 +239,13 @@
             direction: ltr;
             color: #2c3e50;
             min-height: 1.2em;
+            display: inline-block; /* برای اعمال min-width */
+            min-width: 90px; /* حداقل عرض برای جلوگیری از لرزش */
+            text-align: center; /* متن در مرکز قرار گیرد */
+            /* مهم برای جلوگیری از لرزش اعداد */
+            font-variant-numeric: tabular-nums;
+            font-feature-settings: "tnum";
+            will-change: contents; /* بهینه‌سازی برای تغییر محتوا */
         }
 
         .price-change {
@@ -269,6 +255,13 @@
             border-radius: 4px;
             direction: ltr;
             min-height: 1em;
+            display: inline-block; /* برای اعمال min-width */
+            min-width: 70px; /* حداقل عرض برای جلوگیری از لرزش */
+            text-align: center; /* متن در مرکز قرار گیرد */
+            /* مهم برای جلوگیری از لرزش اعداد */
+            font-variant-numeric: tabular-nums;
+            font-feature-settings: "tnum";
+            will-change: contents; /* بهینه‌سازی برای تغییر محتوا */
         }
 
         .change-up { 
@@ -289,7 +282,7 @@
             font-size: 0.55em;
             color: #7f8c8d;
             margin-top: 8px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-top: 1px solid rgba(0, 0, 0, 0.05); /* حاشیه ملایم برای فوتر */
             padding-top: 6px;
             display: flex;
             justify-content: space-between;
@@ -333,17 +326,6 @@
         .status-indicator.success { 
             background-color: rgba(40, 167, 69, 0.8); 
             color: #155724;
-        }
-
-        /* حذف پس‌زمینه رنگی */
-        body {
-            background: transparent;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 10px;
         }
 
         /* تبلت و موبایل */
@@ -407,27 +389,47 @@
     (function() {
         'use strict';
 
-        // تنظیمات منابع قیمت
+        // تنظیمات منابع قیمت - شامل تمام موارد درخواستی شما
         const PRICE_SOURCES = [
             {
-                id: 'price_dollar_rl',
+                id: 'price_dollar_rl', // دلار آمریکا
                 name: 'دلار آمریکا',
                 icon: 'fas fa-dollar-sign'
             },
             {
-                id: 'price_eur',
+                id: 'price_eur', // یورو
                 name: 'یورو',
                 icon: 'fas fa-euro-sign'
             },
             {
-                id: 'sekee',
+                id: 'geram18', // طلای ۱۸ عیار
+                name: 'طلای ۱۸ عیار',
+                icon: 'fas fa-gem' // آیکون سنگ قیمتی برای طلا
+            },
+            {
+                id: 'geram24', // طلای ۲۴ عیار
+                name: 'طلای ۲۴ عیار',
+                icon: 'fas fa-gem'
+            },
+            {
+                id: 'sekee', // سکه امامی
                 name: 'سکه امامی',
                 icon: 'fas fa-coins'
             },
             {
-                id: 'geram18',
-                name: 'طلای ۱۸ عیار',
-                icon: 'fas fa-chart-line'
+                id: 'bahar', // سکه بهار آزادی (id استاندارد در tgju)
+                name: 'سکه بهار آزادی',
+                icon: 'fas fa-coins'
+            },
+            {
+                id: 'nim', // نیم سکه (id استاندارد در tgju)
+                name: 'نیم سکه',
+                icon: 'fas fa-coins'
+            },
+            {
+                id: 'rob', // ربع سکه (id استاندارد در tgju)
+                name: 'ربع سکه',
+                icon: 'fas fa-coins'
             }
         ];
 
@@ -517,15 +519,16 @@
             showStatus('loading', 'دریافت...');
 
             try {
+                // آدرس API اصلی TGJU که شامل تمام قیمت‌هاست
                 const apiUrl = `https://call5.tgju.org/ajax.json?${new Date().getTime()}`;
                 
                 const response = await fetch(apiUrl, {
                     method: 'GET',
                     headers: {
                         'Accept': 'application/json',
-                        'Referer': 'https://www.tgju.org/'
+                        'Referer': 'https://www.tgju.org/' // ارسال Referer برای جلوگیری از خطای CORS در برخی موارد
                     },
-                    cache: 'no-store'
+                    cache: 'no-store' // اطمینان از دریافت جدیدترین داده‌ها
                 });
 
                 if (!response.ok) {
@@ -544,6 +547,15 @@
                             allPricesData.push({
                                 price: apiData.p || '---',
                                 change: apiData.dp || '0',
+                                name: source.name,
+                                icon: source.icon
+                            });
+                        } else {
+                            // در صورتی که آیتم در API یافت نشد
+                            console.warn(`آیتم ${source.name} (id: ${source.id}) در API یافت نشد.`);
+                            allPricesData.push({
+                                price: '---',
+                                change: '0',
                                 name: source.name,
                                 icon: source.icon
                             });
@@ -574,35 +586,29 @@
         // بروزرسانی نمایش
         function updateDisplay() {
             if (allPricesData.length === 0) return;
-
-            elements.pricesRow.classList.add('changing');
             
-            setTimeout(() => {
-                // نمایش دو مورد از شاخص فعلی
-                for (let i = 0; i < 2; i++) {
-                    const dataIndex = (currentIndex + i) % allPricesData.length;
-                    const itemData = allPricesData[dataIndex];
-                    
-                    const nameEl = document.getElementById(`item${i + 1}-name`);
-                    const priceEl = document.getElementById(`item${i + 1}-price`);
-                    const changeEl = document.getElementById(`item${i + 1}-change`);
-                    const iconEl = nameEl.parentElement.querySelector('i');
-                    
-                    nameEl.textContent = itemData.name;
-                    iconEl.className = itemData.icon;
-                    priceEl.textContent = formatNumber(itemData.price);
-                    
-                    const change = formatChange(itemData.change);
-                    changeEl.textContent = change.text;
-                    changeEl.className = `price-change change-${change.type}`;
-                }
+            // نمایش دو مورد از شاخص فعلی
+            for (let i = 0; i < 2; i++) {
+                const dataIndex = (currentIndex + i) % allPricesData.length;
+                const itemData = allPricesData[dataIndex];
                 
-                // بروزرسانی شمارنده
-                elements.itemNumber.textContent = Math.floor(currentIndex / 2) + 1;
-                elements.totalItems.textContent = Math.ceil(allPricesData.length / 2);
+                const nameEl = document.getElementById(`item${i + 1}-name`);
+                const priceEl = document.getElementById(`item${i + 1}-price`);
+                const changeEl = document.getElementById(`item${i + 1}-change`);
+                const iconEl = nameEl.parentElement.querySelector('i');
                 
-                elements.pricesRow.classList.remove('changing');
-            }, 200);
+                nameEl.textContent = itemData.name;
+                iconEl.className = itemData.icon; // بروزرسانی کلاس آیکون
+                priceEl.textContent = formatNumber(itemData.price);
+                
+                const change = formatChange(itemData.change);
+                changeEl.textContent = change.text;
+                changeEl.className = `price-change change-${change.type}`;
+            }
+            
+            // بروزرسانی شمارنده
+            elements.itemNumber.textContent = Math.floor(currentIndex / 2) + 1;
+            elements.totalItems.textContent = Math.ceil(allPricesData.length / 2);
         }
 
         // چرخش موارد
@@ -648,7 +654,7 @@
                         updateTime();
                     }
                 } catch (e) {
-                    console.warn('خطا در بارگذاری:', e);
+                    console.warn('خطا در بارگذاری داده‌های ذخیره شده:', e);
                 }
             }
 
@@ -660,13 +666,14 @@
                     firstLoadComplete = true;
                     updateDisplay();
                     
-                    if (!rotationTimer) {
+                    if (!rotationTimer) { // فقط در صورتی که تایمر چرخش از قبل فعال نشده باشد
                         setTimeout(startRotation, 2000);
                     }
                 } else if (firstLoadComplete && !rotationTimer) {
+                    // اگر دریافت اولیه ناموفق بود اما داده‌های قبلی وجود داشت، چرخش را شروع کن
                     setTimeout(startRotation, 2000);
                 }
-            }, 1000);
+            }, 1000); // تاخیر اولیه برای نمایش اولیه یا بارگذاری از کش
 
             // بروزرسانی دوره‌ای
             setInterval(fetchPrices, UPDATE_INTERVAL);
