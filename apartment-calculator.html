@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دستیار شخصی املاک</title>
+    <title>جعبه ابزار املاک</title>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -59,7 +59,7 @@
             box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
             padding: 8px 15px;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             position: relative;
         }
@@ -78,202 +78,26 @@
             object-fit: contain;
             display: block;
         }
-
-        #menuButton {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            width: 30px;
-            height: 21px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            z-index: 10;
-        }
-
-        #menuButton span {
-            display: block;
-            height: 3px;
-            width: 100%;
-            background-color: var(--primary-color);
-            border-radius: 3px;
-            transition: all 0.3s ease;
-        }
-
-        .menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .menu-overlay.active {
-            display: block;
-            opacity: 1;
-        }
-
-        .menu-panel {
-            position: fixed;
-            top: 0;
-            right: -320px;
-            width: 320px;
-            height: 100%;
-            background: linear-gradient(to bottom, #ffffff, #f8fff9);
-            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.15);
-            z-index: 1001;
-            padding: 30px;
-            transition: right 0.3s ease;
-            overflow-y: auto;
-            border-left: 3px solid var(--primary-color, #00D968);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .menu-overlay.active .menu-panel {
-            right: 0;
-        }
-
-        .menu-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(0, 217, 104, 0.2);
-        }
-
-        .menu-logo {
-            max-width: 140px;
-            height: auto;
-            display: block;
-        }
-
-        .close-menu {
-            background-color: #e53935;
-            border: none;
-            font-size: 18px;
-            cursor: pointer;
-            color: white;
-            transition: all 0.3s ease;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        
+        .header-icon-btn {
             position: absolute;
-            left: -15px;
+            left: 15px;
             top: 50%;
             transform: translateY(-50%);
-        }
-
-        .close-menu:hover {
-            background-color: #d32f2f;
-            transform: translateY(-50%) rotate(90deg);
-        }
-
-        .menu-content {
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .menu-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .menu-item {
-            margin-bottom: 8px;
-        }
-
-        .menu-link {
-            display: flex;
-            align-items: center;
-            padding: 12px 15px;
-            border-radius: 10px;
-            text-decoration: none;
-            color: #333;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            position: relative;
-            overflow: hidden;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--grey-color);
             cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            transition: var(--transition);
         }
-
-        .menu-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background-color: var(--primary-color, #00D968);
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
-        }
-
-        .menu-link:hover {
-            background-color: rgba(0, 217, 104, 0.1);
-            color: var(--primary-color, #00D968);
-            padding-right: 20px;
-        }
-
-        .menu-link:hover::before {
-            transform: scaleY(1);
-        }
-
-        .menu-icon {
-            margin-left: 12px;
-            width: 20px;
-            text-align: center;
-            color: var(--primary-color, #00D968);
-            transition: all 0.3s ease;
-        }
-
-        .menu-link:hover .menu-icon {
-            color: var(--primary-color, #00D968);
-        }
-
-        .menu-footer {
-            padding: 15px;
-            border-top: 1px solid rgba(0, 217, 104, 0.2);
-            text-align: center;
-            font-size: 0.9rem;
-            color: #6c757d;
-            background-color: rgba(0, 217, 104, 0.05);
-            border-radius: 10px;
-            margin-top: auto;
-        }
-
-        .menu-version {
-            display: inline-block;
-            padding: 3px 10px;
-            background-color: rgba(0, 217, 104, 0.1);
-            color: var(--primary-color, #00D968);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            margin-top: 5px;
-        }
-
-        @media (max-width: 480px) {
-            .menu-panel {
-                width: 280px;
-                padding: 20px;
-            }
-
-            .close-menu {
-                left: 5px;
-            }
+        
+        .header-icon-btn:hover {
+            color: var(--primary-color);
+            background-color: #f0f0f0;
+            transform: translateY(-50%) rotate(90deg);
         }
 
         .help-modal-overlay {
@@ -377,36 +201,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px 15px;
+            padding: 30px 15px 20px;
             min-height: calc(100vh - 90px);
-        }
-
-        .guide-text {
-            text-align: center;
-            margin-top: 30px;
-            margin-bottom: 35px;
-            font-size: 1.15rem;
-            color: #555;
-            max-width: 680px;
-            line-height: 1.7;
-            position: relative;
-        }
-
-        .guide-text::after {
-            content: '';
-            position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 150px;
-            height: 3px;
-            background: var(--gradient);
-            border-radius: 3px;
-        }
-
-        .guide-text .highlight {
-            color: var(--primary-color);
-            font-weight: 600;
         }
 
         .form-container {
@@ -503,6 +299,7 @@
             border-radius: 14px;
             padding: 20px;
             margin-top: 25px;
+            margin-bottom: 25px; /* Added margin to separate from bottom */
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             text-align: center;
             border: 1px solid rgba(0, 217, 104, 0.1);
@@ -553,7 +350,6 @@
             max-width: 300px;
         }
 
-        /* استایل خاص برای ردیف ویژگی‌های آپارتمان */
         .features-row {
             display: flex;
             flex-direction: row;
@@ -585,14 +381,21 @@
         }
 
         .nuisance-checkbox-group {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(2, auto);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 10px;
             margin-bottom: 20px;
             width: 100%;
             max-width: 650px;
         }
+        
+        .nuisance-checkbox-group .checkbox-item {
+            flex: 1 1 auto;
+            min-width: 70px;
+            justify-content: center;
+        }
+
 
         .checkbox-item {
             display: flex;
@@ -649,39 +452,6 @@
             font-size: 20px;
         }
 
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            border-radius: var(--button-border-radius);
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 500;
-            font-family: 'Vazirmatn', Arial, sans-serif;
-            text-align: center;
-            transition: var(--transition);
-            border: none;
-            outline: none;
-        }
-
-        .btn-primary {
-            background: var(--gradient);
-            color: white;
-            box-shadow: 0 4px 12px rgba(0, 217, 104, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0, 217, 104, 0.4);
-        }
-
-        .navigation-buttons {
-            margin-top: 25px;
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            max-width: 650px;
-        }
-
         .bold-placeholder::placeholder {
             font-weight: 700;
         }
@@ -713,9 +483,7 @@
             .checkbox-container,
             .nuisance-checkbox-group,
             .checkbox-label,
-            .price-container,
-            .navigation-buttons,
-            .guide-text {
+            .price-container {
                 max-width: 100%;
             }
 
@@ -753,16 +521,6 @@
                 font-size: 13px;
             }
 
-            .guide-text {
-                font-size: 1rem;
-                margin-bottom: 30px;
-            }
-
-            .guide-text::after {
-                width: 120px;
-                bottom: -10px;
-            }
-
             .logo-container {
                 height: 45px;
                 width: 135px;
@@ -773,7 +531,6 @@
                 max-width: 100%;
             }
 
-            /* تنظیمات ویژگی‌های آپارتمان برای موبایل */
             .features-row {
                 flex-direction: row;
                 justify-content: space-between;
@@ -824,7 +581,6 @@
                 max-width: 100%;
             }
 
-            /* حفظ ردیف ویژگی‌های آپارتمان حتی در صفحات کوچک */
             .features-row {
                 flex-direction: row;
                 justify-content: space-between;
@@ -851,15 +607,12 @@
 <body>
     <header class="header-container">
         <div class="topbar">
-            <button id="menuButton" aria-label="منو آپارتمان">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-
             <div class="logo-container">
                 <img src="images/logo.png" alt="لوگوی برنامه" class="logo-image">
             </div>
+            <button id="resetButtonHeader" class="header-icon-btn" aria-label="محاسبه مجدد">
+                <i class="fas fa-sync-alt"></i>
+            </button>
         </div>
     </header>
 
@@ -874,15 +627,12 @@
             <p><strong><span class="red-text">نکته مهم:</span></strong> محاسبات مربوط به افت قیمت سالانه ملک (استهلاک) که در این برنامه لحاظ گردیده، بر اساس رویه و نظر <span class="red-text">کارشناسان رسمی دادگستری</span> تنظیم شده و تا سقف ۳۰ سال برای سن بنا در نظر گرفته شده است.</p>
         </div>
     </div>
-
+    
     <div class="toast-message" id="comingSoonToast">
         این قابلیت به زودی فعال می‌شود
     </div>
 
     <main>
-        <p class="guide-text">
-            برای استفاده بهینه از امکانات و دریافت راهنمایی‌های بیشتر، می‌توانید از بخش <span class="highlight">راهنما</span> در منو استفاده کنید.
-        </p>
         <div class="form-container">
             <div class="form-row">
                 <div class="form-group">
@@ -962,12 +712,6 @@
             <span class="price-value" id="meter-price">۰ تومان</span>
             <span class="price-label">قیمت کل:</span>
             <span class="price-value" id="total-price">۰ تومان</span>
-        </div>
-
-        <div class="navigation-buttons">
-            <button class="btn btn-primary" id="resetButton">
-                <i class="fas fa-calculator"></i> محاسبه مجدد
-            </button>
         </div>
     </main>
 
@@ -1170,99 +914,16 @@
             document.getElementById('meter-price').innerText = `${toFarsiNumber(formatNumberWithCommas(currentPricePerMeter.toFixed(0)))} تومان`;
             document.getElementById('total-price').innerText = `${toFarsiNumber(formatNumberWithCommas(totalCalculatedPrice.toFixed(0)))} تومان`;
         }
-
-        function createMenuHTML() {
-            const menuOverlay = document.createElement('div');
-            menuOverlay.className = 'menu-overlay';
-            menuOverlay.id = 'menuOverlayElement';
-
-            const menuPanel = document.createElement('div');
-            menuPanel.className = 'menu-panel';
-
-            const menuHeader = document.createElement('div');
-            menuHeader.className = 'menu-header';
-
-            const logoImage = document.createElement('img');
-            logoImage.className = 'menu-logo';
-            logoImage.src = 'images/logo.png';
-            logoImage.alt = 'لوگوی برنامه';
-
-            const closeButton = document.createElement('button');
-            closeButton.className = 'close-menu';
-            closeButton.id = 'closeMenuButton';
-
-            const closeIcon = document.createElement('i');
-            closeIcon.className = 'fas fa-times';
-            closeButton.appendChild(closeIcon);
-            menuHeader.appendChild(logoImage);
-            menuHeader.appendChild(closeButton);
-            menuPanel.appendChild(menuHeader);
-
-            const menuContent = document.createElement('div');
-            menuContent.className = 'menu-content';
-
-            const menuHTML = `
-                <ul class="menu-list">
-                    <li class="menu-item">
-                        <a class="menu-link" id="helpMenuItem">
-                            <i class="menu-icon fas fa-question-circle"></i>
-                            <span>راهنما</span>
-                        </a>
-                    </li>
-                </ul>
-            `;
-            menuContent.innerHTML = menuHTML;
-            menuPanel.appendChild(menuContent);
-
-            const menuFooter = document.createElement('div');
-            menuFooter.className = 'menu-footer';
-            menuFooter.innerHTML = `
-                <span class="menu-version">نسخه ۱.۰.۰</span>
-            `;
-            menuPanel.appendChild(menuFooter);
-
-            menuOverlay.appendChild(menuPanel);
-            document.body.appendChild(menuOverlay);
-        }
-
-        function setupMenuEvents() {
-            const menuButton = document.getElementById('menuButton');
-            if (menuButton) {
-                menuButton.addEventListener('click', function () {
-                    const menuOverlay = document.getElementById('menuOverlayElement');
-                    if (menuOverlay) {
-                        menuOverlay.classList.add('active');
-                        document.body.style.overflow = 'hidden';
-                    }
-                });
-            }
-
-            const closeMenuBtn = document.getElementById('closeMenuButton');
-            const menuOverlay = document.getElementById('menuOverlayElement');
-            const helpMenuItem = document.getElementById('helpMenuItem');
+        
+        function setupHelpModalEvents() {
+            const helpMenuItem = document.querySelector('.guide-text .highlight');
             const helpModalOverlay = document.getElementById('helpModalOverlay');
             const closeHelpModalBtn = document.getElementById('closeHelpModal');
-
-            if (closeMenuBtn) {
-                closeMenuBtn.addEventListener('click', function () {
-                    menuOverlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                });
-            }
-
-            if (menuOverlay) {
-                menuOverlay.addEventListener('click', function (e) {
-                    if (e.target === menuOverlay) {
-                        menuOverlay.classList.remove('active');
-                        document.body.style.overflow = '';
-                    }
-                });
-            }
-
+            
             if (helpMenuItem) {
+                helpMenuItem.style.cursor = 'pointer';
                 helpMenuItem.addEventListener('click', function () {
                     if (helpModalOverlay) helpModalOverlay.classList.add('active');
-                    if (menuOverlay) menuOverlay.classList.remove('active');
                     document.body.style.overflow = 'hidden';
                 });
             }
@@ -1285,19 +946,17 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            // ایجاد منو و تنظیم رویدادهای آن
-            createMenuHTML();
-            setupMenuEvents();
+            setupHelpModalEvents();
             
-            // اضافه کردن event listener برای دکمه محاسبه مجدد
-            const resetButton = document.getElementById('resetButton');
+            // Add event listener for the new header reset button
+            const resetButton = document.getElementById('resetButtonHeader');
             if (resetButton) {
                 resetButton.addEventListener('click', function() {
                     resetForm();
                 });
             }
             
-            // اضافه کردن event listener برای فیلدهای ورودی
+            // Add event listeners for input fields
             const inputFields = document.querySelectorAll('input[type="text"], select');
             inputFields.forEach(field => {
                 if (field.type === 'text') {
@@ -1317,7 +976,7 @@
                 field.addEventListener('change', calculateApartmentPrice);
             });
             
-            // محاسبه اولیه قیمت
+            // Initial price calculation
             calculateApartmentPrice();
         });
     </script>
