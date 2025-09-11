@@ -10,25 +10,29 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #00D968;
-            --primary-light: #4DF5A5;
-            --secondary-color: #00B84B;
-            --dark-color: #008E3A;
-            --light-color: #E6F8EE;
-            --shadow: 0 10px 30px rgba(0, 217, 104, 0.1);
-            --transition: all 0.3s ease;
+            /* رنگ‌بندی هماهنگ با صفحه اخبار (آبی) */
+            --primary-color: #3A7DDE;
+            --primary-light: #EAF2FF;
+            --secondary-color: #2C5A9E;
+            --dark-color: #1A3D6D;
+            --light-color: #ffffff; /* رنگ کاملاً سفید */
             --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            --card-shadow: 0 15px 35px rgba(0, 217, 104, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
-            --hover-transform: translateY(-5px);
-            --border-radius: 16px;
-            --button-border-radius: 8px;
-            --border-color: #e0e0e0;
+            
+            /* شعاع گردی و سایه‌ها هماهنگ با صفحه اخبار */
+            --border-radius: 20px;
+            --button-border-radius: 12px;
+            --border-color: #dee2e6;
+            --card-shadow: 0 10px 30px rgba(58, 125, 222, 0.1);
+            --hover-card-shadow: 0 15px 40px rgba(58, 125, 222, 0.15);
+
+            /* متغیرهای عمومی */
+            --transition: all 0.3s ease;
+            --hover-transform: translateY(-2px);
             --grey-color: #6c757d;
             --success-color: #28a745;
             --red-color: #e53935;
-            --text-black-color: #333;
+            --text-black-color: #343a40;
             --yellow-color: #FFC107;
-            --blue-color: #0275d8;
         }
 
         * {
@@ -39,37 +43,35 @@
 
         body {
             font-family: 'Vazirmatn', Arial, sans-serif;
-            color: #333;
+            color: var(--text-black-color);
             line-height: 1.6;
             overflow-x: hidden;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             position: relative;
-            background-color: #ffffff;
+            background-color: var(--light-color);
+            direction: rtl;
+            text-align: right;
         }
 
-        .header-container {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            width: 100%;
-        }
-
-        .topbar {
+        /* Header هماهنگ با صفحه اخبار */
+        .header {
             background-color: #ffffff;
-            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
-            padding: 8px 15px;
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
         }
 
         .logo-container {
-            height: 50px;
             width: 150px;
-            border-radius: 8px;
+            height: 60px;
             overflow: hidden;
             background-color: #ffffff;
         }
@@ -90,27 +92,30 @@
             min-height: calc(100vh - 90px);
         }
 
+        /* کادر مستطیلی با لبه‌های گرد */
         .consultation-box {
             background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-radius: var(--border-radius); /* لبه‌های گرد */
+            box-shadow: var(--card-shadow);
             transition: var(--transition);
             position: relative;
-            border: 1px solid #f0f0f0;
+            border: 1px solid var(--border-color);
             padding: 20px;
             width: 100%;
-            max-width: 500px;
-            text-align: center;
+            max-width: 500px; /* برای ایجاد حالت عمودی‌تر */
             margin-bottom: 20px;
+            display: flex; /* برای تنظیم محتوا */
+            flex-direction: column; /* محتوا زیر هم */
+            align-items: center; /* محتوا در مرکز افقی */
         }
 
         .intro-text {
             font-size: 16px;
             line-height: 1.6;
             margin-bottom: 15px;
-            text-align: center;
+            text-align: justify; /* تراز از ابتدا تا انتها */
             color: var(--text-black-color);
+            width: 100%; /* برای اینکه justify به درستی کار کند */
         }
 
         .free-consultation {
@@ -123,12 +128,14 @@
         .sms-info {
             font-size: 15px;
             line-height: 1.5;
-            margin: 20px 0 15px;
+            margin: 20px 0 25px 0;
+            text-align: justify; /* تراز از ابتدا تا انتها */
             color: var(--grey-color);
+            width: 100%; /* برای اینکه justify به درستی کار کند */
         }
 
         .sms-button {
-            background: var(--blue-color);
+            background: var(--gradient);
             color: white;
             border: none;
             border-radius: var(--button-border-radius);
@@ -136,26 +143,26 @@
             font-size: 16px;
             font-weight: 500;
             cursor: pointer;
-            display: inline-flex;
+            display: flex; /* تغییر به flex برای مرکزیت بهتر */
+            justify-content: center; /* مرکزیت افقی */
             align-items: center;
             gap: 8px;
-            margin-top: 15px;
+            margin: 0 auto; /* برای مرکزیت دکمه در کادر */
             transition: var(--transition);
             text-decoration: none;
-            box-shadow: 0 4px 12px rgba(2, 117, 216, 0.3);
+            box-shadow: 0 4px 12px rgba(58, 125, 222, 0.3);
         }
 
         .sms-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(2, 117, 216, 0.4);
+            transform: var(--hover-transform);
+            box-shadow: 0 6px 15px rgba(58, 125, 222, 0.4);
         }
 
         .guide-text {
             text-align: center;
-            margin-top: 20px;
-            margin-bottom: 25px;
-            font-size: 1.1rem;
-            color: #555;
+            margin: 30px 0 35px 0;
+            font-size: 1.2rem;
+            color: #444;
             max-width: 680px;
             line-height: 1.7;
             position: relative;
@@ -164,20 +171,21 @@
         .guide-text::after {
             content: '';
             position: absolute;
-            bottom: -8px;
+            bottom: -15px;
             left: 50%;
             transform: translateX(-50%);
-            width: 120px;
-            height: 2px;
+            width: 100px;
+            height: 3px;
             background: var(--gradient);
-            border-radius: 2px;
+            border-radius: 3px;
         }
 
         .guide-text .highlight {
             color: var(--primary-color);
-            font-weight: 600;
+            font-weight: 700;
         }
 
+        /* Floating Button - (در HTML استفاده نشده ولی برای هماهنگی استایل شده) */
         .floating-button {
             position: fixed;
             bottom: 30px;
@@ -190,7 +198,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 15px rgba(0, 217, 104, 0.3);
+            box-shadow: 0 4px 15px rgba(58, 125, 222, 0.3);
             cursor: pointer;
             transition: var(--transition);
             z-index: 100;
@@ -198,7 +206,7 @@
 
         .floating-button:hover {
             transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0, 217, 104, 0.4);
+            box-shadow: 0 6px 20px rgba(58, 125, 222, 0.4);
         }
 
         .floating-button i {
@@ -231,7 +239,7 @@
             }
         }
 
-        /* Modal Styles */
+        /* Modal Styles (در HTML استفاده نشده ولی برای هماهنگی استایل شده) */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -313,8 +321,8 @@
         }
 
         .back-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 217, 104, 0.2);
+            transform: var(--hover-transform);
+            box-shadow: 0 4px 10px rgba(58, 125, 222, 0.2);
         }
 
         /* Responsive styles */
@@ -341,19 +349,16 @@
             }
 
             .logo-container {
-                height: 45px;
-                width: 135px;
+                height: 50px;
             }
         }
     </style>
 </head>
 
 <body>
-    <header class="header-container">
-        <div class="topbar">
-            <div class="logo-container">
-                <img src="images/logo.png" alt="لوگوی برنامه" class="logo-image">
-            </div>
+    <header class="header">
+        <div class="logo-container">
+            <img src="images/logo.png" alt="لوگوی برنامه" class="logo-image">
         </div>
     </header>
 
@@ -369,7 +374,7 @@
             
             <p class="sms-info">برای هماهنگی مشاوره، لطفاً نام خود را همراه با درخواست مشاوره به شماره زیر پیامک کنید.</p>
             
-            <a href="sms:09113930981" class="sms-button">
+            <a href="sms:09113930981?body=%D8%B3%D9%84%D8%A7%D9%85%20%D9%85%D9%86%20%D9%82%D8%B5%D8%AF%20%D8%AE%D8%B1%DB%8C%D8%AF%20%D9%85%D9%84%DA%A9%20%D8%AF%D8%B1%20%D8%B1%D8%A7%D9%85%D8%B3%D8%B1%20%D8%B1%D8%A7%20%D8%AF%D8%A7%D8%B1%D9%85.%20%D8%A8%D8%B1%D8%A7%DB%8C%20%D9%85%D8%B4%D8%A7%D9%88%D8%B1%D9%87%20%DA%A9%DB%8C%20%D8%AA%D9%85%D8%A7%D8%B3%20%D8%A8%DA%AF%DB%8C%D8%B1%D9%85%D8%9F%20(%D8%A7%D8%B3%D9%85%20%D9%85%D9%86)" class="sms-button">
                 <i class="fas fa-sms"></i>
                 پیامک به ما
             </a>
@@ -380,13 +385,12 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        // تبدیل اعداد انگلیسی به فارسی
+        // توابع تبدیل اعداد (در این صفحه کاربرد مستقیم ندارند اما برای حفظ یکپارچگی باقی می‌مانند)
         function toFarsiNumber(n) {
             const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
             return n.toString().replace(/\d/g, x => farsiDigits[x]);
         }
 
-        // تبدیل اعداد فارسی به انگلیسی
         function toEnglishNumber(s) {
             const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
             let result = s.toString();
@@ -397,7 +401,7 @@
             return result;
         }
 
-        // نمایش پیام toast
+        // تابع نمایش پیام toast (در حال حاضر فراخوانی نمی‌شود اما آماده استفاده است)
         function showToast(message, duration = 3000) {
             const toast = document.getElementById('toast');
             toast.textContent = message;
