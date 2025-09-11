@@ -10,29 +10,31 @@
 
     <style>
         body {
-            background: transparent;
+            background-color: white; /* Changed to white background */
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            /* Removed min-height: 100vh to let parent iframe control height */
             margin: 0;
-            padding: 10px;
+            padding: 0; /* Removed padding to let card control spacing */
             font-family: 'Vazirmatn', sans-serif;
             color: #333;
             overflow: hidden;
+            width: 100%; /* Ensure body takes full width of iframe */
+            height: 100%; /* Ensure body takes full height of iframe */
         }
 
         .glass-price-card {
             width: 100%;
-            max-width: 400px;
-            height: 120px;
+            max-width: 450px; /* Increased max-width */
+            height: 200px; /* Increased height */
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border-radius: 12px;
             border: 1px solid rgba(0, 0, 0, 0.1);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            padding: 16px;
+            padding: 18px; /* Adjusted padding */
             position: relative;
             overflow: hidden;
             display: flex;
@@ -56,24 +58,24 @@
         }
 
         .glass-price-card::before {
-            width: 150px;
-            height: 150px;
-            top: -75px;
-            right: -75px;
+            width: 180px; /* Adjusted size for larger card */
+            height: 180px; /* Adjusted size for larger card */
+            top: -90px;
+            right: -90px;
             animation: moveLight 15s infinite;
         }
 
         .glass-price-card::after {
-            width: 100px;
-            height: 100px;
-            bottom: -50px;
-            left: -50px;
+            width: 130px; /* Adjusted size for larger card */
+            height: 130px; /* Adjusted size for larger card */
+            bottom: -65px;
+            left: -65px;
             animation: moveLight2 20s infinite;
             animation-delay: 5s;
         }
 
         @keyframes moveLight {
-            0% { top: -75px; right: -75px; opacity: 0; }
+            0% { top: -90px; right: -90px; opacity: 0; }
             10% { opacity: 1; }
             50% { top: 50%; right: 50%; transform: translate(50%, -50%); opacity: 0.8; }
             90% { opacity: 1; }
@@ -81,7 +83,7 @@
         }
 
         @keyframes moveLight2 {
-            0% { bottom: -50px; left: -50px; opacity: 0; }
+            0% { bottom: -65px; left: -65px; opacity: 0; }
             10% { opacity: 1; }
             40% { bottom: 30%; left: 20%; opacity: 0.7; }
             70% { bottom: 60%; left: 80%; opacity: 0.9; }
@@ -91,8 +93,8 @@
 
         .random-light {
             position: absolute;
-            width: 80px;
-            height: 80px;
+            width: 100px; /* Adjusted size for larger card */
+            height: 100px; /* Adjusted size for larger card */
             background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 40%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
@@ -106,7 +108,7 @@
         .random-light-3 { animation: randomMove3 25s infinite; animation-delay: 12s; }
 
         @keyframes randomMove1 {
-            0% { top: 10%; left: -40px; opacity: 0; }
+            0% { top: 10%; left: -50px; opacity: 0; }
             20% { opacity: 0.8; }
             50% { top: 70%; left: 60%; opacity: 0.6; }
             80% { opacity: 0.8; }
@@ -114,7 +116,7 @@
         }
 
         @keyframes randomMove2 {
-            0% { bottom: 20%; right: -40px; opacity: 0; }
+            0% { bottom: 20%; right: -50px; opacity: 0; }
             20% { opacity: 0.7; }
             60% { bottom: 50%; right: 70%; opacity: 0.5; }
             80% { opacity: 0.7; }
@@ -122,7 +124,7 @@
         }
 
         @keyframes randomMove3 {
-            0% { top: -40px; left: 20%; opacity: 0; }
+            0% { top: -50px; left: 20%; opacity: 0; }
             20% { opacity: 0.6; }
             50% { top: 60%; left: 80%; opacity: 0.7; }
             80% { opacity: 0.6; }
@@ -133,14 +135,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 15px; /* Adjusted margin */
             position: relative;
             z-index: 2;
         }
 
         .card-header h3 {
             margin: 0;
-            font-size: 0.85em;
+            font-size: 1em; /* Adjusted font size */
             font-weight: 600;
             color: #2c3e50;
             display: flex;
@@ -149,7 +151,7 @@
         }
 
         .rotation-indicator {
-            font-size: 0.7em;
+            font-size: 0.8em; /* Adjusted font size */
             color: #3498db;
             animation: pulse 2s infinite;
             will-change: transform, opacity;
@@ -161,7 +163,7 @@
         }
 
         .last-update {
-            font-size: 0.6em;
+            font-size: 0.7em; /* Adjusted font size */
             color: #7f8c8d;
             font-weight: 500;
             display: flex;
@@ -201,7 +203,7 @@
         
         .price-item {
             flex: 1;
-            padding: 12px 8px;
+            padding: 15px 8px; /* Adjusted padding */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -211,10 +213,10 @@
         }
 
         .price-item .currency-name {
-            font-size: 0.65em;
+            font-size: 0.75em; /* Adjusted font size */
             font-weight: 600;
             color: #34495e;
-            margin-bottom: 6px;
+            margin-bottom: 8px; /* Adjusted margin */
             display: flex;
             align-items: center;
             gap: 4px;
@@ -234,37 +236,33 @@
         .fa-gem { color: #e74c3c; }
         .fa-sterling-sign { color: #9b59b6; }
 
-        /* --- تغییرات اصلی در این بخش --- */
         .price-value {
-            font-size: 0.75em;
+            font-size: 0.95em; /* Adjusted font size */
             font-weight: 700;
-            margin-bottom: 6px;
+            margin-bottom: 8px; /* Adjusted margin */
             color: #2c3e50;
             min-height: 1.2em;
             min-width: 110px;
-            /* استفاده از فلکس برای چیدمان صحیح */
             display: flex;
-            justify-content: center; /* محتوا را در مرکز کادر قرار می‌دهد */
-            align-items: baseline; /* تراز کردن بر اساس خط پایه متن */
-            gap: 5px; /* فاصله بین واحد و عدد */
-            direction: ltr; /* مهم: واحد در چپ، عدد در راست */
+            justify-content: center;
+            align-items: baseline;
+            gap: 5px;
+            direction: ltr;
         }
         
         .price-number {
-            /* مهم برای جلوگیری از لرزش اعداد */
             font-variant-numeric: tabular-nums;
             font-feature-settings: "tnum";
             will-change: contents;
         }
         
         .currency-unit {
-            font-size: 0.8em;
+            font-size: 0.9em; /* Adjusted font size */
             font-weight: 500;
         }
-        /* --- پایان تغییرات --- */
 
         .price-change {
-            font-size: 0.6em;
+            font-size: 0.7em; /* Adjusted font size */
             font-weight: 600;
             padding: 2px 6px;
             border-radius: 4px;
@@ -293,11 +291,11 @@
 
         .card-footer {
             text-align: center;
-            font-size: 0.55em;
+            font-size: 0.6em; /* Adjusted font size */
             color: #7f8c8d;
-            margin-top: 8px;
+            margin-top: 10px; /* Adjusted margin */
             border-top: 1px solid rgba(0, 0, 0, 0.05);
-            padding-top: 6px;
+            padding-top: 8px; /* Adjusted padding */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -357,14 +355,17 @@
         @media (min-width: 480px) {
             .glass-price-card { 
                 max-width: 500px; 
-                height: 130px;
-                padding: 18px; 
+                height: 220px; /* Adjusted for larger screen */
+                padding: 20px; 
             }
-            .card-header h3 { font-size: 0.9em; }
-            .last-update { font-size: 0.65em; }
-            .price-item .currency-name { font-size: 0.7em; }
-            .price-value { font-size: 0.8em; }
-            .price-change { font-size: 0.65em; }
+            .card-header h3 { font-size: 1.1em; }
+            .last-update { font-size: 0.75em; }
+            .price-item .currency-name { font-size: 0.85em; }
+            .price-value { font-size: 1.1em; }
+            .currency-unit { font-size: 1em; }
+            .price-change { font-size: 0.8em; }
+            .rotation-indicator { font-size: 0.9em; }
+            .card-footer { font-size: 0.7em; }
         }
     </style>
 </head>
@@ -539,7 +540,6 @@
             return false;
         }
 
-        // --- تغییر اصلی در این بخش ---
         function updateDisplay() {
             if (allPricesData.length === 0) return;
             for (let i = 0; i < 2; i++) {
@@ -547,38 +547,43 @@
                 const itemData = allPricesData[dataIndex];
                 
                 const nameEl = document.getElementById(`item${i + 1}-name`);
-                // به جای کل div، فقط span مربوط به عدد را انتخاب می‌کنیم
                 const priceNumberEl = document.querySelector(`#item${i + 1}-price .price-number`);
                 const changeEl = document.getElementById(`item${i + 1}-change`);
                 const iconEl = nameEl.parentElement.querySelector('i');
                 
-                nameEl.textContent = itemData.name;
-                iconEl.className = itemData.icon;
+                if (nameEl) nameEl.textContent = itemData.name;
+                if (iconEl) iconEl.className = itemData.icon;
                 
-                // فقط محتوای عدد را آپدیت می‌کنیم
                 if (priceNumberEl) {
                     priceNumberEl.textContent = formatNumber(itemData.price);
                 }
                 
                 const change = formatChange(itemData.change);
-                changeEl.textContent = change.text;
-                changeEl.className = `price-change change-${change.type}`;
+                if (changeEl) {
+                    changeEl.textContent = change.text;
+                    changeEl.className = `price-change change-${change.type}`;
+                }
             }
-            elements.itemNumber.textContent = Math.floor(currentIndex / 2) + 1;
-            elements.totalItems.textContent = Math.ceil(allPricesData.length / 2);
+            if (elements.itemNumber && elements.totalItems) {
+                elements.itemNumber.textContent = Math.floor(currentIndex / 2) + 1;
+                elements.totalItems.textContent = Math.ceil(allPricesData.length / 2);
+            }
         }
-        // --- پایان تغییر ---
 
         function rotateItems() {
             if (!firstLoadComplete || allPricesData.length === 0) return;
             currentIndex = (currentIndex + 2) % allPricesData.length;
             updateDisplay();
-            elements.rotationIcon.style.transform = 'rotate(360deg)';
-            elements.rotationIcon.style.transition = 'transform 0.3s ease';
-            setTimeout(() => {
-                elements.rotationIcon.style.transform = 'rotate(0deg)';
-                elements.rotationIcon.style.transition = 'none';
-            }, 300);
+            if (elements.rotationIcon) {
+                elements.rotationIcon.style.transform = 'rotate(360deg)';
+                elements.rotationIcon.style.transition = 'transform 0.3s ease';
+                setTimeout(() => {
+                    if (elements.rotationIcon) {
+                        elements.rotationIcon.style.transform = 'rotate(0deg)';
+                        elements.rotationIcon.style.transition = 'none';
+                    }
+                }, 300);
+            }
         }
 
         function startRotation() {
@@ -587,10 +592,12 @@
         }
 
         function updateTime() {
-            elements.updateTime.textContent = new Date().toLocaleTimeString('fa-IR', {
-                hour: '2-digit',
-                minute: '2-digit'
-            });
+            if (elements.updateTime) {
+                elements.updateTime.textContent = new Date().toLocaleTimeString('fa-IR', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
         }
 
         async function initialize() {
@@ -607,18 +614,21 @@
                     console.warn('خطا در بارگذاری داده‌های ذخیره شده:', e);
                 }
             }
+            // Fetch prices after a short delay to allow DOM to render
             setTimeout(async () => {
                 const success = await fetchPrices();
                 if (success) {
                     firstLoadComplete = true;
                     updateDisplay();
-                    if (!rotationTimer) {
-                        setTimeout(startRotation, 2000);
+                    if (!rotationTimer && allPricesData.length > 2) { // Only start rotation if there are enough items to rotate
+                        setTimeout(startRotation, 2000); // Start rotation after a short delay
                     }
-                } else if (firstLoadComplete && !rotationTimer) {
+                } else if (firstLoadComplete && !rotationTimer && allPricesData.length > 2) { // If fetch failed but we have old data, still start rotation
                     setTimeout(startRotation, 2000);
                 }
-            }, 1000);
+            }, 500); // Reduced initial fetch delay
+
+            // Set interval for periodic fetching of new prices
             setInterval(fetchPrices, UPDATE_INTERVAL);
         }
 
