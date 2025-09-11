@@ -22,23 +22,21 @@
 
  <style>
     :root {
-        /* متغیرهای رنگی از کد شماره ۲ (جعبه ابزار املاک) برای ظاهر جدید */
-        --primary-color: #0bff00;
-        --primary-light: #e6ffe6; /* استفاده از یک نسخه روشن‌تر سازگار */
-        --secondary-color: #00cc00;
-        --dark-color: #009900;
-        --light-color: #f0f0f0; /* پس‌زمینه اصلی بدنه */
-        --complementary-color: #0bff00;
-        --complementary-light: #6cff64;
-        --complementary-dark: #00cc00;
+        /* پالت رنگی جدید، حرفه‌ای و مدرن بر پایه آبی */
+        --primary-color: #007BFF;       /* آبی اصلی و حرفه‌ای */
+        --primary-light: #e6f2ff;       /* آبی بسیار روشن برای هاور و پس‌زمینه */
+        --secondary-color: #0056b3;     /* آبی تیره‌تر برای ایجاد عمق در گرادینت */
+        --dark-color: #004085;          /* آبی تیره و خوانا برای متون اصلی */
+        --light-color: #f8f9fa;         /* پس‌زمینه اصلی بدنه، کمی متفاوت از سفید خالص */
+        --complementary-color: #17a2b8; /* رنگ مکمل (فیروزه‌ای) برای تمایز */
         
         /* متغیرهای عمومی و ساختاری */
         --transition: all 0.3s ease;
         --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-        --complementary-gradient: linear-gradient(135deg, var(--complementary-color), var(--complementary-light));
+        --complementary-gradient: linear-gradient(135deg, var(--complementary-color), #107586);
         --border-radius: 20px;
         --button-border-radius: 12px;
-        --border-color: #e0e0e0;
+        --border-color: #dee2e6;
         --disabled-color: #aaaaaa;
         --font-family: 'Vazirmatn', Arial, sans-serif;
         --font-size-base: 14px;
@@ -48,17 +46,17 @@
         --dark-mode-text: #ffffff;
         --dark-mode-card: #1e1e1e;
         --dark-mode-border: #333333;
-        --arrow-color: #ef00f6;
+        --arrow-color: #ef00f6; /* این رنگ می‌تواند ثابت بماند یا تغییر کند */
         
-        /* متغیرهای باقی‌مانده از کد شماره ۱ برای سازگاری */
-        --shadow: 0 10px 30px rgba(11, 255, 0, 0.1);
-        --card-shadow: 0 15px 35px rgba(11, 255, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+        /* متغیرهای باقی‌مانده برای سازگاری */
+        --shadow: 0 10px 25px rgba(0, 123, 255, 0.2);
+        --card-shadow: 0 15px 35px rgba(0, 123, 255, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
         --subtle-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         --grey-color: #6c757d;
         --danger-color: #e74c3c;
-        --text-color: #333333;
-        --text-light: #666666;
-        --bg-color: #f9f9f9;
+        --text-color: #343a40;
+        --text-light: #6c757d;
+        --bg-color: #f8f9fa;
         --white: #ffffff;
     }
     
@@ -202,11 +200,22 @@
     }
     body.dark-mode #app-container { background-color: var(--dark-mode-bg); }
 
+    .top-banner-wrapper {
+        padding: 0 15px;
+        margin-top: 15px;
+    }
+
     .date-banner {
-        width: calc(100% - 30px); height: 1cm; background: white; display: flex; justify-content: center;
-        align-items: center; color: black; font-weight: 600; font-size: 16px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        width: calc(100% - 30px); height: auto; background: white; display: flex; justify-content: center;
+        align-items: center; color: black; font-weight: 600; font-size: 13px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         margin: 15px auto; border-radius: 12px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        position: relative; overflow: visible; z-index: 20;
+        position: relative; overflow: visible; z-index: 20; padding: 10px; flex-wrap: wrap;
+    }
+    
+    .date-banner .separator {
+        color: var(--primary-color);
+        margin: 0 5px;
+        font-weight: bold;
     }
 
     .price-component-container { padding: 0; margin: -1cm 0 0 0; background-color: #f2f2f2; position: relative; z-index: 1; }
@@ -279,7 +288,7 @@
     .calc-item:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
     body.dark-mode .calc-item:hover { box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); }
     .calc-image { width: 45px; height: 45px; border-radius: 50%; overflow: hidden; background-color: var(--primary-light); display: flex; justify-content: center; align-items: center; }
-    body.dark-mode .calc-image { background-color: rgba(11, 255, 0, 0.1); }
+    body.dark-mode .calc-image { background-color: rgba(0, 123, 255, 0.1); }
     .calc-image i { color: var(--primary-color); font-size: 24px; }
     .calc-name { font-size: 11px; color: #333; text-align: center; font-weight: 500; line-height: 1.3; }
     body.dark-mode .calc-name { color: var(--dark-mode-text); }
@@ -299,12 +308,12 @@
     body.dark-mode .bottom-nav { background-color: var(--dark-mode-card); box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2); }
     .nav-item { display: flex; flex-direction: column; align-items: center; color: #333; text-decoration: none; font-size: 11px; background-color: white; border-radius: 8px; padding: 5px 10px; transition: all 0.3s ease; }
     body.dark-mode .nav-item { background-color: var(--dark-mode-card); color: #aaa; }
-    .nav-item:first-child i { color: var(--primary-color); }
-    .nav-item:nth-child(2) i { color: var(--complementary-color); }
-    .nav-item:nth-child(3) i { color: var(--primary-color); }
-    .nav-item:last-child i { color: var(--primary-color); }
-    .nav-item.active { color: var(--primary-color); }
-    
+    .nav-item i { color: var(--grey-color); transition: color 0.3s ease; font-size: 20px; margin-bottom: 4px; }
+    .nav-item.active, .nav-item:hover { color: var(--primary-color); }
+    .nav-item.active i, .nav-item:hover i { color: var(--primary-color); }
+    .nav-item:nth-child(3) i { color: var(--complementary-color); }
+    .nav-item:nth-child(3).active i, .nav-item:nth-child(3):hover i { color: var(--complementary-color); }
+
     .toast-message {
         position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
         background-color: rgba(0, 0, 0, 0.8); color: white; padding: 12px 20px;
@@ -380,7 +389,7 @@
     .limit-modal-buttons { display: flex; gap: 10px; justify-content: center; }
     .limit-modal-btn { padding: 12px 20px; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-block; font-family: var(--font-family); }
     .limit-modal-btn.primary { background: var(--gradient); color: white; }
-    .limit-modal-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(11, 255, 0, 0.3); }
+    .limit-modal-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3); }
     .limit-modal-btn.secondary { background-color: #f0f0f0; color: #333; }
     body.dark-mode .limit-modal-btn.secondary { background-color: var(--dark-mode-bg); color: var(--dark-mode-text); }
     
@@ -399,7 +408,7 @@
     .modal-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; background-color: white; border-radius: 10px; padding: 12px 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; position: relative; }
     body.dark-mode .modal-item { background-color: var(--dark-mode-card); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); }
     .modal-item-icon { width: 45px; height: 45px; border-radius: 50%; background-color: var(--primary-light); display: flex; justify-content: center; align-items: center; margin-bottom: 8px; }
-    body.dark-mode .modal-item-icon { background-color: rgba(11, 255, 0, 0.1); }
+    body.dark-mode .modal-item-icon { background-color: rgba(0, 123, 255, 0.1); }
     .modal-item-icon i { font-size: 20px; color: var(--primary-color); }
     .modal-item-name { font-size: 11px; color: #333; text-align: center; font-weight: 500; line-height: 1.3; }
     body.dark-mode .modal-item-name { color: var(--dark-mode-text); }
@@ -435,7 +444,7 @@
     #payment-container #logout-button-payment { background: none; color: var(--grey-color); border: 1px solid var(--border-color); }
     #payment-container #logout-button-payment:hover { background-color: var(--primary-light); }
     #payment-container #payment-message { margin-top: 20px; color: red; font-size: 14px; }
-    body.loading::after { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.7) url('data:image/svg+xml;charset=UTF-8,%3csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3e%3cstyle%3e.spinner_V8m1%7btransform-origin:center;animation:spinner_zKoa 2s linear infinite%7d.spinner_V8m1 circle%7bstroke-linecap:round;animation:spinner_YpZS 1.5s ease-in-out infinite%7d@keyframes spinner_zKoa%7b100%25%7btransform:rotate(360deg)%7d%7d@keyframes spinner_YpZS%7b0%25%7bstroke-dasharray:0 150;stroke-dashoffset:0%7d47.5%25%7bstroke-dasharray:42 150;stroke-dashoffset:-16%7d95%25,100%25%7bstroke-dasharray:42 150;stroke-dashoffset:-59%7d%7d%3c/style%3e%3cg class="spinner_V8m1"%3e%3ccircle cx="20" cy="20" r="9.5" fill="none" stroke="%230bff00" stroke-width="3"%3e%3c/circle%3e%3c/g%3e%3c/svg%3e') center / 50px no-repeat; z-index: 10000; }
+    body.loading::after { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.7) url('data:image/svg+xml;charset=UTF-8,%3csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3e%3cstyle%3e.spinner_V8m1%7btransform-origin:center;animation:spinner_zKoa 2s linear infinite%7d.spinner_V8m1 circle%7bstroke-linecap:round;animation:spinner_YpZS 1.5s ease-in-out infinite%7d@keyframes spinner_zKoa%7b100%25%7btransform:rotate(360deg)%7d%7d@keyframes spinner_YpZS%7b0%25%7bstroke-dasharray:0 150;stroke-dashoffset:0%7d47.5%25%7bstroke-dasharray:42 150;stroke-dashoffset:-16%7d95%25,100%25%7bstroke-dasharray:42 150;stroke-dashoffset:-59%7d%7d%3c/style%3e%3cg class="spinner_V8m1"%3e%3ccircle cx="20" cy="20" r="9.5" fill="none" stroke="%23007BFF" stroke-width="3"%3e%3c/circle%3e%3c/g%3e%3c/svg%3e') center / 50px no-repeat; z-index: 10000; }
     body.loading { pointer-events: none; }
     
     .header, #app-container { display: none; }
@@ -711,6 +720,9 @@
 
 <!-- محتوای اصلی صفحه -->
 <div id="app-container">
+    <div class="top-banner-wrapper">
+        <a href="tablighat.html" class="banner-full" style="background-image: url('images/banner111.png');"></a>
+    </div>
     <div class="date-banner" id="persianDateContainer"></div>
     <div class="search-container" id="searchContainer">
         <div class="search-box">
@@ -1038,21 +1050,21 @@
     <div id="payment-iframe-container" style="display:none;"></div>
     
     <div class="bottom-nav">
-        <a href="karbari.html" class="nav-item">
-            <i class="fas fa-user"></i>
-            <span>حساب کاربری</span>
-        </a>
-        <a href="#" class="nav-item" id="searchButtonBottomNav">
-            <i class="fas fa-search"></i>
-            <span>جستجو</span>
+        <a href="#" class="nav-item" id="showAllToolsBtn">
+            <i class="fas fa-th-large"></i>
+            <span>همه ابزارها</span>
         </a>
         <a href="favorites.html" class="nav-item">
             <i class="fas fa-heart"></i>
             <span>علاقه‌مندی‌ها</span>
         </a>
-        <a href="#" class="nav-item" id="showAllToolsBtn">
-            <i class="fas fa-th-large"></i>
-            <span>همه ابزارها</span>
+        <a href="#" class="nav-item" id="searchButtonBottomNav">
+            <i class="fas fa-search"></i>
+            <span>جستجو</span>
+        </a>
+        <a href="karbari.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>حساب کاربری</span>
         </a>
     </div>
 </div>
@@ -1248,7 +1260,28 @@ document.addEventListener('DOMContentLoaded', function() {
     }); 
     
     function showPersianDate() {
-        document.getElementById('persianDateContainer').innerText = new Date().toLocaleDateString('fa-IR-u-nu-latn', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        // --- بخش نمایش تاریخ ---
+        const now = new Date();
+        const weekday = now.toLocaleDateString('fa-IR', { weekday: 'long' });
+        const day = now.toLocaleDateString('fa-IR', { day: 'numeric' });
+        const month = now.toLocaleDateString('fa-IR', { month: 'long' });
+        const year = now.toLocaleDateString('fa-IR', { year: 'numeric' });
+        const formattedDate = `${weekday} <span class="separator">|</span> ${day}${month} ${year}`;
+
+        // --- بخش محاسبه روزهای باقیمانده تا پایان سال ---
+        const currentGregorianYear = now.getFullYear();
+        let nowruz = new Date(currentGregorianYear, 2, 21);
+        if (now > nowruz) {
+            nowruz = new Date(currentGregorianYear + 1, 2, 21);
+        }
+        const timeDifference = nowruz.getTime() - now.getTime();
+        const daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+        const persianDaysRemaining = daysRemaining.toLocaleString('fa-IR', { useGrouping: false });
+        const countdownText = `${persianDaysRemaining} روز تا پایان سال`;
+
+        // --- ترکیب و نمایش نهایی ---
+        const finalOutput = `${formattedDate} <span class="separator">|</span> ${countdownText}`;
+        document.getElementById('persianDateContainer').innerHTML = finalOutput;
     }
 
     function displayMotivationalQuote() {
