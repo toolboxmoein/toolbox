@@ -180,7 +180,7 @@
             line-height: 1.6;
             display: -webkit-box;
             -webkit-line-clamp: 2;
-            line-clamp: 2; /* اضافه شده برای سازگاری */
+            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
             min-height: 54px;
@@ -191,7 +191,7 @@
             margin-bottom: 20px;
             display: -webkit-box;
             -webkit-line-clamp: 3;
-            line-clamp: 3; /* اضافه شده برای سازگاری */
+            line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
             flex-grow: 1;
@@ -224,12 +224,34 @@
              transform: translateY(-2px);
         }
 
-        .loading, .error, .no-news { text-align: center; padding: 40px; background: white; border-radius: var(--border-radius); box-shadow: var(--card-shadow); margin: 20px 0; }
-        .loading i { font-size: 24px; animation: spin 1s linear infinite; color: var(--primary-color); }
+        /* استایل برای نشانگرهای بارگذاری و خطا */
+        .loading, .error, .no-news { 
+            text-align: center; 
+            padding: 40px; 
+            background: white; 
+            border-radius: var(--border-radius); 
+            box-shadow: var(--card-shadow); 
+            margin: 20px auto; 
+            max-width: 500px;
+        }
+        .loading i { 
+            font-size: 24px; 
+            animation: spin 1s linear infinite; 
+            color: var(--primary-color); 
+            margin-bottom: 10px;
+        }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        .load-more { text-align: center; margin: 30px 0; }
-        .load-more-btn { background: white; color: var(--text-black-color); padding: 12px 30px; border: 1px solid var(--border-color); border-radius: 25px; cursor: pointer; font-size: 14px; transition: all 0.2s ease; }
-        .load-more-btn:hover { background-color: var(--primary-light); border-color: var(--primary-color); }
+        
+        /* استایل خاص برای لودر اسکرول بی‌نهایت */
+        #infiniteScrollLoader {
+            visibility: hidden; /* پنهان کردن اولیه با visibility */
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        #infiniteScrollLoader.is-visible {
+            visibility: visible;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -240,31 +262,47 @@
     <main>
         <p class="guide-text">مهم‌ترین اخبار <span class="highlight">دلار، مسکن و اقتصاد</span> ایران</p>
         <div class="controls"><div class="search-box"><input type="text" id="searchInput" placeholder="جستجو در اخبار..."><i class="fas fa-search"></i></div></div>
-        <div id="loading" class="loading"><i class="fas fa-spinner"></i><div>در حال بارگذاری اخبار...</div></div>
+        
+        <div id="initialLoading" class="loading"><i class="fas fa-spinner"></i><div>در حال بارگذاری اخبار...</div></div>
         <div id="error" class="error" style="display: none;"><h3>خطا در بارگذاری اخبار</h3><p>لطفاً اتصال اینترنت خود را بررسی کرده و دوباره تلاش کنید.</p></div>
+        
         <div id="newsContainer" class="news-grid"></div>
         <div id="noNews" class="no-news" style="display: none;"><h3>خبری یافت نشد</h3><p>متأسفانه خبری با این جستجو پیدا نشد.</p></div>
-        <div class="load-more"><button id="loadMoreBtn" class="load-more-btn" style="display: none;">نمایش اخبار بیشتر</button></div>
+        
+        <!-- نشانگر بارگذاری برای اسکرول بی‌نهایت -->
+        <div id="infiniteScrollLoader" class="loading"><i class="fas fa-spinner"></i><div>در حال بارگذاری اخبار بیشتر...</div></div>
+        
     </main>
     
     <script>
         let allNews = [], displayedNews = [], currentPage = 0, isLoading = false, searchTimeout = null;
         const newsPerPage = 9;
+        let observer; // برای Intersection Observer
 
-        const topPriorityKeywords = ['دلار', 'مسکن', 'املاک', 'ملک', 'ملکی'];
+        const topPriorityKeywords = ['دلار', 'مسکن', 'املاک', 'ملک', 'ملکی', 'ارز', 'طلا', 'سکه'];
 
         const keywordFilters = {
             real_estate: ['اجاره', 'شهرداری', 'وام مسکن', 'طرح ملی مسکن', 'بافت فرسوده', 'انبوه سازی', 'شهرسازی', 'زمین', 'ویلا', 'آپارتمان', 'خرید خانه', 'قیمت خانه'],
-            economy: ['اقتصاد', 'بازار', 'بورس', 'سهام', 'یورو', 'ارز', 'طلا', 'سکه', 'قیمت', 'تورم', 'بانک', 'وام', 'بودجه', 'مالیات', 'تجارت', 'صادرات', 'واردات', 'نفت', 'یارانه', 'حقوق', 'سرمایه‌گذاری', 'شاخص کل', 'سهام عدالت'],
+            economy: ['اقتصاد', 'بازار', 'بورس', 'سهام', 'یورو', 'قیمت', 'تورم', 'بانک', 'وام', 'بودجه', 'مالیات', 'تجارت', 'صادرات', 'واردات', 'نفت', 'یارانه', 'حقوق', 'سرمایه‌گذاری', 'شاخص کل', 'سهام عدالت'],
             politics: ['سیاست', 'دولت', 'مجلس', 'رئیس جمهور', 'وزیر', 'نماینده', 'انتخابات', 'برجام', 'تحریم', 'مذاکره']
         };
-        const negativeKeywords = ['فوتبال', 'ورزش', 'سینما', 'بازیگر', 'موسیقی', 'حوادث', 'سلامت', 'تکنولوژی', 'پزشکی', 'گردشگری', 'خودرو', 'فرهنگی', 'هنری', 'اجتماعی', 'بین الملل', 'جهان', 'خارجی', 'آسیب', 'آلودگی'];
+        const negativeKeywords = [
+            'فوتبال', 'ورزش', 'لیگ', 'تیم', 'بازیکن', 'المپیک', 'مدال', // ورزش
+            'سینما', 'بازیگر', 'موسیقی', 'حوادث', 'تصادف', 'سوانح', 'سرقت', 'جرم', // هنر و حوادث
+            'سلامت', 'تکنولوژی', 'پزشکی', 'گردشگری', 'خودرو', 'فرهنگی', 'هنری', // سلامت، تکنولوژی، فرهنگ
+            'اجتماعی', 'بین الملل', 'جهان', 'خارجی', 'آسیب', 'آلودگی', 'محیط زیست', 'طبیعت', 'آب و هوا', 'خشکسالی', 'باران', // اجتماعی، بین‌الملل، محیط زیست
+            'غذا', 'آشپزی', 'رستوران', 'خوراک', 'نوشیدنی', 'تغذیه', // غذا
+            'مدارس', 'مدرسه', 'دانشگاه', 'دانشجو', 'آموزش', 'پرورش', 'معلم', 'استاد', 'کنکور', 'امتحان', 'حوزه علمیه', 'حوزه', // آموزش
+            'بهداشت', 'درمان', 'بیمارستان', 'پزشک', 'دارو', 'بیماری', 'کرونا', 'واکسن', // بهداشت
+            'حضرت', 'رسول', 'امام', 'دین', 'مذهب', 'شهادت', 'وفات', 'میلاد', 'جشنواره', 'نمایشگاه', 'کتاب', 'ادبیات', // مذهب و فرهنگ
+            'خانواده', 'ازدواج', 'طلاق', 'کودک', 'جوانان', 'سالمندان', 'زنان', 'مردان', // اجتماعی عمومی
+            'سوریه', 'غزه', 'اوکراین', 'فلسطین' // اخبار بین‌المللی خاص که معمولا به اقتصاد و مسکن مرتبط نیستند
+        ];
 
         function detectNewsCategory(title, description) {
             const combinedText = (title + ' ' + (description || '')).toLowerCase();
             if (negativeKeywords.some(keyword => combinedText.includes(keyword))) return 'other';
             
-            // اولویت با کلمات کلیدی اصلی شماست، پس دسته بندی کلی را بر اساس آنها انجام میدهیم
             if (keywordFilters.real_estate.some(keyword => combinedText.includes(keyword)) || topPriorityKeywords.some(keyword => combinedText.includes(keyword))) return 'real_estate';
             if (keywordFilters.economy.some(keyword => combinedText.includes(keyword))) return 'economy';
             if (keywordFilters.politics.some(keyword => combinedText.includes(keyword))) return 'politics';
@@ -285,10 +323,55 @@
             return originalName.split('|')[0].trim();
         }
 
+        // تابع برای نمایش لودر اسکرول بی‌نهایت
+        function showInfiniteScrollLoader() {
+            const loader = document.getElementById('infiniteScrollLoader');
+            if (loader) {
+                loader.classList.add('is-visible');
+            }
+        }
+
+        // تابع برای پنهان کردن لودر اسکرول بی‌نهایت
+        function hideInfiniteScrollLoader() {
+            const loader = document.getElementById('infiniteScrollLoader');
+            if (loader) {
+                loader.classList.remove('is-visible');
+            }
+        }
+
+        // تابع برای راه‌اندازی Intersection Observer
+        function setupIntersectionObserver() {
+            const infiniteScrollLoader = document.getElementById('infiniteScrollLoader');
+            if (!infiniteScrollLoader) return;
+
+            // ابتدا اگر observer قبلی وجود دارد، آن را قطع می‌کنیم
+            if (observer) {
+                observer.disconnect();
+            }
+
+            const options = {
+                root: null, // viewport به عنوان روت (عنصر والد)
+                rootMargin: '0px', 
+                threshold: 0.1 // وقتی 10 درصد از عنصر قابل مشاهده شد، تریگر کن
+            };
+
+            observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    // اگر loader قابل مشاهده است و در حال بارگذاری نیستیم
+                    if (entry.isIntersecting && !isLoading) {
+                        loadMoreNews();
+                    }
+                });
+            }, options);
+
+            // شروع به مشاهده عنصر loader
+            observer.observe(infiniteScrollLoader);
+        }
+
         async function fetchNewsFromRSS() {
             if (isLoading) return;
             isLoading = true;
-            showLoading();
+            document.getElementById('initialLoading').style.display = 'block'; // نمایش لودر اولیه
             hideError();
 
             const rssFeeds = [
@@ -319,7 +402,9 @@
             
             if (newsItems.length === 0) {
                 showError();
-                hideLoading(); isLoading = false; return;
+                document.getElementById('initialLoading').style.display = 'none';
+                isLoading = false;
+                return;
             }
 
             let processedNews = newsItems.map(item => {
@@ -364,9 +449,9 @@
                 return new Date(b.publishedAt) - new Date(a.publishedAt);
             });
 
-            applyFilters();
-            hideLoading();
-            isLoading = false;
+            applyFilters(); // این تابع اولین دسته اخبار را نمایش می‌دهد و Observer را هم تنظیم می‌کند
+            document.getElementById('initialLoading').style.display = 'none'; // پنهان کردن لودر اولیه
+            isLoading = false; // بازنشانی وضعیت بارگذاری اولیه
         }
         
         function applyFilters() {
@@ -375,13 +460,23 @@
             currentPage = 0;
             displayedNews = [];
             document.getElementById('newsContainer').innerHTML = '';
+            
             if (filteredNews.length === 0) {
                 showNoNews();
-                document.getElementById('loadMoreBtn').style.display = 'none';
+                if (observer) observer.disconnect(); // اگر خبری نیست، observer را قطع کن
+                hideInfiniteScrollLoader(); // نشانگر لودینگ را پنهان کن
             } else {
                 hideNoNews();
                 displayNews(filteredNews);
-                document.getElementById('loadMoreBtn').style.display = filteredNews.length > newsPerPage ? 'block' : 'none';
+                
+                // اگر تعداد کل اخبار فیلتر شده بیشتر از اخبار نمایش داده شده در یک صفحه است، observer را فعال کن
+                if (filteredNews.length > newsPerPage) {
+                    setupIntersectionObserver();
+                    hideInfiniteScrollLoader(); // اطمینان از پنهان بودن نشانگر در ابتدا
+                } else {
+                    if (observer) observer.disconnect(); // اگر خبری برای لود بیشتر نیست، observer را قطع کن
+                    hideInfiniteScrollLoader(); // نشانگر لودینگ را پنهان کن
+                }
             }
         }
 
@@ -389,9 +484,11 @@
             const container = document.getElementById('newsContainer');
             const newsToDisplay = newsArray.slice(currentPage * newsPerPage, (currentPage + 1) * newsPerPage);
             newsToDisplay.forEach(news => {
-                if (displayedNews.some(item => item.id === news.id)) return;
-                container.appendChild(createNewsCard(news));
-                displayedNews.push(news);
+                // اطمینان حاصل کنید که خبر تکراری اضافه نشود
+                if (!displayedNews.some(item => item.id === news.id)) {
+                    container.appendChild(createNewsCard(news));
+                    displayedNews.push(news);
+                }
             });
         }
 
@@ -422,17 +519,35 @@
         }
         
         function loadMoreNews() {
-            currentPage++;
             const query = document.getElementById('searchInput').value.trim().toLowerCase();
-            const filteredNews = query ? allNews.filter(n => n.title.toLowerCase().includes(query) || n.description.toLowerCase().includes(query)) : allNews;
-            displayNews(filteredNews);
-            if ((currentPage + 1) * newsPerPage >= filteredNews.length) {
-                document.getElementById('loadMoreBtn').style.display = 'none';
+            const currentFilteredNews = query ? allNews.filter(n => n.title.toLowerCase().includes(query) || n.description.toLowerCase().includes(query)) : allNews;
+
+            // اگر در حال بارگذاری هستیم یا همه اخبار نمایش داده شده‌اند، کاری نکن
+            if (isLoading || displayedNews.length >= currentFilteredNews.length) {
+                hideInfiniteScrollLoader();
+                if (observer && displayedNews.length >= currentFilteredNews.length) {
+                    observer.disconnect(); // اگر خبری برای لود بیشتر نیست، observer را قطع کن
+                }
+                return;
+            }
+
+            isLoading = true;
+            showInfiniteScrollLoader(); // نمایش نشانگر بارگذاری
+
+            currentPage++; // صفحه را برای بارگذاری دسته بعدی افزایش بده
+            displayNews(currentFilteredNews); // دسته جدید اخبار را نمایش بده
+            
+            isLoading = false; // بازنشانی وضعیت بارگذاری پس از نمایش
+            hideInfiniteScrollLoader(); // پنهان کردن نشانگر پس از بارگذاری
+
+            // مجدداً بررسی کن که آیا هنوز خبری برای بارگذاری در اسکرول‌های بعدی وجود دارد یا خیر
+            if (displayedNews.length >= currentFilteredNews.length && observer) {
+                observer.disconnect(); // اگر همه اخبار نمایش داده شده‌اند، observer را قطع کن
             }
         }
 
-        function showLoading() { document.getElementById('loading').style.display = 'block'; }
-        function hideLoading() { document.getElementById('loading').style.display = 'none'; }
+        function showLoading() { document.getElementById('initialLoading').style.display = 'block'; }
+        function hideLoading() { document.getElementById('initialLoading').style.display = 'none'; }
         function showError() { document.getElementById('error').style.display = 'block'; }
         function hideError() { document.getElementById('error').style.display = 'none'; }
         function showNoNews() { document.getElementById('noNews').style.display = 'block'; }
@@ -442,9 +557,11 @@
             fetchNewsFromRSS();
             document.getElementById('searchInput').addEventListener('input', () => {
                 clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(applyFilters, 300);
+                searchTimeout = setTimeout(() => {
+                    if (observer) observer.disconnect(); // قطع observer قبلی در هنگام جستجو
+                    applyFilters(); // اعمال فیلترها و راه‌اندازی مجدد observer
+                }, 300);
             });
-            document.getElementById('loadMoreBtn').addEventListener('click', loadMoreNews);
         });
     </script>
 </body>
