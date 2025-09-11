@@ -22,6 +22,35 @@
 
  <style>
     :root {
+        /* پالت رنگی جدید: آبی کهکشانی و زردخواهش می‌کنم. با توجه به درخواست شما، تغییرات لازم برای حذف دکمه‌های مشخص شده و غیرفعال کردن و جابجایی دکمه‌های دیگر اعمال شده است. سایر بخش‌های کد بدون تغییر باقی مانده‌اند.
+
+لطفاً کد HTML اصلاح شده را در ادامه مشاهده کنید:
+
+```html
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+ <!-- START: کد ضد کش اضافه شده (برای اطمینان از تازگی HTML) -->
+ <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+ <meta http-equiv="Pragma" content="no-cache" />
+ <meta http-equiv="Expires" content="0" />
+ <!-- END: کد ضد کش اضافه شده -->
+
+ <title>جعبه ابزار املاک</title>
+ 
+ <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css2?family=Khandevane:wght@400;500;600;700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+ 
+ <!-- START: اضافه شده برای نمایش favicon.ico -->
+ <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+ <!-- END: اضافه شده برای نمایش favicon.ico -->
+
+ <style>
+    :root {
         /* پالت رنگی جدید: آبی کهکشانی و زرد طلایی */
         --primary-color: #3A7DDE;       /* آبی اصلی، عمیق و فانتزی */
         --primary-light: #EAF2FF;       /* آبی بسیار روشن برای هاور */
@@ -213,7 +242,7 @@
         font-weight: 600; 
         font-size: 13px; 
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        margin: 15px auto; /* فاصله از بالای صفحه بعد از حذف بنر */
+        margin: 15px auto 0; /* START: اصلاح شده برای فاصله یکنواخت */
         border-radius: 12px; 
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         position: relative; 
@@ -231,8 +260,7 @@
 
     .motivational-wrapper { 
         padding: 0 15px; 
-        margin-bottom: 0; /* فاصله از عنصر بعدی */
-        margin-top: 15px; /* تنظیم margin-top برای فاصله از بنر تاریخ */
+        margin: 15px 0 0 0; /* START: اصلاح شده برای فاصله یکنواخت */
     }
     .motivational-widget { position: relative; width: 100%; margin-top: 0; }
     .box-tag {
@@ -254,7 +282,7 @@
 
     .search-container { 
         padding: 10px 15px; 
-        margin: 15px 15px 0 15px; /* تنظیم margin-top برای فاصله از motivational-wrapper */
+        margin: 15px 15px 0 15px; 
         display: none; 
     }
     .search-container.active { display: block; animation: fadeIn 0.3s ease-in-out; }
@@ -265,7 +293,7 @@
 
     .price-component-container { 
         padding: 0; 
-        margin: 15px 0 0 0; /* تنظیم margin-top برای فاصله از search-container */
+        margin: 15px 0 0 0; /* START: اصلاح شده برای فاصله یکنواخت */
         background-color: #f2f2f2; 
         position: relative; 
         z-index: 1; 
@@ -275,8 +303,7 @@
     
     .tabs-container {
         background-color: white; padding: 0 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        margin-bottom: 15px; 
-        margin-top: 15px; /* تنظیم margin-top برای فاصله از price-component-container */
+        margin: 15px 0 15px 0; /* START: اصلاح شده برای فاصله یکنواخت */
         position: relative;
     }
     body.dark-mode .tabs-container { background-color: var(--dark-mode-card); box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); }
@@ -416,7 +443,7 @@
     .limit-modal-buttons { display: flex; gap: 10px; justify-content: center; }
     .limit-modal-btn { padding: 12px 20px; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-block; font-family: var(--font-family); }
     .limit-modal-btn.primary { background: var(--gradient); color: white; }
-    .limit-modal-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(58, 125, 222, 0.3); }
+    .limit-modal-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px (58, 125, 222, 0.3); }
     .limit-modal-btn.secondary { background-color: #f0f0f0; color: #333; }
     body.dark-mode .limit-modal-btn.secondary { background-color: var(--dark-mode-bg); color: var(--dark-mode-text); }
     
@@ -554,16 +581,6 @@
                 <div class="modal-item-name">حسابداری</div>
                 <div class="favorite-icon" data-id="calc11"><i class="far fa-heart"></i></div>
             </a>
-            <a href="kharjkard-sakhteman.html" class="modal-item">
-                <div class="modal-item-icon"><i class="fas fa-hammer"></i></div>
-                <div class="modal-item-name">خرجکرد ساختمان</div>
-                <div class="favorite-icon" data-id="calc6"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="sharj-sakhteman.html" class="modal-item">
-                <div class="modal-item-icon"><i class="fas fa-file-invoice-dollar"></i></div>
-                <div class="modal-item-name">شارژ ساختمان</div>
-                <div class="favorite-icon" data-id="calc8"><i class="far fa-heart"></i></div>
-            </a>
             <a href="apartment-share-calculator.html" class="modal-item limited-feature" data-feature="apartment-share-calculator">
                 <div class="modal-item-icon"><i class="fas fa-calculator"></i></div>
                 <div class="modal-item-name">قدرالسهم آپارتمان</div>
@@ -584,35 +601,15 @@
                 <div class="modal-item-name">استعلام چک</div>
                 <div class="favorite-icon" data-id="inquiry3"><i class="far fa-heart"></i></div>
             </a>
-            <a href="sabtemelk.html" class="modal-item">
-                <div class="modal-item-icon"><i class="fas fa-handshake"></i></div>
-                <div class="modal-item-name">سپردن ملک</div>
-                <div class="favorite-icon" data-id="service1"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="moshavereh.html" class="modal-item">
-                <div class="modal-item-icon"><i class="fas fa-comments"></i></div>
-                <div class="modal-item-name">مشاوره رایگان</div>
-                <div class="favorite-icon" data-id="service2"><i class="far fa-heart"></i></div>
-            </a>
             <a href="akhbar.html" class="modal-item">
                 <div class="modal-item-icon"><i class="fas fa-newspaper"></i></div>
                 <div class="modal-item-name">اخبار ملکی</div>
                 <div class="favorite-icon" data-id="service3"><i class="far fa-heart"></i></div>
             </a>
-            <a href="hamkari.html" class="modal-item">
-                <div class="modal-item-icon"><i class="fas fa-handshake"></i></div>
-                <div class="modal-item-name">همکاری با ما</div>
-                <div class="favorite-icon" data-id="service4"><i class="far fa-heart"></i></div>
-            </a>
             <a href="businesscard.html" class="modal-item limited-feature" data-feature="businesscard">
                 <div class="modal-item-icon"><i class="fas fa-id-card"></i></div>
                 <div class="modal-item-name">کارت ویزیت</div>
                 <div class="favorite-icon" data-id="service5"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="yaddasht.html" class="modal-item">
-                <div class="modal-item-icon"><i class="fas fa-sticky-note"></i></div>
-                <div class="modal-item-name">یادداشت‌ها</div>
-                <div class="favorite-icon" data-id="service6"><i class="far fa-heart"></i></div>
             </a>
             <a href="KHODNEVIS.html" class="modal-item">
                 <div class="modal-item-icon"><i class="fas fa-globe"></i></div>
@@ -686,6 +683,91 @@
                 <div class="modal-item-icon"><i class="fas fa-check-circle"></i></div>
                 <div class="modal-item-name">ثبت چک</div>
                 <div class="favorite-icon" data-id="inquiry5"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="kharjkardSakhtemanModal">
+                <div class="modal-item-icon"><i class="fas fa-hammer"></i></div>
+                <div class="modal-item-name">خرجکرد ساختمان</div>
+                <div class="favorite-icon" data-id="calc6"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="sharjSakhtemanModal">
+                <div class="modal-item-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div class="modal-item-name">شارژ ساختمان</div>
+                <div class="favorite-icon" data-id="calc8"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="yaddashtModal">
+                <div class="modal-item-icon"><i class="fas fa-sticky-note"></i></div>
+                <div class="modal-item-name">یادداشت‌ها</div>
+                <div class="favorite-icon" data-id="service6"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="sarresidYadavaModal">
+                <div class="modal-item-icon"><i class="fas fa-bell"></i></div>
+                <div class="modal-item-name">سررسیدها و یادآورها</div>
+                <div class="favorite-icon" data-id="tool3"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="gozareshKariModal">
+                <div class="modal-item-icon"><i class="fas fa-chart-pie"></i></div>
+                <div class="modal-item-name">گزارش کاری</div>
+                <div class="favorite-icon" data-id="tool2"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="mohasebeEjareModal">
+                <div class="modal-item-icon"><i class="fas fa-key"></i></div>
+                <div class="modal-item-name">محاسبه اجاره</div>
+                <div class="favorite-icon" data-id="calc12"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="moshavereHoghooghiModal">
+                <div class="modal-item-icon"><i class="fas fa-balance-scale"></i></div>
+                <div class="modal-item-name">مشاوره حقوقی</div>
+                <div class="favorite-icon" data-id="service8"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="entekhabNamAmlakModal">
+                <div class="modal-item-icon"><i class="fas fa-signature"></i></div>
+                <div class="modal-item-name">انتخاب نام املاک</div>
+                <div class="favorite-icon" data-id="service9"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="ejareRoozaneModal">
+                <div class="modal-item-icon"><i class="fas fa-calendar-day"></i></div>
+                <div class="modal-item-name">اجاره روزانه</div>
+                <div class="favorite-icon" data-id="service10"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="akharinMoamelatModal">
+                <div class="modal-item-icon"><i class="fas fa-chart-bar"></i></div>
+                <div class="modal-item-name">آخرین معاملات</div>
+                <div class="favorite-icon" data-id="service11"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="moshtarianModal">
+                <div class="modal-item-icon"><i class="fas fa-users"></i></div>
+                <div class="modal-item-name">مشتریان</div>
+                <div class="favorite-icon" data-id="service7"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="bandGharardadModal">
+                <div class="modal-item-icon"><i class="fas fa-file-signature"></i></div>
+                <div class="modal-item-name">بندهای قراردادی</div>
+                <div class="favorite-icon" data-id="file2"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="bazdidModal">
+                <div class="modal-item-icon"><i class="fas fa-clipboard-list"></i></div>
+                <div class="modal-item-name">چک لیست بازدید</div>
+                <div class="favorite-icon" data-id="file1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="amoozeshMatniModal">
+                <div class="modal-item-icon"><i class="fas fa-file-alt"></i></div>
+                <div class="modal-item-name">آموزش متنی</div>
+                <div class="favorite-icon" data-id="edu1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="amoozeshSotiModal">
+                <div class="modal-item-icon"><i class="fas fa-volume-up"></i></div>
+                <div class="modal-item-name">آموزش صوتی</div>
+                <div class="favorite-icon" data-id="edu2"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="amoozeshTasviriModal">
+                <div class="modal-item-icon"><i class="fas fa-video"></i></div>
+                <div class="modal-item-name">آموزش تصویری</div>
+                <div class="favorite-icon" data-id="edu3"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="chatAiModal">
+                <div class="modal-item-icon"><i class="fas fa-robot"></i></div>
+                <div class="modal-item-name">چت با هوش مصنوعی</div>
+                <div class="favorite-icon" data-id="tool4"><i class="far fa-heart"></i></div>
             </a>
         </div>
     </div>
@@ -800,7 +882,7 @@
     
     <div class="tab-content active" id="calculations-tab">
         <div class="calc-container">
-            <!-- Row 1 -->
+            <!-- Active Items -->
             <a href="apartment-calculator.html" class="calc-item limited-feature" data-feature="apartment-calculator">
                 <div class="calc-image"><i class="fas fa-building"></i></div>
                 <div class="calc-name">قیمت آپارتمان</div>
@@ -833,27 +915,27 @@
                 <div class="calc-name">حسابداری</div>
                 <div class="favorite-icon" data-id="calc11"><i class="far fa-heart"></i></div>
             </a>
-            <a href="#" class="calc-item disabled" id="commissionCalc">
-                <div class="calc-image"><i class="fas fa-percentage"></i></div>
-                <div class="calc-name">محاسبه کمیسیون</div>
-                <div class="favorite-icon" data-id="calc5"><i class="far fa-heart"></i></div>
+            
+            <!-- Disabled Items at the end -->
+            <a href="#" class="calc-item disabled" id="mohasebeejareh">
+                <div class="calc-image"><i class="fas fa-key"></i></div>
+                <div class="calc-name">محاسبه اجاره</div>
+                <div class="favorite-icon" data-id="calc12"><i class="far fa-heart"></i></div>
             </a>
-
-            <!-- Row 4 -->
-            <a href="kharjkard-sakhteman.html" class="calc-item">
+            <a href="#" class="calc-item disabled" id="kharjkardSakhteman">
                 <div class="calc-image"><i class="fas fa-hammer"></i></div>
                 <div class="calc-name">خرجکرد ساختمان</div>
                 <div class="favorite-icon" data-id="calc6"><i class="far fa-heart"></i></div>
             </a>
-            <a href="sharj-sakhteman.html" class="calc-item">
+            <a href="#" class="calc-item disabled" id="sharjSakhteman">
                 <div class="calc-image"><i class="fas fa-file-invoice-dollar"></i></div>
                 <div class="calc-name">شارژ ساختمان</div>
                 <div class="favorite-icon" data-id="calc8"><i class="far fa-heart"></i></div>
             </a>
-            <a href="mohasebeejareh.html" class="calc-item">
-                <div class="calc-image"><i class="fas fa-key"></i></div>
-                <div class="calc-name">محاسبه اجاره</div>
-                <div class="favorite-icon" data-id="calc12"><i class="far fa-heart"></i></div>
+            <a href="#" class="calc-item disabled" id="commissionCalc">
+                <div class="calc-image"><i class="fas fa-percentage"></i></div>
+                <div class="calc-name">محاسبه کمیسیون</div>
+                <div class="favorite-icon" data-id="calc5"><i class="far fa-heart"></i></div>
             </a>
         </div>
     </div>
@@ -878,7 +960,7 @@
             <div class="banner-container">
                 <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg2.png');"></a>
             </div>
-            <a href="taidiye-codeposti.html" class="calc-item">
+            <a href="#" class="calc-item disabled" id="taidiyeCodeposti">
                 <div class="calc-image"><i class="fas fa-map-pin"></i></div>
                 <div class="calc-name">تاییدیه کد پستی</div>
                 <div class="favorite-icon" data-id="inquiry4"><i class="far fa-heart"></i></div>
@@ -887,68 +969,36 @@
     </div>
     <div class="tab-content" id="services-tab">
         <div class="calc-container">
-            <!-- Row 1 -->
-            <a href="sabtemelk.html" class="calc-item">
-                <div class="calc-image"><i class="fas fa-handshake"></i></div>
-                <div class="calc-name">سپردن ملک</div>
-                <div class="favorite-icon" data-id="service1"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="moshavereh.html" class="calc-item">
-                <div class="calc-image"><i class="fas fa-comments"></i></div>
-                <div class="calc-name">مشاوره رایگان</div>
-                <div class="favorite-icon" data-id="service2"><i class="far fa-heart"></i></div>
-            </a>
+            <!-- Active Items -->
             <a href="akhbar.html" class="calc-item">
                 <div class="calc-image"><i class="fas fa-newspaper"></i></div>
                 <div class="calc-name">اخبار ملکی</div>
                 <div class="favorite-icon" data-id="service3"><i class="far fa-heart"></i></div>
-            </a>
-            <!-- Row 2 -->
-            <a href="hamkari.html" class="calc-item">
-                <div class="calc-image"><i class="fas fa-handshake"></i></div>
-                <div class="calc-name">همکاری با ما</div>
-                <div class="favorite-icon" data-id="service4"><i class="far fa-heart"></i></div>
             </a>
             <a href="businesscard.html" class="calc-item limited-feature" data-feature="businesscard">
                 <div class="calc-image"><i class="fas fa-id-card"></i></div>
                 <div class="calc-name">کارت ویزیت</div>
                 <div class="favorite-icon" data-id="service5"><i class="far fa-heart"></i></div>
             </a>
-            <a href="yaddasht.html" class="calc-item">
-                <div class="calc-image"><i class="fas fa-sticky-note"></i></div>
-                <div class="calc-name">یادداشت‌ها</div>
-                <div class="favorite-icon" data-id="service6"><i class="far fa-heart"></i></div>
-            </a>
-            <!-- Row 3: Banner -->
+            <!-- Banner -->
             <div class="banner-container">
                 <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg1.png');"></a>
             </div>
-            <!-- Row 4 -->
-            <a href="moshtarian.html" class="calc-item">
+            <!-- Disabled Items at the end -->
+            <a href="#" class="calc-item disabled" id="moshtarian">
                 <div class="calc-image"><i class="fas fa-users"></i></div>
                 <div class="calc-name">مشتریان</div>
                 <div class="favorite-icon" data-id="service7"><i class="far fa-heart"></i></div>
             </a>
-            <a href="moshavere-hoghooghi.html" class="calc-item">
-                <div class="calc-image"><i class="fas fa-balance-scale"></i></div>
-                <div class="calc-name">مشاوره حقوقی</div>
-                <div class="favorite-icon" data-id="service8"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="entekhab-nam-amlak.html" class="calc-item">
-                <div class="calc-image"><i class="fas fa-signature"></i></div>
-                <div class="calc-name">انتخاب نام املاک</div>
-                <div class="favorite-icon" data-id="service9"><i class="far fa-heart"></i></div>
-            </a>
-            <!-- Row 5 -->
-            <a href="ejare-roozane.html" class="calc-item">
-                <div class="calc-image"><i class="fas fa-calendar-day"></i></div>
-                <div class="calc-name">اجاره روزانه</div>
-                <div class="favorite-icon" data-id="service10"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="akharin-moamelat.html" class="calc-item">
+            <a href="#" class="calc-item disabled" id="akharinMoamelat">
                 <div class="calc-image"><i class="fas fa-chart-bar"></i></div>
                 <div class="calc-name">آخرین معاملات</div>
                 <div class="favorite-icon" data-id="service11"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="calc-item disabled" id="yaddasht">
+                <div class="calc-image"><i class="fas fa-sticky-note"></i></div>
+                <div class="calc-name">یادداشت‌ها</div>
+                <div class="favorite-icon" data-id="service6"><i class="far fa-heart"></i></div>
             </a>
         </div>
     </div>
@@ -1015,25 +1065,26 @@
     </div>
     <div class="tab-content" id="education-tab">
         <div class="calc-container">
-            <a href="amoozesh.matni.html" class="calc-item">
-                <div class="calc-image"><i class="fas fa-file-alt"></i></div>
-                <div class="calc-name">آموزش متنی</div>
-                <div class="favorite-icon" data-id="edu1"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="amoozesh.soti.html" class="calc-item">
-                <div class="calc-image"><i class="fas fa-volume-up"></i></div>
-                <div class="calc-name">آموزش صوتی</div>
-                <div class="favorite-icon" data-id="edu2"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="amoozesh.tasviri.html" class="calc-item">
-                <div class="calc-image"><i class="fas fa-video"></i></div>
-                <div class="calc-name">آموزش تصویری</div>
-                <div class="favorite-icon" data-id="edu3"><i class="far fa-heart"></i></div>
-            </a>
             <!-- Banner -->
             <div class="banner-container">
                 <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg1.png');"></a>
             </div>
+            <!-- Disabled Items at the end -->
+            <a href="#" class="calc-item disabled" id="amoozeshMatni">
+                <div class="calc-image"><i class="fas fa-file-alt"></i></div>
+                <div class="calc-name">آموزش متنی</div>
+                <div class="favorite-icon" data-id="edu1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="calc-item disabled" id="amoozeshSoti">
+                <div class="calc-image"><i class="fas fa-volume-up"></i></div>
+                <div class="calc-name">آموزش صوتی</div>
+                <div class="favorite-icon" data-id="edu2"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="calc-item disabled" id="amoozeshTasviri">
+                <div class="calc-image"><i class="fas fa-video"></i></div>
+                <div class="calc-name">آموزش تصویری</div>
+                <div class="favorite-icon" data-id="edu3"><i class="far fa-heart"></i></div>
+            </a>
         </div>
     </div>
     <div class="tab-content" id="tools-tab">
@@ -1043,48 +1094,45 @@
                 <div class="calc-name">جعبه لایتنر</div>
                 <div class="favorite-icon" data-id="tool1"><i class="far fa-heart"></i></div>
             </a>
-            <a href="gozaresh-kari.html" class="calc-item">
-                <div class="calc-image"><i class="fas fa-chart-pie"></i></div>
-                <div class="calc-name">گزارش کاری</div>
-                <div class="favorite-icon" data-id="tool2"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="sarresid-yadava.html" class="calc-item">
-                <div class="calc-image"><i class="fas fa-bell"></i></div>
-                <div class="calc-name">سررسیدها و یادآورها</div>
-                <div class="favorite-icon" data-id="tool3"><i class="far fa-heart"></i></div>
-            </a>
-            <!-- Banner -->
-            <div class="banner-container">
-                <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg2.png');"></a>
-            </div>
-            <a href="chat-ai.html" class="calc-item">
-                <div class="calc-image"><i class="fas fa-robot"></i></div>
-                <div class="calc-name">چت با هوش مصنوعی</div>
-                <div class="favorite-icon" data-id="tool4"><i class="far fa-heart"></i></div>
-            </a>
             <a href="num-to-word.html" class="calc-item">
                 <div class="calc-image"><i class="fas fa-spell-check"></i></div>
                 <div class="calc-name">تبدیل عدد به حروف</div>
                 <div class="favorite-icon" data-id="tool5"><i class="far fa-heart"></i></div>
             </a>
+            <!-- Banner -->
+            <div class="banner-container">
+                <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg2.png');"></a>
+            </div>
+            <!-- Disabled Items at the end -->
+            <a href="#" class="calc-item disabled" id="sarresidYadava">
+                <div class="calc-image"><i class="fas fa-bell"></i></div>
+                <div class="calc-name">سررسیدها و یادآورها</div>
+                <div class="favorite-icon" data-id="tool3"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="calc-item disabled" id="gozareshKari">
+                <div class="calc-image"><i class="fas fa-chart-pie"></i></div>
+                <div class="calc-name">گزارش کاری</div>
+                <div class="favorite-icon" data-id="tool2"><i class="far fa-heart"></i></div>
+            </a>
         </div>
     </div>
     <div class="tab-content" id="files-tab">
         <div class="calc-container">
-            <a href="bazdid.html" class="calc-item">
-                <div class="calc-image"><i class="fas fa-clipboard-list"></i></div>
-                <div class="calc-name">چک لیست بازدید</div>
-                <div class="favorite-icon" data-id="file1"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="band_gharardad.html" class="calc-item">
-                <div class="calc-image"><i class="fas fa-file-signature"></i></div>
-                <div class="calc-name">بندهای قراردادی</div>
-                <div class="favorite-icon" data-id="file2"><i class="far fa-heart"></i></div>
-            </a>
             <!-- Banner -->
             <div class="banner-container">
                 <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg1.png');"></a>
             </div>
+            <!-- Disabled Items at the end -->
+            <a href="#" class="calc-item disabled" id="bazdid">
+                <div class="calc-image"><i class="fas fa-clipboard-list"></i></div>
+                <div class="calc-name">چک لیست بازدید</div>
+                <div class="favorite-icon" data-id="file1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="calc-item disabled" id="bandGharardad">
+                <div class="calc-image"><i class="fas fa-file-signature"></i></div>
+                <div class="calc-name">بندهای قراردادی</div>
+                <div class="favorite-icon" data-id="file2"><i class="far fa-heart"></i></div>
+            </a>
         </div>
     </div>
 
