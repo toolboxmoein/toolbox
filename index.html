@@ -22,35 +22,6 @@
 
  <style>
     :root {
-        /* پالت رنگی جدید: آبی کهکشانی و زردخواهش می‌کنم. با توجه به درخواست شما، تغییرات لازم برای حذف دکمه‌های مشخص شده و غیرفعال کردن و جابجایی دکمه‌های دیگر اعمال شده است. سایر بخش‌های کد بدون تغییر باقی مانده‌اند.
-
-لطفاً کد HTML اصلاح شده را در ادامه مشاهده کنید:
-
-```html
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- 
- <!-- START: کد ضد کش اضافه شده (برای اطمینان از تازگی HTML) -->
- <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
- <meta http-equiv="Pragma" content="no-cache" />
- <meta http-equiv="Expires" content="0" />
- <!-- END: کد ضد کش اضافه شده -->
-
- <title>جعبه ابزار املاک</title>
- 
- <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
- <link href="https://fonts.googleapis.com/css2?family=Khandevane:wght@400;500;600;700&display=swap" rel="stylesheet">
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
- 
- <!-- START: اضافه شده برای نمایش favicon.ico -->
- <link rel="icon" href="images/favicon.ico" type="image/x-icon">
- <!-- END: اضافه شده برای نمایش favicon.ico -->
-
- <style>
-    :root {
         /* پالت رنگی جدید: آبی کهکشانی و زرد طلایی */
         --primary-color: #3A7DDE;       /* آبی اصلی، عمیق و فانتزی */
         --primary-light: #EAF2FF;       /* آبی بسیار روشن برای هاور */
@@ -87,6 +58,12 @@
         --text-light: #6c757d;
         --bg-color: #f8f9fa;
         --white: #ffffff;
+
+        /* رنگ‌بندی برای دسته‌های اخبار */
+        --real-estate-color: #FFC107; /* زرد طلایی برای مسکن */
+        --economy-color: #008e3a; /* سبز برای اقتصاد */
+        --politics-color: #0277bd; /* آبی برای سیاسی */
+        --text-black-color: #343a40; /* برای متون سیاه در اخبار */
     }
     
     /* --- استایل‌های پایه و عمومی --- */
@@ -157,13 +134,29 @@
     }
     .hamburger-menu { flex: 0 0 auto; display: flex; justify-content: flex-start; }
     .menu-tab-button { 
-        background-color: var(--primary-color); color: white; border: none;
-        padding: 12px 50px 12px 25px; font-family: 'Vazirmatn', Arial, sans-serif;
-        font-size: 16px; font-weight: 600; cursor: pointer;
-        border-radius: 15px 0 0 15px; transition: var(--transition);
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        background: none; /* Removed blue background */
+        border: none;
+        padding: 12px; /* Adjusted padding for icon-only look */
+        font-family: var(--font-family);
+        font-size: 16px; 
+        font-weight: 600; 
+        cursor: pointer;
+        border-radius: 15px; /* More rounded for icon */
+        transition: var(--transition);
+        box-shadow: none; /* No shadow for plain icon button */
+        color: var(--primary-color); /* Set icon color */
     }
-    .menu-tab-button:hover { background-color: var(--secondary-color); transform: translateX(5px); }
+    body.dark-mode .menu-tab-button {
+        color: var(--dark-mode-text);
+    }
+    .menu-tab-button i { /* Style for hamburger icon */
+        font-size: 24px; /* Larger icon */
+        margin: 0;
+    }
+    .menu-tab-button:hover { 
+        background-color: var(--primary-light); /* Light hover effect */
+        transform: scale(1.05); /* Slight scale on hover */
+    }
     .logo-container { flex-grow: 1; display: flex; justify-content: center; } 
     .logo-placeholder { 
         width: 150px; height: 60px; background-image: url('images/logo.png'); 
@@ -231,8 +224,21 @@
 
     /* .top-banner-wrapper - این بخش به طور کامل حذف شده است */
 
+    /* Consistent margin and padding for all top-level content sections */
+    .date-banner,
+    .motivational-wrapper,
+    .random-news-section-wrapper,
+    .search-container,
+    .price-component-container,
+    .tabs-container {
+        margin: 15px auto 0; /* 15px top margin, auto left/right for centering, 0 bottom */
+        padding: 0 15px; /* Consistent horizontal padding */
+        width: 100%; /* Take full width and padding will be inside */
+        max-width: 100%; /* Ensure it doesn't exceed viewport width */
+        box-sizing: border-box; /* Include padding in width calculation */
+    }
+
     .date-banner {
-        width: calc(100% - 30px); 
         height: auto; 
         background: white; 
         display: flex; 
@@ -242,13 +248,12 @@
         font-weight: 600; 
         font-size: 13px; 
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        margin: 15px auto 0; /* START: اصلاح شده برای فاصله یکنواخت */
         border-radius: 12px; 
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         position: relative; 
         overflow: visible; 
         z-index: 20; 
-        padding: 10px; 
+        padding: 10px 15px; /* Inner padding for text */
         flex-wrap: wrap;
     }
     
@@ -259,17 +264,34 @@
     }
 
     .motivational-wrapper { 
-        padding: 0 15px; 
-        margin: 15px 0 0 0; /* START: اصلاح شده برای فاصله یکنواخت */
+        position: relative; /* Needed for absolute positioning of the label */
     }
-    .motivational-widget { position: relative; width: 100%; margin-top: 0; }
-    .box-tag {
-        background-color: var(--secondary-color); color: white; font-size: 12px; font-weight: 600; padding: 4px 12px;
-        border-radius: 8px; display: inline-block; position: absolute; top: 10px; right: 15px; z-index: 1;
+    .motivational-label { /* NEW: Style for "متن امروز" label */
+        position: absolute;
+        top: -10px; /* Position above the container */
+        right: 15px;
+        background: var(--secondary-color);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        z-index: 1;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
+    body.dark-mode .motivational-label {
+        background-color: var(--dark-mode-card);
+        color: var(--dark-mode-text);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
     .motivational-quote-container {
-        width: 100%; height: 3cm; background-color: white; border-radius: 12px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        display: flex; justify-content: center; align-items: center; padding: 30px 20px 15px 20px; box-sizing: border-box;
+        width: 100%;
+        min-height: 60px; 
+        background-color: white; border-radius: 12px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        display: flex; justify-content: center; align-items: center;
+        padding: 15px 20px; 
+        box-sizing: border-box;
         overflow: hidden; position: relative;
     }
     body.dark-mode .motivational-quote-container { background-color: var(--dark-mode-card); box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); }
@@ -281,9 +303,8 @@
     body.dark-mode #daily-quote { color: var(--dark-mode-text); }
 
     .search-container { 
-        padding: 10px 15px; 
-        margin: 15px 15px 0 15px; 
-        display: none; 
+        /* Margin and padding handled by common rule above */
+        display: none; /* Controlled by JS */
     }
     .search-container.active { display: block; animation: fadeIn 0.3s ease-in-out; }
     .search-box { position: relative; width: 100%; }
@@ -292,23 +313,64 @@
     .search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #999; font-size: 16px; }
 
     .price-component-container { 
-        padding: 0; 
-        margin: 15px 0 0 0; /* START: اصلاح شده برای فاصله یکنواخت */
-        background-color: #f2f2f2; 
+        /* Margin and padding handled by common rule above */
+        background-color: transparent; /* Parent bg, iframe handles its own bg */
         position: relative; 
         z-index: 1; 
     }
     body.dark-mode .price-component-container { background-color: var(--dark-mode-bg); }
-    .price-iframe { width: 100%; height: 200px; border: none; border-radius: 0; overflow: hidden; margin: 0; display: block; }
+    .price-label { /* NEW: Style for "قیمت لحظه‌ای" label, similar to motivational-label */
+        position: absolute;
+        top: -10px; /* Position above the container */
+        right: 15px;
+        background: var(--secondary-color);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        z-index: 1;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    body.dark-mode .price-label {
+        background-color: var(--dark-mode-card);
+        color: var(--dark-mode-text);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .price-iframe { 
+        width: 100%; 
+        height: 220px; /* Increased height to accommodate larger card */
+        border: none; 
+        border-radius: 12px; /* Consistent border-radius */
+        overflow: hidden; 
+        margin: 0; /* Remove default iframe margin */
+        display: block; 
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Consistent shadow */
+        background-color: white; /* Ensure iframe has a background */
+    }
+    body.dark-mode .price-iframe {
+        background-color: var(--dark-mode-card); /* Ensure iframe background is dark in dark mode */
+    }
     
     .tabs-container {
-        background-color: white; padding: 0 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        margin: 15px 0 15px 0; /* START: اصلاح شده برای فاصله یکنواخت */
+        /* Margin and padding handled by common rule above */
+        background-color: white; 
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        margin-bottom: 15px; /* Specific bottom margin for this section */
         position: relative;
+        border-radius: 12px; /* Consistent border-radius */
     }
     body.dark-mode .tabs-container { background-color: var(--dark-mode-card); box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); }
     
-    .tabs-nav { display: flex; align-items: center; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; padding: 0 20px; }
+    .tabs-nav { 
+        display: flex; 
+        align-items: center; 
+        overflow-x: auto; 
+        scrollbar-width: none; 
+        -ms-overflow-style: none; 
+        scroll-behavior: smooth; 
+        padding: 0 20px; /* Inner padding for nav items */
+    }
     .tabs-nav::-webkit-scrollbar { display: none; }
     
     .tab-button {
@@ -336,7 +398,7 @@
     .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
-    .calc-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0 15px; margin-bottom: 15px; }
+    .calc-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 0; margin-bottom: 0; } /* Padding/margin handled by parent sections */
     .calc-item { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; background-color: white; padding: 12px 8px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; position: relative; }
     body.dark-mode .calc-item { background-color: var(--dark-mode-card); box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); }
     .calc-item:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
@@ -443,7 +505,7 @@
     .limit-modal-buttons { display: flex; gap: 10px; justify-content: center; }
     .limit-modal-btn { padding: 12px 20px; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-block; font-family: var(--font-family); }
     .limit-modal-btn.primary { background: var(--gradient); color: white; }
-    .limit-modal-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px (58, 125, 222, 0.3); }
+    .limit-modal-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(58, 125, 222, 0.3); }
     .limit-modal-btn.secondary { background-color: #f0f0f0; color: #333; }
     body.dark-mode .limit-modal-btn.secondary { background-color: var(--dark-mode-bg); color: var(--dark-mode-text); }
     
@@ -459,8 +521,10 @@
     .close-modal:hover { transform: rotate(90deg); background-color: #e60000; }
     .modal-section-title { padding: 15px 20px 5px; font-size: 16px; font-weight: 600; color: var(--primary-color); }
     .modal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 10px 20px 20px; }
-    .modal-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; background-color: white; border-radius: 10px; padding: 12px 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; position: relative; }
+    .modal-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; background-color: white; padding: 12px 8px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; position: relative; }
     body.dark-mode .modal-item { background-color: var(--dark-mode-card); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); }
+    .modal-item:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
+    body.dark-mode .modal-item:hover { box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); }
     .modal-item-icon { width: 45px; height: 45px; border-radius: 50%; overflow: hidden; background-color: var(--primary-light); display: flex; justify-content: center; align-items: center; margin-bottom: 8px; }
     body.dark-mode .modal-item-icon { background-color: rgba(58, 125, 222, 0.1); }
     .modal-item-icon i { color: var(--primary-color); font-size: 24px; }
@@ -470,7 +534,7 @@
     /* استایل‌های مربوط به حالت دسکتاپ و ریسپانسیو */
     @media (max-width: 768px) {
         .logo-placeholder { width: 150px; height: 60px; }
-        .menu-tab-button { font-size: 14px; padding: 10px 35px 10px 20px; }
+        .menu-tab-button { font-size: 14px; padding: 10px; } /* Adjusted padding */
         .sidebar { width: 90%; }
         .header-icons-wrapper { flex-basis: auto; padding-left: 10px; }
     }
@@ -485,6 +549,7 @@
         .favorite-icon { width: 22px; height: 22px; top: 3px; right: 3px; }
         .favorite-icon i { font-size: 12px; }
         #daily-quote { font-size: 16px; }
+        .menu-tab-button i { font-size: 20px; } /* Smaller icon on mobile */
     }
 
     /* استایل‌های حالت پرداخت از کد ۱ */
@@ -513,6 +578,197 @@
     body.loading { pointer-events: none; }
     
     .header, #app-container { display: none; }
+
+    /* --- استایل‌های بخش اخبار رندوم --- */
+    .random-news-section-wrapper {
+        /* Margin and padding handled by common rule above */
+        display: none; /* Hidden by default, shown when content is ready */
+        position: relative; /* Needed for absolute positioning of the label */
+        background-color: transparent; /* Ensure no background interferes with card shadow */
+    }
+    .news-label { /* NEW: Style for "اخبار" label, similar to motivational-label */
+        position: absolute;
+        top: -10px; /* Position above the container */
+        right: 15px;
+        background: var(--secondary-color);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        z-index: 1;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    body.dark-mode .news-label {
+        background-color: var(--dark-mode-card);
+        color: var(--dark-mode-text);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .news-highlights-grid { /* Changed to flex for single item centering */
+        display: flex;
+        justify-content: center; /* Center the single news card */
+        align-items: flex-start; /* Align item to top if height varies */
+        width: 100%;
+        max-width: 1200px; /* Max width for the container */
+        margin: 0 auto; /* Centered horizontally within its parent */
+        height: 80px; /* Fixed height for the grid to hold the card */
+    }
+
+    /* Styles for individual news items, adapting calc-item */
+    .news-item-card { /* Custom class for news items to distinguish them from generic calc-items */
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        background-color: white;
+        padding: 10px 15px; /* Adjusted padding */
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        position: relative;
+        width: 100%; /* Take full width of parent (flex item) */
+        max-width: 450px; /* Limit max width for consistency with other cards */
+        height: 80px; /* Fixed height for the card, smaller than 200px iframe */
+        overflow: hidden; /* Hide overflowing content */
+        justify-content: center; /* Center content vertically */
+        align-items: center; /* Center content horizontally */
+        text-align: center; /* Center text within the card */
+        cursor: pointer; /* Indicate it's clickable */
+    }
+    body.dark-mode .news-item-card {
+        background-color: var(--dark-mode-card);
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    }
+    .news-item-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    body.dark-mode .news-item-card:hover {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .news-item-card .card-content { /* Wrapper for text content inside news card */
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        width: 100%;
+        justify-content: center; /* Vertically center title and cue */
+        align-items: center; /* Horizontally center title and cue */
+        gap: 5px; /* Small gap between title and cue */
+    }
+
+    /* Hide category badge */
+    .news-item-card .news-category-badge {
+        display: none;
+    }
+
+    .news-item-card .news-title-text {
+        font-size: 14px; /* Slightly larger for prominence */
+        font-weight: 600;
+        color: var(--dark-color);
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 1; /* Limit to 1 line */
+        line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin: 0; /* Remove any default margins */
+        text-align: center; /* Ensure title text is centered */
+        max-width: 90%; /* Prevent title from hitting edges */
+    }
+    body.dark-mode .news-item-card .news-title-text {
+        color: var(--dark-mode-text);
+    }
+
+    .news-item-card .news-footer-info { /* Re-purposed to hold only the "ادامه خبر" cue */
+        display: flex;
+        justify-content: center; /* Center the cue */
+        align-items: center;
+        margin-top: auto; /* Push to bottom */
+        padding-top: 5px; /* Small padding above cue */
+        /* No border-top needed if only cue is here */
+    }
+
+    .news-item-card .news-source-date { /* Hidden by default for this card type */
+        display: none; 
+    }
+    .news-item-card .read-more-cue { /* Style for "ادامه خبر" */
+        font-size: 11px;
+        color: var(--primary-color);
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+    }
+    .news-item-card .read-more-cue i {
+        font-size: 9px;
+    }
+
+
+    /* Loading/Error/No News for random section */
+    .info-message {
+        text-align: center;
+        padding: 15px;
+        background: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--card-shadow);
+        margin: 0 auto; /* Centered in its parent */
+        max-width: 450px; /* Match news card max width */
+        height: 80px; /* Match news card height */
+        display: none; /* Hidden by default */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%; /* Take full width of parent flex item */
+    }
+    .info-message.loading i {
+        font-size: 18px; /* Reduced font size */
+        animation: spin 1s linear infinite;
+        color: var(--primary-color);
+        margin-bottom: 5px;
+    }
+    .info-message h3 {
+        font-size: 1rem; /* Reduced font size */
+        color: var(--dark-color);
+        margin-bottom: 8px; /* Reduced margin */
+    }
+    .info-message p {
+        font-size: 0.85rem; /* Reduced font size */
+        color: var(--grey-color);
+    }
+    body.dark-mode .info-message {
+        background-color: var(--dark-mode-card);
+        color: var(--dark-mode-text);
+    }
+    body.dark-mode .info-message h3 {
+        color: var(--dark-mode-text);
+    }
+
+    /* Responsive adjustments for random news section */
+    @media (max-width: 480px) {
+        .news-highlights-grid {
+            gap: 10px;
+        }
+        .news-item-card {
+            height: 75px; /* Slightly smaller height on mobile */
+            padding: 10px; /* Further reduced padding */
+        }
+        .news-item-card .news-title-text {
+            font-size: 12px;
+            min-height: auto;
+        }
+        .news-item-card .read-more-cue {
+            font-size: 9px;
+        }
+        .news-item-card .read-more-cue i {
+            font-size: 7px;
+        }
+        .motivational-label, .news-label, .price-label {
+            font-size: 11px;
+            padding: 3px 10px;
+            top: -8px;
+        }
+    }
     
  </style>
 </head>
@@ -561,6 +817,7 @@
         </div>
         <div class="modal-section-title">ابزارهای فعال</div>
         <div class="modal-grid">
+            <!-- Active Calculations -->
             <a href="apartment-calculator.html" class="modal-item limited-feature" data-feature="apartment-calculator">
                 <div class="modal-item-icon"><i class="fas fa-building"></i></div>
                 <div class="modal-item-name">قیمت آپارتمان</div>
@@ -586,6 +843,8 @@
                 <div class="modal-item-name">قدرالسهم آپارتمان</div>
                 <div class="favorite-icon" data-id="calc9"><i class="far fa-heart"></i></div>
             </a>
+
+            <!-- Active Inquiries -->
             <a href="estelam.html" class="modal-item">
                 <div class="modal-item-icon"><i class="fas fa-file-contract"></i></div>
                 <div class="modal-item-name">استعلام سند</div>
@@ -601,6 +860,8 @@
                 <div class="modal-item-name">استعلام چک</div>
                 <div class="favorite-icon" data-id="inquiry3"><i class="far fa-heart"></i></div>
             </a>
+            
+            <!-- Active Services -->
             <a href="akhbar.html" class="modal-item">
                 <div class="modal-item-icon"><i class="fas fa-newspaper"></i></div>
                 <div class="modal-item-name">اخبار ملکی</div>
@@ -611,16 +872,8 @@
                 <div class="modal-item-name">کارت ویزیت</div>
                 <div class="favorite-icon" data-id="service5"><i class="far fa-heart"></i></div>
             </a>
-            <a href="KHODNEVIS.html" class="modal-item">
-                <div class="modal-item-icon"><i class="fas fa-globe"></i></div>
-                <div class="modal-item-name">سایت خودنویس</div>
-                <div class="favorite-icon" data-id="website1"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="kateb.html" class="modal-item">
-                <div class="modal-item-icon"><i class="fas fa-globe"></i></div>
-                <div class="modal-item-name">سامانه کاتب</div>
-                <div class="favorite-icon" data-id="website4"><i class="far fa-heart"></i></div>
-            </a>
+            
+            <!-- Active Social -->
             <a href="checklist-content.html" class="modal-item">
                 <div class="modal-item-icon"><i class="fas fa-clipboard-check"></i></div>
                 <div class="modal-item-name">چک لیست تولید محتوا</div>
@@ -633,8 +886,8 @@
             </a>
             <a href="content-calendar.html" class="modal-item">
                 <div class="modal-item-icon"><i class="fas fa-calendar-alt"></i></div>
-                <div class="modal-item-name">تقویم تولید محتوا</div>
                 <div class="favorite-icon" data-id="social3"><i class="far fa-heart"></i></div>
+                <div class="modal-item-name">تقویم تولید محتوا</div>
             </a>
             <a href="instagram-caption.html" class="modal-item">
                 <div class="modal-item-icon"><i class="fab fa-instagram"></i></div>
@@ -651,123 +904,127 @@
                 <div class="modal-item-name">تعامل روزانه</div>
                 <div class="favorite-icon" data-id="social6"><i class="far fa-heart"></i></div>
             </a>
-            <a href="sabteman.html" class="modal-item">
+
+            <!-- Active Websites -->
+            <a href="KHODNEVIS.html" class="modal-item">
                 <div class="modal-item-icon"><i class="fas fa-globe"></i></div>
+                <div class="modal-item-name">سایت خودنویس</div>
+                <div class="favorite-icon" data-id="website1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="kateb.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-globe"></i></div>
+                <div class="modal-item-name">سامانه کاتب</div>
+                <div class="favorite-icon" data-id="website4"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="sabteman.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-id-card-alt"></i></div>
                 <div class="modal-item-name">سایت ثبت من</div>
                 <div class="favorite-icon" data-id="website3"><i class="far fa-heart"></i></div>
             </a>
+
+            <!-- Active Tools -->
+            <a href="lightner.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-box-open"></i></div>
+                <div class="modal-item-name">جعبه لایتنر</div>
+                <div class="favorite-icon" data-id="tool1"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="num-to-word.html" class="modal-item">
+                <div class="modal-item-icon"><i class="fas fa-spell-check"></i></div>
+                <div class="modal-item-name">تبدیل عدد به حروف</div>
+                <div class="favorite-icon" data-id="tool5"><i class="far fa-heart"></i></div>
+            </a>
         </div>
+
         <div class="modal-section-title">به زودی فعال می‌شوند</div>
         <div class="modal-grid">
-            <a href="#" class="modal-item disabled" id="totalPriceCalc">
-                <div class="modal-item-icon"><i class="fas fa-coins"></i></div>
-                <div class="modal-item-name">قیمت کل آپارتمان</div>
-                <div class="favorite-icon" data-id="calc10"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="#" class="modal-item disabled" id="commissionCalc">
-                <div class="modal-item-icon"><i class="fas fa-percentage"></i></div>
-                <div class="modal-item-name">محاسبه کمیسیون</div>
-                <div class="favorite-icon" data-id="calc5"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="#" class="modal-item disabled" id="constructionCalc">
-                <div class="modal-item-icon"><i class="fas fa-hammer"></i></div>
-                <div class="modal-item-name">هزینه ساخت</div>
-                <div class="favorite-icon" data-id="calc6"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="#" class="modal-item disabled" id="postalCodeInquiry">
-                <div class="modal-item-icon"><i class="fas fa-map-pin"></i></div>
-                <div class="modal-item-name">استعلام کد پستی</div>
-                <div class="favorite-icon" data-id="inquiry4"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="#" class="modal-item disabled" id="checkRegistration">
-                <div class="modal-item-icon"><i class="fas fa-check-circle"></i></div>
-                <div class="modal-item-name">ثبت چک</div>
-                <div class="favorite-icon" data-id="inquiry5"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="#" class="modal-item disabled" id="kharjkardSakhtemanModal">
-                <div class="modal-item-icon"><i class="fas fa-hammer"></i></div>
-                <div class="modal-item-name">خرجکرد ساختمان</div>
-                <div class="favorite-icon" data-id="calc6"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="#" class="modal-item disabled" id="sharjSakhtemanModal">
-                <div class="modal-item-icon"><i class="fas fa-file-invoice-dollar"></i></div>
-                <div class="modal-item-name">شارژ ساختمان</div>
-                <div class="favorite-icon" data-id="calc8"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="#" class="modal-item disabled" id="yaddashtModal">
-                <div class="modal-item-icon"><i class="fas fa-sticky-note"></i></div>
-                <div class="modal-item-name">یادداشت‌ها</div>
-                <div class="favorite-icon" data-id="service6"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="#" class="modal-item disabled" id="sarresidYadavaModal">
-                <div class="modal-item-icon"><i class="fas fa-bell"></i></div>
-                <div class="modal-item-name">سررسیدها و یادآورها</div>
-                <div class="favorite-icon" data-id="tool3"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="#" class="modal-item disabled" id="gozareshKariModal">
-                <div class="modal-item-icon"><i class="fas fa-chart-pie"></i></div>
-                <div class="modal-item-name">گزارش کاری</div>
-                <div class="favorite-icon" data-id="tool2"><i class="far fa-heart"></i></div>
-            </a>
-            <a href="#" class="modal-item disabled" id="mohasebeEjareModal">
+            <!-- Disabled Calculations -->
+            <a href="#" class="modal-item disabled" id="mohasebeEjareModal_disabled">
                 <div class="modal-item-icon"><i class="fas fa-key"></i></div>
                 <div class="modal-item-name">محاسبه اجاره</div>
                 <div class="favorite-icon" data-id="calc12"><i class="far fa-heart"></i></div>
             </a>
-            <a href="#" class="modal-item disabled" id="moshavereHoghooghiModal">
-                <div class="modal-item-icon"><i class="fas fa-balance-scale"></i></div>
-                <div class="modal-item-name">مشاوره حقوقی</div>
-                <div class="favorite-icon" data-id="service8"><i class="far fa-heart"></i></div>
+            <a href="#" class="modal-item disabled" id="kharjkardSakhtemanModal_disabled">
+                <div class="modal-item-icon"><i class="fas fa-hammer"></i></div>
+                <div class="modal-item-name">خرجکرد ساختمان</div>
+                <div class="favorite-icon" data-id="calc6"><i class="far fa-heart"></i></div>
             </a>
-            <a href="#" class="modal-item disabled" id="entekhabNamAmlakModal">
-                <div class="modal-item-icon"><i class="fas fa-signature"></i></div>
-                <div class="modal-item-name">انتخاب نام املاک</div>
-                <div class="favorite-icon" data-id="service9"><i class="far fa-heart"></i></div>
+            <a href="#" class="modal-item disabled" id="sharjSakhtemanModal_disabled">
+                <div class="modal-item-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div class="modal-item-name">شارژ ساختمان</div>
+                <div class="favorite-icon" data-id="calc8"><i class="far fa-heart"></i></div>
             </a>
-            <a href="#" class="modal-item disabled" id="ejareRoozaneModal">
-                <div class="modal-item-icon"><i class="fas fa-calendar-day"></i></div>
-                <div class="modal-item-name">اجاره روزانه</div>
-                <div class="favorite-icon" data-id="service10"><i class="far fa-heart"></i></div>
+            <a href="#" class="modal-item disabled" id="commissionCalcModal_disabled">
+                <div class="modal-item-icon"><i class="fas fa-percentage"></i></div>
+                <div class="modal-item-name">محاسبه کمیسیون</div>
+                <div class="favorite-icon" data-id="calc5"><i class="far fa-heart"></i></div>
             </a>
-            <a href="#" class="modal-item disabled" id="akharinMoamelatModal">
-                <div class="modal-item-icon"><i class="fas fa-chart-bar"></i></div>
-                <div class="modal-item-name">آخرین معاملات</div>
-                <div class="favorite-icon" data-id="service11"><i class="far fa-heart"></i></div>
+            <a href="#" class="modal-item disabled" id="totalPriceCalcModal">
+                <div class="modal-item-icon"><i class="fas fa-coins"></i></div>
+                <div class="modal-item-name">قیمت کل آپارتمان</div>
+                <div class="favorite-icon" data-id="calc10"><i class="far fa-heart"></i></div>
             </a>
-            <a href="#" class="modal-item disabled" id="moshtarianModal">
+            <a href="#" class="modal-item disabled" id="constructionCalcModal">
+                <div class="modal-item-icon"><i class="fas fa-hammer"></i></div>
+                <div class="modal-item-name">هزینه ساخت</div>
+                <div class="favorite-icon" data-id="calc6_construction"><i class="far fa-heart"></i></div>
+            </a>
+
+            <!-- Disabled Inquiries -->
+            <a href="#" class="modal-item disabled" id="postalCodeInquiryModal_disabled">
+                <div class="modal-item-icon"><i class="fas fa-map-pin"></i></div>
+                <div class="modal-item-name">تاییدیه کد پستی</div>
+                <div class="favorite-icon" data-id="inquiry4"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="checkRegistrationModal">
+                <div class="modal-item-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="modal-item-name">ثبت چک</div>
+                <div class="favorite-icon" data-id="inquiry5"><i class="far fa-heart"></i></div>
+            </a>
+            
+            <!-- Disabled Services -->
+            <a href="#" class="modal-item disabled" id="moshtarianModal_disabled">
                 <div class="modal-item-icon"><i class="fas fa-users"></i></div>
                 <div class="modal-item-name">مشتریان</div>
                 <div class="favorite-icon" data-id="service7"><i class="far fa-heart"></i></div>
             </a>
-            <a href="#" class="modal-item disabled" id="bandGharardadModal">
-                <div class="modal-item-icon"><i class="fas fa-file-signature"></i></div>
-                <div class="modal-item-name">بندهای قراردادی</div>
-                <div class="favorite-icon" data-id="file2"><i class="far fa-heart"></i></div>
+            <a href="#" class="modal-item disabled" id="yaddashtModal_disabled">
+                <div class="modal-item-icon"><i class="fas fa-sticky-note"></i></div>
+                <div class="modal-item-name">یادداشت‌ها</div>
+                <div class="favorite-icon" data-id="service6"><i class="far fa-heart"></i></div>
             </a>
-            <a href="#" class="modal-item disabled" id="bazdidModal">
-                <div class="modal-item-icon"><i class="fas fa-clipboard-list"></i></div>
-                <div class="modal-item-name">چک لیست بازدید</div>
-                <div class="favorite-icon" data-id="file1"><i class="far fa-heart"></i></div>
+            <a href="#" class="modal-item disabled" id="akharinMoamelatModal_disabled">
+                <div class="modal-item-icon"><i class="fas fa-chart-bar"></i></div>
+                <div class="modal-item-name">آخرین معاملات</div>
+                <div class="favorite-icon" data-id="service11"><i class="far fa-heart"></i></div>
             </a>
-            <a href="#" class="modal-item disabled" id="amoozeshMatniModal">
+            
+            <!-- Disabled Education -->
+            <a href="#" class="modal-item disabled" id="amoozeshMatniModal_disabled">
                 <div class="modal-item-icon"><i class="fas fa-file-alt"></i></div>
                 <div class="modal-item-name">آموزش متنی</div>
                 <div class="favorite-icon" data-id="edu1"><i class="far fa-heart"></i></div>
             </a>
-            <a href="#" class="modal-item disabled" id="amoozeshSotiModal">
+            <a href="#" class="modal-item disabled" id="amoozeshSotiModal_disabled">
                 <div class="modal-item-icon"><i class="fas fa-volume-up"></i></div>
                 <div class="modal-item-name">آموزش صوتی</div>
                 <div class="favorite-icon" data-id="edu2"><i class="far fa-heart"></i></div>
             </a>
-            <a href="#" class="modal-item disabled" id="amoozeshTasviriModal">
+            <a href="#" class="modal-item disabled" id="amoozeshTasviriModal_disabled">
                 <div class="modal-item-icon"><i class="fas fa-video"></i></div>
                 <div class="modal-item-name">آموزش تصویری</div>
                 <div class="favorite-icon" data-id="edu3"><i class="far fa-heart"></i></div>
             </a>
-            <a href="#" class="modal-item disabled" id="chatAiModal">
-                <div class="modal-item-icon"><i class="fas fa-robot"></i></div>
-                <div class="modal-item-name">چت با هوش مصنوعی</div>
-                <div class="favorite-icon" data-id="tool4"><i class="far fa-heart"></i></div>
+            
+            <!-- Disabled Tools -->
+            <a href="#" class="modal-item disabled" id="sarresidYadavaModal_disabled">
+                <div class="modal-item-icon"><i class="fas fa-bell"></i></div>
+                <div class="modal-item-name">سررسیدها و یادآورها</div>
+                <div class="favorite-icon" data-id="tool3"><i class="far fa-heart"></i></div>
+            </a>
+            <a href="#" class="modal-item disabled" id="gozareshKariModal_disabled">
+                <div class="modal-item-icon"><i class="fas fa-chart-pie"></i></div>
+                <div class="modal-item-name">گزارش کاری</div>
+                <div class="favorite-icon" data-id="tool2"><i class="far fa-heart"></i></div>
             </a>
         </div>
     </div>
@@ -800,7 +1057,7 @@
 <!-- هدر و سایدبار -->
 <header class="header">
  <div class="hamburger-menu">
-    <button class="menu-tab-button" id="hamburgerIcon">منو</button>
+    <button class="menu-tab-button" id="hamburgerIcon"><i class="fas fa-bars"></i></button>
  </div>
  <div class="logo-container">
     <div class="logo-placeholder"></div> 
@@ -846,12 +1103,33 @@
     
     <div class="motivational-wrapper">
         <div class="motivational-widget">
+            <div class="motivational-label">متن امروز</div> <!-- NEW: Motivational label -->
             <div class="motivational-quote-container">
-                <div class="box-tag">متن امروز</div>
                 <p id="daily-quote">در حال بارگذاری...</p>
             </div>
         </div>
     </div>
+
+    <!-- NEW: Random News Section -->
+    <div class="random-news-section-wrapper">
+        <div class="news-label">اخبار</div> <!-- NEW: News label -->
+        <div id="randomNewsContainer" class="news-highlights-grid">
+            <!-- Random news card will be injected here by JavaScript -->
+        </div>
+        <div id="randomNewsLoading" class="info-message loading" style="display: none;">
+            <i class="fas fa-spinner"></i>
+            <div>در حال بارگذاری اخبار منتخب...</div>
+        </div>
+        <div id="randomNewsError" class="info-message error" style="display: none;">
+            <h3>خطا در بارگذاری اخبار</h3>
+            <p>لطفاً اتصال اینترنت خود را بررسی کرده و دوباره تلاش کنید.</p>
+        </div>
+        <div id="randomNoNews" class="info-message no-news" style="display: none;">
+            <h3>خبری یافت نشد</h3>
+            <p>متأسفانه خبری برای نمایش پیدا نشد.</p>
+        </div>
+    </div>
+    <!-- END NEW: Random News Section -->
 
     <div class="search-container" id="searchContainer">
         <div class="search-box">
@@ -862,7 +1140,8 @@
     </div>
 
     <div class="price-component-container">
-        <iframe src="gheymat.bazar.html" class="price-iframe" scrolling="no"></iframe>
+        <div class="price-label">قیمت لحظه‌ای</div> <!-- NEW: Price label -->
+        <iframe src="gheymat.bazar.html" class="price-iframe" scrolling="no" onerror="this.style.display='none'; this.after(document.createTextNode('خطا در بارگذاری قیمت لحظه‌ای.'));"></iframe>
     </div>
     
     <div class="tabs-container">
@@ -898,13 +1177,9 @@
                 <div class="calc-name">تبدیل رهن و اجاره</div>
                 <div class="favorite-icon" data-id="calc4"><i class="far fa-heart"></i></div>
             </a>
-
-            <!-- Row 2: Banner -->
             <div class="banner-container">
                 <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg2.png');"></a>
             </div>
-
-            <!-- Row 3 -->
             <a href="apartment-share-calculator.html" class="calc-item limited-feature" data-feature="apartment-share-calculator">
                 <div class="calc-image"><i class="fas fa-calculator"></i></div>
                 <div class="calc-name">قدرالسهم آپارتمان</div>
@@ -916,7 +1191,7 @@
                 <div class="favorite-icon" data-id="calc11"><i class="far fa-heart"></i></div>
             </a>
             
-            <!-- Disabled Items at the end -->
+            <!-- Disabled Items (at the end of the list) -->
             <a href="#" class="calc-item disabled" id="mohasebeejareh">
                 <div class="calc-image"><i class="fas fa-key"></i></div>
                 <div class="calc-name">محاسبه اجاره</div>
@@ -941,6 +1216,7 @@
     </div>
     <div class="tab-content" id="inquiries-tab">
         <div class="calc-container">
+            <!-- Active Items -->
             <a href="estelam.html" class="calc-item">
                 <div class="calc-image"><i class="fas fa-file-contract"></i></div>
                 <div class="calc-name">استعلام سند</div>
@@ -956,10 +1232,10 @@
                 <div class="calc-name">استعلام چک</div>
                 <div class="favorite-icon" data-id="inquiry3"><i class="far fa-heart"></i></div>
             </a>
-            <!-- Banner -->
             <div class="banner-container">
                 <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg2.png');"></a>
             </div>
+            <!-- Disabled Items (at the end of the list) -->
             <a href="#" class="calc-item disabled" id="taidiyeCodeposti">
                 <div class="calc-image"><i class="fas fa-map-pin"></i></div>
                 <div class="calc-name">تاییدیه کد پستی</div>
@@ -980,11 +1256,10 @@
                 <div class="calc-name">کارت ویزیت</div>
                 <div class="favorite-icon" data-id="service5"><i class="far fa-heart"></i></div>
             </a>
-            <!-- Banner -->
             <div class="banner-container">
                 <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg1.png');"></a>
             </div>
-            <!-- Disabled Items at the end -->
+            <!-- Disabled Items (at the end of the list) -->
             <a href="#" class="calc-item disabled" id="moshtarian">
                 <div class="calc-image"><i class="fas fa-users"></i></div>
                 <div class="calc-name">مشتریان</div>
@@ -1004,6 +1279,7 @@
     </div>
     <div class="tab-content" id="social-tab">
         <div class="calc-container">
+            <!-- Active Items -->
             <a href="follower-management.html" class="calc-item">
                 <div class="calc-image"><i class="fas fa-users"></i></div>
                 <div class="calc-name">مدیریت فالوورها</div>
@@ -1019,7 +1295,6 @@
                 <div class="calc-name">دایرکت مارکتینگ</div>
                 <div class="favorite-icon" data-id="social3"><i class="far fa-heart"></i></div>
             </a>
-            <!-- Banner -->
             <div class="banner-container">
                 <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg1.png');"></a>
             </div>
@@ -1042,6 +1317,7 @@
     </div>
     <div class="tab-content" id="websites-tab">
         <div class="calc-container">
+            <!-- Active Items -->
             <a href="KHODNEVIS.html" class="calc-item">
                 <div class="calc-image"><i class="fas fa-globe"></i></div>
                 <div class="calc-name">سایت خودنویس</div>
@@ -1057,7 +1333,6 @@
                 <div class="calc-name">سایت ثبت من</div>
                 <div class="favorite-icon" data-id="website3"><i class="far fa-heart"></i></div>
             </a>
-            <!-- Banner -->
             <div class="banner-container">
                 <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg2.png');"></a>
             </div>
@@ -1065,11 +1340,10 @@
     </div>
     <div class="tab-content" id="education-tab">
         <div class="calc-container">
-            <!-- Banner -->
             <div class="banner-container">
                 <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg1.png');"></a>
             </div>
-            <!-- Disabled Items at the end -->
+            <!-- Disabled Items (at the end of the list) -->
             <a href="#" class="calc-item disabled" id="amoozeshMatni">
                 <div class="calc-image"><i class="fas fa-file-alt"></i></div>
                 <div class="calc-name">آموزش متنی</div>
@@ -1089,6 +1363,7 @@
     </div>
     <div class="tab-content" id="tools-tab">
         <div class="calc-container">
+            <!-- Active Items -->
             <a href="lightner.html" class="calc-item">
                 <div class="calc-image"><i class="fas fa-box-open"></i></div>
                 <div class="calc-name">جعبه لایتنر</div>
@@ -1099,11 +1374,10 @@
                 <div class="calc-name">تبدیل عدد به حروف</div>
                 <div class="favorite-icon" data-id="tool5"><i class="far fa-heart"></i></div>
             </a>
-            <!-- Banner -->
             <div class="banner-container">
                 <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg2.png');"></a>
             </div>
-            <!-- Disabled Items at the end -->
+            <!-- Disabled Items (at the end of the list) -->
             <a href="#" class="calc-item disabled" id="sarresidYadava">
                 <div class="calc-image"><i class="fas fa-bell"></i></div>
                 <div class="calc-name">سررسیدها و یادآورها</div>
@@ -1118,11 +1392,10 @@
     </div>
     <div class="tab-content" id="files-tab">
         <div class="calc-container">
-            <!-- Banner -->
             <div class="banner-container">
                 <a href="tablighat.html" class="banner-full" style="background-image: url('images/sarbarg1.png');"></a>
             </div>
-            <!-- Disabled Items at the end -->
+            <!-- Disabled Items (at the end of the list) -->
             <a href="#" class="calc-item disabled" id="bazdid">
                 <div class="calc-image"><i class="fas fa-clipboard-list"></i></div>
                 <div class="calc-name">چک لیست بازدید</div>
@@ -1160,14 +1433,16 @@
 
 <script src="quotes.js"></script>
 <script>
-// --- START: اسکریپت‌های اصلی از کد ۱ (احراز هویت و ...) ---
+// --- START: Global Functions ---
 let currentUserEmail = null; 
 let currentDeviceId = null; 
 let conflictingLoginEmail = null;
+let allFetchedNews = [];
+let currentNewsIndex = 0; 
+const numberOfRandomNews = 1; 
+let newsIntervalId; 
 
-function goToRegister() { window.location.href = 'register.html'; }
-function generateDeviceId() { let deviceId = localStorage.getItem('deviceId'); if (!deviceId) { deviceId = 'device-' + Math.random().toString(36).substr(2, 9) + '-' + Date.now(); localStorage.setItem('deviceId', deviceId); } return deviceId; }
-
+// Helper function for making requests to the worker
 async function makeWorkerRequest(endpoint, data = null, method = 'GET') { 
     const url = `https://weathered-sun-e806.toolbox-moein.workers.dev${endpoint}`; 
     const options = { method: method, headers: { 'Content-Type': 'application/json' } }; 
@@ -1183,6 +1458,10 @@ async function makeWorkerRequest(endpoint, data = null, method = 'GET') {
         return { success: false, error: 'خطای شبکه رخ داد' }; 
     } 
 }
+
+// Authentication/Session related functions
+function goToRegister() { window.location.href = 'register.html'; }
+function generateDeviceId() { let deviceId = localStorage.getItem('deviceId'); if (!deviceId) { deviceId = 'device-' + Math.random().toString(36).substr(2, 9) + '-' + Date.now(); localStorage.setItem('deviceId', deviceId); } return deviceId; }
 
 async function checkSession() { 
     const sessionToken = localStorage.getItem('sessionToken'); 
@@ -1210,12 +1489,14 @@ function showNoSessionPage() {
 async function loadUserProfile() { 
     const session = await checkSession(); 
     if (!session || !session.user) { 
-        document.getElementById('userName').textContent = 'مهمان'; 
+        const userNameElem = document.getElementById('userName');
+        if (userNameElem) userNameElem.textContent = 'مهمان'; 
         return; 
     } 
     const { firstName = '', lastName = '' } = session.user; 
     const fullName = `${firstName} ${lastName}`.trim(); 
-    document.getElementById('userName').textContent = fullName || session.user.email; 
+    const userNameElem = document.getElementById('userName');
+    if (userNameElem) userNameElem.textContent = fullName || session.user.email; 
 }
 
 function handlePaymentResult() { 
@@ -1230,22 +1511,24 @@ function handlePaymentResult() {
     let notificationTimeout; 
     function showNotification(type, titleText, messageText) { 
         clearTimeout(notificationTimeout); 
-        notification.className = `payment-notification ${type} show`; 
-        icon.className = `notification-icon fas ${type === 'success' ? 'fa-check-circle' : 'fa-times-circle'}`; 
-        title.textContent = titleText; 
-        message.textContent = messageText; 
-        notificationTimeout = setTimeout(() => notification.classList.remove('show'), 5000); 
+        if (notification) notification.className = `payment-notification ${type} show`; 
+        if (icon) icon.className = `notification-icon fas ${type === 'success' ? 'fa-check-circle' : 'fa-times-circle'}`; 
+        if (title) title.textContent = titleText; 
+        if (message) message.textContent = messageText; 
+        notificationTimeout = setTimeout(() => { if(notification) notification.classList.remove('show'); }, 5000); 
     } 
-    closeBtn.onclick = () => { clearTimeout(notificationTimeout); notification.classList.remove('show'); }; 
+    if (closeBtn) closeBtn.onclick = () => { clearTimeout(notificationTimeout); if(notification) notification.classList.remove('show'); }; 
     if (paymentStatus === 'success') { showNotification('success', 'پرداخت موفق', 'اشتراک شما با موفقیت فعال گردید.'); } 
     else if (paymentStatus === 'failed') { showNotification('failed', 'پرداخت ناموفق', 'پرداخت لغو شد یا با خطا مواجه گردید.'); } 
     history.replaceState(null, '', window.location.pathname); 
 }
 
 function loadPaymentPage() {
-    document.querySelector('.tabs-container').style.display = 'none';
-    document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-    document.querySelector('.motivational-wrapper').style.display = 'none';
+    const tabsContainer = document.querySelector('.tabs-container');
+    if (tabsContainer) tabsContainer.style.display = 'none';
+    document.querySelectorAll('.tab-content').forEach(el => { if(el) el.style.display = 'none'; });
+    const motivationalWrapper = document.querySelector('.motivational-wrapper');
+    if (motivationalWrapper) motivationalWrapper.style.display = 'none';
     const container = document.getElementById('payment-iframe-container');
     if (container) {
         container.style.display = 'block';
@@ -1283,13 +1566,284 @@ async function checkUnreadMessages() {
     }
 }
 
+// Date display function
+function showPersianDate() {
+    const now = new Date();
+    const weekday = now.toLocaleDateString('fa-IR', { weekday: 'long' });
+    const day = now.toLocaleDateString('fa-IR', { day: 'numeric' });
+    const month = now.toLocaleDateString('fa-IR', { month: 'long' });
+    const year = now.toLocaleDateString('fa-IR', { year: 'numeric' });
+    const formattedDate = `${weekday} <span class="separator">|</span> ${day}${month} ${year}`;
+
+    const currentGregorianYear = now.getFullYear();
+    let nowruz = new Date(currentGregorianYear, 2, 21); // Month March is index 2
+    
+    if (now > nowruz) {
+        nowruz = new Date(currentGregorianYear + 1, 2, 21);
+    }
+
+    const timeDifference = nowruz.getTime() - now.getTime();
+    const daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+    const persianDaysRemaining = daysRemaining.toLocaleString('fa-IR', { useGrouping: false });
+    const countdownText = `${persianDaysRemaining} روز تا پایان سال`;
+
+    const finalOutput = `${formattedDate} <span class="separator">|</span> ${countdownText}`;
+    const persianDateContainer = document.getElementById('persianDateContainer');
+    if (persianDateContainer) { 
+        persianDateContainer.innerHTML = finalOutput;
+    }
+}
+
+// Motivational quote display function
+function displayMotivationalQuote() {
+    // Check if 'quotes' array exists and is not empty (from quotes.js)
+    if (typeof quotes === 'undefined' || !Array.isArray(quotes) || quotes.length === 0) {
+        const dailyQuoteElem = document.getElementById('daily-quote');
+        if (dailyQuoteElem) { 
+            dailyQuoteElem.textContent = 'خطا در بارگذاری جملات.';
+        }
+        return;
+    }
+    const epoch = new Date('2025-01-01T06:00:00'); // Consistent epoch for daily quotes
+    const now = new Date();
+    const diffTime = now - epoch;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const quoteIndex = diffDays % quotes.length;
+    const selectedQuote = quotes[quoteIndex];
+    const dailyQuoteElem = document.getElementById('daily-quote');
+    if (dailyQuoteElem) { 
+        dailyQuoteElem.textContent = selectedQuote;
+    }
+}
+
+
+// News highlights functions
+const topPriorityKeywords = ['دلار', 'مسکن', 'املاک', 'ملک', 'ملکی', 'ارز', 'طلا', 'سکه'];
+const keywordFilters = {
+    real_estate: ['اجاره', 'شهرداری', 'وام مسکن', 'طرح ملی مسکن', 'بافت فرسوده', 'انبوه سازی', 'شهرسازی', 'زمین', 'ویلا', 'آپارتمان', 'خرید خانه', 'قیمت خانه'],
+    economy: ['اقتصاد', 'بازار', 'بورس', 'سهام', 'یورو', 'قیمت', 'تورم', 'بانک', 'وام', 'بودجه', 'مالیات', 'تجارت', 'صادرات', 'واردات', 'نفت', 'یارانه', 'حقوق', 'سرمایه‌گذاری', 'شاخص کل', 'سهام عدالت'],
+    politics: ['سیاست', 'دولت', 'مجلس', 'رئیس جمهور', 'وزیر', 'نماینده', 'انتخابات', 'برجام', 'تحریم', 'مذاکره']
+};
+const negativeKeywords = [
+    'فوتبال', 'ورزش', 'لیگ', 'تیم', 'بازیکن', 'المپیک', 'مدال', 
+    'سینما', 'بازیگر', 'موسیقی', 'حوادث', 'تصادف', 'سوانح', 'سرقت', 'جرم', 
+    'سلامت', 'تکنولوژی', 'پزشکی', 'گردشگری', 'خودرو', 'فرهنگی', 'هنری', 
+    'اجتماعی', 'بین الملل', 'جهان', 'خارجی', 'آسیب', 'آلودگی', 'محیط زیست', 'طبیعت', 'آب و هوا', 'خشکسالی', 'باران', 
+    'غذا', 'آشپزی', 'رستوران', 'خوراک', 'نوشیدنی', 'تغذیه', 
+    'مدارس', 'مدرسه', 'دانشگاه', 'دانشجو', 'آموزش', 'پرورش', 'معلم', 'استاد', 'کنکور', 'امتحان', 'حوزه علمیه', 'حوزه', 
+    'بهداشت', 'درمان', 'بیمارستان', 'پزشک', 'دارو', 'بیماری', 'کرونا', 'واکسن', 
+    'حضرت', 'رسول', 'امام', 'دین', 'مذهب', 'شهادت', 'وفات', 'میلاد', 'جشنواره', 'نمایشگاه', 'کتاب', 'ادبیات', 
+    'خانواده', 'ازدواج', 'طلاق', 'کودک', 'جوانان', 'سالمندان', 'زنان', 'مردان', 
+    'سوریه', 'غزه', 'اوکراین', 'فلسطین'
+];
+
+function detectNewsCategory(title, description) {
+    const combinedText = (title + ' ' + (description || '')).toLowerCase();
+    if (negativeKeywords.some(keyword => combinedText.includes(keyword))) return 'other';
+    
+    if (keywordFilters.real_estate.some(keyword => combinedText.includes(keyword)) || topPriorityKeywords.some(keyword => combinedText.includes(keyword))) return 'real_estate';
+    if (keywordFilters.economy.some(keyword => combinedText.includes(keyword))) return 'economy';
+    if (keywordFilters.politics.some(keyword => combinedText.includes(keyword))) return 'politics';
+    return 'other';
+}
+
+const sourceNameMap = {
+    'خبرگزاری تسنیم': 'خبرگزاری تسنیم', 'خبرگزاری مهر': 'خبرگزاری مهر',
+    'خبرگزاری ايسنا': 'خبرگزاری ایسنا', 'خبرگزاری ایسنا': 'خبرگزاری ایسنا',
+    'تجارت نیوز': 'تجارت نیوز', 'دنیای اقتصاد': 'دنیای اقتصاد',
+    'خبرگزاری فارس': 'خبرگزاری فارس', 'خبرگزاری جمهوری اسلامی': 'خبرگزاری ایرنا',
+    'خبرگزاری تابناک': 'تابناک', 'اقتصاد آنلاین': 'اقتصاد آنلاین'
+};
+function cleanSourceName(originalName) {
+    for (const key in sourceNameMap) {
+        if (originalName.includes(key)) return sourceNameMap[key];
+    }
+    return originalName.split('|')[0].trim();
+}
+
+function createNewsHighlightCard(news) {
+    const card = document.createElement('div'); 
+    card.className = 'news-item-card'; 
+    card.setAttribute('data-news-url', news.url); 
+    
+    card.innerHTML = `
+        <div class="card-content">
+            <h3 class="news-title-text">${news.title}</h3>
+            <div class="news-footer-info">
+                <span class="read-more-cue">ادامه خبر <i class="fas fa-chevron-left"></i></span>
+            </div>
+        </div>`;
+    
+    card.addEventListener('click', () => {
+        window.location.href = 'akhbar.html'; 
+    });
+
+    return card;
+}
+
+async function fetchAndProcessNewsForHighlights() {
+    const sectionWrapper = document.querySelector('.random-news-section-wrapper');
+    const loadingElem = document.getElementById('randomNewsLoading');
+    const errorElem = document.getElementById('randomNewsError');
+    const noNewsElem = document.getElementById('randomNoNews');
+    const container = document.getElementById('randomNewsContainer');
+
+    // Hide everything first within the sectionWrapper
+    if (loadingElem) loadingElem.style.display = 'none';
+    if (errorElem) errorElem.style.display = 'none';
+    if (noNewsElem) noNewsElem.style.display = 'none';
+    if (container) {
+        container.innerHTML = ''; 
+        container.style.display = 'none'; 
+    }
+
+    // Show loading message, making sure the section wrapper is visible to display it
+    if (sectionWrapper) sectionWrapper.style.display = 'block'; 
+    if (loadingElem) loadingElem.style.display = 'flex'; 
+
+    // Clear previous interval if any
+    if (newsIntervalId) {
+        clearInterval(newsIntervalId);
+    }
+
+    const rssFeeds = [
+        'https://tejaratnews.com/feed/section/housing', 
+        'https://www.donya-e-eqtesad.com/fa/tiny/feed',
+        'https://www.isna.ir/rss/tp/14', 
+        'https://www.mehrnews.com/rss/tp/8' 
+    ];
+    
+    const rssToJsonService = 'https://api.rss2json.com/v1/api.json?rss_url=';
+    const requests = rssFeeds.map(feed => fetch(rssToJsonService + encodeURIComponent(feed)));
+    const responses = await Promise.allSettled(requests);
+    
+    let newsItems = [];
+    for (const result of responses) {
+        if (result.status === 'fulfilled') {
+            try {
+                const data = await result.value.json();
+                if (data.status === 'ok' && data.items) {
+                    const sourceName = cleanSourceName(data.feed.title);
+                    const itemsWithSource = data.items.map(item => ({...item, sourceName }));
+                    newsItems.push(...itemsWithSource);
+                }
+            } catch (e) { console.error("خطا در پردازش فید (اخبار رندوم):", e); }
+        } else {
+            console.error("خطا در دریافت فید (اخبار رندوم):", result.reason);
+        }
+    }
+    
+    if (newsItems.length === 0) {
+        if (loadingElem) loadingElem.style.display = 'none';
+        if (errorElem) errorElem.style.display = 'flex'; 
+        return;
+    }
+
+    let processedNews = newsItems.map(item => {
+        const cleanTitle = item.title ? item.title.replace(/ساخت‌وساز/g, '').replace(/\s\s+/g, ' ').trim() : '';
+        let plainDescription = item.description ? item.description.replace(/<[^>]*>?/gm, '') : '';
+        plainDescription = plainDescription.replace(/ساخت‌وساز/g, '').replace(/\s\s+/g, ' ').trim();
+        plainDescription = plainDescription.substring(0, 200) + (plainDescription.length > 200 ? '...' : '');
+        
+        const category = detectNewsCategory(cleanTitle, plainDescription);
+        if (category === 'real_estate' || category === 'economy' || category === 'politics') { 
+             let priority;
+            const combinedText = (cleanTitle + ' ' + plainDescription).toLowerCase();
+
+            if (topPriorityKeywords.some(keyword => combinedText.includes(keyword))) {
+                priority = 0; 
+            } else {
+                switch (category) {
+                    case 'real_estate': priority = 1; break;
+                    case 'economy':     priority = 2; break;
+                    case 'politics':    priority = 3; break;
+                    default:            priority = 4; 
+                }
+            }
+
+            return {
+                title: cleanTitle, description: plainDescription, url: item.link,
+                publishedAt: item.pubDate, category: category, sourceName: item.sourceName,
+                id: item.guid || item.link, priority: priority
+            };
+        }
+        return null; 
+    }).filter(Boolean); 
+
+    const uniqueUrls = new Set();
+    allFetchedNews = processedNews.filter(item => {
+        if (uniqueUrls.has(item.url)) return false;
+        uniqueUrls.add(item.url);
+        return true;
+    });
+
+    allFetchedNews.sort((a, b) => {
+        if (a.priority !== b.priority) return a.priority - b.priority;
+        return new Date(b.publishedAt) - new Date(a.publishedAt);
+    });
+
+    if (loadingElem) loadingElem.style.display = 'none'; 
+    
+    if (allFetchedNews.length === 0) {
+        if (noNewsElem) noNewsElem.style.display = 'flex'; 
+        return;
+    }
+
+    displayRandomNewsHighlights(); 
+
+    if (allFetchedNews.length > 1) { 
+        newsIntervalId = setInterval(displayRandomNewsHighlights, 10000); 
+    }
+}
+
+function displayRandomNewsHighlights() {
+    const sectionWrapper = document.querySelector('.random-news-section-wrapper');
+    const noNewsElem = document.getElementById('randomNoNews');
+    const container = document.getElementById('randomNewsContainer');
+    const errorElem = document.getElementById('randomNewsError');
+
+
+    if (container) {
+        container.innerHTML = ''; 
+        container.style.display = 'none'; 
+    }
+    if (noNewsElem) noNewsElem.style.display = 'none'; 
+    if (errorElem) errorElem.style.display = 'none'; 
+
+
+    if (allFetchedNews.length === 0) {
+        if (sectionWrapper) sectionWrapper.style.display = 'block'; 
+        if (noNewsElem) noNewsElem.style.display = 'flex'; 
+        if (newsIntervalId) clearInterval(newsIntervalId); 
+        return;
+    }
+
+    if (sectionWrapper) sectionWrapper.style.display = 'block'; 
+
+    const newsToDisplay = allFetchedNews[currentNewsIndex];
+    if (container) {
+        container.appendChild(createNewsHighlightCard(newsToDisplay));
+        container.style.display = 'flex'; 
+    }
+
+    currentNewsIndex = (currentNewsIndex + 1) % allFetchedNews.length; 
+}
+
+// Function to open and close sidebar
+function openMenu() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('overlay'); if (sidebar && overlay) { sidebar.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; } }
+function closeMenu() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('overlay'); if (sidebar && overlay) { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow = ''; } }
+
+
+// Main authentication and content display flow
 async function checkAuthStateAndDisplayContent() { 
     handlePaymentResult(); 
     currentDeviceId = generateDeviceId(); 
     const urlParams = new URLSearchParams(window.location.search); 
     if (urlParams.get('loginConflict') === 'true' && urlParams.get('email')) { 
-        document.getElementById('conflictingEmailDisplay').textContent = decodeURIComponent(urlParams.get('email')); 
-        document.getElementById('multiDeviceModal').classList.add('active'); 
+        const conflictingEmailDisplay = document.getElementById('conflictingEmailDisplay');
+        if (conflictingEmailDisplay) conflictingEmailDisplay.textContent = decodeURIComponent(urlParams.get('email')); 
+        const multiDeviceModal = document.getElementById('multiDeviceModal');
+        if (multiDeviceModal) multiDeviceModal.classList.add('active'); 
         document.body.style.overflow = 'hidden'; 
         history.replaceState(null, '', window.location.pathname); 
         return; 
@@ -1307,8 +1861,11 @@ async function checkAuthStateAndDisplayContent() {
         return; 
     } 
     
-    document.querySelector('.header').style.display = 'flex';
-    document.querySelector('#app-container').style.display = 'flex';
+    // Ensure the main app containers are visible before populating them
+    const headerElem = document.querySelector('.header');
+    if (headerElem) headerElem.style.display = 'flex';
+    const appContainerElem = document.querySelector('#app-container');
+    if (appContainerElem) appContainerElem.style.display = 'flex';
 
     const isSubscriptionActive = subscriptionStatus === 'active'; 
     const trialEndDate = new Date(new Date(userCreatedAt).getTime() + 7 * 24 * 60 * 60 * 1000); 
@@ -1320,10 +1877,14 @@ async function checkAuthStateAndDisplayContent() {
     
     await loadUserProfile();
     await checkUnreadMessages();
-}
 
-function openMenu() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('overlay'); if (sidebar && overlay) { sidebar.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; } }
-function closeMenu() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('overlay'); if (sidebar && overlay) { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow = ''; } }
+    // Now call the functions that populate content, as the container is visible
+    showPersianDate();
+    displayMotivationalQuote();
+    fetchAndProcessNewsForHighlights(); 
+}
+// --- END: Global Functions ---
+
 
 document.addEventListener('DOMContentLoaded', function() { 
     checkAuthStateAndDisplayContent(); 
@@ -1343,56 +1904,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }); 
     document.getElementById('confirmSwitchDevice')?.addEventListener('click', () => alert('این قابلیت در حال توسعه است')); 
     document.getElementById('cancelSwitchDevice')?.addEventListener('click', () => { 
-        document.getElementById('multiDeviceModal').classList.remove('active'); 
+        document.getElementById('multiDeviceModal')?.classList.remove('active'); 
         document.body.style.overflow = ''; 
         goToRegister(); 
     }); 
     
-    function showPersianDate() {
-        // --- بخش نمایش تاریخ ---
-        const now = new Date();
-        const weekday = now.toLocaleDateString('fa-IR', { weekday: 'long' });
-        const day = now.toLocaleDateString('fa-IR', { day: 'numeric' });
-        const month = now.toLocaleDateString('fa-IR', { month: 'long' });
-        const year = now.toLocaleDateString('fa-IR', { year: 'numeric' });
-        const formattedDate = `${weekday} <span class="separator">|</span> ${day}${month} ${year}`;
-
-        // --- بخش محاسبه روزهای باقیمانده تا پایان سال ---
-        const currentGregorianYear = now.getFullYear();
-        let nowruz = new Date(currentGregorianYear, 2, 21); // ماه مارس (March) اندیس 2 دارد
-        
-        // اگر تاریخ امروز از نوروز امسال گذشته باشد، نوروز سال بعد را هدف قرار می‌دهیم
-        if (now > nowruz) {
-            nowruz = new Date(currentGregorianYear + 1, 2, 21);
-        }
-
-        const timeDifference = nowruz.getTime() - now.getTime();
-        const daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-        const persianDaysRemaining = daysRemaining.toLocaleString('fa-IR', { useGrouping: false });
-        const countdownText = `${persianDaysRemaining} روز تا پایان سال`;
-
-        // --- ترکیب و نمایش نهایی ---
-        const finalOutput = `${formattedDate} <span class="separator">|</span> ${countdownText}`;
-        document.getElementById('persianDateContainer').innerHTML = finalOutput;
-    }
-
-    function displayMotivationalQuote() {
-        if (typeof quotes === 'undefined' || quotes.length === 0) {
-            document.getElementById('daily-quote').textContent = 'خطا در بارگذاری جملات.';
-            return;
-        }
-        const epoch = new Date('2025-01-01T06:00:00');
-        const now = new Date();
-        const diffTime = now - epoch;
-        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-        const quoteIndex = diffDays % quotes.length;
-        const selectedQuote = quotes[quoteIndex];
-        document.getElementById('daily-quote').textContent = selectedQuote;
-    }
-
-    showPersianDate();
-    displayMotivationalQuote();
-
     const tabButtons = document.querySelectorAll('.tab-button');
     const tabContents = document.querySelectorAll('.tab-content');
     tabButtons.forEach(button => {
@@ -1401,7 +1917,10 @@ document.addEventListener('DOMContentLoaded', function() {
             tabButtons.forEach(btn => btn.classList.remove('active'));
             tabContents.forEach(content => content.classList.remove('active'));
             this.classList.add('active');
-            document.getElementById(`${tabId}-tab`).classList.add('active');
+            const targetTab = document.getElementById(`${tabId}-tab`);
+            if (targetTab) { 
+                targetTab.classList.add('active');
+            }
         });
     });
 
@@ -1410,7 +1929,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const tabScrollRight = document.getElementById('tabScrollRight');
 
     function updateScrollArrows() {
-        if (!tabsNav) return;
+        if (!tabsNav || !tabScrollLeft || !tabScrollRight) return; 
         const isRTL = getComputedStyle(tabsNav).direction === 'rtl';
         if (isRTL) {
             tabScrollRight.classList.toggle('hidden', tabsNav.scrollLeft >= 0);
@@ -1420,20 +1939,20 @@ document.addEventListener('DOMContentLoaded', function() {
             tabScrollRight.classList.toggle('hidden', tabsNav.scrollLeft + tabsNav.clientWidth >= tabsNav.scrollWidth - 5);
         }
     }
-    tabScrollLeft.addEventListener('click', () => tabsNav.scrollBy({ left: 100, behavior: 'smooth' }));
-    tabScrollRight.addEventListener('click', () => tabsNav.scrollBy({ left: -100, behavior: 'smooth' }));
-    tabsNav.addEventListener('scroll', updateScrollArrows);
+    tabScrollLeft?.addEventListener('click', () => tabsNav.scrollBy({ left: 100, behavior: 'smooth' })); 
+    tabScrollRight?.addEventListener('click', () => tabsNav.scrollBy({ left: -100, behavior: 'smooth' })); 
+    tabsNav?.addEventListener('scroll', updateScrollArrows); 
     window.addEventListener('resize', updateScrollArrows);
     updateScrollArrows();
 
     const searchButton = document.getElementById('searchButtonBottomNav');
     const searchContainer = document.getElementById('searchContainer');
     const searchInput = document.getElementById('searchInput');
-    searchButton.addEventListener('click', function (e) {
+    searchButton?.addEventListener('click', function (e) { 
         e.preventDefault();
-        searchContainer.classList.toggle('active');
-        if (searchContainer.classList.contains('active')) {
-            searchInput.focus();
+        searchContainer?.classList.toggle('active'); 
+        if (searchContainer?.classList.contains('active')) { 
+            searchInput?.focus(); 
         }
     });
 
@@ -1441,20 +1960,32 @@ document.addEventListener('DOMContentLoaded', function() {
     const allToolsModal = document.getElementById('allToolsModal');
     const closeAllToolsModal = document.getElementById('closeAllToolsModal');
 
-    function openModal(modal) { modal.classList.add('active'); document.body.style.overflow = 'hidden';}
-    function closeModal(modal) { modal.classList.remove('active'); document.body.style.overflow = ''; }
+    function openModal(modal) { 
+        if (modal) { 
+            modal.classList.add('active'); 
+            document.body.style.overflow = 'hidden';
+        }
+    }
+    function closeModal(modal) { 
+        if (modal) { 
+            modal.classList.remove('active'); 
+            document.body.style.overflow = ''; 
+        }
+    }
 
-    showAllToolsBtn.addEventListener('click', (e) => { e.preventDefault(); openModal(allToolsModal) });
-    closeAllToolsModal.addEventListener('click', () => closeModal(allToolsModal));
+    showAllToolsBtn?.addEventListener('click', (e) => { e.preventDefault(); openModal(allToolsModal) }); 
+    closeAllToolsModal?.addEventListener('click', () => closeModal(allToolsModal)); 
     document.getElementById('closeLimitModal')?.addEventListener('click', () => closeModal(document.getElementById('limitModal')));
 
 
     const favoriteIcons = document.querySelectorAll('.favorite-icon');
     const favoriteToast = document.getElementById('favoriteToast');
     function showToast(message) {
-        favoriteToast.textContent = message;
-        favoriteToast.classList.add('show');
-        setTimeout(() => { favoriteToast.classList.remove('show'); }, 2000);
+        if (favoriteToast) { 
+            favoriteToast.textContent = message;
+            favoriteToast.classList.add('show');
+            setTimeout(() => { favoriteToast.classList.remove('show'); }, 2000);
+        }
     }
     favoriteIcons.forEach(icon => {
         icon.addEventListener('click', function (e) {
@@ -1471,8 +2002,10 @@ document.addEventListener('DOMContentLoaded', function() {
     disabledItems.forEach(item => {
         item.addEventListener('click', function (e) {
             e.preventDefault();
-            disabledFeatureToast.classList.add('show');
-            setTimeout(() => { disabledFeatureToast.classList.remove('show'); }, 2000);
+            if (disabledFeatureToast) { 
+                disabledFeatureToast.classList.add('show');
+                setTimeout(() => { disabledFeatureToast.classList.remove('show'); }, 2000);
+            }
         });
     });
     
