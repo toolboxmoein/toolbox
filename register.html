@@ -16,322 +16,360 @@
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
  
  <style>
- :root {
- --primary-color: #00D968;
- --secondary-color: #00B84B;
- --dark-color: #333;
- --input-bg-color: #f0f0f0;
- --text-grey: #666;
- --border-radius: 16px;
- --transition: all 0.3s ease;
- --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
- }
- 
- * { margin: 0; padding: 0; box-sizing: border-box; }
- 
- body { 
- font-family: 'Vazirmatn', Arial, sans-serif; 
- background-color: #ffffff;
- direction: rtl; 
- text-align: right; 
- color: var(--dark-color); 
- line-height: 1.6; 
- display: flex; 
- justify-content: center; 
- align-items: center; 
- min-height: 100vh; 
- padding: 20px; 
- }
- 
- .auth-container { 
- background: #ffffff;
- padding: 30px 20px;
- border-radius: var(--border-radius);
- width: 90%;
- max-width: 450px;
- text-align: center; 
- }
- 
- .logo-placeholder { 
- width: 200px;
- height: 60px;
- background-image: url('images/logo.png'); 
- background-size: contain; 
- background-repeat: no-repeat; 
- background-position: center; 
- margin: 0 auto 40px;
- }
- 
- .intro-text {
- font-size: 16px;
- color: var(--dark-color);
- margin-bottom: 30px;
- line-height: 1.8;
- text-align: center;
- padding: 0 10px;
- }
- 
- .intro-text .app-name {
- font-weight: 600;
- color: var(--primary-color);
- }
- 
- .form-group { 
- margin-bottom: 15px; 
- text-align: right; 
- }
- 
- .form-row { 
- display: grid; 
- grid-template-columns: 1fr 1fr; 
- gap: 15px; 
- }
- 
- .form-group input { 
- width: 100%; 
- padding: 18px 20px;
- border: none;
- background-color: var(--input-bg-color);
- border-radius: 12px;
- font-family: 'Vazirmatn', Arial, sans-serif; 
- font-size: 16px; 
- text-align: right; 
- direction: rtl; 
- transition: var(--transition); 
- color: var(--dark-color);
- }
- 
- .form-group input::placeholder {
- color: var(--text-grey);
- text-align: right;
- }
- 
- .form-group input:focus { 
- outline: none; 
- box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
- background-color: #ffffff;
- border: 1px solid var(--primary-color);
- }
- 
- .form-group input.error { 
- border: 1px solid #dc3545;
- box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1); 
- }
- 
- .password-strength { 
- margin-top: 5px; 
- font-size: 12px; 
- text-align: right; 
- padding-right: 5px; 
- }
- 
- .auth-button { 
- width: 100%; 
- padding: 18px;
- margin-top: 30px;
- border: none; 
- border-radius: 12px;
- font-family: 'Vazirmatn', Arial, sans-serif; 
- font-size: 16px; 
- font-weight: 600; 
- cursor: pointer; 
- transition: var(--transition); 
- background: var(--gradient); 
- color: white;
- }
- 
- .auth-button:hover:not(:disabled) { 
- transform: translateY(-2px); 
- }
- 
- .auth-button:disabled { 
- opacity: 0.6; 
- cursor: not-allowed; 
- transform: none; 
- }
- 
- .mode-switch { 
- margin-top: 25px;
- display: flex; 
- justify-content: center; 
- align-items: center;
- font-size: 14px;
- }
- 
- .mode-switch p {
- margin-bottom: 0;
- margin-left: 5px;
- color: var(--text-grey);
- }
- 
- .mode-switch button { 
- background: none; 
- border: none; 
- color: var(--dark-color);
- cursor: pointer; 
- font-family: 'Vazirmatn', Arial, sans-serif; 
- font-size: 14px; 
- text-decoration: none;
- font-weight: 500;
- padding: 0;
- }
- 
- .mode-switch button:hover { 
- color: var(--primary-color);
- text-decoration: underline;
- }
+    :root {
+        /* پالت رنگی جدید: آبی کهکشانی و زرد طلایی (از index.html) */
+        --primary-color: #3A7DDE;       /* آبی اصلی، عمیق و فانتزی */
+        --primary-light: #EAF2FF;       /* آبی بسیار روشن برای هاور */
+        --secondary-color: #2C5A9E;     /* آبی تیره‌تر برای گرادینت */
+        --dark-color: #1A3D6D;          /* آبی بسیار تیره برای متون اصلی */
+        --light-color: #f8f9fa;         /* پس‌زمینه اصلی بدنه */
+        --complementary-color: #FFC107; /* زرد طلایی به عنوان رنگ مکمل و جذاب */
+        
+        /* متغیرهای عمومی و ساختاری (از index.html) */
+        --transition: all 0.3s ease;
+        --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        --complementary-gradient: linear-gradient(135deg, var(--complementary-color), #d9a406);
+        --border-radius: 20px;
+        --button-border-radius: 12px;
+        --border-color: #dee2e6;
+        --disabled-color: #aaaaaa;
+        --font-family: 'Vazirmatn', Arial, sans-serif;
+        --font-size-base: 14px;
+        
+        /* متغیرهای دارک مود (حفظ شده از index.html برای سازگاری آینده) */
+        --dark-mode-bg: #121212;
+        --dark-mode-text: #ffffff;
+        --dark-mode-card: #1e1e1e;
+        --dark-mode-border: #333333;
+        --arrow-color: #ef00f6; /* این رنگ می‌تواند ثابت بماند یا تغییر کند */
+        
+        /* متغیرهای باقی‌مانده برای سازگاری (از index.html) */
+        --shadow: 0 10px 25px rgba(58, 125, 222, 0.2);
+        --card-shadow: 0 15px 35px rgba(58, 125, 222, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+        --subtle-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        --grey-color: #6c757d;
+        --danger-color: #e74c3c;
+        --text-color: #343a40; /* رنگ متن عمومی */
+        --text-light: #6c757d;
+        --bg-color: #f8f9fa;    /* این متغیر اکنون برای پس‌زمینه ورودی‌ها استفاده می‌شود */
+        --white: #ffffff;       /* پس زمینه صفحه و کارت‌ها */
+        
+        /* START: رنگ‌های سبز برای پیام موفقیت */
+        --success-color: #155724;
+        --success-light-bg: #d4edda;
+        --success-border-color: #c3e6cb;
+        /* END: رنگ‌های سبز برای پیام موفقیت */
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { 
+        font-family: var(--font-family);
+        background-color: var(--white); /* زمینه سفید خالص */
+        direction: rtl; 
+        text-align: right; 
+        color: var(--text-color);
+        line-height: 1.6; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        min-height: 100vh; 
+        padding: 20px; 
+    }
+    
+    .auth-container { 
+        width: 90%;
+        max-width: 450px;
+        text-align: center; 
+    }
+    
+    .logo-placeholder { 
+        width: 200px;
+        height: 60px;
+        background-image: url('images/logo.png'); 
+        background-size: contain; 
+        background-repeat: no-repeat; 
+        background-position: center; 
+        margin: 0 auto 40px;
+    }
+    
+    .intro-text {
+        font-size: 16px;
+        color: var(--text-color);
+        margin-bottom: 30px;
+        line-height: 1.8;
+        text-align: center;
+        padding: 0 10px;
+    }
+    
+    .intro-text .app-name {
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+    
+    .form-group { 
+        margin-bottom: 15px; 
+        text-align: right; 
+    }
+    
+    .form-row { 
+        display: grid; 
+        grid-template-columns: 1fr 1fr; 
+        gap: 15px; 
+    }
+    
+    .form-group input { 
+        width: 100%; 
+        padding: 18px 20px;
+        border: 1px solid var(--border-color);
+        background-color: var(--bg-color); /* خاکستری روشن برای کنتراست */
+        border-radius: var(--button-border-radius);
+        font-family: var(--font-family);
+        font-size: 16px; 
+        text-align: right; 
+        direction: rtl; 
+        transition: var(--transition); 
+        color: var(--dark-color);
+    }
+    
+    .form-group input::placeholder {
+        color: var(--grey-color);
+        text-align: right;
+    }
+    
+    .form-group input:focus { 
+        outline: none; 
+        box-shadow: 0 0 0 3px rgba(58, 125, 222, 0.15);
+        background-color: var(--white);
+        border: 1px solid var(--primary-color);
+    }
+    
+    .form-group input.error { 
+        border: 1px solid var(--danger-color);
+        box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15);
+    }
+    
+    .password-strength { 
+        margin-top: 5px; 
+        font-size: 12px; 
+        text-align: right; 
+        padding-right: 5px; 
+    }
+    
+    .auth-button { 
+        width: 100%; 
+        padding: 18px;
+        margin-top: 30px;
+        border: none; 
+        border-radius: var(--button-border-radius);
+        font-family: var(--font-family);
+        font-size: 16px; 
+        font-weight: 600; 
+        cursor: pointer; 
+        transition: var(--transition); 
+        background: var(--gradient);
+        color: white;
+    }
+    
+    .auth-button:hover:not(:disabled) { 
+        transform: translateY(-2px); 
+        box-shadow: var(--shadow);
+    }
+    
+    .auth-button:disabled { 
+        opacity: 0.6; 
+        cursor: not-allowed; 
+        transform: none; 
+    }
+    
+    .mode-switch { 
+        margin-top: 25px;
+        display: flex; 
+        justify-content: center; 
+        align-items: center;
+        font-size: 14px;
+    }
+    
+    .mode-switch p {
+        margin-bottom: 0;
+        margin-left: 5px;
+        color: var(--grey-color);
+    }
+    
+    .mode-switch button { 
+        background: none; 
+        border: none; 
+        color: var(--dark-color);
+        cursor: pointer; 
+        font-family: var(--font-family);
+        font-size: 14px; 
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0;
+    }
+    
+    .mode-switch button:hover { 
+        color: var(--primary-color);
+        text-decoration: underline;
+    }
 
- .message { 
- margin-top: 20px; 
- padding: 12px; 
- border-radius: 8px; 
- font-size: 14px; 
- text-align: center; 
- }
- 
- .message.error { 
- background-color: #f8d7da; 
- color: #721c24; 
- border: 1px solid #f5c6cb; 
- }
- 
- .message.success { 
- background-color: #d4edda; 
- color: #155724; 
- border: 1px solid #c3e6cb; 
- }
+    .message { 
+        margin-top: 20px; 
+        padding: 12px; 
+        border-radius: 8px; 
+        font-size: 14px; 
+        text-align: center; 
+    }
+    
+    .message.error { 
+        background-color: #ffebee; 
+        color: var(--danger-color);
+        border: 1px solid #ffcdd2;
+    }
+    
+    /* START: تغییر بر اساس درخواست کاربر - پیام موفقیت سبز و مشخص */
+    .message.success { 
+        background-color: var(--success-light-bg); 
+        color: var(--success-color); 
+        border: 1px solid var(--success-border-color);
+        font-weight: 600; /* مشخص‌تر کردن فونت */
+    }
+    /* END: تغییر بر اساس درخواست کاربر */
 
- .forgot-password-link {
- display: block;
- margin-top: 10px;
- font-size: 13px;
- color: var(--text-grey);
- text-decoration: none;
- text-align: center;
- }
- 
- .forgot-password-link:hover {
- color: var(--primary-color);
- text-decoration: underline;
- }
+    .forgot-password-link {
+        display: block;
+        margin-top: 10px;
+        font-size: 13px;
+        color: var(--grey-color);
+        text-decoration: none;
+        text-align: center;
+    }
+    
+    .forgot-password-link:hover {
+        color: var(--primary-color);
+        text-decoration: underline;
+    }
 
- /* Modal styles for forgot password */
- .modal-backdrop {
- position: fixed;
- top: 0;
- left: 0;
- width: 100%;
- height: 100%;
- background-color: rgba(0, 0, 0, 0.6);
- display: flex;
- justify-content: center;
- align-items: center;
- z-index: 1000;
- opacity: 0;
- visibility: hidden;
- transition: opacity 0.3s ease, visibility 0.3s ease;
- }
- 
- .modal-backdrop.show {
- opacity: 1;
- visibility: visible;
- }
- 
- .modal-content {
- background-color: #ffffff;
- padding: 30px;
- border-radius: var(--border-radius);
- width: 90%;
- max-width: 400px;
- text-align: right;
- transform: translateY(-50px);
- opacity: 0;
- transition: transform 0.3s ease-out, opacity 0.3s ease-out;
- }
- 
- .modal-backdrop.show .modal-content {
- transform: translateY(0);
- opacity: 1;
- }
- 
- .modal-header {
- font-size: 20px;
- font-weight: 700;
- color: var(--dark-color);
- margin-bottom: 20px;
- text-align: center;
- }
- 
- .modal-body p {
- font-size: 14px;
- color: var(--text-grey);
- margin-bottom: 20px;
- line-height: 1.7;
- }
- 
- .modal-body input {
- width: 100%;
- padding: 15px 18px;
- border: 1px solid #e0e0e0;
- border-radius: 8px;
- font-family: 'Vazirmatn', Arial, sans-serif;
- font-size: 15px;
- text-align: right;
- direction: rtl;
- margin-bottom: 15px;
- }
- 
- .modal-body input:focus {
- outline: none;
- border-color: var(--primary-color);
- box-shadow: 0 0 0 3px rgba(0, 217, 104, 0.1);
- }
- 
- .modal-buttons {
- display: flex;
- gap: 10px;
- justify-content: center;
- }
- 
- .modal-button {
- flex: 1;
- padding: 12px;
- border: none;
- border-radius: 8px;
- font-family: 'Vazirmatn', Arial, sans-serif;
- font-size: 15px;
- font-weight: 600;
- cursor: pointer;
- transition: var(--transition);
- }
- 
- .modal-button.primary {
- background: var(--gradient);
- color: white;
- }
- 
- .modal-button.primary:hover {
- transform: translateY(-2px);
- }
- 
- .modal-button.secondary {
- background-color: var(--input-bg-color);
- color: var(--dark-color);
- border: 1px solid #e0e0e0;
- }
- 
- .modal-button.secondary:hover {
- background-color: #e0e0e0;
- }
- 
- .modal-message {
- margin-top: 15px;
- font-size: 13px;
- text-align: center;
- }
- 
- .modal-message.success { color: var(--primary-color); }
- .modal-message.error { color: #dc3545; }
+    /* Modal styles for forgot password */
+    .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    .modal-backdrop.show {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .modal-content {
+        background-color: var(--white);
+        padding: 30px;
+        border-radius: var(--border-radius);
+        width: 90%;
+        max-width: 400px;
+        text-align: right;
+        transform: translateY(-50px);
+        opacity: 0;
+        transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        box-shadow: var(--card-shadow);
+    }
+    
+    .modal-backdrop.show .modal-content {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    
+    .modal-header {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--dark-color);
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    
+    .modal-body p {
+        font-size: 14px;
+        color: var(--grey-color);
+        margin-bottom: 20px;
+        line-height: 1.7;
+    }
+    
+    .modal-body input {
+        width: 100%;
+        padding: 15px 18px;
+        border: 1px solid var(--border-color);
+        background-color: var(--bg-color);
+        border-radius: var(--button-border-radius);
+        font-family: var(--font-family);
+        font-size: 15px;
+        text-align: right;
+        direction: rtl;
+        margin-bottom: 15px;
+    }
+    
+    .modal-body input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(58, 125, 222, 0.15);
+    }
+    
+    .modal-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+    
+    .modal-button {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        border-radius: var(--button-border-radius);
+        font-family: var(--font-family);
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    
+    .modal-button.primary {
+        background: var(--gradient);
+        color: white;
+    }
+    
+    .modal-button.primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+    }
+    
+    .modal-button.secondary {
+        background-color: var(--bg-color);
+        color: var(--dark-color);
+        border: 1px solid var(--border-color);
+    }
+    
+    .modal-button.secondary:hover {
+        background-color: var(--primary-light);
+    }
+    
+    .modal-message {
+        margin-top: 15px;
+        font-size: 13px;
+        text-align: center;
+    }
+    
+    .modal-message.success { color: var(--success-color); }
+    .modal-message.error { color: var(--danger-color); }
  </style>
 </head>
 <body>
@@ -724,7 +762,7 @@
         return isValid;
     }
     
-    // بررسی قدرت رمز عبور
+    // بررسی قدرت رمز عبور (رنگ‌ها هماهنگ شده با پالت جدید)
     function checkPasswordStrength(password) {
         const passwordStrength = document.getElementById('password-strength');
         
@@ -735,6 +773,7 @@
         
         let strength = 0;
         let feedback = '';
+        let color = ''; 
         
         if (password.length >= 8) strength++;
         if (/[a-z]/.test(password)) strength++;
@@ -744,19 +783,20 @@
         
         if (password.length < 6) {
             feedback = 'رمز عبور خیلی کوتاه است';
-            passwordStrength.style.color = '#dc3545';
+            color = '#e74c3c'; // --danger-color
         } else if (strength < 3) {
             feedback = 'رمز عبور ضعیف است';
-            passwordStrength.style.color = '#ffc107';
+            color = '#FFC107'; // --complementary-color (زرد برای هشدار)
         } else if (strength < 4) {
             feedback = 'رمز عبور متوسط است';
-            passwordStrength.style.color = '#17a2b8';
+            color = '#3A7DDE'; // --primary-color (آبی اصلی)
         } else {
             feedback = 'رمز عبور قوی است';
-            passwordStrength.style.color = '#28a745';
+            color = '#3A7DDE'; // --primary-color (آبی اصلی)
         }
         
         passwordStrength.textContent = feedback;
+        passwordStrength.style.color = color; 
     }
     
     // Modal functions
@@ -896,7 +936,7 @@
     });
     
     console.log("✅ register.html: All event listeners attached");
-    </script>
+</script>
 
 </body>
 </html>
