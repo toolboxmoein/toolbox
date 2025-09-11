@@ -159,7 +159,9 @@
     }
     .logo-container { flex-grow: 1; display: flex; justify-content: center; } 
     .logo-placeholder { 
-        width: 150px; height: 60px; background-image: url('images/logo.png'); 
+        width: 160px; /* Increased logo size */
+        height: 65px; /* Increased logo size */
+        background-image: url('images/logo.png'); 
         background-size: contain; background-repeat: no-repeat;
         background-position: center;
     }
@@ -224,18 +226,26 @@
 
     /* .top-banner-wrapper - این بخش به طور کامل حذف شده است */
 
-    /* Consistent margin and padding for all top-level content sections */
-    .date-banner,
+    /* Rule for containers that are WRAPPERS for content (using padding for alignment) */
     .motivational-wrapper,
     .random-news-section-wrapper,
     .search-container,
     .price-component-container,
+    .tab-content {
+        margin: 15px auto 0;
+        padding: 0 15px;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Rule for containers that ARE the visible content (using margin for alignment) */
+    .date-banner,
     .tabs-container {
-        margin: 15px auto 0; /* 15px top margin, auto left/right for centering, 0 bottom */
-        padding: 0 15px; /* Consistent horizontal padding */
-        width: 100%; /* Take full width and padding will be inside */
-        max-width: 100%; /* Ensure it doesn't exceed viewport width */
-        box-sizing: border-box; /* Include padding in width calculation */
+        margin: 15px 15px 0; /* 15px top, 15px left/right, 0 bottom */
+        width: calc(100% - 30px); /* Full width minus the left/right margins */
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .date-banner {
@@ -353,10 +363,10 @@
     }
     
     .tabs-container {
-        /* Margin and padding handled by common rule above */
+        /* Margin and width handled by new common rule above */
         background-color: white; 
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        margin-bottom: 15px; /* Specific bottom margin for this section */
+        margin-bottom: 0; /* Specific bottom margin for this section */
         position: relative;
         border-radius: 12px; /* Consistent border-radius */
     }
@@ -394,7 +404,10 @@
     .tab-scroll-arrow.hidden { display: none; }
     @keyframes pulse { 0% { transform: translateY(-50%) scale(1); opacity: 1; } 50% { transform: translateY(-50%) scale(1.2); opacity: 0.8; } 100% { transform: translateY(-50%) scale(1); opacity: 1; } }
     
-    .tab-content { display: none; }
+    .tab-content { 
+        display: none;
+        padding-top: 15px; /* Add some top padding to separate from tabs nav */
+    }
     .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
@@ -663,7 +676,7 @@
     }
 
     .news-item-card .news-title-text {
-        font-size: 14px; /* Slightly larger for prominence */
+        font-size: 18px; /* Increased font size to match motivational quote */
         font-weight: 600;
         color: var(--dark-color);
         line-height: 1.3;
@@ -754,7 +767,7 @@
             padding: 10px; /* Further reduced padding */
         }
         .news-item-card .news-title-text {
-            font-size: 12px;
+            font-size: 16px; /* Reduced font size for smaller screens */
             min-height: auto;
         }
         .news-item-card .read-more-cue {
